@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Main functions and hook implementations for the Invoicing Client module.
+ */
+
+/**
+ * Implements hook_entity_info().
+ */
+function inv_client_entity_info() {
+  return array(
+    'inv_client' => array(
+      'label' => t('Client'),
+      'plural label' => t('Clients'),
+      'entity class' => 'Entity',
+      'controller class' => 'EntityAPIController',
+      'base table' => 'inv_client',
+      'entity keys' => array(
+        'id' => 'cid',
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+    ),
+  );
+}

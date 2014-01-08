@@ -221,3 +221,20 @@ function client_uri(Client $client){
 function client_page_title($client) {
   return $client->name;
 }
+
+/**
+ * Creates a client type.
+ *
+ * @param string $type
+ *   The machine readable name of the client type.
+ * @param string $name
+ *   The human readable name of the client type.
+ */
+function client_type_create($type, $name) {
+  db_insert('client_type')
+    ->fields(array(
+      'type' => $type,
+      'name' => $name,
+    ))
+    ->execute();
+}

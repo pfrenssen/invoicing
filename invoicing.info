@@ -1,5 +1,7 @@
 name = Invoicing
 description = Online invoicing application
 core = 7.x
+
 dependencies[] = block
+dependencies[] = client
 dependencies[] = dblog

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Main functions and hook implementations for the Invoicing Client module.
@@ -11,15 +12,212 @@ function inv_client_entity_info() {
   return array(
     'inv_client' => array(
       'label' => t('Client'),
-      'plural label' => t('Clients'),
       'entity class' => 'Entity',
       'controller class' => 'EntityAPIController',
       'base table' => 'inv_client',
+      'fieldable' => TRUE,
       'entity keys' => array(
         'id' => 'cid',
+        'bundle' => 'type',
       ),
+      'bundle keys' => array(
+        'bundle' => 'type',
+      ),
+      'bundles' => array(),
       'label callback' => 'entity_class_label',
       'uri callback' => 'entity_class_uri',
     ),
   );
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function inv_client_entity_info_alter(&$entity_info) {
+  foreach (inv_client_get_types() as $type => $info) {
+    $entity_info['inv_client']['bundles'][$type] = array(
+      'label' => $info->label,
+      'admin' => array(
+        'path' => 'admin/structure/inv_client_types/manage/%inv_client_type',
+        'real path' => 'admin/structure/inv_client_types/manage/' . $type,
+        'bundle argument' => 4,
+        'access arguments' => array('administer client types'),
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function inv_client_permission() {
+  $permissions = array(
+    'administer client types' => array(
+      'title' => t('Administer client types'),
+      'description' => t('Create and delete fields for client types, and set their permissions.'),
+    ),
+    'administer clients' => array(
+      'title' => t('Administer clients'),
+      'description' => t('Edit and delete all clients'),
+    ),
+  );
+
+  // Generate permissions per client type.
+  foreach (inv_client_get_types() as $type) {
+    $permissions += array(
+      "edit any $type->type client" => array(
+        'title' => t('%type_name: Edit any client', array('%type_name' => $type->name)),
+      ),
+      "view any $type->type client" => array(
+        'title' => t('%type_name: View any client', array('%type_name' => $type->name)),
+      ),
+    );
+  }
+
+  return $permissions;
+}
+
+/**
+ * Determines whether the given user has access to a client.
+ *
+ * @param string $op
+ *   The operation being performed. One of 'view', 'update', 'create', 'delete'
+ *   or just 'edit' (being the same as 'create' or 'update').
+ * @param object $client
+ *   Optionally a client or a client type to check access for. If nothing is
+ *   given, access for all clients is determined.
+ * @param object $account
+ *   Optional, a user object representing the user for whom the operation is to
+ *   be performed. Determines access for a user other than the current user.
+ *
+ * @return boolean
+ *   TRUE if the operation may be performed, FALSE otherwise.
+ */
+function inv_client_access($op, $client = NULL, $account = NULL) {
+  if (user_access('administer clients', $account)) {
+    return TRUE;
+  }
+  if (isset($client)) {
+    $op = $op == 'view' ? 'view' : 'edit';
+    return user_access("$op any $client->type client", $account);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Returns an array of client types, keyed by the type name.
+ *
+ * @return array
+ *   An array of client types.
+ */
+function inv_client_get_types() {
+  $types = &drupal_static(__FUNCTION__);
+
+  if (!$types) {
+    $types = db_select('inv_client_type', 'ict')
+      ->fields('ict')
+      ->execute()
+      ->fetchAllAssoc('type');
+  }
+
+  return $types;
+}
+
+/**
+ * Loads clients from the database.
+ *
+ * This function should be used whenever you need to load more than one client
+ * from the database. Clients are loaded into memory and will not require
+ * database access if loaded again during the same page request.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
+ *
+ * @param $cids
+ *   An array of client IDs.
+ * @param $reset
+ *   Whether to reset the internal cache.
+ *
+ * @return
+ *   An array of client objects indexed by cid.
+ */
+function inv_client_load_multiple($cids = array(), $reset = FALSE) {
+  return entity_load('inv_client', $cids, array(), $reset);
+}
+
+/**
+ * Loads a client object from the database.
+ *
+ * @param $cid
+ *   The client ID.
+ * @param $reset
+ *   Whether to reset the cache.
+ *
+ * @return
+ *   A fully-populated client object, or FALSE if the client is not found.
+ */
+function inv_client_load($cid = NULL, $reset = FALSE) {
+  $nids = isset($cid) ? array($cid) : array();
+  $clients = inv_client_load_multiple($nids, $reset);
+
+  return $clients ? reset($clients) : FALSE;
+}
+
+/**
+ * Deletes a client.
+ */
+function inv_client_delete(Client $client) {
+  $client->delete();
+}
+
+/**
+ * Deletes multiple clients.
+ *
+ * @param $cids
+ *   An array of client IDs.
+ */
+function inv_client_delete_multiple(array $cids) {
+  entity_get_controller('inv_client')->delete($cids);
+}
+
+/**
+ * Creates a client object.
+ */
+function inv_client_create($values = array()) {
+  return entity_get_controller('inv_client')->create($values);
+}
+
+/**
+ * Saves a client to the database.
+ *
+ * @param $client
+ *   The client object.
+ */
+function inv_client_save(Client $client) {
+  return $client->save();
+}
+
+/**
+ * Implements callback_entity_info_uri().
+ */
+function inv_client_uri(Client $client){
+  return array(
+    'path' => 'client/' . $client->cid,
+  );
+}
+
+/**
+ * Title callback: Returns the title of the client.
+ *
+ * @param $client
+ *   The client object.
+ *
+ * @return
+ *   An unsanitized string that is the title of the client.
+ *
+ * @see client_menu()
+ */
+function inv_client_page_title($client) {
+  return $client->name;
 }

@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update and schema hooks for Invoicing Client.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function inv_client_schema() {
+  $schema = array();
+
+  $schema['inv_client'] = array(
+    'description' => 'The base table for Client entities.',
+    'fields' => array(
+      'cid' => array(
+        'description' => 'The primary identifier for a client',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The {inv_client_type}.type of this client.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'name' => array(
+        'description' => 'The human readable name of the client.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the client was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the client was most recently saved.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('cid'),
+    'indexes' => array(
+      'type' => array('type'),
+    ),
+  );
+
+  $schema['inv_client_type'] = array(
+    'description' => 'Stores information about defined client types.',
+    'fields' => array(
+      'type' => array(
+        'description' => 'The machine-readable name of this client type.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'The human-readable name of this client type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'translatable' => TRUE,
+      ),
+    ),
+    'primary key' => array('type'),
+  );
+
+  return $schema;
+}

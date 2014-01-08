@@ -8,10 +8,10 @@
 /**
  * Implements hook_schema().
  */
-function inv_client_schema() {
+function client_schema() {
   $schema = array();
 
-  $schema['inv_client'] = array(
+  $schema['client'] = array(
     'description' => 'The base table for Client entities.',
     'fields' => array(
       'cid' => array(
@@ -21,7 +21,7 @@ function inv_client_schema() {
         'not null' => TRUE,
       ),
       'type' => array(
-        'description' => 'The {inv_client_type}.type of this client.',
+        'description' => 'The {client_type}.type of this client.',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,
@@ -53,7 +53,7 @@ function inv_client_schema() {
     ),
   );
 
-  $schema['inv_client_type'] = array(
+  $schema['client_type'] = array(
     'description' => 'Stores information about defined client types.',
     'fields' => array(
       'type' => array(

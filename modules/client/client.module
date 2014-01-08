@@ -8,13 +8,13 @@
 /**
  * Implements hook_entity_info().
  */
-function inv_client_entity_info() {
+function client_entity_info() {
   return array(
-    'inv_client' => array(
+    'client' => array(
       'label' => t('Client'),
       'entity class' => 'Entity',
       'controller class' => 'EntityAPIController',
-      'base table' => 'inv_client',
+      'base table' => 'client',
       'fieldable' => TRUE,
       'entity keys' => array(
         'id' => 'cid',
@@ -33,13 +33,13 @@ function inv_client_entity_info() {
 /**
  * Implements hook_entity_info_alter().
  */
-function inv_client_entity_info_alter(&$entity_info) {
-  foreach (inv_client_get_types() as $type => $info) {
-    $entity_info['inv_client']['bundles'][$type] = array(
+function client_entity_info_alter(&$entity_info) {
+  foreach (client_get_types() as $type => $info) {
+    $entity_info['client']['bundles'][$type] = array(
       'label' => $info->label,
       'admin' => array(
-        'path' => 'admin/structure/inv_client_types/manage/%inv_client_type',
-        'real path' => 'admin/structure/inv_client_types/manage/' . $type,
+        'path' => 'admin/structure/client_types/manage/%client_type',
+        'real path' => 'admin/structure/client_types/manage/' . $type,
         'bundle argument' => 4,
         'access arguments' => array('administer client types'),
       ),
@@ -50,7 +50,7 @@ function inv_client_entity_info_alter(&$entity_info) {
 /**
  * Implements hook_permission().
  */
-function inv_client_permission() {
+function client_permission() {
   $permissions = array(
     'administer client types' => array(
       'title' => t('Administer client types'),
@@ -63,7 +63,7 @@ function inv_client_permission() {
   );
 
   // Generate permissions per client type.
-  foreach (inv_client_get_types() as $type) {
+  foreach (client_get_types() as $type) {
     $permissions += array(
       "edit any $type->type client" => array(
         'title' => t('%type_name: Edit any client', array('%type_name' => $type->name)),
@@ -93,7 +93,7 @@ function inv_client_permission() {
  * @return boolean
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function inv_client_access($op, $client = NULL, $account = NULL) {
+function client_access($op, $client = NULL, $account = NULL) {
   if (user_access('administer clients', $account)) {
     return TRUE;
   }
@@ -111,11 +111,11 @@ function inv_client_access($op, $client = NULL, $account = NULL) {
  * @return array
  *   An array of client types.
  */
-function inv_client_get_types() {
+function client_get_types() {
   $types = &drupal_static(__FUNCTION__);
 
   if (!$types) {
-    $types = db_select('inv_client_type', 'ict')
+    $types = db_select('client_type', 'ict')
       ->fields('ict')
       ->execute()
       ->fetchAllAssoc('type');
@@ -142,8 +142,8 @@ function inv_client_get_types() {
  * @return
  *   An array of client objects indexed by cid.
  */
-function inv_client_load_multiple($cids = array(), $reset = FALSE) {
-  return entity_load('inv_client', $cids, array(), $reset);
+function client_load_multiple($cids = array(), $reset = FALSE) {
+  return entity_load('client', $cids, array(), $reset);
 }
 
 /**
@@ -157,9 +157,9 @@ function inv_client_load_multiple($cids = array(), $reset = FALSE) {
  * @return
  *   A fully-populated client object, or FALSE if the client is not found.
  */
-function inv_client_load($cid = NULL, $reset = FALSE) {
+function client_load($cid = NULL, $reset = FALSE) {
   $nids = isset($cid) ? array($cid) : array();
-  $clients = inv_client_load_multiple($nids, $reset);
+  $clients = client_load_multiple($nids, $reset);
 
   return $clients ? reset($clients) : FALSE;
 }
@@ -167,7 +167,7 @@ function inv_client_load($cid = NULL, $reset = FALSE) {
 /**
  * Deletes a client.
  */
-function inv_client_delete(Client $client) {
+function client_delete(Client $client) {
   $client->delete();
 }
 
@@ -177,15 +177,15 @@ function inv_client_delete(Client $client) {
  * @param $cids
  *   An array of client IDs.
  */
-function inv_client_delete_multiple(array $cids) {
-  entity_get_controller('inv_client')->delete($cids);
+function client_delete_multiple(array $cids) {
+  entity_get_controller('client')->delete($cids);
 }
 
 /**
  * Creates a client object.
  */
-function inv_client_create($values = array()) {
-  return entity_get_controller('inv_client')->create($values);
+function client_create($values = array()) {
+  return entity_get_controller('client')->create($values);
 }
 
 /**
@@ -194,14 +194,14 @@ function inv_client_create($values = array()) {
  * @param $client
  *   The client object.
  */
-function inv_client_save(Client $client) {
+function client_save(Client $client) {
   return $client->save();
 }
 
 /**
  * Implements callback_entity_info_uri().
  */
-function inv_client_uri(Client $client){
+function client_uri(Client $client){
   return array(
     'path' => 'client/' . $client->cid,
   );
@@ -218,6 +218,6 @@ function inv_client_uri(Client $client){
  *
  * @see client_menu()
  */
-function inv_client_page_title($client) {
+function client_page_title($client) {
   return $client->name;
 }

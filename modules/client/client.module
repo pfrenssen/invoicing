@@ -36,7 +36,7 @@ function client_entity_info() {
 function client_entity_info_alter(&$entity_info) {
   foreach (client_get_types() as $type => $info) {
     $entity_info['client']['bundles'][$type] = array(
-      'label' => $info->label,
+      'label' => $info->name,
       'admin' => array(
         'path' => 'admin/structure/client_types/manage/%client_type',
         'real path' => 'admin/structure/client_types/manage/' . $type,

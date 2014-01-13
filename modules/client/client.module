@@ -9,42 +9,71 @@
  * Implements hook_entity_info().
  */
 function client_entity_info() {
-  return array(
-    'client' => array(
-      'label' => t('Client'),
-      'entity class' => 'Entity',
-      'controller class' => 'EntityAPIController',
-      'base table' => 'client',
-      'fieldable' => TRUE,
-      'entity keys' => array(
-        'id' => 'cid',
-        'bundle' => 'type',
-      ),
-      'bundle keys' => array(
-        'bundle' => 'type',
-      ),
-      'bundles' => array(),
-      'label callback' => 'entity_class_label',
-      'uri callback' => 'entity_class_uri',
-    ),
-  );
-}
+  $info = array();
 
-/**
- * Implements hook_entity_info_alter().
- */
-function client_entity_info_alter(&$entity_info) {
-  foreach (client_get_types() as $type => $info) {
+  $entity_info['client'] = array(
+    'label' => t('Client'),
+    'plural label' => t('Clients'),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'client',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+      'id' => 'cid',
+      'bundle' => 'type',
+    ),
+    'bundle keys' => array(
+      'bundle' => 'type',
+    ),
+    'bundles' => array(),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'access callback' => 'client_access',
+  );
+
+  // Add bundle info but bypass entity_load() as we cannot use it here.
+  $types = db_select('client_type', 'ict')
+    ->fields('ict', array('type', 'name'))
+    ->execute()
+    ->fetchAllKeyed();
+
+  foreach ($types as $type => $name) {
     $entity_info['client']['bundles'][$type] = array(
-      'label' => $info->name,
+      'label' => $name,
       'admin' => array(
-        'path' => 'admin/structure/client_types/manage/%client_type',
-        'real path' => 'admin/structure/client_types/manage/' . $type,
+        'path' => 'admin/structure/clients/manage/%client_type',
+        'real path' => 'admin/structure/clients/manage/' . $type,
         'bundle argument' => 4,
-        'access arguments' => array('administer client types'),
+        'access arguments' => array('administer clients'),
       ),
     );
   }
+
+  $entity_info['client_type'] = array(
+    'label' => t('Client type'),
+    'plural label' => t('Client types'),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIControllerExportable',
+    'base table' => 'client_type',
+    'fieldable' => FALSE,
+    'bundle of' => 'client',
+    'exportable' => TRUE,
+    'entity keys' => array(
+      'id' => 'type',
+      'name' => 'type',
+      'label' => 'name',
+    ),
+    'access callback' => 'client_type_access',
+    'label callback' => 'client_type_label',
+    'module' => 'client',
+    'admin ui' => array(
+      'path' => 'admin/structure/clients',
+      'file' => 'client.admin.inc',
+      'controller class' => 'EntityDefaultUIController',
+    ),
+  );
+
+  return $entity_info;
 }
 
 /**
@@ -106,6 +135,13 @@ function client_access($op, $client = NULL, $account = NULL) {
 }
 
 /**
+ * Access callback for Entity API exportables for client types.
+ */
+function client_type_access($op, $type = NULL, $account = NULL) {
+  return user_access('administer client types', $account);
+}
+
+/**
  * Returns an array of client types, keyed by the type name.
  *
  * @return array
@@ -122,6 +158,21 @@ function client_get_types() {
   }
 
   return $types;
+}
+
+/**
+ * Returns a client type by type name.
+ *
+ * @param string $type
+ *   The machine readable name of the client type.
+ *
+ * @return Entity
+ *   A client type entity, or FALSE if the client type does not exist.
+ */
+function client_type_load($type) {
+  $types = client_get_types();
+
+  return !empty($types[$type]) ? $types[$type] : FALSE;
 }
 
 /**
@@ -158,8 +209,8 @@ function client_load_multiple($cids = array(), $reset = FALSE) {
  *   A fully-populated client object, or FALSE if the client is not found.
  */
 function client_load($cid = NULL, $reset = FALSE) {
-  $nids = isset($cid) ? array($cid) : array();
-  $clients = client_load_multiple($nids, $reset);
+  $cids = isset($cid) ? array($cid) : array();
+  $clients = client_load_multiple($cids, $reset);
 
   return $clients ? reset($clients) : FALSE;
 }

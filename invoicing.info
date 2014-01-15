@@ -5,4 +5,5 @@ core = 7.x
 dependencies[] = addressfield
 dependencies[] = block
 dependencies[] = client
+dependencies[] = ctools
 dependencies[] = dblog

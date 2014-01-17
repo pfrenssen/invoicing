@@ -6,4 +6,3 @@ dependencies[] = addressfield
 dependencies[] = block
 dependencies[] = client
 dependencies[] = ctools
-dependencies[] = dblog

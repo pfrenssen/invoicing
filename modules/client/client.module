@@ -5,6 +5,8 @@
  * Main functions and hook implementations for the Invoicing Client module.
  */
 
+include_once 'client.features.inc';
+
 /**
  * Implements hook_entity_info().
  */

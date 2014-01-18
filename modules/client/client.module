@@ -77,6 +77,37 @@ function client_entity_info() {
 }
 
 /**
+ * Implements hook_menu().
+ */
+function client_menu() {
+  $items = array();
+
+  // We only support one basic client type for the moment. This may be extended
+  // in the future.
+  $client_type = client_type_load('client');
+  $items['client/add'] = array(
+    'title' => 'Add client',
+    'page callback' => 'client_add_page',
+    'page arguments' => array($client_type),
+    'access callback' => 'client_access',
+    'access arguments' => array('create', $client_type),
+    'file' => 'client.pages.inc',
+  );
+
+  $items['client/%client/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('client_edit_form', 1),
+    'access callback' => 'client_access',
+    'access arguments' => array('update', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'client.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_permission().
  */
 function client_permission() {
@@ -104,6 +135,27 @@ function client_permission() {
   }
 
   return $permissions;
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function client_field_extra_fields() {
+  $extra_fields = array();
+
+  foreach (client_get_types() as $client_type) {
+    $extra_fields['client'][$client_type->type] = array(
+      'form' => array(
+        'name' => array(
+          'label' => t('Name'),
+          'description' => t('The name of the client'),
+          'weight' => -5,
+        ),
+      ),
+    );
+  }
+
+  return $extra_fields;
 }
 
 /**

@@ -3,10 +3,13 @@ description = Client related functionality.
 core = 7.x
 package = Invoicing
 
+dependencies[] = addressfield
 dependencies[] = entity
 dependencies[] = features
 
 features[client_type][] = client
 features[features_api][] = api:2
+features[field_base][] = field_client_address
+features[field_instance][] = client-client-field_client_address
 
 files[] = client.admin.inc

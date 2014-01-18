@@ -12,3 +12,7 @@ projects[ctools][download][branch] = 7.x-1.x
 projects[entity][download][type] = git
 projects[entity][download][revision] = 7.x-1.2
 projects[entity][download][branch] = 7.x-1.x
+
+projects[features][download][type] = git
+projects[features][download][revision] = 7.x-2.0
+projects[features][download][branch] = 7.x-2.x

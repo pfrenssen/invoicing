@@ -15,7 +15,7 @@ function client_schema() {
     'description' => 'The base table for Client entities.',
     'fields' => array(
       'cid' => array(
-        'description' => 'The primary identifier for a client',
+        'description' => 'The primary identifier for a client.',
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -28,7 +28,7 @@ function client_schema() {
         'default' => '',
       ),
       'name' => array(
-        'description' => 'The human readable name of the client.',
+        'description' => 'The name of the client.',
         'type' => 'varchar',
         'length' => 255,
         'not null' => TRUE,

@@ -14,7 +14,7 @@ function client_entity_info() {
   $entity_info['client'] = array(
     'label' => t('Client'),
     'plural label' => t('Clients'),
-    'entity class' => 'Entity',
+    'entity class' => 'Client',
     'controller class' => 'EntityAPIController',
     'base table' => 'client',
     'fieldable' => TRUE,
@@ -288,4 +288,48 @@ function client_type_create($type, $name) {
       'name' => $name,
     ))
     ->execute();
+}
+
+/**
+ * The class used for client entities.
+ */
+class Client extends Entity {
+
+  /**
+   * The primary identifier for a client.
+   */
+  public $cid;
+
+  /**
+   * The type of this client.
+   */
+  public $type;
+
+  /**
+   * The name of the client.
+   */
+  public $name;
+
+  /**
+   * The Unix timestamp when the client was created.
+   */
+  public $created;
+
+  /**
+   * The Unix timestamp when the client was most recently saved.
+   */
+  public $changed;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save() {
+    // Set created and changed values. Only set the created value if it is new.
+    if (empty($this->created) && (!empty($this->is_new) || !$this->cid)) {
+      $this->created = REQUEST_TIME;
+    }
+    $this->changed = REQUEST_TIME;
+
+    parent::save();
+  }
 }

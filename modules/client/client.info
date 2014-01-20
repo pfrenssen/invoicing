@@ -12,7 +12,15 @@ features[client_type][] = client
 features[features_api][] = api:2
 features[field_base][] = field_client_address
 features[field_base][] = field_client_email
+features[field_base][] = field_client_notes
+features[field_base][] = field_client_phone
+features[field_base][] = field_client_shipping_address
+features[field_base][] = field_client_vat
 features[field_instance][] = client-client-field_client_address
 features[field_instance][] = client-client-field_client_email
+features[field_instance][] = client-client-field_client_notes
+features[field_instance][] = client-client-field_client_phone
+features[field_instance][] = client-client-field_client_shipping_address
+features[field_instance][] = client-client-field_client_vat
 
 files[] = client.admin.inc

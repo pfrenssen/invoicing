@@ -41,7 +41,7 @@ function client_field_default_field_instances() {
     ),
     'entity_type' => 'client',
     'field_name' => 'field_client_address',
-    'label' => 'Address',
+    'label' => 'Billing address',
     'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -60,7 +60,7 @@ function client_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -93,14 +93,174 @@ function client_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => 2,
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'client-client-field_client_notes'
+  $field_instances['client-client-field_client_notes'] = array(
+    'bundle' => 'client',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+    ),
+    'entity_type' => 'client',
+    'field_name' => 'field_client_notes',
+    'label' => 'Notes',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'client-client-field_client_phone'
+  $field_instances['client-client-field_client_phone'] = array(
+    'bundle' => 'client',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'client',
+    'field_name' => 'field_client_phone',
+    'label' => 'Phone number',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'client-client-field_client_shipping_address'
+  $field_instances['client-client-field_client_shipping_address'] = array(
+    'bundle' => 'client',
+    'default_value' => array(
+      0 => array(
+        'element_key' => 'client|client|field_client_shipping_address|und|0',
+        'thoroughfare' => '',
+        'premise' => '',
+        'postal_code' => '',
+        'locality' => '',
+        'country' => 'BE',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'addressfield',
+        'settings' => array(
+          'format_handlers' => array(
+            0 => 'address',
+          ),
+          'use_widget_handlers' => 1,
+        ),
+        'type' => 'addressfield_default',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'client',
+    'field_name' => 'field_client_shipping_address',
+    'label' => 'Shipping address',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'addressfield',
+      'settings' => array(
+        'available_countries' => array(),
+        'format_handlers' => array(
+          'address' => 'address',
+          'address-hide-country' => 0,
+          'organisation' => 0,
+          'name-full' => 0,
+          'name-oneline' => 0,
+        ),
+      ),
+      'type' => 'addressfield_standard',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'client-client-field_client_vat'
+  $field_instances['client-client-field_client_vat'] = array(
+    'bundle' => 'client',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'client',
+    'field_name' => 'field_client_vat',
+    'label' => 'VAT number',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 4,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Address');
+  t('Billing address');
   t('Email address');
+  t('Notes');
+  t('Phone number');
+  t('Shipping address');
+  t('VAT number');
 
   return $field_instances;
 }

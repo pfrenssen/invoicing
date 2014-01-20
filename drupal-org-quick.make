@@ -12,3 +12,6 @@ projects[email][subdir] = contrib
 
 projects[entity] = 1.2
 projects[entity][subdir] = contrib
+
+projects[features] = 2.0
+projects[features][subdir] = contrib

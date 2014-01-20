@@ -116,6 +116,6 @@ function client_edit_form_submit($form, &$form_state) {
  * Deletes a client.
  */
 function client_edit_form_delete_submit($form, &$form_state) {
-  // @todo Implement.
-  var_dump(__FUNCTION__); die;
+  $client = $form_state['client'];
+  client_delete($client);
 }

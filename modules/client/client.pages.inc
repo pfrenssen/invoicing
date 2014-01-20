@@ -23,6 +23,23 @@ function client_add_page($client_type) {
 }
 
 /**
+ * Page callback: Returns the client add/edit form to edit an existing client.
+ *
+ * @see client_edit_form()
+ *
+ * @param object $client
+ *   The client to edit.
+ *
+ * @return array
+ *   The client add/edit form render array.
+ */
+function client_edit_page(Client $client) {
+  drupal_set_title(t('Edit client %client', array('%client' => $client->name)), PASS_THROUGH);
+
+  return drupal_get_form('client_edit_form', $client);
+}
+
+/**
  * Form constructor for the client add/edit form.
  *
  * @param Client $client

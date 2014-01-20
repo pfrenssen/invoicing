@@ -1,9 +1,6 @@
 api = 2
 core = 7.x
-projects[drupal][type] = core
-projects[drupal][download][type] = git
-projects[drupal][download][revision] = 7.26
-projects[drupal][download][branch] = 7.x
+projects[drupal][version] = 7.26
 
 ; Recursive module dependencies of installation profile are not enabled in
 ; DrupalWebTestCase::setUp.

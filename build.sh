@@ -15,6 +15,7 @@ function show_help {
   echo -e "Builds the Invoicing distribution in the 'build' subfolder. Options:"
   echo -e "-h\t--help\tShow this help text."
   echo -e "-g\t--git\tRetain the git repositories of all downloaded projects."
+  echo -e "-q\t--quick\tDo a quick install, using packaged downloads rather than full git repositories."
 }
 
 # Check command line arguments.
@@ -22,7 +23,7 @@ while [[ "$1" == -* ]]; do
   case "$1" in
     -h|--help|-\?) show_help; exit 0;;
     -g|--git) GIT=true; shift;;
-    -b|--branded) BRANDED=true; shift;;
+    -q|--quick) QUICK=true; shift;;
     --) shift; break;;
     -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
   esac
@@ -47,11 +48,23 @@ find "${ROOT_DIR}" -mindepth 1 -maxdepth 1 ! -iname "build" -exec cp -r {} "${BU
 cd "${BUILD_DIR}"
 
 # Install Drupal core.
-drush make --prepare-install --drupal-org=core "${ROOT_DIR}/drupal-org-core.make" -y $DRUSH_MAKE_OPTIONS
+if [ -z $QUICK ] ; then
+  FILE=drupal-org-core.make
+else
+  FILE=drupal-org-core-quick.make
+fi
+
+drush make --prepare-install --drupal-org=core "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS
 if [ $? -ne 0 ] ; then { echo "error: Drupal core build failed" ; exit 1 ; } fi
 
 # Install contrib.
-drush make --contrib-destination=profiles/invoicing "${ROOT_DIR}/drupal-org.make" -y $DRUSH_MAKE_OPTIONS --drupal-org
+if [ -z $QUICK ] ; then
+  FILE=drupal-org.make
+else
+  FILE=drupal-org-quick.make
+fi
+
+drush make --contrib-destination=profiles/invoicing "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS --drupal-org
 if [ $? -ne 0 ] ; then { echo "error: contributed modules could not be built" ; exit 1 ; } fi
 
 # Remove all .git directories if they are not needed.

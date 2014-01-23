@@ -334,6 +334,8 @@ function client_delete_multiple(array $cids) {
  * Creates a client object.
  */
 function client_create($values = array()) {
+  // Default to the 'client' bundle.
+  $values += array('type' => 'client');
   return entity_get_controller('client')->create($values);
 }
 

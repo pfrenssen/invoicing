@@ -24,4 +24,4 @@ features[field_instance][] = client-client-field_client_shipping_address
 features[field_instance][] = client-client-field_client_vat
 
 files[] = client.admin.inc
-files[] = tests/client_crud.test
+files[] = tests/crud.test

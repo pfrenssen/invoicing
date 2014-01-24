@@ -354,6 +354,10 @@ function client_create($values = array()) {
  *
  * @param Client $client
  *   The client entity.
+ *
+ * @return mixed
+ *   Returns FALSE if the transaction failed. If it succeeded, returns SAVED_NEW
+ *   or SAVED_UPDATED, depending on the operation performed.
  */
 function client_save(Client $client) {
   return $client->save();
@@ -452,6 +456,7 @@ class Client extends Entity {
     }
     $this->changed = REQUEST_TIME;
 
-    parent::save();
+    return parent::save();
   }
+
 }

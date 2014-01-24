@@ -233,7 +233,7 @@ function client_type_access($op, $type = NULL, $account = NULL) {
  * Returns an array of client types, keyed by the type name.
  *
  * @return array
- *   An array of client types.
+ *   An associative array of client types, keyed by client type.
  */
 function client_get_types() {
   $types = &drupal_static(__FUNCTION__);
@@ -298,9 +298,9 @@ function client_load_multiple($cids = array(), $reset = FALSE) {
 /**
  * Loads a client object from the database.
  *
- * @param $cid
+ * @param int $cid
  *   The client ID.
- * @param $reset
+ * @param bool $reset
  *   Whether to reset the cache.
  *
  * @return
@@ -315,6 +315,9 @@ function client_load($cid = NULL, $reset = FALSE) {
 
 /**
  * Deletes a client.
+ *
+ * @param Client $client
+ *   The client to delete.
  */
 function client_delete(Client $client) {
   $client->delete();
@@ -323,7 +326,7 @@ function client_delete(Client $client) {
 /**
  * Deletes multiple clients.
  *
- * @param $cids
+ * @param array $cids
  *   An array of client IDs.
  */
 function client_delete_multiple(array $cids) {
@@ -331,7 +334,14 @@ function client_delete_multiple(array $cids) {
 }
 
 /**
- * Creates a client object.
+ * Creates a new client entity.
+ *
+ * @param array $values
+ *   An associative array of values to apply to the entity, keyed by property
+ *   name.
+ *
+ * @return Client
+ *   The new client entity.
  */
 function client_create($values = array()) {
   // Default to the 'client' bundle.
@@ -342,8 +352,8 @@ function client_create($values = array()) {
 /**
  * Saves a client to the database.
  *
- * @param $client
- *   The client object.
+ * @param Client $client
+ *   The client entity.
  */
 function client_save(Client $client) {
   return $client->save();

@@ -5,7 +5,7 @@
  * Base class for testing the Client module.
  */
 
-class ClientTestCase extends DrupalWebTestCase {
+class ClientWebTestCase extends DrupalWebTestCase {
 
   /**
    * {@inheritdoc}

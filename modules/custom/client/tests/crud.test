@@ -5,7 +5,7 @@
  * CRUD tests for the Client module.
  */
 
-class ClientCRUDTestCase extends ClientTestCase {
+class ClientCRUDTestCase extends ClientWebTestCase {
 
   /**
    * Returns test case metadata.

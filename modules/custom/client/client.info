@@ -25,4 +25,4 @@ features[field_instance][] = client-client-field_client_vat
 
 files[] = client.admin.inc
 files[] = tests/crud.test
-files[] = tests/client_test_case.php
+files[] = tests/client_web_test_case.php

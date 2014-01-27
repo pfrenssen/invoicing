@@ -102,12 +102,22 @@ function client_edit_form_validate($form, &$form_state) {
 /**
  * Form submission handler for client_edit_form().
  *
- * Saves a client.
+ * Saves a client and outputs a status message to the user.
  */
 function client_edit_form_submit($form, &$form_state) {
   $client = $form_state['client'];
   entity_form_submit_build_entity('client', $client, $form, $form_state);
-  client_save($client);
+
+  $operation = !empty($client->is_new) ? 'add' : 'edit';
+
+  if (client_save($client)) {
+    $message = $operation == 'add' ? 'New client %name has been added.' : 'Client %name has been edited.';
+    drupal_set_message(t($message, array('%name' => $client->name)));
+  }
+  else {
+    drupal_set_message(t('The client could not be saved.'), 'error');
+    watchdog('client', 'Client %name could not be saved.', array('%name' => $client->name), WATCHDOG_ERROR);
+  }
 }
 
 /**
@@ -118,4 +128,5 @@ function client_edit_form_submit($form, &$form_state) {
 function client_edit_form_delete_submit($form, &$form_state) {
   $client = $form_state['client'];
   client_delete($client);
+  drupal_set_message(t('The client has been deleted.'));
 }

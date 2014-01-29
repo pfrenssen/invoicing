@@ -97,6 +97,7 @@ function client_edit_form($form, &$form_state, Client $client) {
  * Form validation handler for client_edit_form().
  */
 function client_edit_form_validate($form, &$form_state) {
+  field_attach_form_validate('client', $form_state['client'], $form, $form_state);
 }
 
 /**

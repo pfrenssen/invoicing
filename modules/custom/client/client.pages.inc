@@ -112,7 +112,7 @@ function client_edit_form_submit($form, &$form_state) {
   $operation = !empty($client->is_new) ? 'add' : 'edit';
 
   if (client_save($client)) {
-    $message = $operation == 'add' ? 'New client %name has been added.' : 'Client %name has been edited.';
+    $message = $operation == 'add' ? 'New client %name has been added.' : 'The changes have been saved.';
     drupal_set_message(t($message, array('%name' => $client->name)));
   }
   else {

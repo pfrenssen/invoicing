@@ -123,10 +123,47 @@ function client_edit_form_submit($form, &$form_state) {
 /**
  * Form submission handler for client_edit_form().
  *
- * Deletes a client.
+ * Handles the 'Delete' button on the node form.
+ *
+ * @see client_edit_form()
+ * @see client_delete_confirm_form()
  */
 function client_edit_form_delete_submit($form, &$form_state) {
+  $destination = array();
+  if (isset($_GET['destination'])) {
+    $destination = drupal_get_destination();
+    unset($_GET['destination']);
+  }
+  $client = $form_state['client'];
+  $form_state['redirect'] = array('client/' . $client->cid . '/delete', array('query' => $destination));
+}
+
+/**
+ * Form constructor for the client deletion confirmation form.
+ *
+ * @see client_delete_confirm_form_submit()
+ */
+function client_delete_confirm_form($form, &$form_state, Client $client) {
+  $form_state['client'] = $client;
+  return confirm_form($form,
+    t('Are you sure you want to delete %name?', array('%name' => $client->name)),
+    'client/' . $client->cid,
+    t('This action cannot be undone.'),
+    t('Delete'),
+    t('Cancel')
+  );
+}
+
+/**
+ * Form submission handler for client_delete_confirm_form().
+ *
+ * Deletes the client.
+ *
+ * @see client_delete_confirm_form()
+ */
+function client_delete_confirm_form_submit($form, &$form_state) {
   $client = $form_state['client'];
   client_delete($client);
-  drupal_set_message(t('The client has been deleted.'));
+  drupal_set_message(t('Client %name has been deleted.', array('%name' => $client->name)));
+  $form_state['redirect'] = '<front>';
 }

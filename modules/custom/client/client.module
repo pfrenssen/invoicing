@@ -140,6 +140,16 @@ function client_menu() {
     'file' => 'client.pages.inc',
   );
 
+  $items['client/%client/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('client_delete_confirm_form', 1),
+    'access callback' => 'client_access',
+    'access arguments' => array('delete', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'client.pages.inc',
+  );
+
   return $items;
 }
 

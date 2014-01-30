@@ -20,6 +20,24 @@ class ClientWebTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * {@inheritdoc}
+   *
+   * Like DrupalTestCase::randomString(), but includes additional special
+   * characters, and starts with a space. This helps in discovering security
+   * problems and improper trimming and encoding of strings.
+   *
+   * By default it returns 16 characters rather than the usual 8 to make up for
+   * lost entropy.
+   */
+  public static function randomString($length = 16) {
+    $str = ' &\/;<>\'"ä☢';
+    for ($i = 0; $i < $length; $i++) {
+      $str .= chr(mt_rand(32, 126));
+    }
+    return $str;
+  }
+
+  /**
    * Returns random values for all properties on the client entity.
    *
    * @returns array

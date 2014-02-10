@@ -25,3 +25,8 @@ projects[features][download][type] = git
 projects[features][download][revision] = 7.x-2.0
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
+
+projects[views][download][type] = git
+projects[views][download][revision] = 7.x-3.7
+projects[views][download][branch] = 7.x-3.x
+projects[views][subdir] = contrib

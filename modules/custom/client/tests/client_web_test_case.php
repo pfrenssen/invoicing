@@ -62,11 +62,15 @@ class ClientWebTestCase extends DrupalWebTestCase {
    *   A random address field.
    */
   public function randomAddressField() {
+    // The Address Field module trims all input and converts double spaces to
+    // single spaces before saving the values to the database. We make sure our
+    // random data does the same so we do not get random failures.
+    // @see addressfield_field_presave()
     return array(
       'country' => chr(mt_rand(65, 90)) . chr(mt_rand(65, 90)),
-      'locality' => $this->randomString(),
+      'locality' => trim(str_replace('  ', ' ', $this->randomString())),
       'postal_code' => rand(1000, 9999),
-      'thoroughfare' => $this->randomString(),
+      'thoroughfare' => trim(str_replace('  ', ' ', $this->randomString())),
     );
   }
 

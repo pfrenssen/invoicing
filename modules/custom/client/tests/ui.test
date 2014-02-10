@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * UI tests for the Client module.
+ */
+
+class ClientUITestCase extends ClientWebTestCase {
+
+  /**
+   * A test user.
+   *
+   * @var object $user
+   */
+  protected $user;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UI test',
+      'description' => 'Tests the managing of clients through the user interface.',
+      'group' => 'Client',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('client');
+
+    // Create a test user and log in.
+    $permissions = array('administer clients');
+    $this->user = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->user);
+  }
+
+  /**
+   * Tests the client form.
+   */
+  public function testClientForm() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('client'), 'The client database table exists.');
+    $this->assertClientTableEmpty('The client database is initially empty.');
+
+    // Check that error messages are displayed about required fields when
+    // creating a new client.
+    $required_fields = array(
+      'name' => t('Client name'),
+      'field_client_email[und][0][email]' => t('Email address'),
+    );
+    $messages = array();
+    foreach ($required_fields as $required_field) {
+      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
+    }
+    $this->drupalPost('client/add', array(), t('Save'));
+    $this->assertFieldValidationFailed(array_keys($required_fields));
+    $this->assertStatusMessages($messages);
+
+    // Check form validation errors.
+    $invalid_values = array(
+      'field_client_email[und][0][email]' => $this->randomString(),
+    );
+    $messages = array(
+      'error' => array(
+        t('!name field is required.', array('!name' => t('Client name'))),
+        t('"%mail" is not a valid email address', array('%mail' => $invalid_values['field_client_email[und][0][email]']))),
+    );
+    $this->drupalPost('client/add', $invalid_values, t('Save'));
+    $this->assertFieldValidationFailed(array_keys($invalid_values));
+    $this->assertStatusMessages($messages);
+
+    // Fill in all the fields and check if they are saved correctly.
+    $values = $this->randomClientValues();
+    $client = $this->createUiClient($values);
+    $messages = array('status' => array(t('New client %name has been added.', array('%name' => $values['name']))));
+    $this->assertStatusMessages($messages);
+    $this->assertClientTableNotEmpty('The client database table is no longer empty after creating a client.');
+    $this->assertClientProperties($client, $values, 'The client has been correctly saved to the database.');
+
+    // Check that the form fields have correct values when the client is edited.
+    $this->drupalGet('client/' . $client->cid . '/edit');
+    $form_values = $this->convertToFormPostValues($values);
+    foreach ($form_values as $name => $value) {
+      $this->assertFieldByName($name, $value, format_string('When editing an existing client the %name field has the right value.', array('%name' => $name)));
+    }
+
+    // Change the values and check that the entity is correctly updated.
+    $new_values = $this->randomClientValues();
+    $this->drupalPost('client/' . $client->cid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $client = client_load($client->cid, TRUE);
+    $this->assertRaw(t('The changes have been saved.', array('%name' => $values['name'])), 'A message is shown informing the user that the client has been edited.');
+    $this->assertClientProperties($client, $new_values, 'The updated client has been correctly saved to the database.');
+
+    // Check that the user is redirected to the confirmation page when clicking
+    // the 'Delete' button on the client edit page.
+    $this->drupalPost('client/' . $client->cid . '/edit', array(), t('Delete'));
+    $this->assertUrl('client/' . $client->cid . '/delete', array(), 'The user is redirected to the confirmation form when clicking the "Delete" button in the client edit form.');
+    $this->assertRaw(t('Are you sure you want to delete %name?', array('%name' => $client->name)), 'The confirmation message is shown when deleting a user.');
+    $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting a user.');
+
+    // Check that the client can be deleted.
+    $this->drupalPost('client/' .$client->cid . '/delete', array(), t('Delete'));
+    $this->assertRaw(t('Client %name has been deleted.', array('%name' => $client->name)), 'A message is shown informing the user that the client has been deleted.');
+    $this->assertClientTableEmpty('The client database is empty after the client has been deleted.');
+  }
+
+  /**
+   * Returns form post values from the given entity values.
+   *
+   * @see self::randomClientValues()
+   *
+   * @param array $values
+   *   An associative array of client values, keyed by property name, as
+   *   returned by self::randomClientValues().
+   *
+   * @returns array
+   *   An associative array of values, keyed by form field name, as used by
+   *   parent::drupalPost().
+   */
+  public function convertToFormPostValues($values) {
+    return array(
+      'name' => $values['name'],
+      'field_client_email[und][0][email]' => $values['field_client_email'],
+      // @todo Support other countries in addition to Belgium.
+      'field_client_address[und][0][country]' => 'BE',
+      'field_client_address[und][0][thoroughfare]' => $values['field_client_address']['thoroughfare'],
+      'field_client_address[und][0][postal_code]' => $values['field_client_address']['postal_code'],
+      'field_client_address[und][0][locality]' => $values['field_client_address']['locality'],
+      // @todo Support other countries in addition to Belgium.
+      'field_client_shipping_address[und][0][country]' => 'BE',
+      'field_client_shipping_address[und][0][thoroughfare]' => $values['field_client_shipping_address']['thoroughfare'],
+      'field_client_shipping_address[und][0][postal_code]' => $values['field_client_shipping_address']['postal_code'],
+      'field_client_shipping_address[und][0][locality]' => $values['field_client_shipping_address']['locality'],
+      'field_client_vat[und][0][value]' => $values['field_client_vat'],
+      'field_client_phone[und][0][value]' => $values['field_client_phone'],
+      'field_client_notes[und][0][value]' => $values['field_client_notes'],
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function randomClientValues() {
+    $values = parent::randomClientValues();
+
+    // @todo Support other countries in addition to Belgium.
+    $values['field_client_address']['country'] = 'BE';
+    $values['field_client_shipping_address']['country'] = 'BE';
+
+    return $values;
+  }
+
+}

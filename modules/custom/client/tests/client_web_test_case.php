@@ -165,6 +165,31 @@ class ClientWebTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * Check if the given form fields are indicating that validation failed.
+   *
+   * This checks for the presence of the 'error' class on the field.
+   *
+   * @param array $fields
+   *   An indexed array of field names that should be checked.
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertFieldValidationFailed(array $fields, $message = '', $group = 'Other') {
+    $result = TRUE;
+    foreach ($fields as $field) {
+      $xpath = '//textarea[@name=:value and contains(@class, "error")]|//input[@name=:value and contains(@class, "error")]|//select[@name=:value and contains(@class, "error")]';
+      $elements = $this->xpath($this->buildXPathQuery($xpath, array(':value' => $field)));
+      $result &= $this->assertTrue($elements, format_string('The field %field has the "error" class.', array('%field' => $field)));
+    }
+    return $this->assertTrue($result, $message ?: 'All fields are indicating that validation failed.', $group);
+  }
+
+  /**
    * Creates a new client entity.
    *
    * @param array $values

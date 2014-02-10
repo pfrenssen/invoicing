@@ -209,6 +209,42 @@ class ClientWebTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * Creates a new client entity through the user interface.
+   *
+   * The saved client is retrieved by client name and email address. In order to
+   * retrieve the correct client entity, these should be unique.
+   *
+   * @param array $values
+   *   An optional associative array of values, keyed by property name. Random
+   *   values will be applied to all omitted properties.
+   *
+   * @return Client
+   *   A new client entity.
+   */
+  function createUiClient(array $values = array()) {
+    // Provide some default values.
+    $values += $this->randomClientValues();
+
+    // Convert the entity property values to form values and submit the form.
+    $edit = $this->convertToFormPostValues($values);
+    $this->drupalPost('client/add', $edit, t('Save'));
+
+    // Retrieve the saved client by name and email address and return it.
+    $query = new EntityFieldQuery();
+    $query
+      ->entityCondition('entity_type', 'client')
+      ->entityCondition('bundle', 'client')
+      ->propertyCondition('name', $values['name'])
+      ->fieldCondition('field_client_email', 'email', $values['field_client_email'])
+      ->range(0,1);
+    $result = $query->execute();
+    $cids = array_keys($result['client']);
+    $this->assertTrue($cids, 'Client was successfully created through the UI.');
+
+    return client_load($cids[0]);
+  }
+
+  /**
    * Updates the given client with the given properties.
    *
    * @param Client $client

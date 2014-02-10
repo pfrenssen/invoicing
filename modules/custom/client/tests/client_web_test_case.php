@@ -165,7 +165,7 @@ class ClientWebTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Creates a new client entity with random values.
+   * Creates a new client entity.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random

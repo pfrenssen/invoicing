@@ -31,6 +31,7 @@ function client_entity_info() {
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
     'access callback' => 'client_access',
+    'module' => 'client',
   );
 
   // Add bundle info but bypass entity_load() as we cannot use it here.

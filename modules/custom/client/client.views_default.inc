@@ -38,7 +38,7 @@ function client_views_default_views() {
     'field_client_phone' => 'field_client_phone',
     'nothing' => 'nothing',
   );
-  $handler->display->display_options['style_options']['default'] = 'cid';
+  $handler->display->display_options['style_options']['default'] = 'name';
   $handler->display->display_options['style_options']['info'] = array(
     'cid' => array(
       'sortable' => 1,

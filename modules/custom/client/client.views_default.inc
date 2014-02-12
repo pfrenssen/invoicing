@@ -41,28 +41,28 @@ function client_views_default_views() {
   $handler->display->display_options['style_options']['default'] = 'name';
   $handler->display->display_options['style_options']['info'] = array(
     'cid' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'name' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_client_email' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'field_client_phone' => array(
-      'sortable' => 1,
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',

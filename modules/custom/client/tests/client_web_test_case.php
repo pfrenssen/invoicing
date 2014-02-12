@@ -45,7 +45,7 @@ class ClientWebTestCase extends DrupalWebTestCase {
    */
   public function randomClientValues() {
     return array(
-      'name' => $this->randomName(),
+      'name' => $this->randomString(),
       'field_client_address' => $this->randomAddressField(),
       'field_client_shipping_address' => $this->randomAddressField(),
       'field_client_email' => $this->randomEmail(),

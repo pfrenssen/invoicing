@@ -287,6 +287,40 @@ class ClientWebTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * Check if a pager is present on the page.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertPager($message = '', $group = 'Other') {
+    $message = $message ?: 'A pager is present on the page.';
+    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
+    return $this->assertXPathElements($xpath, 1, array(), $message, $group);
+  }
+
+  /**
+   * Check if no pager is present on the page.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertNoPager($message = '', $group = 'Other') {
+    $message = $message ?: 'No pager is present on the page.';
+    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
+    return $this->assertXPathElements($xpath, 0, array(), $message, $group);
+  }
+
+  /**
    * Creates a new client entity.
    *
    * @param array $values

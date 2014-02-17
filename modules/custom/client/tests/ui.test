@@ -57,7 +57,7 @@ class ClientUITestCase extends ClientWebTestCase {
     }
     $this->drupalPost('client/add', array(), t('Save'));
     $this->assertFieldValidationFailed(array_keys($required_fields));
-    $this->assertStatusMessages($messages);
+    $this->assertStatusMessages($messages, 'Error messages are shown informing the user about required fields.');
 
     // Check form validation errors.
     $invalid_values = array(
@@ -70,13 +70,13 @@ class ClientUITestCase extends ClientWebTestCase {
     );
     $this->drupalPost('client/add', $invalid_values, t('Save'));
     $this->assertFieldValidationFailed(array_keys($invalid_values));
-    $this->assertStatusMessages($messages);
+    $this->assertStatusMessages($messages, 'Error messages are shown informing the user about form validation errors.');
 
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomClientValues();
     $client = $this->createUiClient($values);
     $messages = array('status' => array(t('New client %name has been added.', array('%name' => $values['name']))));
-    $this->assertStatusMessages($messages);
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been added.');
     $this->assertClientTableNotEmpty('The client database table is no longer empty after creating a client.');
     $this->assertClientProperties($client, $values, 'The client has been correctly saved to the database.');
 
@@ -91,7 +91,8 @@ class ClientUITestCase extends ClientWebTestCase {
     $new_values = $this->randomClientValues();
     $this->drupalPost('client/' . $client->cid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
     $client = client_load($client->cid, TRUE);
-    $this->assertRaw(t('The changes have been saved.', array('%name' => $values['name'])), 'A message is shown informing the user that the client has been edited.');
+    $messages = array('status' => array(t('The changes have been saved.', array('%name' => $values['name']))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been edited.');
     $this->assertClientProperties($client, $new_values, 'The updated client has been correctly saved to the database.');
 
     // Check that the user is redirected to the confirmation page when clicking
@@ -103,7 +104,8 @@ class ClientUITestCase extends ClientWebTestCase {
 
     // Check that the client can be deleted.
     $this->drupalPost('client/' .$client->cid . '/delete', array(), t('Delete'));
-    $this->assertRaw(t('Client %name has been deleted.', array('%name' => $client->name)), 'A message is shown informing the user that the client has been deleted.');
+    $messages = array('status' => array(t('Client %name has been deleted.', array('%name' => $client->name))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been deleted.');
     $this->assertClientTableEmpty('The client database is empty after the client has been deleted.');
   }
 

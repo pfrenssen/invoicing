@@ -79,6 +79,7 @@ class ClientUITestCase extends ClientWebTestCase {
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been added.');
     $this->assertClientTableNotEmpty('The client database table is no longer empty after creating a client.');
     $this->assertClientProperties($client, $values, 'The client has been correctly saved to the database.');
+    $this->assertUrl('clients', array(), 'The user is redirected to the client overview after creating a new client.');
 
     // Check that the form fields have correct values when the client is edited.
     $this->drupalGet('client/' . $client->cid . '/edit');
@@ -94,6 +95,7 @@ class ClientUITestCase extends ClientWebTestCase {
     $messages = array('status' => array(t('The changes have been saved.', array('%name' => $values['name']))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been edited.');
     $this->assertClientProperties($client, $new_values, 'The updated client has been correctly saved to the database.');
+    $this->assertUrl('clients', array(), 'The user is redirected to the client overview after editing a client.');
 
     // Check that the user is redirected to the confirmation page when clicking
     // the 'Delete' button on the client edit page.
@@ -107,6 +109,7 @@ class ClientUITestCase extends ClientWebTestCase {
     $messages = array('status' => array(t('Client %name has been deleted.', array('%name' => $client->name))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been deleted.');
     $this->assertClientTableEmpty('The client database is empty after the client has been deleted.');
+    $this->assertUrl('clients', array(), 'The user is redirected to the client overview after deleting a client.');
   }
 
   /**

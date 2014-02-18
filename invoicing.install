@@ -72,9 +72,6 @@ function invoicing_install() {
   }
   $query->execute();
 
-  // Allow visitor account creation, but with administrative approval.
-  variable_set('user_register', USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL);
-
   // Create the 'administrator' role and grant permissions.
   $role = new stdClass();
   $role->name = 'administrator';
@@ -109,4 +106,8 @@ function invoicing_install() {
   // Enable default permissions for system roles.
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
+
+  // Allow visitor account creation.
+  variable_set('user_register', USER_REGISTER_VISITORS);
+
 }

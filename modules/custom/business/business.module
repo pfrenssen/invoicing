@@ -5,6 +5,8 @@
  * Main functions and hook implementations for the Invoicing Business module.
  */
 
+include_once 'business.features.inc';
+
 /**
  * Implements hook_entity_info().
  */

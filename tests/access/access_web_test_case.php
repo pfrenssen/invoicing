@@ -4,7 +4,7 @@
  * @file
  * Base class for access and permission tests.
  */
-class AccessWebTestCase extends DrupalWebTestCase {
+abstract class AccessWebTestCase extends DrupalWebTestCase {
 
   /**
    * {@inheritdoc}

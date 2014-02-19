@@ -49,7 +49,6 @@ class BusinessUITestCase extends BusinessWebTestCase {
     // creating a new business.
     $required_fields = array(
       'name' => t('Business name'),
-      'field_business_email[und][0][email]' => t('Email address'),
     );
     $messages = array();
     foreach ($required_fields as $required_field) {
@@ -123,7 +122,7 @@ class BusinessUITestCase extends BusinessWebTestCase {
   public function convertToFormPostValues($values) {
     return array(
       'name' => $values['name'],
-      'field_businesst_email[und][0][email]' => $values['field_business_email'],
+      'field_business_email[und][0][email]' => $values['field_business_email'],
       // @todo Support other countries in addition to Belgium.
       'field_business_address[und][0][country]' => 'BE',
       'field_business_address[und][0][thoroughfare]' => $values['field_business_address']['thoroughfare'],
@@ -145,7 +144,6 @@ class BusinessUITestCase extends BusinessWebTestCase {
 
     // @todo Support other countries in addition to Belgium.
     $values['field_business_address']['country'] = 'BE';
-    $values['field_business_shipping_address']['country'] = 'BE';
 
     return $values;
   }

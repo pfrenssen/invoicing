@@ -1,0 +1,4 @@
+name = Invoicing Core
+description = Core functionality for the Invoicing application.
+core = 7.x
+package = Invoicing

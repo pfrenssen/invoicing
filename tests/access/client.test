@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Access and permission tests for the 'client' role.
+ */
+
+class ClientAccessTestCase extends AccessWebTestCase {
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Client',
+      'description' => 'Tests access permissions for the "client" role.',
+      'group' => 'Invoicing - Access',
+    );
+  }
+
+}

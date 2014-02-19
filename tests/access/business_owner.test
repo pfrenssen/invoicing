@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Access and permission tests for the 'business owner' role.
+ */
+
+class BusinessOwnerAccessTestCase extends AccessWebTestCase {
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Business owner',
+      'description' => 'Tests access permissions for the "business owner" role.',
+      'group' => 'Invoicing - Access',
+    );
+  }
+
+}

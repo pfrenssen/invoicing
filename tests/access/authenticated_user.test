@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Access and permission tests for the 'authenticated user' role.
+ */
+
+class AuthenticatedUserAccessTestCase extends AccessWebTestCase {
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Authenticated user',
+      'description' => 'Tests access permissions for the "authenticated user" role.',
+      'group' => 'Invoicing - Access',
+    );
+  }
+
+}

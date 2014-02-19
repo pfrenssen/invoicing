@@ -7,3 +7,10 @@ dependencies[] = block
 dependencies[] = client
 dependencies[] = ctools
 dependencies[] = features
+
+files[] = tests/access/access_web_test_case.php
+files[] = tests/access/administrator.test
+files[] = tests/access/anonymous_user.test
+files[] = tests/access/authenticated_user.test
+files[] = tests/access/business_owner.test
+files[] = tests/access/client.test

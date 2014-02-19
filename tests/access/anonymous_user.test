@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Access and permission tests for the 'anonymous user' role.
+ */
+
+class AnonymousUserAccessTestCase extends AccessWebTestCase {
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Anonymous user',
+      'description' => 'Tests access permissions for the "anonymous user" role.',
+      'group' => 'Invoicing - Access',
+    );
+  }
+
+}

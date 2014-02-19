@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Access and permission tests for the 'administrator' role.
+ */
+
+class AdministratorAccessTestCase extends AccessWebTestCase {
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Administrator',
+      'description' => 'Tests access permissions for the "administrator" role.',
+      'group' => 'Invoicing - Access',
+    );
+  }
+
+}

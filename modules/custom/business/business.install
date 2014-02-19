@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update and schema hooks for Invoicing Business.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function business_schema() {
+  $schema = array();
+
+  $schema['business'] = array(
+    'description' => 'The base table for Business entities.',
+    'fields' => array(
+      'bid' => array(
+        'description' => 'The primary identifier for a business.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The {business_type}.type of this business.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'name' => array(
+        'description' => 'The name of the business.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the business was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the business was most recently saved.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('bid'),
+    'indexes' => array(
+      'type' => array('type'),
+    ),
+  );
+
+  $schema['business_type'] = array(
+    'description' => 'Stores information about defined business types.',
+    'fields' => array(
+      'type' => array(
+        'description' => 'The machine-readable name of this business type.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'The human-readable name of this business type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'translatable' => TRUE,
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        // Set the default to ENTITY_CUSTOM without using the constant as it is
+        // not safe to use it at this point.
+        'default' => 0x01,
+        'size' => 'tiny',
+        'description' => 'The exportable status of the entity.',
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('type'),
+  );
+
+  return $schema;
+}

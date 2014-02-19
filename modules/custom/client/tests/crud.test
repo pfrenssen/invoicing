@@ -2,10 +2,10 @@
 
 /**
  * @file
- * CRUD tests for the Business module.
+ * CRUD tests for the Client module.
  */
 
-class BusinessCRUDTestCase extends BusinessWebTestCase {
+class ClientCRUDTestCase extends ClientWebTestCase {
 
   /**
    * Returns test case metadata.
@@ -13,39 +13,39 @@ class BusinessCRUDTestCase extends BusinessWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'CRUD test',
-      'description' => 'Tests the creating, reading, updating and deleting of businesses.',
-      'group' => 'Business',
+      'description' => 'Tests the creating, reading, updating and deleting of clients.',
+      'group' => 'Client',
     );
   }
 
   /**
-   * Tests creating, reading, updating and deleting of businesses.
+   * Tests creating, reading, updating and deleting of clients.
    */
-  public function testBusinessCRUD() {
+  public function testClientCRUD() {
     // Check that the database table exists and is empty.
-    $this->assertTrue(db_table_exists('business'), 'The business database table exists.');
-    $this->assertBusinessTableEmpty('The business database is initially empty.');
+    $this->assertTrue(db_table_exists('client'), 'The client database table exists.');
+    $this->assertClientTableEmpty('The client database is initially empty.');
 
-    // Check if a new business can be saved to the database.
-    $values = $this->randomBusinessValues();
-    $business = $this->createBusiness($values);
-    $business->save();
-    $this->assertBusinessTableNotEmpty('The business database table is no longer empty after creating a business.');
+    // Check if a new client can be saved to the database.
+    $values = $this->randomClientValues();
+    $client = $this->createClient($values);
+    $client->save();
+    $this->assertClientTableNotEmpty('The client database table is no longer empty after creating a client.');
 
-    // Check that the business data can be read from the database.
-    $retrieved_business = business_load($business->bid);
-    $this->assertBusinessProperties($retrieved_business, $values, 'The business that was saved to the database can be read correctly.');
+    // Check that the client data can be read from the database.
+    $retrieved_client = client_load($client->cid);
+    $this->assertClientProperties($retrieved_client, $values, 'The client that was saved to the database can be read correctly.');
 
-    // Update the business and check that the new values were written to the
+    // Update the client and check that the new values were written to the
     // database.
-    $new_values = $this->randomBusinessValues();
-    $this->updateBusiness($business, $new_values);
-    $business->save();
-    $this->assertBusinessProperties($business, $new_values, 'The business has been updated correctly.');
+    $new_values = $this->randomClientValues();
+    $this->updateClient($client, $new_values);
+    $client->save();
+    $this->assertClientProperties($client, $new_values, 'The client has been updated correctly.');
 
-    // Delete the business. The database should be empty again.
-    $business->delete();
-    $this->assertBusinessTableEmpty('The business can be deleted from the database.');
+    // Delete the client. The database should be empty again.
+    $client->delete();
+    $this->assertClientTableEmpty('The client can be deleted from the database.');
   }
 
 }

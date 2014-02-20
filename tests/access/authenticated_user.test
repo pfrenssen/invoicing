@@ -25,7 +25,8 @@ class AuthenticatedUserAccessTestCase extends AccessWebTestCase {
    * {@inheritdoc}
    */
   protected $inaccessiblePaths = array(
-    // The front page will become accessible when we have a dashboard.
+    // @todo The front page will become accessible when we have a dashboard.
+    // @see http://atrium.pocomas.be/invoicing/node/1165
     '<front>',
     'admin',
     'admin/config',

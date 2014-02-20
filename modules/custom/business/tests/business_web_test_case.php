@@ -263,6 +263,31 @@ class BusinessWebTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * Check if element(s) that match the given XPath expression are present.
+   *
+   * @param array $xpath
+   *   The XPath expression to execute on the page.
+   * @param int $count
+   *   The number of elements that should match the expression.
+   * @param array $arguments
+   *   Optional array of arguments to pass to DrupalWebTestCase::xpath().
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertXPathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
+    // Provide a default message.
+    $message = $message ?: format_plural($count, 'The element matching the XPath expression is present in the page.', 'The @count elements matching the XPath expression are present in the page.');
+
+    $elements = $this->xpath($xpath, $arguments);
+    return $this->assertEqual(count($elements), $count, $message, $group);
+  }
+
+  /**
    * Creates a new business entity.
    *
    * @param array $values

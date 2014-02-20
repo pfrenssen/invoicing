@@ -27,6 +27,7 @@ features[field_instance][] = business-business-field_business_phone
 features[field_instance][] = business-business-field_business_vat
 
 files[] = business.admin.inc
+files[] = tests/access.test
 files[] = tests/crud.test
 files[] = tests/business_web_test_case.php
 files[] = tests/ui.test

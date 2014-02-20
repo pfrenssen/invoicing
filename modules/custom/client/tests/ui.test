@@ -112,6 +112,47 @@ class ClientUITestCase extends ClientWebTestCase {
     $this->assertUrl('clients', array(), 'The user is redirected to the client overview after deleting a client.');
   }
 
+  /*
+   * Tests the rendering of the client entity.
+   */
+  public function testClientViewEntity() {
+    $client = $this->createUiClient();
+
+    $this->drupalGet('client/' . $client->cid);
+    // Check that the entity is rendered.
+    $xpath = '//div[contains(@class, "entity-client")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The client entity is rendered.');
+
+    // Check that the entity title is a link.
+    $url = url('client/' . $client->cid);
+    $xpath = '//div[contains(@class, "entity-client")]//a[@href=:href]';
+    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client entity is rendered.');
+
+    // Check that all fields are rendered.
+    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-address")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The address field is rendered.');
+    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-shipping-address")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The shipping address field is rendered.');
+    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-email")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The email field is rendered.');
+    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-notes")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The notes field is rendered.');
+    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-phone")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The phone field is rendered.');
+    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-vat")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The vat field is rendered.');
+
+    // Check if the edit and delete tabs are rendered.
+    $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
+    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client view tab is rendered.');
+    $url = ur('client/' . $client->cid . '/edit');
+    $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
+    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client edit tab is rendered.');
+    $url = ur('client/' . $client->cid . '/delete');
+    $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
+    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client delete tab is rendered.');
+  }
+
   /**
    * Returns form post values from the given entity values.
    *

@@ -1,0 +1,472 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations for the Business module.
+ */
+
+include_once 'business.features.inc';
+
+/**
+ * Implements hook_entity_info().
+ */
+function business_entity_info() {
+  $info = array();
+
+  $entity_info['business'] = array(
+    'label' => t('Business'),
+    'plural label' => t('Businesses'),
+    'entity class' => 'Business',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'business',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+      'id' => 'bid',
+      'bundle' => 'type',
+    ),
+    'bundle keys' => array(
+      'bundle' => 'type',
+    ),
+    'bundles' => array(),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'access callback' => 'business_access',
+  );
+
+  // Add bundle info but bypass entity_load() as we cannot use it here.
+  $types = db_select('business_type', 'ibt')
+    ->fields('ibt', array('type', 'name'))
+    ->execute()
+    ->fetchAllKeyed();
+
+  foreach ($types as $type => $name) {
+    $entity_info['business']['bundles'][$type] = array(
+      'label' => $name,
+      'admin' => array(
+        'path' => 'admin/structure/businesses/manage/%business_type',
+        'real path' => 'admin/structure/businesses/manage/' . $type,
+        'bundle argument' => 4,
+        'access arguments' => array('administer businesses'),
+      ),
+    );
+  }
+
+  $entity_info['business_type'] = array(
+    'label' => t('Business type'),
+    'plural label' => t('Business types'),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIControllerExportable',
+    'base table' => 'business_type',
+    'fieldable' => FALSE,
+    'bundle of' => 'business',
+    'exportable' => TRUE,
+    'entity keys' => array(
+      'id' => 'type',
+      'name' => 'type',
+      'label' => 'name',
+    ),
+    'access callback' => 'business_type_access',
+    'label callback' => 'business_type_label',
+    'module' => 'business',
+    'admin ui' => array(
+      'path' => 'admin/structure/businesses',
+      'file' => 'business.admin.inc',
+      'controller class' => 'EntityDefaultUIController',
+    ),
+  );
+
+  return $entity_info;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function business_entity_property_info_alter(&$info) {
+  // Augment the default information that is provided by entityPropertyInfo().
+  // @see EntityDefaultMetadataController::entityPropertyInfo()
+  $properties = &$info['business']['properties'];
+
+  $properties['type']['description'] = t('The business type');
+  $properties['type']['options list'] = 'business_type_get_names';
+  $properties['type']['required'] = TRUE;
+  $properties['type']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['type']['setter permission'] = 'administer businesses';
+
+  $properties['name']['description'] = t('The name of the business.');
+  $properties['name']['required'] = TRUE;
+  $properties['name']['setter callback'] = 'entity_property_verbatim_set';
+
+  $properties['created']['label'] = t('Date created');
+  $properties['created']['description'] = t('The date the business was created.');
+  $properties['created']['type'] = 'date';
+  $properties['created']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['created']['setter permission'] = 'administer businesses';
+
+  $properties['changed']['label'] = t('Date changed');
+  $properties['changed']['description'] = t('The date the business was most recently updated.');
+  $properties['changed']['type'] = 'date';
+
+  $properties['is_new']['label'] = t('Is new');
+  $properties['is_new']['description'] = t('Whether the business is new and not saved to the database yet.');
+  $properties['is_new']['type'] = 'boolean';
+  $properties['is_new']['getter callback'] = 'business_entity_metadata_get_properties';
+}
+
+/**
+ * Implements hook_menu().
+ */
+function business_menu() {
+  $items = array();
+
+  // We only support one basic business type for the moment. This may be
+  // extended in the future.
+  $business_type = business_type_load('business');
+  $items['business/add'] = array(
+    'title' => 'Add business',
+    'page callback' => 'business_add_page',
+    'page arguments' => array($business_type),
+    'access callback' => 'business_access',
+    'access arguments' => array('create', $business_type),
+    'file' => 'business.pages.inc',
+  );
+
+  $items['business/%business/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'business_edit_page',
+    'page arguments' => array(1),
+    'access callback' => 'business_access',
+    'access arguments' => array('update', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'business.pages.inc',
+  );
+
+  $items['business/%business/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('business_delete_confirm_form', 1),
+    'access callback' => 'business_access',
+    'access arguments' => array('delete', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'business.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function business_permission() {
+  $permissions = array(
+    'administer business types' => array(
+      'title' => t('Administer business types'),
+      'description' => t('Create and delete fields for business types, and set their permissions.'),
+    ),
+    'administer businesses' => array(
+      'title' => t('Administer businesses'),
+      'description' => t('Edit and delete all businesses'),
+    ),
+  );
+
+  // Generate permissions per business type.
+  foreach (business_get_types() as $type) {
+    $permissions += array(
+      "edit any $type->type business" => array(
+        'title' => t('%type_name: Edit any business', array('%type_name' => $type->name)),
+      ),
+      "view any $type->type business" => array(
+        'title' => t('%type_name: View any business', array('%type_name' => $type->name)),
+      ),
+    );
+  }
+
+  return $permissions;
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function business_field_extra_fields() {
+  $extra_fields = array();
+
+  foreach (business_get_types() as $business_type) {
+    $extra_fields['business'][$business_type->type] = array(
+      'form' => array(
+        'name' => array(
+          'label' => t('Name'),
+          'description' => t('The name of the business'),
+          'weight' => -5,
+        ),
+      ),
+    );
+  }
+
+  return $extra_fields;
+}
+
+/**
+ * Determines whether the given user has access to a business.
+ *
+ * @param string $op
+ *   The operation being performed. One of 'view', 'update', 'create', 'delete'
+ *   or just 'edit' (being the same as 'create' or 'update').
+ * @param object $business
+ *   Optionally a business or a business type to check access for. If nothing is
+ *   given, access for all businesses is determined.
+ * @param object $account
+ *   Optional, a user object representing the user for whom the operation is to
+ *   be performed. Determines access for a user other than the current user.
+ *
+ * @return boolean
+ *   TRUE if the operation may be performed, FALSE otherwise.
+ */
+function business_access($op, $business = NULL, $account = NULL) {
+  if (user_access('administer businesses', $account)) {
+    return TRUE;
+  }
+  if (isset($business)) {
+    $op = $op == 'view' ? 'view' : 'edit';
+    return user_access("$op any $business->type business", $account);
+  }
+
+  return FALSE;
+}
+
+/**
+ * Access callback for Entity API exportables for business types.
+ */
+function business_type_access($op, $type = NULL, $account = NULL) {
+  return user_access('administer business types', $account);
+}
+
+/**
+ * Returns an array of business types, keyed by the type name.
+ *
+ * @return array
+ *   An associative array of business types, keyed by business type.
+ */
+function business_get_types() {
+  $types = &drupal_static(__FUNCTION__);
+
+  if (!$types) {
+    $types = db_select('business_type', 'ibt')
+      ->fields('ibt')
+      ->execute()
+      ->fetchAllAssoc('type');
+  }
+
+  return $types;
+}
+
+/**
+ * Returns a business type by type name.
+ *
+ * @param string $type
+ *   The machine readable name of the business type.
+ *
+ * @return Entity
+ *   A business type entity, or FALSE if the business type does not exist.
+ */
+function business_type_load($type) {
+  $types = business_get_types();
+
+  return !empty($types[$type]) ? $types[$type] : FALSE;
+}
+
+/**
+ * Returns a list of business type machine names.
+ *
+ * @return array
+ *   An indexed array of business type machine names.
+ */
+function business_type_get_names() {
+  return array_keys(business_get_types());
+}
+
+/**
+ * Loads businesses from the database.
+ *
+ * This function should be used whenever you need to load more than one business
+ * from the database. businesses are loaded into memory and will not require
+ * database access if loaded again during the same page request.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
+ *
+ * @param $bids
+ *   An array of business IDs.
+ * @param $reset
+ *   Whether to reset the internal cache.
+ *
+ * @return
+ *   An array of business objects indexed by bid.
+ */
+function business_load_multiple($bids = array(), $reset = FALSE) {
+  return entity_load('business', $bids, array(), $reset);
+}
+
+/**
+ * Loads a business object from the database.
+ *
+ * @param int $bid
+ *   The business ID.
+ * @param bool $reset
+ *   Whether to reset the cache.
+ *
+ * @return
+ *   A fully-populated business object, or FALSE if the business is not found.
+ */
+function business_load($bid = NULL, $reset = FALSE) {
+  $bids = isset($bid) ? array($bid) : array();
+  $businesses = business_load_multiple($bids, $reset);
+
+  return $businesses ? reset($businesses) : FALSE;
+}
+
+/**
+ * Deletes a business.
+ *
+ * @param Business $business
+ *   The business to delete.
+ */
+function business_delete(Business $business) {
+  $business->delete();
+}
+
+/**
+ * Deletes multiple businesses.
+ *
+ * @param array $bids
+ *   An array of business IDs.
+ */
+function business_delete_multiple(array $bids) {
+  entity_get_controller('business')->delete($bids);
+}
+
+/**
+ * Creates a new business entity.
+ *
+ * @param array $values
+ *   An associative array of values to apply to the entity, keyed by property
+ *   name.
+ *
+ * @return Business
+ *   The new business entity.
+ */
+function business_create($values = array()) {
+  // Default to the 'business' bundle.
+  $values += array('type' => 'business');
+  return entity_get_controller('business')->create($values);
+}
+
+/**
+ * Saves a business to the database.
+ *
+ * @param Business $business
+ *   The business entity.
+ *
+ * @return mixed
+ *   Returns FALSE if the transaction failed. If it succeeded, returns SAVED_NEW
+ *   or SAVED_UPDATED, depending on the operation performed.
+ */
+function business_save(Business $business) {
+  return $business->save();
+}
+
+/**
+ * Implements callback_entity_info_uri().
+ */
+function business_uri(Business $business){
+  return array(
+    'path' => 'business/' . $business->bid,
+  );
+}
+
+/**
+ * Title callback: Returns the title of the business.
+ *
+ * @param $business
+ *   The business object.
+ *
+ * @return
+ *   An unsanitized string that is the title of the business.
+ *
+ * @see business_menu()
+ */
+function business_page_title($business) {
+  return $business->name;
+}
+
+/**
+ * Creates a business type.
+ *
+ * @param string $type
+ *   The machine readable name of the business type.
+ * @param string $name
+ *   The human readable name of the business type.
+ */
+function business_type_create($type, $name) {
+  db_insert('business_type')
+    ->fields(array(
+      'type' => $type,
+      'name' => $name,
+    ))
+    ->execute();
+}
+
+/**
+ * Callback for getting business properties.
+ *
+ * @see business_entity_property_info()
+ */
+function business_entity_metadata_get_properties(Business $business, array $options, $name, $entity_type, $info) {
+  switch ($name) {
+    case 'is_new':
+      return empty($business->bid) || !empty($business->is_new);
+  }
+}
+
+/**
+ * The class used for business entities.
+ */
+class Business extends Entity {
+
+  /**
+   * The primary identifier for a business.
+   */
+  public $bid;
+
+  /**
+   * The type of this business.
+   */
+  public $type;
+
+  /**
+   * The name of the business.
+   */
+  public $name;
+
+  /**
+   * The Unix timestamp when the business was created.
+   */
+  public $created;
+
+  /**
+   * The Unix timestamp when the business was most recently saved.
+   */
+  public $changed;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save() {
+    // Set created and changed values. Only set the created value if it is new.
+    if (empty($this->created) && (!empty($this->is_new) || !$this->bid)) {
+      $this->created = REQUEST_TIME;
+    }
+    $this->changed = REQUEST_TIME;
+
+    return parent::save();
+  }
+
+}

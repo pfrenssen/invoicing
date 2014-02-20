@@ -1,0 +1,32 @@
+name = Business
+description = Business related functionality.
+core = 7.x
+package = Invoicing
+
+dependencies[] = addressfield
+dependencies[] = email
+dependencies[] = entity
+dependencies[] = features
+dependencies[] = text
+
+features[business_type][] = business
+features[features_api][] = api:2
+features[field_base][] = field_business_address
+features[field_base][] = field_business_bic
+features[field_base][] = field_business_email
+features[field_base][] = field_business_iban
+features[field_base][] = field_business_mobile
+features[field_base][] = field_business_phone
+features[field_base][] = field_business_vat
+features[field_instance][] = business-business-field_business_address
+features[field_instance][] = business-business-field_business_bic
+features[field_instance][] = business-business-field_business_email
+features[field_instance][] = business-business-field_business_iban
+features[field_instance][] = business-business-field_business_mobile
+features[field_instance][] = business-business-field_business_phone
+features[field_instance][] = business-business-field_business_vat
+
+files[] = business.admin.inc
+files[] = tests/crud.test
+files[] = tests/business_web_test_case.php
+files[] = tests/ui.test

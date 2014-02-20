@@ -29,7 +29,7 @@ function client_entity_info() {
     ),
     'bundles' => array(),
     'label callback' => 'client_label',
-    'uri callback' => 'entity_class_uri',
+    'uri callback' => 'client_uri',
     'access callback' => 'client_access',
     'module' => 'client',
   );
@@ -416,7 +416,7 @@ function client_save(Client $client) {
 /**
  * Implements callback_entity_info_uri().
  */
-function client_uri(Client $client){
+function client_uri(Client $client) {
   return array(
     'path' => 'client/' . $client->cid,
   );

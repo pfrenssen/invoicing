@@ -46,8 +46,20 @@ function client_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'bid' => array(
+        'description' => 'The id of the business this client belongs to.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
     ),
     'primary key' => array('cid'),
+    'foreign keys' => array(
+      'bid' => array(
+        'table' => 'business',
+        'columns' => array('bid' => 'bid'),
+      ),
+    ),
     'indexes' => array(
       'type' => array('type'),
     ),

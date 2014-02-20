@@ -18,6 +18,7 @@ class AdministratorAccessTestCase extends AccessWebTestCase {
   protected $accessiblePaths = array(
     'clients',
     'client/add',
+    'business/add',
     'user',
     'user/password',
     'user/register',

@@ -41,7 +41,9 @@ class BusinessOwnerAccessTestCase extends AccessWebTestCase {
     // @see http://atrium.pocomas.be/invoicing/node/1157
     'clients',
     'client/add',
-
+    // @todo This will become accessible once we have 'edit/create own business'
+    //  permissions.
+    'business/add',
     'node',
     'node/add',
   );

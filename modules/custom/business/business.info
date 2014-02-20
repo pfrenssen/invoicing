@@ -1,4 +1,4 @@
-name = Invoicing Business
+name = Business
 description = Business related functionality.
 core = 7.x
 package = Invoicing

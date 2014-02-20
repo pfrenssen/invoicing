@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations for the Invoicing Business module.
+ * Main functions and hook implementations for the Business module.
  */
 
 include_once 'business.features.inc';

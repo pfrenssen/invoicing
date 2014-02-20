@@ -183,7 +183,15 @@ function client_permission() {
     ),
     'administer clients' => array(
       'title' => t('Administer clients'),
-      'description' => t('Edit and delete all clients'),
+      'description' => t('Edit and delete all clients.'),
+    ),
+    'administer own clients' => array(
+      'title' => t('Administer own clients'),
+      'description' => t('Edit and delete your own clients.'),
+    ),
+    'view own clients' => array(
+      'title' => t('View own clients'),
+      'description' => t('View your own clients.'),
     ),
   );
 

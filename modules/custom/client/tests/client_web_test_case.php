@@ -45,7 +45,7 @@ class ClientWebTestCase extends DrupalWebTestCase {
    */
   public function randomClientValues() {
     return array(
-      'name' => $this->randomName(),
+      'name' => $this->randomString(),
       'field_client_address' => $this->randomAddressField(),
       'field_client_shipping_address' => $this->randomAddressField(),
       'field_client_email' => $this->randomEmail(),
@@ -259,6 +259,65 @@ class ClientWebTestCase extends DrupalWebTestCase {
     }
 
     return $this->assertTrue($result, $message ?: 'The correct messages are shown.', $group);
+  }
+
+  /**
+   * Check if element(s) that match the given XPath expression are present.
+   *
+   * @param array $xpath
+   *   The XPath expression to execute on the page.
+   * @param int $count
+   *   The number of elements that should match the expression.
+   * @param array $arguments
+   *   Optional array of arguments to pass to DrupalWebTestCase::xpath().
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertXPathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
+    // Provide a default message.
+    $message = $message ?: format_plural($count, 'The element matching the XPath expression is present in the page.', 'The @count elements matching the XPath expression are present in the page.');
+
+    $elements = $this->xpath($xpath, $arguments);
+    return $this->assertEqual(count($elements), $count, $message, $group);
+  }
+
+  /**
+   * Check if a pager is present on the page.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertPager($message = '', $group = 'Other') {
+    $message = $message ?: 'A pager is present on the page.';
+    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
+    return $this->assertXPathElements($xpath, 1, array(), $message, $group);
+  }
+
+  /**
+   * Check if no pager is present on the page.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertNoPager($message = '', $group = 'Other') {
+    $message = $message ?: 'No pager is present on the page.';
+    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
+    return $this->assertXPathElements($xpath, 0, array(), $message, $group);
   }
 
   /**

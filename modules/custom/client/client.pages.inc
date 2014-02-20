@@ -119,6 +119,8 @@ function client_edit_form_submit($form, &$form_state) {
     drupal_set_message(t('The client could not be saved.'), 'error');
     watchdog('client', 'Client %name could not be saved.', array('%name' => $client->name), WATCHDOG_ERROR);
   }
+
+  $form_state['redirect'] = 'clients';
 }
 
 /**
@@ -166,5 +168,5 @@ function client_delete_confirm_form_submit($form, &$form_state) {
   $client = $form_state['client'];
   client_delete($client);
   drupal_set_message(t('Client %name has been deleted.', array('%name' => $client->name)));
-  $form_state['redirect'] = '<front>';
+  $form_state['redirect'] = 'clients';
 }

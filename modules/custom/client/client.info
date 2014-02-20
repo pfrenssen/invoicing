@@ -1,4 +1,4 @@
-name = Invoicing Client
+name = Client
 description = Client related functionality.
 core = 7.x
 package = Invoicing
@@ -7,8 +7,10 @@ dependencies[] = addressfield
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = features
+dependencies[] = views
 
 features[client_type][] = client
+features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
 features[field_base][] = field_client_address
 features[field_base][] = field_client_email
@@ -22,8 +24,10 @@ features[field_instance][] = client-client-field_client_notes
 features[field_instance][] = client-client-field_client_phone
 features[field_instance][] = client-client-field_client_shipping_address
 features[field_instance][] = client-client-field_client_vat
+features[views_view][] = clients
 
 files[] = client.admin.inc
 files[] = tests/crud.test
 files[] = tests/client_web_test_case.php
+files[] = tests/overview.test
 files[] = tests/ui.test

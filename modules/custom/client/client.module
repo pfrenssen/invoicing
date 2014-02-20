@@ -139,6 +139,7 @@ function client_menu() {
     'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
     'file' => 'client.pages.inc',
+    'weight' => 5,
   );
 
   $items['client/%client/delete'] = array(
@@ -148,6 +149,28 @@ function client_menu() {
     'access callback' => 'client_access',
     'access arguments' => array('delete', 1),
     'type' => MENU_LOCAL_TASK,
+    'file' => 'client.pages.inc',
+    'weight' => 10,
+  );
+
+  $items['client/%client/view'] = array(
+    'title' => 'View',
+    'page callback' => 'client_detail_page',
+    'page arguments' => array(1),
+    'access callback' => 'client_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'client.pages.inc',
+    'weight' => 0,
+  );
+
+  $items['client/%client'] = array(
+    'title' => '',
+    'page callback' => 'client_detail_page',
+    'page arguments' => array(1),
+    'access callback' => 'client_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_CALLBACK,
     'file' => 'client.pages.inc',
   );
 

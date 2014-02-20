@@ -4,6 +4,7 @@ core = 7.x
 package = Invoicing
 
 dependencies[] = addressfield
+dependencies[] = business
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = features

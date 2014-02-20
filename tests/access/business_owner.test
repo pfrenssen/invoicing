@@ -8,6 +8,45 @@
 class BusinessOwnerAccessTestCase extends AccessWebTestCase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $role = 'business owner';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $accessiblePaths = array(
+    'user',
+    'user/password',
+    'user/register',
+  );
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $inaccessiblePaths = array(
+    // @todo The front page will become accessible when we have a dashboard.
+    // @see http://atrium.pocomas.be/invoicing/node/1165
+    '<front>',
+    'admin',
+    'admin/config',
+    'admin/config/people',
+    'admin/content',
+    'admin/people',
+    'admin/reports',
+    'admin/structure',
+
+    // @todo These will become accessible once we have 'edit/create own client'
+    //   permissions.
+    // @see http://atrium.pocomas.be/invoicing/node/1157
+    'clients',
+    'client/add',
+
+    'node',
+    'node/add',
+  );
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {

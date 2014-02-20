@@ -8,6 +8,38 @@
 class AnonymousUserAccessTestCase extends AccessWebTestCase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $role = 'anonymous';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $accessiblePaths = array(
+    'user',
+    'user/password',
+    'user/register',
+  );
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $inaccessiblePaths = array(
+    '<front>',
+    'admin',
+    'admin/config',
+    'admin/config/people',
+    'admin/content',
+    'admin/people',
+    'admin/reports',
+    'admin/structure',
+    'clients',
+    'client/add',
+    'node',
+    'node/add',
+  );
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -16,6 +48,13 @@ class AnonymousUserAccessTestCase extends AccessWebTestCase {
       'description' => 'Tests access permissions for the "anonymous user" role.',
       'group' => 'Invoicing - Access',
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setupUser() {
+    // Do not log in a user, we're testing an anonymous visitor.
   }
 
 }

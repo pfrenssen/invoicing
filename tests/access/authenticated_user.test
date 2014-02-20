@@ -8,6 +8,39 @@
 class AuthenticatedUserAccessTestCase extends AccessWebTestCase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected $role = 'authenticated user';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $accessiblePaths = array(
+    'user',
+    'user/password',
+    'user/register',
+  );
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $inaccessiblePaths = array(
+    // The front page will become accessible when we have a dashboard.
+    '<front>',
+    'admin',
+    'admin/config',
+    'admin/config/people',
+    'admin/content',
+    'admin/people',
+    'admin/reports',
+    'admin/structure',
+    'clients',
+    'client/add',
+    'node',
+    'node/add',
+  );
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {

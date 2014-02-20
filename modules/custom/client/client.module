@@ -28,7 +28,7 @@ function client_entity_info() {
       'bundle' => 'type',
     ),
     'bundles' => array(),
-    'label callback' => 'entity_class_label',
+    'label callback' => 'client_label',
     'uri callback' => 'entity_class_uri',
     'access callback' => 'client_access',
     'module' => 'client',
@@ -441,6 +441,23 @@ function client_entity_metadata_get_properties(Client $client, array $options, $
     case 'is_new':
       return empty($client->cid) || !empty($client->is_new);
   }
+}
+
+/**
+ * Composes the label of a Client.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function client_label($entity, $entity_type) {
+  return $entity->name;
 }
 
 /**

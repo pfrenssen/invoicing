@@ -33,9 +33,9 @@ class AnonymousUserAccessTestCase extends AccessWebTestCase {
     'admin/people',
     'admin/reports',
     'admin/structure',
+    'business/add',
     'clients',
     'client/add',
-    'business/add',
     'node',
     'node/add',
   );

@@ -428,6 +428,22 @@ function business_entity_metadata_get_properties(Business $business, array $opti
 }
 
 /**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  // Add action link to 'business/add' on the Businesses overview.
+  if ($root_path == 'businesses') {
+    $item = menu_get_item('business/add');
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
  * The class used for business entities.
  */
 class Business extends Entity {

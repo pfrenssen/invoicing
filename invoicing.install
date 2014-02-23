@@ -80,6 +80,7 @@ function invoicing_install() {
   $permissions = array(
     'access content',
     'administer clients',
+    'administer businesses',
   );
   user_role_grant_permissions($role->rid, $permissions);
 

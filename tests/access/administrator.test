@@ -16,6 +16,7 @@ class AdministratorAccessTestCase extends AccessWebTestCase {
    * {@inheritdoc}
    */
   protected $accessiblePaths = array(
+    'businesses',
     'business/add',
     'clients',
     'client/add',

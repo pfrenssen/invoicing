@@ -35,9 +35,10 @@ class ClientAccessTestCase extends AccessWebTestCase {
     'admin/people',
     'admin/reports',
     'admin/structure',
+    'businesses',
+    'business/add',
     'clients',
     'client/add',
-    'business/add',
     'node',
     'node/add',
   );

@@ -41,6 +41,8 @@ function business_views_default_views() {
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'business';
   $handler->display->display_options['fields']['name']['field'] = 'name';
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['name']['alter']['path'] = 'business/[bid]';
   /* Field: Business: Email address */
   $handler->display->display_options['fields']['field_business_email']['id'] = 'field_business_email';
   $handler->display->display_options['fields']['field_business_email']['table'] = 'field_data_field_business_email';
@@ -62,6 +64,10 @@ function business_views_default_views() {
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<a href="/business/[bid]/edit">edit</a>';
+  /* Sort criterion: Business: Name */
+  $handler->display->display_options['sorts']['name']['id'] = 'name';
+  $handler->display->display_options['sorts']['name']['table'] = 'business';
+  $handler->display->display_options['sorts']['name']['field'] = 'name';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_businesses');

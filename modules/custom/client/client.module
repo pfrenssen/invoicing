@@ -155,12 +155,7 @@ function client_menu() {
 
   $items['client/%client/view'] = array(
     'title' => 'View',
-    'page callback' => 'client_detail_page',
-    'page arguments' => array(1),
-    'access callback' => 'client_access',
-    'access arguments' => array('view', 1),
-    'type' => MENU_LOCAL_TASK,
-    'file' => 'client.pages.inc',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0,
   );
 

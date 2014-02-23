@@ -7,9 +7,9 @@ dependencies[] = addressfield
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = features
-dependencies[] = text
-
+dependencies[] = views
 features[business_type][] = business
+features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
 features[field_base][] = field_business_address
 features[field_base][] = field_business_bic
@@ -25,7 +25,7 @@ features[field_instance][] = business-business-field_business_iban
 features[field_instance][] = business-business-field_business_mobile
 features[field_instance][] = business-business-field_business_phone
 features[field_instance][] = business-business-field_business_vat
-
+features[views_view][] = businesses
 files[] = business.admin.inc
 files[] = tests/access.test
 files[] = tests/crud.test

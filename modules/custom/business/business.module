@@ -31,6 +31,7 @@ function business_entity_info() {
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
     'access callback' => 'business_access',
+    'module' => 'business',
   );
 
   // Add bundle info but bypass entity_load() as we cannot use it here.

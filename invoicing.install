@@ -91,6 +91,8 @@ function invoicing_install() {
 
   $permissions = array(
     'access content',
+    'administer own clients',
+    'view own clients',
   );
   user_role_grant_permissions($role->rid, $permissions);
 

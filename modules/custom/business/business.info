@@ -8,6 +8,7 @@ dependencies[] = email
 dependencies[] = entity
 dependencies[] = features
 dependencies[] = views
+
 features[business_type][] = business
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
@@ -26,8 +27,10 @@ features[field_instance][] = business-business-field_business_mobile
 features[field_instance][] = business-business-field_business_phone
 features[field_instance][] = business-business-field_business_vat
 features[views_view][] = businesses
+
 files[] = business.admin.inc
 files[] = tests/access.test
 files[] = tests/crud.test
 files[] = tests/business_web_test_case.php
+files[] = tests/overview.test
 files[] = tests/ui.test

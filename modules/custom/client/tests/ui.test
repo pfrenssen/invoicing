@@ -120,8 +120,7 @@ class ClientUITestCase extends ClientWebTestCase {
 
     $this->drupalGet('client/' . $client->cid);
     // Check that the entity is rendered.
-    $xpath = '//div[contains(@class, "entity-client")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The client entity is rendered.');
+    $this->assertXPathElements($this->getClientEntityXpath(), 1, array(), 'The client entity is rendered.');
 
     // Check that the entity title is a link.
     $url = url('client/' . $client->cid);
@@ -129,18 +128,18 @@ class ClientUITestCase extends ClientWebTestCase {
     $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client entity is rendered.');
 
     // Check that all fields are rendered.
-    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-address")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The address field is rendered.');
-    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-shipping-address")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The shipping address field is rendered.');
-    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-email")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The email field is rendered.');
-    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-notes")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The notes field is rendered.');
-    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-phone")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The phone field is rendered.');
-    $xpath = '//div[contains(@class, "entity-client")]//div[contains(@class, "field-name-field-client-vat")]';
-    $this->assertXPathElements($xpath, 1, array(), 'The vat field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-address")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The address field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-shipping-address")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The shipping address field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-email")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The email field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-notes")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The notes field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-phone")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The phone field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-vat")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The vat field is rendered.');
 
     // Check if the edit and delete tabs are rendered.
     $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
@@ -197,6 +196,24 @@ class ClientUITestCase extends ClientWebTestCase {
     $values['field_client_shipping_address']['country'] = 'BE';
 
     return $values;
+  }
+
+  /**
+   * Constructs a XPath query to find an element on the client entity page.
+   * @param string $pxath
+   *   The path seector to search for.
+   */
+  protected function getClientEntityXpath($xpath = NULL) {
+    $parts = array(
+      '//div[contains(@class, "entity-client")]',
+    );
+
+    if (!empty($xpath)) {
+      $parts[] = $xpath;
+    }
+
+    $query = implode('', $parts);
+    return $query;
   }
 
 }

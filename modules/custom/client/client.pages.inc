@@ -175,5 +175,6 @@ function client_delete_confirm_form_submit($form, &$form_state) {
  * Page callback for the client page.
  */
 function client_detail_page($client) {
+  drupal_set_title('View client ' . $client->name);
   return entity_view($client->type, array($client));
 }

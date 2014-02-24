@@ -427,6 +427,15 @@ function business_entity_metadata_get_properties(Business $business, array $opti
 }
 
 /**
+ * Implements hook_field_access().
+ */
+function business_field_access($op, $field, $entity_type, $entity, $account) {
+  if ($op == 'edit' && $field['field_name'] == 'field_user_businesses') {
+    return user_access('administer businesses', $account);
+  }
+}
+
+/**
  * The class used for business entities.
  */
 class Business extends Entity {

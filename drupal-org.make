@@ -21,6 +21,11 @@ projects[entity][download][revision] = 7.x-1.2
 projects[entity][download][branch] = 7.x-1.x
 projects[entity][subdir] = contrib
 
+projects[entityreference][download][type] = git
+projects[entityreference][download][revision] = 7.x-1.1
+projects[entityreference][download][branch] = 7.x-1.x
+projects[entityreference][subdir] = contrib
+
 projects[features][download][type] = git
 projects[features][download][revision] = 7.x-2.0
 projects[features][download][branch] = 7.x-2.x

@@ -436,6 +436,27 @@ function business_field_access($op, $field, $entity_type, $entity, $account) {
 }
 
 /**
+ * Get the businesses from a specific user, defaults to the logged in user.
+ *
+ * @param object $account
+ *   The user to get the businesses for.
+ * @return array
+ *   An array with all the field items, FALSE if none found.
+ */
+function business_get_businesses_from_user($account = NULL) {
+  global $user;
+
+  // If no object given, take the logged in user.
+  if (!$account) {
+    $account = $user;
+  }
+
+  // Get the businesses.
+  $businesses = field_get_items('user', $account, 'field_user_businesses');
+  return $businesses;
+}
+
+/**
  * The class used for business entities.
  */
 class Business extends Entity {

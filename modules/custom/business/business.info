@@ -18,7 +18,6 @@ features[field_base][] = field_business_iban
 features[field_base][] = field_business_mobile
 features[field_base][] = field_business_phone
 features[field_base][] = field_business_vat
-features[field_base][] = field_user_businesses
 features[field_instance][] = business-business-field_business_address
 features[field_instance][] = business-business-field_business_bic
 features[field_instance][] = business-business-field_business_email

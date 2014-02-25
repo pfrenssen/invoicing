@@ -200,6 +200,7 @@ class ClientUITestCase extends ClientWebTestCase {
 
   /**
    * Constructs a XPath query to find an element on the client entity page.
+   *
    * @param string $pxath
    *   The path seector to search for.
    */

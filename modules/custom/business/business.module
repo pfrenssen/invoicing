@@ -441,7 +441,8 @@ function business_field_access($op, $field, $entity_type, $entity, $account) {
  * @param object $account
  *   The user to get the businesses for.
  * @return array
- *   An array with all the field items, FALSE if none found.
+ *   An array with all the business id's linked to this user, FALSE if none
+ *   found.
  */
 function business_get_businesses_from_user($account = NULL) {
   global $user;
@@ -450,6 +451,9 @@ function business_get_businesses_from_user($account = NULL) {
   if (!$account) {
     $account = $user;
   }
+
+  // Load the full user object.
+  $account = user_load($account->uid);
 
   // Get the businesses.
   $businesses = field_get_items('user', $account, 'field_user_businesses');

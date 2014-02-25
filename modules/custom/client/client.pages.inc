@@ -170,3 +170,16 @@ function client_delete_confirm_form_submit($form, &$form_state) {
   drupal_set_message(t('Client %name has been deleted.', array('%name' => $client->name)));
   $form_state['redirect'] = 'clients';
 }
+
+/**
+ * Page callback for the client page.
+ */
+function client_detail_page($client) {
+  drupal_set_title($client->name);
+  $output = entity_view($client->type, array($client));
+
+  // Prevent the client title from being rendered twice.
+  $output['client'][$client->cid]['#page'] = TRUE;
+
+  return $output;
+}

@@ -28,8 +28,8 @@ function client_entity_info() {
       'bundle' => 'type',
     ),
     'bundles' => array(),
-    'label callback' => 'entity_class_label',
-    'uri callback' => 'entity_class_uri',
+    'label callback' => 'client_label',
+    'uri callback' => 'client_uri',
     'access callback' => 'client_access',
     'module' => 'client',
   );
@@ -139,6 +139,7 @@ function client_menu() {
     'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
     'file' => 'client.pages.inc',
+    'weight' => 5,
   );
 
   $items['client/%client/delete'] = array(
@@ -148,6 +149,23 @@ function client_menu() {
     'access callback' => 'client_access',
     'access arguments' => array('delete', 1),
     'type' => MENU_LOCAL_TASK,
+    'file' => 'client.pages.inc',
+    'weight' => 10,
+  );
+
+  $items['client/%client/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+
+  $items['client/%client'] = array(
+    'title' => '',
+    'page callback' => 'client_detail_page',
+    'page arguments' => array(1),
+    'access callback' => 'client_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_CALLBACK,
     'file' => 'client.pages.inc',
   );
 
@@ -393,7 +411,7 @@ function client_save(Client $client) {
 /**
  * Implements callback_entity_info_uri().
  */
-function client_uri(Client $client){
+function client_uri(Client $client) {
   return array(
     'path' => 'client/' . $client->cid,
   );
@@ -441,6 +459,23 @@ function client_entity_metadata_get_properties(Client $client, array $options, $
     case 'is_new':
       return empty($client->cid) || !empty($client->is_new);
   }
+}
+
+/**
+ * Composes the label of a Client.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function client_label($entity, $entity_type) {
+  return $entity->name;
 }
 
 /**

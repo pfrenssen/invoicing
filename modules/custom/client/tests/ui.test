@@ -117,15 +117,18 @@ class ClientUITestCase extends ClientWebTestCase {
    */
   public function testClientViewEntity() {
     $client = $this->createUiClient();
-
     $this->drupalGet('client/' . $client->cid);
+
     // Check that the entity is rendered.
     $this->assertXPathElements($this->getClientEntityXpath(), 1, array(), 'The client entity is rendered.');
 
-    // Check that the entity title is a link.
-    $url = url('client/' . $client->cid);
-    $xpath = '//div[contains(@class, "entity-client")]//a[@href=:href]';
-    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client entity is rendered.');
+    // Check that the page title is set to the client name.
+    // @todo: Change "Drupal" to the project name.
+    // @see http://atrium.pocomas.be/invoicing/node/1169
+    $this->assertTitle($client->name . ' | Drupal');
+
+    $xpath = '//h1[@id = "page-title" and contains(text(), :name)]';
+    $this->assertXPathElements($xpath, 1, array(':name' => $client->name), 'The page title contains the client name.');
 
     // Check that all fields are rendered.
     $xpath = '//div[contains(@class, "field-name-field-client-address")]';

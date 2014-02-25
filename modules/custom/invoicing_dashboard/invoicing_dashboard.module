@@ -2,13 +2,36 @@
 
 /**
  * @file
- * Main functions and hook implementations for the Invoicing Core module.
+ * Main functions and hook implementations for the Invoicing Dashboard module.
  */
 
 /**
- * Implements hook_menu_alter().
+ * Implements hook_menu().
  */
-function invoicing_core_menu_alter(&$items) {
-  // Deny access to the 'node' page.
-  $items['node']['access callback'] = FALSE;
+function invoicing_dashboard_menu() {
+  $items = array();
+
+  $items['dashboard'] = array(
+    'title' => 'Dashboard',
+    'page callback' => 'invoicing_dashboard_overview',
+    'access arguments' => array('access dashboard'),
+    'type' => MENU_CALLBACK,
+    'file' => 'invoicing_dashboard.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function invoicing_dashboard_permission() {
+  $permissions = array(
+    'access dashboard' => array(
+      'title' => t('Access the dashboard'),
+      'description' => t('Access the dashboard.'),
+    ),
+  );
+
+  return $permissions;
 }

@@ -107,6 +107,30 @@ class BusinessUITestCase extends BusinessWebTestCase {
   }
 
   /**
+   * Tests the business field in the user edit form.
+   */
+  public function testBusinessFieldForUser() {
+    $business = $this->createUiBusiness();
+
+    // Go to the edit screen of the user.
+    $this->drupalGet('user/' . $this->user->uid . '/edit');
+    $this->assertFieldById('edit-field-user-businesses-und-0-target-id', '', 'The field_user_businesses is shown on the page.');
+
+    // Add a business to the user.
+    $this->drupalPost(NULL, array('field_user_businesses[und][0][target_id]' => $business->name . ' (' . $business->bid . ')'), t('Add another item'));
+    $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a second is shown on the page.');
+
+    $this->drupalPost(NULL, array(), t('Save'));
+    $user = user_load($this->user->uid);
+
+    // Verify that the business_get_businesses_from_user() works correctly.
+    $businesses_1 = business_get_businesses_from_user($this->user);
+    $this->assertEqual($business->bid, $businesses_1[0]['target_id'], 'The business_get_businesses_from_user returns the correct data with a parameter given.');
+    $businesses_2 = business_get_businesses_from_user();
+    $this->assertEqual($business->bid, $businesses_2[0]['target_id'], 'The business_get_businesses_from_user returns the correct data without a parameter given.');
+  }
+
+  /**
    * Returns form post values from the given entity values.
    *
    * @see self::randomBusinessValues()

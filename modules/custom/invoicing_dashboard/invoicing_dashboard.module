@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations for the Invoicing Core module.
+ */
+
+/**
+ * Implements hook_menu_alter().
+ */
+function invoicing_core_menu_alter(&$items) {
+  // Deny access to the 'node' page.
+  $items['node']['access callback'] = FALSE;
+}

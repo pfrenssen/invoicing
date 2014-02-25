@@ -176,5 +176,10 @@ function client_delete_confirm_form_submit($form, &$form_state) {
  */
 function client_detail_page($client) {
   drupal_set_title($client->name);
-  return entity_view($client->type, array($client));
+  $output = entity_view($client->type, array($client));
+
+  // Prevent the client title from being rendered twice.
+  $output['client'][$client->cid]['#page'] = TRUE;
+
+  return $output;
 }

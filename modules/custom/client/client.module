@@ -177,6 +177,10 @@ function client_menu() {
  */
 function client_permission() {
   $permissions = array(
+    'access client overview' => array(
+      'title' => t('Access client overview'),
+      'description' => t('Access the client overview.'),
+    ),
     'administer client types' => array(
       'title' => t('Administer client types'),
       'description' => t('Create and delete fields for client types, and set their permissions.'),

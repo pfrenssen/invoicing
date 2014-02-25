@@ -28,7 +28,7 @@ function business_entity_info() {
       'bundle' => 'type',
     ),
     'bundles' => array(),
-    'label callback' => 'entity_class_label',
+    'label callback' => 'business_label',
     'uri callback' => 'entity_class_uri',
     'access callback' => 'business_access',
   );
@@ -454,6 +454,23 @@ function business_get_businesses_from_user($account = NULL) {
   // Get the businesses.
   $businesses = field_get_items('user', $account, 'field_user_businesses');
   return $businesses;
+}
+
+/**
+ * Composes the label of a business.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function business_label($entity, $entity_type) {
+  return $entity->name;
 }
 
 /**

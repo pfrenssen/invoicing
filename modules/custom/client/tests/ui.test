@@ -144,15 +144,12 @@ class ClientUITestCase extends ClientWebTestCase {
     $xpath = '//div[contains(@class, "field-name-field-client-vat")]';
     $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The vat field is rendered.');
 
-    // Check if the edit and delete tabs are rendered.
+    // Check if the tabs are rendered.
     $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
+    $url = url('client/' . $client->cid);
     $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client view tab is rendered.');
-    $url = url('client/' . $client->cid . '/edit');
-    $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
-    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client edit tab is rendered.');
-    $url = url('client/' . $client->cid . '/delete');
-    $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
-    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The client delete tab is rendered.');
+    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/edit'), 'The client edit tab is rendered.');
+    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/delete'), 'The client delete tab is rendered.');
   }
 
   /**

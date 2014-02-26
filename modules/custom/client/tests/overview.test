@@ -39,7 +39,7 @@ class ClientOverviewTestCase extends ClientWebTestCase {
     parent::setup('client');
 
     // Create a test user and log in.
-    $permissions = array('administer clients');
+    $permissions = array('access client overview');
     $this->user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->user);
 
@@ -64,6 +64,7 @@ class ClientOverviewTestCase extends ClientWebTestCase {
    */
   public function testOverview() {
     $this->drupalGet('clients');
+    $this->assertResponse(200, 'The client overview is accessible.');
 
     // Check that the "Add client" local action is present.
     $xpath = '//ul[@class="action-links"]/li/a[@href="/client/add" and contains(text(), :text)]';

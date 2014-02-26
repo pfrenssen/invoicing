@@ -179,7 +179,6 @@ function client_permission() {
   $permissions = array(
     'access client overview' => array(
       'title' => t('Access client overview'),
-      'description' => t('Access the client overview.'),
     ),
     'administer client types' => array(
       'title' => t('Administer client types'),
@@ -187,7 +186,7 @@ function client_permission() {
     ),
     'administer clients' => array(
       'title' => t('Administer clients'),
-      'description' => t('Edit and delete all clients.'),
+      'description' => t('Create new clients, and edit and delete all clients.'),
     ),
     'administer own clients' => array(
       'title' => t('Administer own clients'),
@@ -195,7 +194,6 @@ function client_permission() {
     ),
     'view own clients' => array(
       'title' => t('View own clients'),
-      'description' => t('View your own clients.'),
     ),
   );
 

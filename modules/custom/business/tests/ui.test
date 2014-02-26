@@ -5,7 +5,7 @@
  * UI tests for the Business module.
  */
 
-class BusinessUITestCase extends BusinessWebTestCase {
+class BusinessUITestCase extends DrupalWebTestCase {
 
   /**
    * A test user.
@@ -13,6 +13,11 @@ class BusinessUITestCase extends BusinessWebTestCase {
    * @var object $user
    */
   protected $user;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -30,6 +35,9 @@ class BusinessUITestCase extends BusinessWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
+
+    module_load_include('inc', 'test_traits', 'business');
+    module_load_include('inc', 'test_traits', 'base');
 
     // Create a test user and log in.
     $permissions = array('administer businesses');

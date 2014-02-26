@@ -5,7 +5,12 @@
  * CRUD tests for the Business module.
  */
 
-class BusinessCRUDTestCase extends BusinessWebTestCase {
+class BusinessCRUDTestCase extends DrupalWebTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -16,6 +21,16 @@ class BusinessCRUDTestCase extends BusinessWebTestCase {
       'description' => 'Tests the creating, reading, updating and deleting of businesses.',
       'group' => 'Business',
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('business');
+
+    module_load_include('inc', 'test_traits', 'business');
+    module_load_include('inc', 'test_traits', 'base');
   }
 
   /**

@@ -5,7 +5,7 @@
  * Tests the business overview.
  */
 
-class BusinessOverviewTestCase extends BusinessWebTestCase {
+class BusinessOverviewTestCase extends DrupalWebTestCase {
 
   /**
    * A test user.
@@ -20,6 +20,11 @@ class BusinessOverviewTestCase extends BusinessWebTestCase {
    * @var array
    */
   protected $businesses;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -37,6 +42,9 @@ class BusinessOverviewTestCase extends BusinessWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
+
+    module_load_include('inc', 'test_traits', 'business');
+    module_load_include('inc', 'test_traits', 'base');
 
     // Create a test user and log in.
     $permissions = array('administer businesses');

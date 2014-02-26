@@ -5,7 +5,7 @@
  * Access tests for the Business module.
  */
 
-class BusinessAccessTestCase extends BusinessWebTestCase {
+class BusinessAccessTestCase extends DrupalWebTestCase {
 
   /**
    * A user with administrator permissions.
@@ -29,6 +29,11 @@ class BusinessAccessTestCase extends BusinessWebTestCase {
   protected $business;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -44,6 +49,9 @@ class BusinessAccessTestCase extends BusinessWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
+
+    module_load_include('inc', 'test_traits', 'business');
+    module_load_include('inc', 'test_traits', 'base');
 
     // Create test users.
     $permissions = array('administer businesses');

@@ -40,3 +40,5 @@ files[] = tests/business_web_test_case.php
 files[] = tests/overview.test
 files[] = tests/ui.test
 files[] = tests/unit.test
+
+test_dependency[] = test_traits

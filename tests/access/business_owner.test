@@ -16,6 +16,7 @@ class BusinessOwnerAccessTestCase extends AccessWebTestCase {
    * {@inheritdoc}
    */
   protected $accessiblePaths = array(
+    'client/add',
     'clients',
     'user',
     'user/password',
@@ -41,11 +42,6 @@ class BusinessOwnerAccessTestCase extends AccessWebTestCase {
     //  permissions.
     // @see http://atrium.pocomas.be/invoicing/node/1167
     'business/add',
-
-    // @todo This will become accessible once we have 'edit/create own client'
-    //   permissions.
-    // @see http://atrium.pocomas.be/invoicing/node/1157
-    'client/add',
 
     'node',
     'node/add',

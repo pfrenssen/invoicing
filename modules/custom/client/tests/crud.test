@@ -5,7 +5,11 @@
  * CRUD tests for the Client module.
  */
 
-class ClientCRUDTestCase extends ClientWebTestCase {
+class ClientCRUDTestCase extends DrupalWebTestCase {
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -22,6 +26,9 @@ class ClientCRUDTestCase extends ClientWebTestCase {
    * Tests creating, reading, updating and deleting of clients.
    */
   public function testClientCRUD() {
+    module_load_include('inc', 'test_traits', 'client');
+    module_load_include('inc', 'test_traits', 'base');
+
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('client'), 'The client database table exists.');
     $this->assertClientTableEmpty('The client database is initially empty.');

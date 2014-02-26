@@ -5,7 +5,7 @@
  * Tests the client overview.
  */
 
-class ClientOverviewTestCase extends ClientWebTestCase {
+class ClientOverviewTestCase extends DrupalWebTestCase {
 
   /**
    * A test user.
@@ -20,6 +20,11 @@ class ClientOverviewTestCase extends ClientWebTestCase {
    * @var array
    */
   protected $clients;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -37,6 +42,9 @@ class ClientOverviewTestCase extends ClientWebTestCase {
    */
   protected function setUp() {
     parent::setup('client');
+
+    module_load_include('inc', 'test_traits', 'client');
+    module_load_include('inc', 'test_traits', 'base');
 
     // Create a test user and log in.
     $permissions = array(

@@ -5,7 +5,7 @@
  * UI tests for the Client module.
  */
 
-class ClientUITestCase extends ClientWebTestCase {
+class ClientUITestCase extends DrupalWebTestCase {
 
   /**
    * A test user.
@@ -13,6 +13,11 @@ class ClientUITestCase extends ClientWebTestCase {
    * @var object $user
    */
   protected $user;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -30,6 +35,9 @@ class ClientUITestCase extends ClientWebTestCase {
    */
   protected function setUp() {
     parent::setup('client');
+
+    module_load_include('inc', 'test_traits', 'client');
+    module_load_include('inc', 'test_traits', 'base');
 
     // Create a test user and log in.
     $permissions = array('administer clients');

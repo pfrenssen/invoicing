@@ -33,3 +33,5 @@ files[] = tests/crud.test
 files[] = tests/client_web_test_case.php
 files[] = tests/overview.test
 files[] = tests/ui.test
+
+test_dependency[] = test_traits

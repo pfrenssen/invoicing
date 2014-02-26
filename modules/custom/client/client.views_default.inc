@@ -99,7 +99,8 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<a href="/client/[cid]/edit">edit</a>';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<a href="/client/[cid]">view</a>
+<a href="/client/[cid]/edit">edit</a>';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');

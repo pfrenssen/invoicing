@@ -39,7 +39,10 @@ class ClientOverviewTestCase extends ClientWebTestCase {
     parent::setup('client');
 
     // Create a test user and log in.
-    $permissions = array('access client overview');
+    $permissions = array(
+      'access client overview',
+      'administer own clients',
+    );
     $this->user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->user);
 

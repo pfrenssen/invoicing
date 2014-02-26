@@ -12,3 +12,10 @@ function business_default_business_type() {
   $items['business'] = entity_import('business_type', '{ "type" : "business", "name" : "Business" }');
   return $items;
 }
+
+/**
+ * Implements hook_views_api().
+ */
+function business_views_api($module = NULL, $api = NULL) {
+  return array("api" => "3.0");
+}

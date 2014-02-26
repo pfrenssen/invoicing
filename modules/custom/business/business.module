@@ -31,6 +31,7 @@ function business_entity_info() {
     'label callback' => 'business_label',
     'uri callback' => 'entity_class_uri',
     'access callback' => 'business_access',
+    'module' => 'business',
   );
 
   // Add bundle info but bypass entity_load() as we cannot use it here.
@@ -432,6 +433,22 @@ function business_entity_metadata_get_properties(Business $business, array $opti
 function business_field_access($op, $field, $entity_type, $entity, $account) {
   if ($op == 'edit' && $field['field_name'] == 'field_user_businesses') {
     return user_access('administer businesses', $account);
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  // Add action link to 'business/add' on the Businesses overview.
+  if ($root_path == 'businesses') {
+    $item = menu_get_item('business/add');
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
   }
 }
 

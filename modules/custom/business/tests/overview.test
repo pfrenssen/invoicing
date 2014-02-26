@@ -1,0 +1,142 @@
+<?php
+
+/**
+ * @file
+ * Tests the business overview.
+ */
+
+class BusinessOverviewTestCase extends BusinessWebTestCase {
+
+  /**
+   * A test user.
+   *
+   * @var object
+   */
+  protected $user;
+
+  /**
+   * An array of test businesses.
+   *
+   * @var array
+   */
+  protected $businesses;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Overview test',
+      'description' => 'Tests the business overview.',
+      'group' => 'Business',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('business');
+
+    // Create a test user and log in.
+    $permissions = array('administer businesses');
+    $this->user = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->user);
+
+    // Create a number of test business.
+    for ($i = 0; $i < 20; $i++) {
+      // Make sure the business name starts with letters to avoid random test
+      // failures to due differences in sorting of special characters between
+      // PHP and the database. PHP uses the system locale to determine the
+      // collation, while the database can be configured with an arbitrary
+      // collation.
+      $name = $this->randomName(4) . $this->randomString();
+      $business = $this->createBusiness(array('name' => $name));
+      $business->save();
+      $this->businesses[$business->bid] = $business;
+    }
+  }
+
+  /**
+   * Tests the business overview.
+   *
+   * @var SimpleXMLElement $tablerow
+   */
+  public function testOverview() {
+    $this->drupalGet('businesses');
+
+    // Check that the "Add business" local action is present.
+    $xpath = '//ul[@class="action-links"]/li/a[@href="/business/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add business')), 'The "Add business" local action is present.');
+
+    // Check that the pager is not present. We added 20 businesses which is the
+    // maximum number that fits on one page.
+    $this->assertNoPager().
+
+    // Check that the businesses are present in the overview in alphabetical
+    // order.
+    uasort($this->businesses, function ($a, $b) {
+      return strcasecmp($a->name, $b->name);
+    });
+
+    // Loop over the displayed table rows and compare them with each business in
+    // order.
+    $tablerows = $this->xpath('//div[contains(@class, "view-businesses")]//table/tbody/tr');
+    foreach ($tablerows as $tablerow) {
+      /* @var $tablerow SimpleXMLElement */
+      /* @var $business EntityDrupalWrapper */
+      $business = entity_metadata_wrapper('business', array_shift($this->businesses));
+
+      $testcases = array(
+        array(
+          'message' => 'The first column contains the business name.',
+          'expected' => $business->name->value(),
+          'actual' => (string) $tablerow->td[0]->a,
+        ),
+        array(
+          'message' => 'The first column is linked to the business detail page.',
+          'expected' => '/business/' . $business->getIdentifier(),
+          'actual' => (string) $tablerow->td[0]->a['href'],
+        ),
+        array(
+          'message' => 'The second column contains the email address.',
+          'expected' => $business->field_business_email->value(),
+          'actual' => (string) $tablerow->td[1]->a,
+        ),
+        array(
+          'message' => 'The second column is linked to the email address.',
+          'expected' => 'mailto:' . $business->field_business_email->value(),
+          'actual' => (string) $tablerow->td[1]->a['href'],
+        ),
+        array(
+          'message' => 'The third column contains the phone number.',
+          'expected' => $business->field_business_phone->value(),
+          'actual' => (string) $tablerow->td[2],
+        ),
+        array(
+          'message' => 'The fourth column contains the "edit" action link.',
+          'expected' => t('edit'),
+          'actual' => (string) $tablerow->td[3]->a,
+        ),
+        array(
+          'message' => 'The fourth column is linked to the business edit page.',
+          'expected' => '/business/' . $business->getIdentifier() . '/edit',
+          'actual' => (string) $tablerow->td[3]->a['href'],
+        ),
+      );
+
+      foreach ($testcases as $testcase) {
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
+      }
+    }
+
+    // Check that all businesses were displayed.
+    $this->assertFalse($this->businesses, 'All businesses are shown in the table.');
+
+    // Add one more business and assert that a pager now appears.
+    $this->createBusiness()->save();
+    $this->drupalGet('businesses');
+    $this->assertPager();
+  }
+
+}

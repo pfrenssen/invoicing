@@ -23,6 +23,15 @@ class ClientCRUDTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('client');
+
+    module_load_include('inc', 'test_traits', 'client');
+    module_load_include('inc', 'test_traits', 'base');
+  }
+  /**
    * Tests creating, reading, updating and deleting of clients.
    */
   public function testClientCRUD() {

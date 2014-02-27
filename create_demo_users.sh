@@ -17,10 +17,10 @@ ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "${ROOT_DIR}"
 
 # Create the users.
-drush user-create administrator --password="demo"
-drush user-create "authenticated user" --password="demo"
-drush user-create "business owner" --password="demo"
-drush user-create client --password="demo"
+drush user-create administrator --mail="administrator@example.com" --password="demo"
+drush user-create "authenticated user" --mail="authenticated_user@example.com" --password="demo"
+drush user-create "business owner" --mail="business_owner@example.com" --password="demo"
+drush user-create client --mail="client@example.com" --password="demo"
 
 # Add the roles to the users.
 drush user-add-role administrator administrator

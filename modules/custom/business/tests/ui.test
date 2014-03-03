@@ -109,21 +109,26 @@ class BusinessUITestCase extends BusinessWebTestCase {
   /**
    * Tests the business field in the user edit form.
    */
-  public function testBusinessFieldForUser() {
-    $business = $this->createUiBusiness();
+  public function testBusinessesFieldForUser() {
+    // Create two businesses.
+    $business1 = $this->createUiBusiness();
+    $business2 = $this->createUiBusiness();
 
     // Go to the edit screen of the user.
     $this->drupalGet('user/' . $this->user->uid . '/edit');
     $this->assertFieldById('edit-field-user-businesses-und-0-target-id', '', 'The field_user_businesses is shown on the page.');
 
-    // Add a business to the user.
-    $this->drupalPost(NULL, array('field_user_businesses[und][0][target_id]' => $business->name . ' (' . $business->bid . ')'), t('Add another item'));
-    $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a second is shown on the page.');
+    // Add the businesses to the user.
+    $this->drupalPost(NULL, array('field_user_businesses[und][0][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
+    $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a second business is shown on the page.');
+    $this->drupalPost(NULL, array('field_user_businesses[und][1][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
+    $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a third business is shown on the page.');
     $this->drupalPost(NULL, array(), t('Save'));
 
-    // Check that the business is linked to the user.
+    // Check that the businesses are linked to the user.
     $user = user_load($this->user->uid);
-    $this->assertEqual($user->field_user_businesses[LANGUAGE_NONE][0]['target_id'], $business->bid, 'The business has been linked to the user.');
+    $this->assertTrue($user->field_user_businesses[LANGUAGE_NONE][0]['target_id'], $business1->bid, 'The first business has been linked to the user.');
+    $this->assertTrue($user->field_user_businesses[LANGUAGE_NONE][1]['target_id'], $business2->bid, 'The second business has been linked to the user.');
   }
 
   /**

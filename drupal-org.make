@@ -26,6 +26,15 @@ projects[entityreference][download][revision] = 7.x-1.1
 projects[entityreference][download][branch] = 7.x-1.x
 projects[entityreference][subdir] = contrib
 
+projects[entityreference_unique][download][type] = git
+projects[entityreference_unique][download][revision] = 7.x-1.0-alpha1
+projects[entityreference_unique][download][branch] = 7.x-1.x
+projects[entityreference_unique][subdir] = contrib
+
+; Issue #2206905: Notice when entity does not have bundle.
+; @see https://drupal.org/node/2206905
+projects[entityreference_unique][patch][] = https://drupal.org/files/issues/2206905-3-entityreference_unique-notice.patch
+
 projects[features][download][type] = git
 projects[features][download][revision] = 7.x-2.0
 projects[features][download][branch] = 7.x-2.x

@@ -213,6 +213,9 @@ function business_field_default_field_bases() {
       'handler' => 'base',
       'handler_settings' => array(
         'behaviors' => array(
+          'unique_field_behavior' => array(
+            'status' => 1,
+          ),
           'views-select-list' => array(
             'status' => 0,
           ),

@@ -7,6 +7,7 @@ dependencies[] = addressfield
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = entityreference
+dependencies[] = entityreference_unique
 dependencies[] = features
 dependencies[] = text
 dependencies[] = views

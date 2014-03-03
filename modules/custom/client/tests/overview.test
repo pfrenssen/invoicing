@@ -116,16 +116,31 @@ class ClientOverviewTestCase extends ClientWebTestCase {
           'expected' => $client->field_client_phone->value(),
           'actual' => (string) $tablerow->td[2],
         ),
+        array(
+          'message' => 'The fourth column contains the "view" action link.',
+          'expected' => t('view'),
+          'actual' => (string) $tablerow->td[3]->a[0],
+        ),
+        array(
+          'message' => 'The fourth column is linked to the client detail page.',
+          'expected' => '/client/' . $client->getIdentifier(),
+          'actual' => (string) $tablerow->td[3]->a[0]['href'],
+        ),
+        array(
+          'message' => 'The fourth column contains the "edit" action link.',
+          'expected' => t('edit'),
+          'actual' => (string) $tablerow->td[3]->a[1],
+        ),
+        array(
+          'message' => 'The fourth column is linked to the client edit page.',
+          'expected' => '/client/' . $client->getIdentifier() . '/edit',
+          'actual' => (string) $tablerow->td[3]->a[1]['href'],
+        ),
       );
 
       foreach ($testcases as $testcase) {
         $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
       }
-
-      $view_url = url('client/' . $client->getIdentifier());
-      $this->assertTrue($this->buildXPathQuery('//div[@id="view-clients"]//td/a[@href=:href and contains(text(), :text)]', array(':href' => $view_url, ':text' => t('view'))), 'The view action link is shown corrected on the overview.');
-      $edit_url = url('client/' . $client->getIdentifier() . '/edit');
-      $this->assertTrue($this->buildXPathQuery('//div[@id="view-clients"]//td/a[@href=:href and contains(text(), :text)]', array(':href' => $edit_url, ':text' => t('edit'))), 'The edit action link is shown corrected on the overview.');
     }
 
     // Check that all clients were displayed.

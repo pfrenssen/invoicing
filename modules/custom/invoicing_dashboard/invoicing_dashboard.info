@@ -1,5 +1,5 @@
 name = Invoicing Dashboard
-description = Functionality concerning the dashboard for users.
+description = Provides a general status overview for users.
 core = 7.x
 package = Invoicing
 

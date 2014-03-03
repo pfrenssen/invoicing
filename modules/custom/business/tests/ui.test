@@ -121,9 +121,10 @@ class BusinessUITestCase extends BusinessWebTestCase {
     // Add the businesses to the user.
     $this->drupalPost(NULL, array('field_user_businesses[und][0][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
     $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a second business is shown on the page.');
-    $this->drupalPost(NULL, array('field_user_businesses[und][1][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
+    $this->drupalPost(NULL, array('field_user_businesses[und][1][target_id]' => $business2->name . ' (' . $business2->bid . ')'), t('Add another item'));
     $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a third business is shown on the page.');
     $this->drupalPost(NULL, array(), t('Save'));
+    $this->assertRaw('The changes have been saved.', 'The user was saved successfully.');
 
     // Check that the businesses are linked to the user.
     $user = user_load($this->user->uid);

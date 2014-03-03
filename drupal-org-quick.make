@@ -23,6 +23,10 @@ projects[entityreference_unique][subdir] = contrib
 ; @see https://drupal.org/node/2206905
 projects[entityreference_unique][patch][] = https://drupal.org/files/issues/2206905-3-entityreference_unique-notice.patch
 
+; Issue #2209127: Improve validation message.
+; @see https://drupal.org/node/2209127
+projects[entityreference_unique][patch][] = https://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
+
 projects[features] = 2.0
 projects[features][subdir] = contrib
 

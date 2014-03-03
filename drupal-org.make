@@ -33,11 +33,11 @@ projects[entityreference_unique][subdir] = contrib
 
 ; Issue #2206905: Notice when entity does not have bundle.
 ; @see https://drupal.org/node/2206905
-projects[entityreference_unique][patch][] = https://drupal.org/files/issues/2206905-3-entityreference_unique-notice.patch
+projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2206905-3-entityreference_unique-notice.patch
 
 ; Issue #2209127: Improve validation message.
 ; @see https://drupal.org/node/2209127
-projects[entityreference_unique][patch][] = https://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
+projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
 projects[features][download][type] = git
 projects[features][download][revision] = 7.x-2.0

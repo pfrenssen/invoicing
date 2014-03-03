@@ -31,7 +31,6 @@ function invoicing_dashboard_permission() {
   $permissions = array(
     'access dashboard' => array(
       'title' => t('Access the dashboard'),
-      'description' => t('Access the dashboard.'),
     ),
   );
 

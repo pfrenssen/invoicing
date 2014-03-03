@@ -128,8 +128,17 @@ class BusinessUITestCase extends BusinessWebTestCase {
 
     // Check that the businesses are linked to the user.
     $user = user_load($this->user->uid);
-    $this->assertTrue($user->field_user_businesses[LANGUAGE_NONE][0]['target_id'], $business1->bid, 'The first business has been linked to the user.');
-    $this->assertTrue($user->field_user_businesses[LANGUAGE_NONE][1]['target_id'], $business2->bid, 'The second business has been linked to the user.');
+    $this->assertEqual($user->field_user_businesses[LANGUAGE_NONE][0]['target_id'], $business1->bid, 'The first business has been linked to the user.');
+    $this->assertEqual($user->field_user_businesses[LANGUAGE_NONE][1]['target_id'], $business2->bid, 'The second business has been linked to the user.');
+
+    // Check that a validation error is displayed if a business is added twice
+    // to the same user.
+    $this->drupalPost(NULL, array('field_user_businesses[und][2][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
+    $this->drupalPost(NULL, array(), t('Save'));
+    // @todo Replace this with $this->assertFieldValidationFailed() and
+    //   $this->assertStatusMessages() when we are using traits.
+    // @see http://atrium.pocomas.be/invoicing/node/1161
+    $this->assertRaw('field can contain only unique values');
   }
 
   /**

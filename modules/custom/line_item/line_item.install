@@ -86,6 +86,10 @@ function line_item_schema() {
         'table' => 'business',
         'columns' => array('bid' => 'bid'),
       ),
+      'pid' => array(
+        'table' => 'line_item_preset',
+        'columns' => array('pid' => 'pid'),
+      ),
     ),
   );
 

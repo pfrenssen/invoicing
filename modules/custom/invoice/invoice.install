@@ -21,7 +21,7 @@ function invoice_schema() {
         'not null' => TRUE,
       ),
       'type' => array(
-        'description' => 'The {invoicetype}.type of this invoice.',
+        'description' => 'The {invoice_type}.type of this invoice.',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,

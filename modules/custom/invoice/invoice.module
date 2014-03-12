@@ -4,3 +4,232 @@
  * @file
  * Main functions and hook implementations for the Invoicing Invoice module.
  */
+
+/**
+ * Implements hook_entity_info().
+ */
+function invoice_entity_info() {
+  $entity_info = array();
+
+  $entity_info['invoice'] = array(
+    'label' => t('Invoice'),
+    'plural label' => t('Invoices'),
+    'entity class' => 'Invoice',
+    'controller class' => 'EntityAPIController',
+    'base table' => 'invoice',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+      'id' => 'iid',
+      'bundle' => 'type',
+    ),
+    'bundle keys' => array(
+      'bundle' => 'type',
+    ),
+    'bundles' => array(),
+    'label callback' => 'invoice_label',
+    'uri callback' => 'entity_class_uri',
+    'access callback' => 'invoice_access',
+    'module' => 'invoice',
+  );
+
+  return $entity_info;
+}
+
+/**
+ * Determines whether the given user has access to an invoice.
+ *
+ * @param string $op
+ *   The operation being performed. One of 'view', 'update', 'create', 'delete'
+ *   or just 'edit' (being the same as 'create' or 'update').
+ * @param object $invoice
+ *   Optionally an invoice to check access for. If nothing is given, access for
+ *   all invoices is determined.
+ * @param object $account
+ *   Optional, a user object representing the user for whom the operation is to
+ *   be performed. Determines access for a user other than the current user.
+ *
+ * @return boolean
+ *   TRUE if the operation may be performed, FALSE otherwise.
+ */
+function invoice_access($op, $invoice = NULL, $account = NULL) {
+  if (user_access('administer invoices', $account)) {
+    return TRUE;
+  }
+
+  if (isset($invoice)) {
+    switch ($op) {
+      case 'create':
+      case 'delete':
+      case 'edit':
+      case 'view':
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function invoice_permission() {
+  $permissions = array(
+    'administer invoices' => array(
+      'title' => t('Administer invoices'),
+      'description' => t('Create new invoices, and edit and delete all invoices.'),
+    ),
+  );
+
+  return $permissions;
+}
+
+/**
+ * Creates a new invoice entity.
+ *
+ * @param array $values
+ *   An associative array of values to apply to the entity, keyed by property
+ *   name.
+ *
+ * @return Invoice
+ *   The new invoice entity.
+ */
+function invoice_create($values = array()) {
+  // Default to the 'invoice' bundle.
+  $values += array('type' => 'invoice');
+  return entity_get_controller('invoice')->create($values);
+}
+
+/**
+ * Deletes a invoice.
+ *
+ * @param Invoice $invoice
+ *   The invoice to delete.
+ */
+function invoice_delete(Invoice $invoice) {
+  $invoice->delete();
+}
+
+/**
+ * Deletes multiple invoices.
+ *
+ * @param array $iids
+ *   An array of invoice IDs.
+ */
+function invoice_delete_multiple(array $iids) {
+  entity_get_controller('invoice')->delete($iids);
+}
+
+/**
+ * Composes the label of an Invoice.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function invoice_label($entity, $entity_type) {
+  return $entity->name;
+}
+
+/**
+ * Saves a invoice to the database.
+ *
+ * @param Invoice $invoice
+ *   The invoice entity.
+ *
+ * @return mixed
+ *   Returns FALSE if the transaction failed. If it succeeded, returns SAVED_NEW
+ *   or SAVED_UPDATED, depending on the operation performed.
+ */
+function invoice_save(Invoice $invoice) {
+  return $invoice->save();
+}
+
+/**
+ * Loads an invoice object from the database.
+ *
+ * @param int $iid
+ *   The invoice ID.
+ * @param bool $reset
+ *   Whether to reset the cache.
+ *
+ * @return
+ *   A fully-populated invoice object, or FALSE if the invoice is not found.
+ */
+function invoice_load($iid = NULL, $reset = FALSE) {
+  $iids = isset($iid) ? array($iid) : array();
+  $invoices = invoice_load_multiple($iids, $reset);
+
+  return $invoices ? reset($invoices) : FALSE;
+}
+
+/**
+ * Loads invoices from the database.
+ *
+ * This function should be used whenever you need to load more than one invoice
+ * from the database. Invoices are loaded into memory and will not require
+ * database access if loaded again during the same page request.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
+ *
+ * @param $iids
+ *   An array of invoice IDs.
+ * @param $reset
+ *   Whether to reset the internal cache.
+ *
+ * @return
+ *   An array of invoice objects indexed by iid.
+ */
+function invoice_load_multiple($iids = array(), $reset = FALSE) {
+  return entity_load('invoice', $iids, array(), $reset);
+}
+
+/**
+ * The class used for invoice entities.
+ */
+class Invoice extends Entity {
+
+  /**
+   * The primary identifier for an invoice.
+   */
+  public $iid;
+
+  /**
+   * The type of this invoice.
+   */
+  public $type;
+
+  /**
+   * The identifier of the business.
+   */
+  public $bid;
+
+  /**
+   * The Unix timestamp when the invoice was created.
+   */
+  public $created;
+
+  /**
+   * The Unix timestamp when the invoice was most recently saved.
+   */
+  public $changed;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save() {
+    // Set created and changed values. Only set the created value if it is new.
+    if (empty($this->created) && (!empty($this->is_new) || !$this->iid)) {
+      $this->created = REQUEST_TIME;
+    }
+    $this->changed = REQUEST_TIME;
+
+    return parent::save();
+  }
+
+}

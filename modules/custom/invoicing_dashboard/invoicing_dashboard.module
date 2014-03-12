@@ -29,7 +29,7 @@ function invoicing_dashboard_menu() {
  */
 function invoicing_dashboard_permission() {
   $permissions = array(
-    'access dashboard' => array(
+    'access invoicing dashboard' => array(
       'title' => t('Access the dashboard'),
     ),
   );

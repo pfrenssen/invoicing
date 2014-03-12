@@ -9,6 +9,8 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 
 class ClientAccessTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use ClientTestHelper;
 
   /**
    * A user with administrator permissions.

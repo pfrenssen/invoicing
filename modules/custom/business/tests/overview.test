@@ -9,6 +9,8 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
 class BusinessOverviewTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use BusinessTestHelper;
 
   /**
    * A test user.

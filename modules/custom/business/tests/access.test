@@ -5,6 +5,9 @@
  * Access tests for the Business module.
  */
 
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
 class BusinessAccessTestCase extends DrupalWebTestCase {
 
   /**
@@ -49,9 +52,6 @@ class BusinessAccessTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
-
-    module_load_include('inc', 'test_traits', 'business');
-    module_load_include('inc', 'test_traits', 'base');
 
     // Create test users.
     $permissions = array('administer businesses');

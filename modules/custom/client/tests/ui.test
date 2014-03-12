@@ -5,6 +5,9 @@
  * UI tests for the Client module.
  */
 
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'client');
+
 class ClientUITestCase extends DrupalWebTestCase {
 
   /**
@@ -35,9 +38,6 @@ class ClientUITestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('client');
-
-    module_load_include('inc', 'test_traits', 'client');
-    module_load_include('inc', 'test_traits', 'base');
 
     // Create a test user and log in.
     $permissions = array('administer clients');

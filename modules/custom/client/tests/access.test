@@ -5,6 +5,9 @@
  * Access tests for the Client module.
  */
 
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'client');
+
 class ClientAccessTestCase extends DrupalWebTestCase {
 
   /**
@@ -49,9 +52,6 @@ class ClientAccessTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('client');
-
-    module_load_include('inc', 'test_traits', 'client');
-    module_load_include('inc', 'test_traits', 'base');
 
     // Create test users.
     $permissions = array('administer clients');

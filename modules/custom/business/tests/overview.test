@@ -5,6 +5,9 @@
  * Tests the business overview.
  */
 
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
 class BusinessOverviewTestCase extends DrupalWebTestCase {
 
   /**
@@ -42,9 +45,6 @@ class BusinessOverviewTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
-
-    module_load_include('inc', 'test_traits', 'business');
-    module_load_include('inc', 'test_traits', 'base');
 
     // Create a test user and log in.
     $permissions = array('administer businesses');

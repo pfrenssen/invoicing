@@ -7,18 +7,19 @@
  * as well as other necessary stuff to integrate
  */
 
-
 /**
  * Implements hook_views_data_alter().
  */
-function client_views_data_alter(&$data) {
-  $data['entity']['edit_link'] = array(
+function client_views_data() {
+  $data = array();
+
+  $data['client']['edit_link'] = array(
     'group' => t('Client'),
     'real field' => 'cid',
-    'title' => t('Edit client link'),
-    'help' => t('Link to the client edit screen.'),
+    'title' => t('Edit link'),
+    'help' => t('The edit link of the client'),
     'field' => array(
-      'handler' => 'client_handler_field_entity_link_edit',
+      'handler' => 'client_handler_field_client_edit_link',
     ),
   );
 

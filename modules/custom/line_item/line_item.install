@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update and schema hooks for Invoicing Line item.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function line_item_schema() {
+  $schema = array();
+
+  $schema['line_item_preset'] = array(
+    'description' => 'The base table for Line item presets.',
+    'fields' => array(
+      'pid' => array(
+        'description' => 'The primary identifier for a line item preset.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'bid' => array(
+        'description' => 'The business that owns the line item preset.',
+        'type' => 'int',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'name' => array(
+        'description' => 'The name of the line item preset.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('pid'),
+    'foreign keys' => array(
+      'bid' => array(
+        'table' => 'business',
+        'columns' => array('bid' => 'bid'),
+      ),
+    ),
+  );
+
+  $schema['line_item'] = array(
+    'description' => 'The base table for Line item entities.',
+    'fields' => array(
+      'lid' => array(
+        'description' => 'The primary identifier for a line item.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The {line_item_type}.type of this line item.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'bid' => array(
+        'description' => 'The business that owns the line item.',
+        'type' => 'int',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'iid' => array(
+        'description' => 'Optional invoice id to which this line item is linked. If this is NULL this line item is providing default values for a preset..',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'pid' => array(
+        'description' => 'Optional preset id that was used to construct this line item.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('lid'),
+    'foreign keys' => array(
+      'bid' => array(
+        'table' => 'business',
+        'columns' => array('bid' => 'bid'),
+      ),
+    ),
+  );
+
+  return $schema;
+}

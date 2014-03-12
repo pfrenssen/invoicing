@@ -10,7 +10,9 @@ module_load_include('inc', 'test_traits', 'client');
 
 class ClientUITestCase extends DrupalWebTestCase {
   use BaseTestHelper;
-  use ClientTestHelper;
+  use ClientTestHelper {
+    randomClientValues as traitRandomClientValues;
+  }
 
   /**
    * A test user.
@@ -199,7 +201,7 @@ class ClientUITestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   public function randomClientValues() {
-    $values = parent::randomClientValues();
+    $values = $this->traitRandomClientValues();
 
     // @todo Support other countries in addition to Belgium.
     $values['field_client_address']['country'] = 'BE';

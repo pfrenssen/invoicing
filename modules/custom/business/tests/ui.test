@@ -10,7 +10,9 @@ module_load_include('inc', 'test_traits', 'business');
 
 class BusinessUITestCase extends DrupalWebTestCase {
   use BaseTestHelper;
-  use BusinessTestHelper;
+  use BusinessTestHelper {
+    randomBusinessValues as traitRandomBusinessValues;
+  }
 
   /**
    * A test user.
@@ -185,7 +187,7 @@ class BusinessUITestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   public function randomBusinessValues() {
-    $values = parent::randomBusinessValues();
+    $values = $this->traitRandomBusinessValues();
 
     // @todo Support other countries in addition to Belgium.
     $values['field_business_address']['country'] = 'BE';

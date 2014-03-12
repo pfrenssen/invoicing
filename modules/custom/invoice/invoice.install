@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update and schema hooks for Invoicing Invoice.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function invoice_schema() {
+  $schema = array();
+
+  $schema['line_item_preset'] = array(
+    'description' => 'The base table for Invoice entities.',
+    'fields' => array(
+      'iid' => array(
+        'description' => 'The primary identifier for an invoice.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'The {invoicetype}.type of this invoice.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'bid' => array(
+        'description' => 'The business that issues the invoice.',
+        'type' => 'int',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the invoice was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the invoice was most recently saved.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('iid'),
+    'foreign keys' => array(
+      'bid' => array(
+        'table' => 'business',
+        'columns' => array('bid' => 'bid'),
+      ),
+    ),
+  );
+
+  return $schema;
+}

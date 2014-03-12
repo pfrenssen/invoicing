@@ -33,3 +33,4 @@ files[] = tests/crud.test
 files[] = tests/client_web_test_case.php
 files[] = tests/overview.test
 files[] = tests/ui.test
+files[] = views/handlers/client_handler_field_entity_link_edit.inc

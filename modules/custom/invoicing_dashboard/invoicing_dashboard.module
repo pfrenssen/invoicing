@@ -16,7 +16,7 @@ function invoicing_dashboard_menu() {
   $items['dashboard'] = array(
     'title' => 'Dashboard',
     'page callback' => 'invoicing_dashboard_overview',
-    'access arguments' => array('access dashboard'),
+    'access arguments' => array('access invoicing dashboard'),
     'type' => MENU_CALLBACK,
     'file' => 'invoicing_dashboard.pages.inc',
   );

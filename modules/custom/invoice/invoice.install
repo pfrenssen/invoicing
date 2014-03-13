@@ -11,7 +11,7 @@
 function invoice_schema() {
   $schema = array();
 
-  $schema['line_item_preset'] = array(
+  $schema['invoice'] = array(
     'description' => 'The base table for Invoice entities.',
     'fields' => array(
       'iid' => array(

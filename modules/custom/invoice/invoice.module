@@ -27,12 +27,143 @@ function invoice_entity_info() {
     ),
     'bundles' => array(),
     'label callback' => 'invoice_label',
-    'uri callback' => 'entity_class_uri',
+    'uri callback' => 'invoice_uri',
     'access callback' => 'invoice_access',
     'module' => 'invoice',
   );
 
+  // Add bundle info but bypass entity_load() as we cannot use it here.
+  $types = db_select('invoice_type', 'ivt')
+    ->fields('ivt', array('type', 'name'))
+    ->execute()
+    ->fetchAllKeyed();
+
+  foreach ($types as $type => $name) {
+    $entity_info['invoice']['bundles'][$type] = array(
+      'label' => $name,
+      'admin' => array(
+        'path' => 'admin/structure/invoices/manage/%invoice_type',
+        'real path' => 'admin/structure/invoices/manage/' . $type,
+        'bundle argument' => 4,
+        'access arguments' => array('administer invoices'),
+      ),
+    );
+  }
+
+  $entity_info['invoice_type'] = array(
+    'label' => t('Invoice type'),
+    'plural label' => t('Invoice types'),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIControllerExportable',
+    'base table' => 'invoice_type',
+    'fieldable' => FALSE,
+    'bundle of' => 'invoice',
+    'exportable' => TRUE,
+    'entity keys' => array(
+      'id' => 'type',
+      'name' => 'type',
+      'label' => 'name',
+    ),
+    'access callback' => 'invoice_type_access',
+    'label callback' => 'invoice_type_label',
+    'module' => 'invoice',
+    'admin ui' => array(
+      'path' => 'admin/structure/invoices',
+      'file' => 'invoice.admin.inc',
+      'controller class' => 'EntityDefaultUIController',
+    ),
+  );
+
   return $entity_info;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function invoice_entity_property_info_alter(&$info) {
+  // Augment the default information that is provided by entityPropertyInfo().
+  // @see EntityDefaultMetadataController::entityPropertyInfo()
+  $properties = &$info['invoice']['properties'];
+
+  $properties['type']['description'] = t('The invoice type');
+  $properties['type']['options list'] = 'invoice_type_get_names';
+  $properties['type']['required'] = TRUE;
+  $properties['type']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['type']['setter permission'] = 'administer invoices';
+
+  $properties['created']['label'] = t('Date created');
+  $properties['created']['description'] = t('The date the invoice was created.');
+  $properties['created']['type'] = 'date';
+  $properties['created']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['created']['setter permission'] = 'administer invoices';
+
+  $properties['changed']['label'] = t('Date changed');
+  $properties['changed']['description'] = t('The date the invoice was most recently updated.');
+  $properties['changed']['type'] = 'date';
+
+  $properties['is_new']['label'] = t('Is new');
+  $properties['is_new']['description'] = t('Whether the invoice is new and not saved to the database yet.');
+  $properties['is_new']['type'] = 'boolean';
+  $properties['is_new']['getter callback'] = 'invoice_entity_metadata_get_properties';
+}
+
+/**
+ * Implements hook_menu().
+ */
+function invoice_menu() {
+  $items = array();
+
+  // We only support one basic invoice type for the moment. This may be extended
+  // in the future.
+  $invoice_type = invoice_type_load('invoice');
+  $items['invoice/add'] = array(
+    'title' => 'Add Invoice',
+    'page callback' => 'invoice_add_page',
+    'page arguments' => array($invoice_type),
+    'access callback' => 'invoice_access',
+    'access arguments' => array('create', $invoice_type),
+    'file' => 'invoice.pages.inc',
+  );
+
+  $items['invoice/%invoice/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'invoice_edit_page',
+    'page arguments' => array(1),
+    'access callback' => 'invoice_access',
+    'access arguments' => array('update', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'invoice.pages.inc',
+    'weight' => 5,
+  );
+
+  $items['invoice/%invoice/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('invoice_delete_confirm_form', 1),
+    'access callback' => 'invoice_access',
+    'access arguments' => array('delete', 1),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'invoice.pages.inc',
+    'weight' => 10,
+  );
+
+  $items['invoice/%invoice/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+
+  $items['invoice/%invoice'] = array(
+    'title' => '',
+    'page callback' => 'invoice_detail_page',
+    'page arguments' => array(1),
+    'access callback' => 'invoice_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_CALLBACK,
+    'file' => 'invoice.pages.inc',
+  );
+
+  return $items;
 }
 
 /**
@@ -61,7 +192,14 @@ function invoice_access($op, $invoice = NULL, $account = NULL) {
       case 'create':
       case 'delete':
       case 'edit':
+        $access = user_access("edit any $invoice->type invoice", $account);
+        $access |= user_access('administer own invoices', $account);
+        return $access;
+
       case 'view':
+        $access = user_access("view any $invoice->type invoice", $account);
+        $access |= user_access('view own invoices', $account);
+        return $access;
     }
   }
 
@@ -77,9 +215,76 @@ function invoice_permission() {
       'title' => t('Administer invoices'),
       'description' => t('Create new invoices, and edit and delete all invoices.'),
     ),
+    'administer invoice types' => array(
+      'title' => t('Administer invoice types'),
+      'description' => t('Create and delete fields for invoice types, and set their permissions.'),
+    ),
   );
 
+  // Generate permissions per invoice type.
+  foreach (invoice_get_types() as $type) {
+    $permissions += array(
+      "edit any $type->type invoice" => array(
+        'title' => t('%type_name: Edit any invoice', array('%type_name' => $type->name)),
+      ),
+      "view any $type->type invoice" => array(
+        'title' => t('%type_name: View any invoice', array('%type_name' => $type->name)),
+      ),
+    );
+  }
+
   return $permissions;
+}
+
+/**
+ * Access callback for Entity API exportables for invoice types.
+ */
+function invoice_type_access($op, $type = NULL, $account = NULL) {
+  return user_access('administer invoice types', $account);
+}
+
+/**
+ * Returns an array of invoice types, keyed by the type name.
+ *
+ * @return array
+ *   An associative array of invoice types, keyed by invoice type.
+ */
+function invoice_get_types() {
+  $types = &drupal_static(__FUNCTION__);
+
+  if (!$types) {
+    $types = db_select('invoice_type', 'ivt')
+      ->fields('ivt')
+      ->execute()
+      ->fetchAllAssoc('type');
+  }
+
+  return $types;
+}
+
+/**
+ * Returns an invoice type by type name.
+ *
+ * @param string $type
+ *   The machine readable name of the invoice type.
+ *
+ * @return Entity
+ *   A invoice type entity, or FALSE if the invoice type does not exist.
+ */
+function invoice_type_load($type) {
+  $types = invoice_get_types();
+
+  return !empty($types[$type]) ? $types[$type] : FALSE;
+}
+
+/**
+ * Returns a list of invoice type machine names.
+ *
+ * @return array
+ *   An indexed array of invoice type machine names.
+ */
+function invoice_type_get_names() {
+  return array_keys(invoice_get_types());
 }
 
 /**
@@ -187,6 +392,44 @@ function invoice_load($iid = NULL, $reset = FALSE) {
  */
 function invoice_load_multiple($iids = array(), $reset = FALSE) {
   return entity_load('invoice', $iids, array(), $reset);
+}
+
+/**
+ * Implements callback_entity_info_uri().
+ */
+function invoice_uri(Invoice $invoice) {
+  return array(
+    'path' => 'invoice/' . $invoice->iid,
+  );
+}
+
+/**
+ * Creates a invoice type.
+ *
+ * @param string $type
+ *   The machine readable name of the invoice type.
+ * @param string $name
+ *   The human readable name of the invoice type.
+ */
+function invoice_type_create($type, $name) {
+  db_insert('invoice_type')
+    ->fields(array(
+      'type' => $type,
+      'name' => $name,
+    ))
+    ->execute();
+}
+
+/**
+ * Callback for getting invoice properties.
+ *
+ * @see invoice_entity_property_info()
+ */
+function invoice_entity_metadata_get_properties(Invoice $invoice, array $options, $name, $entity_type, $info) {
+  switch ($name) {
+    case 'is_new':
+      return empty($invoice->iid) || !empty($invoice->is_new);
+  }
 }
 
 /**

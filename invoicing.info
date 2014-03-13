@@ -7,6 +7,7 @@ dependencies[] = block
 dependencies[] = business
 dependencies[] = client
 dependencies[] = ctools
+dependencies[] = date
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = invoice

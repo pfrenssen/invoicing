@@ -11,6 +11,11 @@ projects[ctools][download][revision] = 7.x-1.4
 projects[ctools][download][branch] = 7.x-1.x
 projects[ctools][subdir] = contrib
 
+projects[date][download][type] = git
+projects[date][download][revision] = 7.x-2.7
+projects[date][download][branch] = 7.x-2.x
+projects[date][subdir] = contrib
+
 projects[email][download][type] = git
 projects[email][download][revision] = 7.x-1.2
 projects[email][download][branch] = 7.x-1.x

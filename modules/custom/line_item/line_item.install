@@ -23,9 +23,9 @@ function line_item_schema() {
       'bid' => array(
         'description' => 'The business that owns the line item preset.',
         'type' => 'int',
-        'length' => 255,
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => '',
+        'default' => 0,
       ),
       'name' => array(
         'description' => 'The name of the line item preset.',
@@ -63,19 +63,20 @@ function line_item_schema() {
       'bid' => array(
         'description' => 'The business that owns the line item.',
         'type' => 'int',
-        'length' => 255,
+        'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => '',
+        'default' => 0,
       ),
       'iid' => array(
-        'description' => 'Optional invoice id to which this line item is linked. If this is NULL this line item is providing default values for a preset..',
+        'description' => 'Optional invoice id to which this line item is linked. If this is NULL this line item is providing default values for a preset.',
         'type' => 'int',
         'not null' => FALSE,
-        'default' => 0,
+        'default' => NULL,
       ),
       'pid' => array(
         'description' => 'Optional preset id that was used to construct this line item.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => FALSE,
         'default' => 0,
       ),

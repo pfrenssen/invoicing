@@ -7,6 +7,9 @@ projects[addressfield][subdir] = contrib
 projects[ctools] = 1.4
 projects[ctools][subdir] = contrib
 
+projects[date] = 2.7
+projects[date][subdir] = contrib
+
 projects[email] = 1.2
 projects[email][subdir] = contrib
 

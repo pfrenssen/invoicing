@@ -11,7 +11,7 @@
 function invoice_type_form($form, &$form_state, $invoice_type, $op = 'edit') {
   // Append 'clone' to the name when the entity is being cloned.
   if ($op == 'clone') {
-    $client_type->name .= ' (cloned)';
+    $invoice_type->name .= ' (cloned)';
     $invoice_type->type = '';
   }
 

@@ -56,7 +56,7 @@ class ClientAccessTestCase extends DrupalWebTestCase {
     parent::setup('client');
 
     // Create test users.
-    $permissions = array('administer clients');
+    $permissions = array('access client overview', 'administer clients');
     $this->administrator = $this->drupalCreateUser($permissions);
     $this->authenticatedUser = $this->drupalCreateUser();
 
@@ -82,7 +82,7 @@ class ClientAccessTestCase extends DrupalWebTestCase {
 
     foreach ($paths as $path) {
       $this->drupalGet($path);
-      $this->assertResponse(200, format_string('A user with permission "administer clients" can access the %path page.', array('%path' => $path)));
+      $this->assertResponse(200, format_string('A user with permissions "access client overview" and "administer clients" can access the %path page.', array('%path' => $path)));
     }
 
     // Check if the administrator can see the 'Delete' button on the edit page.

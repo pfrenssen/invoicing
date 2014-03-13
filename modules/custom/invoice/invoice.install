@@ -30,6 +30,7 @@ function invoice_schema() {
       'bid' => array(
         'description' => 'The business that issues the invoice.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),

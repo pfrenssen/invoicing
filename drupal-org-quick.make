@@ -30,5 +30,8 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22091
 projects[features] = 2.0
 projects[features][subdir] = contrib
 
+projects[strongarm] = 2.0
+projects[strongarm][subdir] = contrib
+
 projects[views] = 3.7
 projects[views][subdir] = contrib

@@ -9,6 +9,7 @@ dependencies[] = client
 dependencies[] = ctools
 dependencies[] = entityreference
 dependencies[] = features
+dependencies[] = invoice
 dependencies[] = invoicing_core
 dependencies[] = views
 

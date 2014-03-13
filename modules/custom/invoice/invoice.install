@@ -30,9 +30,8 @@ function invoice_schema() {
       'bid' => array(
         'description' => 'The business that issues the invoice.',
         'type' => 'int',
-        'length' => 255,
         'not null' => TRUE,
-        'default' => '',
+        'default' => 0,
       ),
       'created' => array(
         'description' => 'The Unix timestamp when the invoice was created.',

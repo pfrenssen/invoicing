@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations for the Invoicing Dashboard module.
+ */
+
+include_once 'invoicing_dashboard.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function invoicing_dashboard_menu() {
+  $items = array();
+
+  $items['dashboard'] = array(
+    'title' => 'Dashboard',
+    'page callback' => 'invoicing_dashboard_overview',
+    'access arguments' => array('access invoicing dashboard'),
+    'type' => MENU_CALLBACK,
+    'file' => 'invoicing_dashboard.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function invoicing_dashboard_permission() {
+  $permissions = array(
+    'access invoicing dashboard' => array(
+      'title' => t('Access the dashboard'),
+    ),
+  );
+
+  return $permissions;
+}

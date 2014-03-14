@@ -18,4 +18,11 @@ function client_views_data_alter(&$data) {
       'handler' => 'client_handler_link_field',
     ),
   );
+  $data['client']['edit_client'] = array(
+    'field' => array(
+      'title' => t('Edit link'),
+      'help' => t('Provide a link to the client edit form.'),
+      'handler' => 'client_handler_edit_link_field',
+    ),
+  );
 }

@@ -28,10 +28,10 @@ features[field_instance][] = client-client-field_client_vat
 features[views_view][] = clients
 
 files[] = client.admin.inc
+files[] = client_handler_link_field.inc
 files[] = tests/access.test
 files[] = tests/crud.test
 files[] = tests/client_web_test_case.php
 files[] = tests/overview.test
 files[] = tests/ui.test
-files[] = includes/client_handler_field_client_edit_link.inc
 files[] = client.views.inc

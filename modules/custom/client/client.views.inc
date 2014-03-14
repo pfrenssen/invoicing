@@ -10,18 +10,12 @@
 /**
  * Implements hook_views_data_alter().
  */
-function client_views_data() {
-  $data = array();
-
-  $data['client']['edit_link'] = array(
-    'group' => t('Client'),
-    'real field' => 'cid',
-    'title' => t('Edit link'),
-    'help' => t('The edit link of the client'),
+function client_views_data_alter(&$data) {
+  $data['client']['link_client'] = array(
     'field' => array(
-      'handler' => 'client_handler_field_client_edit_link',
+      'title' => t('Link'),
+      'help' => t('Provide a simple link to the client.'),
+      'handler' => 'client_handler_link_field',
     ),
   );
-
-  return $data;
 }

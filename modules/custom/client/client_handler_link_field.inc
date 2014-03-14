@@ -16,8 +16,9 @@ class client_handler_link_field extends views_handler_field {
   function construct() {
     parent::construct();
 
-    // Make sure the client id is available in the query.
+    // Make sure the client id and type are available in the query.
     $this->additional_fields['cid'] = 'cid';
+    $this->additional_fields['type'] = 'type';
   }
 
   /**
@@ -65,8 +66,31 @@ class client_handler_link_field extends views_handler_field {
     $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
 
     // Return a link to the client.
-    $cid = $values->{$this->aliases['cid']};
-    return l($text, 'client/' . $cid);
+    $client = client_create(array(
+      'cid' => $values->{$this->aliases['cid']},
+      'type' => $values->{$this->aliases['type']},
+    ));
+    return $this->render_link($client, $values);
+  }
+
+  /**
+   * Renders the link.
+   *
+   * @param Client $client
+   *   The client for which to render the link.
+   * @param array $values
+   *   The values retrieved from the database.
+   *
+   * @return string
+   *   The rendered link.
+   */
+  function render_link($client, $values) {
+    if (client_access('view', $client)) {
+      $this->options['alter']['make_link'] = TRUE;
+      $this->options['alter']['path'] = "client/$client->cid";
+      $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
+      return $text;
+    }
   }
 
 }

@@ -25,4 +25,11 @@ function client_views_data_alter(&$data) {
       'handler' => 'client_handler_edit_link_field',
     ),
   );
+  $data['client']['delete_client'] = array(
+    'field' => array(
+      'title' => t('Delete link'),
+      'help' => t('Provide a link to delete the client.'),
+      'handler' => 'client_handler_delete_link_field',
+    ),
+  );
 }

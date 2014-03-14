@@ -28,6 +28,7 @@ features[field_instance][] = client-client-field_client_vat
 features[views_view][] = clients
 
 files[] = client.admin.inc
+files[] = client_handler_delete_link_field.inc
 files[] = client_handler_edit_link_field.inc
 files[] = client_handler_link_field.inc
 files[] = tests/access.test

@@ -8,6 +8,42 @@
 trait BaseTestHelper {
 
   /**
+   * Create a user with the given user role.
+   *
+   * This is based on drupalCreateUser() but accepts a user role rather than a
+   * set of permissions.
+   *
+   * @param string $role
+   *   The user role to assign to the user.
+   *
+   * @return object|false
+   *   A fully loaded user object with pass_raw property, or FALSE if account
+   *   creation fails.
+   */
+  protected function drupalCreateUserWithRole($role) {
+    $role = user_role_load_by_name($role);
+
+    // Create a user assigned to that role.
+    $edit = array();
+    $edit['name']   = $this->randomName();
+    $edit['mail']   = $edit['name'] . '@example.com';
+    $edit['pass']   = user_password();
+    $edit['status'] = 1;
+    $edit['roles'] = array($role->rid => $role->rid);
+
+    $account = user_save(drupal_anonymous_user(), $edit);
+
+    $this->assertTrue(!empty($account->uid), t('User created with name %name and pass %pass', array('%name' => $edit['name'], '%pass' => $edit['pass'])), t('User login'));
+    if (empty($account->uid)) {
+      return FALSE;
+    }
+
+    // Add the raw password so that we can log in as this user.
+    $account->pass_raw = $edit['pass'];
+    return $account;
+  }
+
+  /**
    * Check if the properties of the given entity match the given values.
    *
    * @param string $entity_type

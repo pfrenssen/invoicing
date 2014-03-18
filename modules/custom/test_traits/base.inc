@@ -2,139 +2,10 @@
 
 /**
  * @file
- * Base class for testing the Business module.
+ * Asserts and helper methods to use in testing.
  */
 
-class BusinessWebTestCase extends DrupalWebTestCase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setup('business');
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * Like DrupalTestCase::randomString(), but includes additional special
-   * characters, and starts with a space. This helps in discovering security
-   * problems and improper trimming and encoding of strings.
-   *
-   * By default it returns 16 characters rather than the usual 8 to make up for
-   * lost entropy.
-   */
-  public static function randomString($length = 16) {
-    $str = ' &\/;<>\'"ä☢';
-    for ($i = 0; $i < $length; $i++) {
-      $str .= chr(mt_rand(32, 126));
-    }
-    return $str;
-  }
-
-  /**
-   * Returns random values for all properties on the business entity.
-   *
-   * @returns array
-   *   An associative array of random values, keyed by property name.
-   */
-  public function randomBusinessValues() {
-    return array(
-      'name' => $this->randomName(),
-      'field_business_address' => $this->randomAddressField(),
-      'field_business_bic' => $this->randomString(),
-      'field_business_email' => $this->randomEmail(),
-      'field_business_iban' => $this->randomString(),
-      'field_business_mobile' => $this->randomString(),
-      'field_business_phone' => $this->randomString(),
-      'field_business_vat' => $this->randomString(),
-    );
-  }
-
-  /**
-   * Returns a random address field.
-   *
-   * @return array
-   *   A random address field.
-   */
-  public function randomAddressField() {
-    // The Address Field module trims all input and converts double spaces to
-    // single spaces before saving the values to the database. We make sure our
-    // random data does the same so we do not get random failures.
-    // @see addressfield_field_presave()
-    return array(
-      'country' => chr(mt_rand(65, 90)) . chr(mt_rand(65, 90)),
-      'locality' => trim(str_replace('  ', ' ', $this->randomString())),
-      'postal_code' => rand(1000, 9999),
-      'thoroughfare' => trim(str_replace('  ', ' ', $this->randomString())),
-    );
-  }
-
-  /**
-   * Returns a random email address.
-   *
-   * @return string
-   *   A random email address.
-   */
-  public function randomEmail() {
-    return strtolower($this->randomName()) . '@example.com';
-  }
-
-  /**
-   * Check if the business database table is empty.
-   *
-   * @param string $message
-   *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
-   *
-   * @return bool
-   *   TRUE if the assertion succeeded, FALSE otherwise.
-   */
-  public function assertBusinessTableEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('business', 'b')->fields('b')->execute()->fetchAll();
-    return $this->assertFalse($result, $message ?: 'The business database table is empty.', $group);
-  }
-
-  /**
-   * Check if the business database table is not empty.
-   *
-   * @param string $message
-   *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
-   *
-   * @return bool
-   *   TRUE if the assertion succeeded, FALSE otherwise.
-   */
-  public function assertBusinessTableNotEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('business', 'b')->fields('b')->execute()->fetchAll();
-    return $this->assertTrue($result, $message ?: 'The business database table is not empty.', $group);
-  }
-
-  /**
-   * Check if the properties of the given business match the given values.
-   *
-   * @param business $business
-   *   The Business entity to check.
-   * @param array $values
-   *   An associative array of values to check, keyed by property name.
-   * @param string $message
-   *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
-   *
-   * @return bool
-   *   TRUE if the assertion succeeded, FALSE otherwise.
-   */
-  public function assertBusinessProperties(Business $business, array $values, $message = '', $group = 'Other') {
-    return $this->assertEntityProperties('business', $business, $values, $message, $group);
-  }
+trait BaseTestHelper {
 
   /**
    * Check if the properties of the given entity match the given values.
@@ -153,7 +24,7 @@ class BusinessWebTestCase extends DrupalWebTestCase {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  public function assertEntityProperties($entity_type, Entity $entity, array $values, $message = '', $group = 'Other') {
+  function assertEntityProperties($entity_type, Entity $entity, array $values, $message = '', $group = 'Other') {
     $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
     $result = TRUE;
@@ -184,7 +55,7 @@ class BusinessWebTestCase extends DrupalWebTestCase {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  public function assertFieldValidationFailed(array $fields, $message = '', $group = 'Other') {
+  function assertFieldValidationFailed(array $fields, $message = '', $group = 'Other') {
     $result = TRUE;
     foreach ($fields as $field) {
       $xpath = '//textarea[@name=:value and contains(@class, "error")]|//input[@name=:value and contains(@class, "error")]|//select[@name=:value and contains(@class, "error")]';
@@ -192,6 +63,40 @@ class BusinessWebTestCase extends DrupalWebTestCase {
       $result &= $this->assertTrue($elements, format_string('The field %field has the "error" class.', array('%field' => $field)));
     }
     return $this->assertTrue($result, $message ?: 'All fields are indicating that validation failed.', $group);
+  }
+
+  /**
+   * Check if no pager is present on the page.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertNoPager($message = '', $group = 'Other') {
+    $message = $message ?: 'No pager is present on the page.';
+    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
+    return $this->assertXPathElements($xpath, 0, array(), $message, $group);
+  }
+
+  /**
+   * Check if a pager is present on the page.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertPager($message = '', $group = 'Other') {
+    $message = $message ?: 'A pager is present on the page.';
+    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
+    return $this->assertXPathElements($xpath, 1, array(), $message, $group);
   }
 
   /**
@@ -213,7 +118,7 @@ class BusinessWebTestCase extends DrupalWebTestCase {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  public function assertStatusMessages($messages, $message = '', $group = 'Other') {
+  function assertStatusMessages($messages, $message = '', $group = 'Other') {
     // Messages can contain a mix of HTML and sanitized HTML, for example:
     // '<em class="placeholder">&lt;script&gt;alert();&lt;&#039;script&gt;</em>'
     // Unfortunately, check_plain() and SimpleXML::asXml() encode quotes and
@@ -279,7 +184,7 @@ class BusinessWebTestCase extends DrupalWebTestCase {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  public function assertXPathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
+  function assertXPathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
     // Provide a default message.
     $message = $message ?: format_plural($count, 'The element matching the XPath expression is present in the page.', 'The @count elements matching the XPath expression are present in the page.');
 
@@ -288,74 +193,23 @@ class BusinessWebTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Creates a new business entity.
+   * Decodes HTML entities of a given array of status messages.
    *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name. Random
-   *   values will be applied to all omitted properties.
+   * @param array $messages
+   *   An associative array of status messages to decode, keyed by message type
+   *   (either 'status', 'warning' or 'error'). Every type contains an indexed
+   *   array of status messages.
    *
-   * @return Business
-   *   A new business entity.
+   * @return array
+   *   The decoded array of status messages.
    */
-  public function createBusiness(array $values = array()) {
-    // Provide some default values.
-    $values += $this->randomBusinessValues();
-    $business = business_create();
-    $this->updateBusiness($business, $values);
-
-    return $business;
-  }
-
-  /**
-   * Creates a new business entity through the user interface.
-   *
-   * The saved business is retrieved by business name and email address. In
-   * order to retrieve the correct business entity, these should be unique.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name. Random
-   *   values will be applied to all omitted properties.
-   *
-   * @return Business
-   *   A new business entity.
-   */
-  function createUiBusiness(array $values = array()) {
-    // Provide some default values.
-    $values += $this->randomBusinessValues();
-
-    // Convert the entity property values to form values and submit the form.
-    $edit = $this->convertToFormPostValues($values);
-    $this->drupalPost('business/add', $edit, t('Save'));
-
-    // Retrieve the saved business by name and email address and return it.
-    $query = new EntityFieldQuery();
-    $query
-      ->entityCondition('entity_type', 'business')
-      ->entityCondition('bundle', 'business')
-      ->propertyCondition('name', $values['name'])
-      ->fieldCondition('field_business_email', 'email', $values['field_business_email'])
-      ->range(0,1);
-    $result = $query->execute();
-    $bids = array_keys($result['business']);
-    $this->assertTrue($bids, 'Business was successfully created through the UI.');
-
-    return business_load($bids[0]);
-  }
-
-  /**
-   * Updates the given business with the given properties.
-   *
-   * @param Business $business
-   *   The business entity to update.
-   * @param array $values
-   *   An associative array of values to apply to the entity, keyed by property
-   *   name.
-   */
-  public function updateBusiness(Business $business, array $values) {
-    $wrapper = entity_metadata_wrapper('business', $business);
-    foreach ($values as $property => $value) {
-      $wrapper->$property->set($value);
+  function decodeStatusMessages($messages) {
+    foreach (array_keys($messages) as $type) {
+      foreach ($messages[$type] as $key => $encoded_message) {
+        $messages[$type][$key] = html_entity_decode($encoded_message, ENT_QUOTES, 'UTF-8');
+      }
     }
+    return $messages;
   }
 
   /**
@@ -366,7 +220,7 @@ class BusinessWebTestCase extends DrupalWebTestCase {
    *   'status', 'warning' or 'error'). Every type contains an indexed array of
    *   status messages.
    */
-  public function getStatusMessages() {
+  function getStatusMessages() {
     $return = array(
       'error' => array(),
       'warning' => array(),
@@ -418,56 +272,50 @@ class BusinessWebTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Decodes HTML entities of a given array of status messages.
-   *
-   * @param array $messages
-   *   An associative array of status messages to decode, keyed by message type
-   *   (either 'status', 'warning' or 'error'). Every type contains an indexed
-   *   array of status messages.
+   * Returns a random address field.
    *
    * @return array
-   *   The decoded array of status messages.
+   *   A random address field.
    */
-  function decodeStatusMessages($messages) {
-    foreach (array_keys($messages) as $type) {
-      foreach ($messages[$type] as $key => $encoded_message) {
-        $messages[$type][$key] = html_entity_decode($encoded_message, ENT_QUOTES, 'UTF-8');
-      }
+  function randomAddressField() {
+    // The Address Field module trims all input and converts double spaces to
+    // single spaces before saving the values to the database. We make sure our
+    // random data does the same so we do not get random failures.
+    // @see addressfield_field_presave()
+    return array(
+      'country' => chr(mt_rand(65, 90)) . chr(mt_rand(65, 90)),
+      'locality' => trim(str_replace('  ', ' ', $this->randomString())),
+      'postal_code' => rand(1000, 9999),
+      'thoroughfare' => trim(str_replace('  ', ' ', $this->randomString())),
+    );
+  }
+
+  /**
+   * Returns a random email address.
+   *
+   * @return string
+   *   A random email address.
+   */
+  function randomEmail() {
+    return strtolower($this->randomName()) . '@example.com';
+  }
+
+  /**
+   * {@inheritdoc}
+   *
+   * Like DrupalTestCase::randomString(), but includes additional special
+   * characters, and starts with a space. This helps in discovering security
+   * problems and improper trimming and encoding of strings.
+   *
+   * By default it returns 16 characters rather than the usual 8 to make up for
+   * lost entropy.
+   */
+  static function randomString($length = 16) {
+    $str = ' &\/;<>\'"ä☢';
+    for ($i = 0; $i < $length; $i++) {
+      $str .= chr(mt_rand(32, 126));
     }
-    return $messages;
+    return $str;
   }
 
-  /**
-   * Check if no pager is present on the page.
-   *
-   * @param string $message
-   *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
-   *
-   * @return bool
-   *   TRUE if the assertion succeeded, FALSE otherwise.
-   */
-  public function assertNoPager($message = '', $group = 'Other') {
-    $message = $message ?: 'No pager is present on the page.';
-    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXPathElements($xpath, 0, array(), $message, $group);
-  }
-
-  /**
-   * Check if a pager is present on the page.
-   *
-   * @param string $message
-   *   The message to display along with the assertion.
-   * @param string $group
-   *   The type of assertion - examples are "Browser", "PHP".
-   *
-   * @return bool
-   *   TRUE if the assertion succeeded, FALSE otherwise.
-   */
-  public function assertPager($message = '', $group = 'Other') {
-    $message = $message ?: 'A pager is present on the page.';
-    $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXPathElements($xpath, 1, array(), $message, $group);
-  }
 }

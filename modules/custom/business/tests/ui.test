@@ -5,7 +5,14 @@
  * UI tests for the Business module.
  */
 
-class BusinessUITestCase extends BusinessWebTestCase {
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
+class BusinessUITestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use BusinessTestHelper {
+    randomBusinessValues as traitRandomBusinessValues;
+  }
 
   /**
    * A test user.
@@ -13,6 +20,11 @@ class BusinessUITestCase extends BusinessWebTestCase {
    * @var object $user
    */
   protected $user;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -175,7 +187,7 @@ class BusinessUITestCase extends BusinessWebTestCase {
    * {@inheritdoc}
    */
   public function randomBusinessValues() {
-    $values = parent::randomBusinessValues();
+    $values = $this->traitRandomBusinessValues();
 
     // @todo Support other countries in addition to Belgium.
     $values['field_business_address']['country'] = 'BE';

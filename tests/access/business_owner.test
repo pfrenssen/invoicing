@@ -5,7 +5,7 @@
  * Access and permission tests for the 'business owner' role.
  */
 
-class BusinessOwnerAccessTestCase extends AccessWebTestCase {
+class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
   /**
    * {@inheritdoc}

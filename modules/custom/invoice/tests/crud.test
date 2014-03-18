@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * CRUD tests for the Invoice module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'invoice');
+
+class InvoiceCRUDTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use InvoiceTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'CRUD test',
+      'description' => 'Tests the creating, reading, updating and deleting of invoices.',
+      'group' => 'Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('invoice');
+  }
+
+  /**
+   * Tests creating, reading, updating and deleting of invoices.
+   */
+  public function testInvoiceCRUD() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('invoice'), 'The invoice database table exists.');
+    $this->assertInvoiceTableEmpty('The invoice database is initially empty.');
+
+    // Check if a new invoice can be saved to the database.
+    $values = $this->randomInvoiceValues();
+    $invoice = $this->createInvoice($values);
+    $invoice->save();
+    $this->assertInvoiceTableNotEmpty('The invoice database table is no longer empty after creating an invoice.');
+
+    // Check that the invoice data can be read from the database.
+    $retrieved_invoice = invoice_load($invoice->iid);
+    $this->assertInvoiceProperties($retrieved_invoice, $values, 'The invoice that was saved to the database can be read correctly.');
+
+    // Update the invoice and check that the new values were written to the
+    // database.
+    $new_values = $this->randomInvoiceValues();
+    $this->updateInvoice($invoice, $new_values);
+    $invoice->save();
+    $this->assertInvoiceProperties($invoice, $new_values, 'The invoice has been updated correctly.');
+
+    // Delete the invoice. The database should be empty again.
+    $invoice->delete();
+    $this->assertInvoiceTableEmpty('The invoice can be deleted from the database.');
+  }
+
+}

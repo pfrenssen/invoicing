@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * @file
+ * UI tests for the Invoice module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'invoice');
+
+class ClientUITestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use InvoiceTestHelper {
+    randomInvoiceValues as traitRandomInvoiceValues;
+  }
+
+  /**
+   * A test user.
+   *
+   * @var object $user
+   */
+  protected $user;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UI test',
+      'description' => 'Tests the managing of invoices through the user interface.',
+      'group' => 'Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('invoice');
+
+    // Create a test user and log in.
+    $permissions = array('administer invoices');
+    $this->user = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->user);
+  }
+
+  /**
+   * Tests the invoice form.
+   */
+  public function testInvoiceForm() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('invoice'), 'The invoice database table exists.');
+    $this->assertInvoiceTableEmpty('The invoice database is initially empty.');
+
+    // Check that error messages are displayed about required fields when
+    // creating a new invoice.
+    $required_fields = array(
+      'field_invoice_client[und]' => t('Invoice client'),
+      'field_invoice_number[und][0][value]' => t('Invoice number'),
+      'field_invoice_date[und][0][value][month]' => t('Invoice date month'),
+      'field_invoice_date[und][0][value][day]' => t('Invoice date day'),
+      'field_invoice_date[und][0][value][year]' => t('Invoice date year'),
+    );
+    $messages = array();
+    foreach ($required_fields as $required_field) {
+      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
+    }
+    $this->drupalPost('invoice/add', array(), t('Save'));
+    $this->assertFieldValidationFailed(array_keys($required_fields));
+    $this->assertStatusMessages($messages, 'Error messages are shown informing the user about required fields.');
+
+    // Fill in all the fields and check if they are saved correctly.
+    $values = $this->randomInvoiceValues();
+    $invoice = $this->createUiInvoice($values);
+    $messages = array('status' => array(t('New invoice %invoice_number has been added.', array('%invoice_number' => $values['field_invoice_number']))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been added.');
+    $this->assertInvoiceTableNotEmpty('The invoice database table is no longer empty after creating a invoice.');
+    $this->assertInvoiceProperties($invoice, $values, 'The invoice has been correctly saved to the database.');
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after creating a new invoice.');
+
+    // Check that the form fields have correct values when the invoice is edited.
+    $this->drupalGet('invoice/' . $invoice->iid . '/edit');
+    $form_values = $this->convertToFormPostValues($values);
+    foreach ($form_values as $name => $value) {
+      $this->assertFieldByName($name, $value, format_string('When editing an existing invoice the %name field has the right value.', array('%name' => $name)));
+    }
+
+    // Change the values and check that the entity is correctly updated.
+    $new_values = $this->randomInvoiceValues();
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $invoice = invoice_load($invoice->iid, TRUE);
+    $messages = array('status' => array(t('The changes have been saved.', array('%invoice_number' => $values['field_invoice_number']))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');
+    $this->assertInvoiceProperties($invoice, $new_values, 'The updated invoice has been correctly saved to the database.');
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after editing an invoice.');
+
+    // Check that the user is redirected to the confirmation page when clicking
+    // the 'Delete' button on the invoice edit page.
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', array(), t('Delete'));
+    $this->assertUrl('invoice/' . $invoice->iid . '/delete', array(), 'The user is redirected to the confirmation form when clicking the "Delete" button in the invoice edit form.');
+    $this->assertRaw(t('Are you sure you want to delete the invoice with id: %id?', array('%id' => $invoice->iid)), 'The confirmation message is shown when deleting an invoice.');
+    $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting an invoice.');
+
+    // Check that the invoice can be deleted.
+    $this->drupalPost('invoice/' .$invoice->iid . '/delete', array(), t('Delete'));
+    $messages = array('status' => array(t('Invoice %id has been deleted.', array('%id' => $invoice->iid))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
+    $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
+  }
+
+  /**
+   * Returns form post values from the given entity values.
+   *
+   * @see self::randomInvoiceValues()
+   *
+   * @param array $values
+   *   An associative array of invoice values, keyed by property name, as
+   *   returned by self::randomInvoiceValues().
+   *
+   * @returns array
+   *   An associative array of values, keyed by form field name, as used by
+   *   parent::drupalPost().
+   */
+  public function convertToFormPostValues($values) {
+    return array(
+      'field_invoice_client[und]' => $values['field_invoice_client'],
+      'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
+      'field_invoice_date[und][0][value][month]' => $values['field_invoice_date']['month'],
+      'field_invoice_date[und][0][value][day]' => $values['field_invoice_date']['day'],
+      'field_invoice_date[und][0][value][year]' => $values['field_invoice_date']['year'],
+      'field_invoice_discount[und][0][value]' => $values['field_invoice_discount'],
+      'field_invoice_po_number[und][0][value]' => $values['field_invoice_po_number'],
+      'field_invoice_due_date[und]' => $values['field_invoice_due_date'],
+      'field_invoice_terms[und][0][value]' => $values['field_invoice_terms'],
+      'field_invoice_status[und]' => $values['field_invoice_status'],
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function randomInvoiceValues() {
+    $values = $this->traitRandomInvoiceValues();
+    $values['field_invoice_date']['month'] = rand(1, 12);
+    $values['field_invoice_date']['day'] = rand(1, 28);
+    $values['field_invoice_date']['year'] = rand(2014, 2017);
+
+    return $values;
+  }
+
+  /**
+   * Constructs a XPath query to find an element on the invoice entity page.
+   *
+   * @param string $pxath
+   *   The path seector to search for.
+   */
+  protected function getInvoiceEntityXpath($xpath = NULL) {
+    $parts = array(
+      '//div[contains(@class, "entity-invoice")]',
+    );
+
+    if (!empty($xpath)) {
+      $parts[] = $xpath;
+    }
+
+    $query = implode('', $parts);
+    return $query;
+  }
+
+}

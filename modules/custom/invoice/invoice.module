@@ -339,6 +339,10 @@ function invoice_delete_multiple(array $iids) {
  *   The entity label or FALSE if not found.
  */
 function invoice_label($entity, $entity_type) {
+  return $entity->iid;
+}
+
+function invoice_type_label($entity, $entity_type) {
   return $entity->name;
 }
 

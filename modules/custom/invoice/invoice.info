@@ -3,4 +3,6 @@ description = Invoice related functionality.
 core = 7.x
 package = Invoicing
 
+features[invoice_type][] = invoice
+
 files[] = invoice.admin.inc

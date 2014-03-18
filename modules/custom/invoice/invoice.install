@@ -37,12 +37,14 @@ function invoice_schema() {
       'created' => array(
         'description' => 'The Unix timestamp when the invoice was created.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),
       'changed' => array(
         'description' => 'The Unix timestamp when the invoice was most recently saved.',
         'type' => 'int',
+        'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
       ),
@@ -94,7 +96,6 @@ function invoice_schema() {
     ),
     'primary key' => array('type'),
   );
-
 
   return $schema;
 }

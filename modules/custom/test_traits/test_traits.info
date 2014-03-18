@@ -6,3 +6,4 @@ package = Invoicing
 files[] = base.inc
 files[] = business.inc
 files[] = client.inc
+files[] = invoice.inc

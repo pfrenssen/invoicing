@@ -12,8 +12,8 @@ class InvoicingCreateClientTestCase extends InvoicingIntegrationTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'UI test',
-      'description' => 'Tests the managing of clients through the user interface.',
+      'name' => 'Client creation test',
+      'description' => 'Tests the creation of clients by business owners.',
       'group' => 'Invoicing - Client',
     );
   }

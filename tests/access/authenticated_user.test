@@ -38,6 +38,7 @@ class AuthenticatedUserAccessTestCase extends AccessWebTestCase {
     'client/add',
     'clients',
     'dashboard',
+    'invoice/add',
     'node',
     'node/add',
   );

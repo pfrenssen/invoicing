@@ -22,6 +22,7 @@ class AdministratorAccessTestCase extends AccessWebTestCase {
     'clients',
     'client/add',
     'dashboard',
+    'invoice/add',
     'user',
     'user/password',
     'user/register',

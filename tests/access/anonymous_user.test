@@ -38,6 +38,7 @@ class AnonymousUserAccessTestCase extends AccessWebTestCase {
     'clients',
     'client/add',
     'dashboard',
+    'invoice/add',
     'node',
     'node/add',
   );

@@ -38,6 +38,7 @@ class ClientAccessTestCase extends AccessWebTestCase {
     'client/add',
     'clients',
     'dashboard',
+    'invoice/add',
     'node',
     'node/add',
   );

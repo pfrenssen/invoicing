@@ -42,7 +42,7 @@ class BusinessOwnerAccessTestCase extends AccessWebTestCase {
     // @see http://atrium.pocomas.be/invoicing/node/1167
     'businesses',
     'business/add',
-
+    'invoice/add',
     'node',
     'node/add',
   );

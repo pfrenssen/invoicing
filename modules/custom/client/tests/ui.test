@@ -95,14 +95,14 @@ class ClientUITestCase extends DrupalWebTestCase {
 
     // Check that the form fields have correct values when the client is edited.
     $this->drupalGet('client/' . $client->cid . '/edit');
-    $form_values = $this->convertToFormPostValues($values);
+    $form_values = $this->convertClientValuesToFormPostValues($values);
     foreach ($form_values as $name => $value) {
       $this->assertFieldByName($name, $value, format_string('When editing an existing client the %name field has the right value.', array('%name' => $name)));
     }
 
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomClientValues();
-    $this->drupalPost('client/' . $client->cid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $this->drupalPost('client/' . $client->cid . '/edit', $this->convertClientValuesToFormPostValues($new_values), t('Save'));
     $client = client_load($client->cid, TRUE);
     $messages = array('status' => array(t('The changes have been saved.', array('%name' => $values['name']))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been edited.');

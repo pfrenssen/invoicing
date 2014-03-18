@@ -5,7 +5,14 @@
  * UI tests for the Client module.
  */
 
-class ClientUITestCase extends ClientWebTestCase {
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'client');
+
+class ClientUITestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use ClientTestHelper {
+    randomClientValues as traitRandomClientValues;
+  }
 
   /**
    * A test user.
@@ -13,6 +20,11 @@ class ClientUITestCase extends ClientWebTestCase {
    * @var object $user
    */
   protected $user;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -189,7 +201,7 @@ class ClientUITestCase extends ClientWebTestCase {
    * {@inheritdoc}
    */
   public function randomClientValues() {
-    $values = parent::randomClientValues();
+    $values = $this->traitRandomClientValues();
 
     // @todo Support other countries in addition to Belgium.
     $values['field_client_address']['country'] = 'BE';

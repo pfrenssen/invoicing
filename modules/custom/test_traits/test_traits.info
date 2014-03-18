@@ -1,0 +1,8 @@
+name = Test Traits
+description = Tests traits for the invoicing project.
+core = 7.x
+package = Invoicing
+
+files[] = base.inc
+files[] = business.inc
+files[] = client.inc

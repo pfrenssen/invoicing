@@ -5,7 +5,12 @@
  * Tests the business overview.
  */
 
-class BusinessOverviewTestCase extends BusinessWebTestCase {
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
+class BusinessOverviewTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use BusinessTestHelper;
 
   /**
    * A test user.
@@ -20,6 +25,11 @@ class BusinessOverviewTestCase extends BusinessWebTestCase {
    * @var array
    */
   protected $businesses;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.

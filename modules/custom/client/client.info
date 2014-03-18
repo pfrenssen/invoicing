@@ -33,7 +33,6 @@ files[] = client_handler_delete_link_field.inc
 files[] = client_handler_edit_link_field.inc
 files[] = client_handler_link_field.inc
 files[] = tests/access.test
-files[] = tests/client_web_test_case.php
 files[] = tests/crud.test
 files[] = tests/overview.test
 files[] = tests/ui.test

@@ -5,7 +5,17 @@
  * Unit tests for the Business module.
  */
 
-class BusinessUnitTestCase extends BusinessWebTestCase {
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
+class BusinessUnitTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use BusinessTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
 
   /**
    * Test user accounts.

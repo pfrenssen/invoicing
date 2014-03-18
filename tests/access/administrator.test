@@ -5,7 +5,7 @@
  * Access and permission tests for the 'administrator' role.
  */
 
-class AdministratorAccessTestCase extends AccessWebTestCase {
+class AdministratorPathAccessTestCase extends AccessWebTestCase {
 
   /**
    * {@inheritdoc}

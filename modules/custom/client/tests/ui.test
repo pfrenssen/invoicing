@@ -165,39 +165,6 @@ class ClientUITestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Returns form post values from the given entity values.
-   *
-   * @see self::randomClientValues()
-   *
-   * @param array $values
-   *   An associative array of client values, keyed by property name, as
-   *   returned by self::randomClientValues().
-   *
-   * @returns array
-   *   An associative array of values, keyed by form field name, as used by
-   *   parent::drupalPost().
-   */
-  public function convertToFormPostValues($values) {
-    return array(
-      'name' => $values['name'],
-      'field_client_email[und][0][email]' => $values['field_client_email'],
-      // @todo Support other countries in addition to Belgium.
-      'field_client_address[und][0][country]' => 'BE',
-      'field_client_address[und][0][thoroughfare]' => $values['field_client_address']['thoroughfare'],
-      'field_client_address[und][0][postal_code]' => $values['field_client_address']['postal_code'],
-      'field_client_address[und][0][locality]' => $values['field_client_address']['locality'],
-      // @todo Support other countries in addition to Belgium.
-      'field_client_shipping_address[und][0][country]' => 'BE',
-      'field_client_shipping_address[und][0][thoroughfare]' => $values['field_client_shipping_address']['thoroughfare'],
-      'field_client_shipping_address[und][0][postal_code]' => $values['field_client_shipping_address']['postal_code'],
-      'field_client_shipping_address[und][0][locality]' => $values['field_client_shipping_address']['locality'],
-      'field_client_vat[und][0][value]' => $values['field_client_vat'],
-      'field_client_phone[und][0][value]' => $values['field_client_phone'],
-      'field_client_notes[und][0][value]' => $values['field_client_notes'],
-    );
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function randomClientValues() {

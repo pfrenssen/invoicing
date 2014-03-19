@@ -91,6 +91,25 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
   }
 
   /**
+   * Tests business_is_owned_by_user().
+   */
+  public function testBusinessIsOwnedByUser() {
+    // Create a mapping of which user owns which businesses.
+    $ownership = array(
+      0 => array(0, 1),
+      1 => array(2),
+      2 => array(),
+    );
+    foreach ($this->users as $user_key => $user) {
+      foreach ($this->businesses as $business_key => $business) {
+        $is_owned = in_array($business_key, $ownership[$user_key]);
+        $message = format_string('Business :business :is_owned by user :user.', array(':business' => $business_key, ':is_owned' => $is_owned ? 'is owned' : 'is not owned', ':user' => $user_key));
+        $this->assertEqual(business_is_owned_by_user($business->bid, $user->uid), in_array($business_key, $ownership[$user_key]), $message);
+      }
+    }
+  }
+
+  /**
    * Checks the output of business_get_businesses_from_user().
    *
    * @param int $uid

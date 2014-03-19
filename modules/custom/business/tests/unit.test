@@ -49,44 +49,42 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
-
-    // Create some test users.
-    for ($i = 0; $i < 3; $i++) {
-      $this->users[$i] = $this->drupalCreateUser();
-    }
   }
 
   /**
    * Tests the business field in the user edit form.
    */
   public function testBusinessGetBusinessesFromUser() {
-    // Link a business to two of the users, but not to the third.
-    foreach ($this->users as $key => $user) {
-      if ($key == 2) {
-        break;
+    global $user;
+
+    // Create some test users and businesses. Link two businesses to the first
+    // user and one business to the second user. A third user is created without
+    // any businesses.
+    for ($user_key = 0; $user_key < 3; $user_key++) {
+      $this->users[$user_key] = $this->drupalCreateUser();
+      for ($business_count = 2 - $user_key; $business_count > 0; $business_count--) {
+        $business = $this->createBusiness();
+        $business->save();
+        $this->businesses[] = $business;
+        $this->users[$user_key]->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $business->bid;
+        user_save($this->users[$user_key]);
       }
-      $this->businesses[$key] = $this->createBusiness();
-      $this->businesses[$key]->save();
-      $user->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $this->businesses[$key]->bid;
-      user_save($user);
     }
 
-    // Verify that the business_get_businesses_from_user() works correctly.
-    // The first business should be linked to the first user.
-    $this->assertBusinessGetBusinessFromUser($this->users[0]->uid, array($this->businesses[0]->bid));
+    $business_key = 0;
+    for ($user_key = 0; $user_key < 2; $user_key++) {
+      // Compile a list of business ids for the user with key $user_key.
+      $bids = array();
+      for ($business_count = 2 - $user_key; $business_count > 0; $business_count--) {
+        $bids[] = $this->businesses[$business_key++]->bid;
+      }
+      // Check that the right businesses are returned for each user.
+      $this->assertBusinessGetBusinessFromUser($this->users[$user_key]->uid, $bids);
 
-    // The second business should be linked to the second user.
-    $this->assertBusinessGetBusinessFromUser($this->users[1]->uid, array($this->businesses[1]->bid));
-
-    // The third user should not have any businesses.
-    $this->assertBusinessGetBusinessFromUser($this->users[2]->uid);
-
-    // Check that the businesses owned by the global $user are returned by
-    // default.
-    global $user;
-    for ($i = 0; $i < 2; $i++) {
-      $user = user_load($this->users[$i]->uid);
-      $this->assertBusinessGetBusinessFromUser(NULL, array($this->businesses[$i]->bid));
+      // Check that the businesses owned by the global $user are returned by
+      // default.
+      $user = user_load($this->users[$user_key]->uid);
+      $this->assertBusinessGetBusinessFromUser(NULL, $bids);
     }
   }
 

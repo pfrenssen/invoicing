@@ -49,17 +49,12 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('business');
-  }
-
-  /**
-   * Tests the business field in the user edit form.
-   */
-  public function testBusinessGetBusinessesFromUser() {
-    global $user;
 
     // Create some test users and businesses. Link two businesses to the first
     // user and one business to the second user. A third user is created without
     // any businesses.
+    $this->businesses = array();
+    $this->users = array();
     for ($user_key = 0; $user_key < 3; $user_key++) {
       $this->users[$user_key] = $this->drupalCreateUser();
       for ($business_count = 2 - $user_key; $business_count > 0; $business_count--) {
@@ -70,6 +65,13 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
         user_save($this->users[$user_key]);
       }
     }
+  }
+
+  /**
+   * Tests the business field in the user edit form.
+   */
+  public function testBusinessGetBusinessesFromUser() {
+    global $user;
 
     $business_key = 0;
     for ($user_key = 0; $user_key < 2; $user_key++) {

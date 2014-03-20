@@ -240,12 +240,23 @@ function business_field_extra_fields() {
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
 function business_access($op, $business = NULL, $account = NULL) {
+  global $user;
+
+  // Users with the 'administer businesses' permission always have access.
   if (user_access('administer businesses', $account)) {
     return TRUE;
   }
+
+  // Allow access for users that can perform operations on any business.
   if (isset($business)) {
-    $op = $op == 'view' ? 'view' : 'edit';
-    return user_access("$op any $business->type business", $account);
+    $operation = $op == 'view' ? 'view' : 'edit';
+    if (user_access("$operation any $business->type business", $account)) {
+      return TRUE;
+    }
+
+    // Allow access if the user wants to edit or delete their own business.
+    $account = $account ?: $user;
+    return in_array($op, array('edit', 'delete')) && business_is_owned_by_user($business->bid, $account->uid);
   }
 
   return FALSE;

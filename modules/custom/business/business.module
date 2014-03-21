@@ -254,7 +254,7 @@ function business_access($op, $business = NULL, $account = NULL) {
       return TRUE;
     }
 
-    // Allow access if the user wants to edit or delete their own business.
+    // allow access if the user wants to edit or delete their own business.
     $account = $account ?: $user;
     return in_array($op, array('edit', 'delete')) && business_is_owned_by_user($business->bid, $account->uid);
   }
@@ -531,7 +531,7 @@ function business_get_active_business() {
 }
 
 /**
- * Returns whether the a given business is owned by a given user.
+ * Returns whether a given business is owned by a given user.
  *
  * @param int $bid
  *   The business id to check.

@@ -537,6 +537,26 @@ function client_validate_website_field($element, &$form_state) {
 }
 
 /**
+ * Returns whether a given client is owned by a given user.
+ *
+ * @param int $cid
+ *   The client id to check.
+ * @param int $uid
+ *   Optional user id to check. Defaults to the currently logged in user.
+ *
+ * @return bool
+ *   TRUE if the client is owned by the user, FALSE otherwise.
+ */
+function client_is_owned_by_user($cid, $uid = NULL) {
+  // Default to the logged in user.
+  global $user;
+  $uid = $uid ?: $user->uid;
+
+  $client = entity_metadata_wrapper('client', client_load($cid));
+  return in_array($client->bid->value(), array_keys(business_get_businesses_from_user($uid)));
+}
+
+/**
  * The class used for client entities.
  */
 class Client extends Entity {

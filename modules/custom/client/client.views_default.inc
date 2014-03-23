@@ -94,13 +94,11 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['field_client_phone']['id'] = 'field_client_phone';
   $handler->display->display_options['fields']['field_client_phone']['table'] = 'field_data_field_client_phone';
   $handler->display->display_options['fields']['field_client_phone']['field'] = 'field_client_phone';
-  /* Field: Global: Custom text */
-  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['table'] = 'views';
-  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
-  $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
-  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<a href="/client/[cid]">view</a>
-<a href="/client/[cid]/edit">edit</a>';
+  /* Field: Client: Edit link */
+  $handler->display->display_options['fields']['edit_client']['id'] = 'edit_client';
+  $handler->display->display_options['fields']['edit_client']['table'] = 'client';
+  $handler->display->display_options['fields']['edit_client']['field'] = 'edit_client';
+  $handler->display->display_options['fields']['edit_client']['label'] = 'Actions';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');

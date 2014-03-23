@@ -487,6 +487,21 @@ function business_get_businesses_from_user($uid = NULL, $reset = FALSE) {
 }
 
 /**
+ * Gets the active business for the current user.
+ *
+ * @todo This currently simply returns the first business owned by the logged in
+ *   user. Once we are able to get the active business from the context (e.g.
+ *   by using Spaces, PURL or Context) this should return that instead.
+ *
+ * @return Business
+ *   The active business for the current user.
+ */
+function business_get_active_business() {
+  $businesses = business_get_businesses_from_user();
+  return $businesses ? reset($businesses) : NULL;
+}
+
+/**
  * Composes the label of a business.
  *
  * @see entity_label()

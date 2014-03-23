@@ -17,7 +17,7 @@ function client_entity_info() {
     'label' => t('Client'),
     'plural label' => t('Clients'),
     'entity class' => 'Client',
-    'controller class' => 'EntityAPIController',
+    'controller class' => 'ClientAPIController',
     'base table' => 'client',
     'fieldable' => TRUE,
     'entity keys' => array(
@@ -545,6 +545,25 @@ class Client extends Entity {
     $this->changed = REQUEST_TIME;
 
     return parent::save();
+  }
+
+}
+
+/**
+ * The Client Entity API controller class.
+ */
+class ClientAPIController extends EntityAPIController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function create(array $values = array()) {
+    // Set the business id to the active business of the logged in user.
+    $business = business_get_active_business();
+    if ($business instanceof Business) {
+      $values += array('bid' => $business->bid);
+    }
+    return parent::create($values);
   }
 
 }

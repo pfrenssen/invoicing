@@ -93,14 +93,14 @@ class BusinessUITestCase extends DrupalWebTestCase {
 
     // Check that the form fields have correct values when the business is edited.
     $this->drupalGet('business/' . $business->bid . '/edit');
-    $form_values = $this->convertToFormPostValues($values);
+    $form_values = $this->convertBusinessValuesToFormPostValues($values);
     foreach ($form_values as $name => $value) {
       $this->assertFieldByName($name, $value, format_string('When editing an existing business the %name field has the right value.', array('%name' => $name)));
     }
 
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomBusinessValues();
-    $this->drupalPost('business/' . $business->bid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $this->drupalPost('business/' . $business->bid . '/edit', $this->convertBusinessValuesToFormPostValues($new_values), t('Save'));
     $business = business_load($business->bid, TRUE);
     $this->assertRaw(t('The changes have been saved.', array('%name' => $values['name'])), 'A message is shown informing the user that the business has been edited.');
     $this->assertBusinessProperties($business, $new_values, 'The updated business has been correctly saved to the database.');
@@ -151,36 +151,6 @@ class BusinessUITestCase extends DrupalWebTestCase {
     //   $this->assertStatusMessages() when we are using traits.
     // @see http://atrium.pocomas.be/invoicing/node/1161
     $this->assertRaw('field can contain only unique values');
-  }
-
-  /**
-   * Returns form post values from the given entity values.
-   *
-   * @see self::randomBusinessValues()
-   *
-   * @param array $values
-   *   An associative array of business values, keyed by property name, as
-   *   returned by self::randomBusinessValues().
-   *
-   * @returns array
-   *   An associative array of values, keyed by form field name, as used by
-   *   parent::drupalPost().
-   */
-  public function convertToFormPostValues($values) {
-    return array(
-      'name' => $values['name'],
-      'field_business_email[und][0][email]' => $values['field_business_email'],
-      // @todo Support other countries in addition to Belgium.
-      'field_business_address[und][0][country]' => 'BE',
-      'field_business_address[und][0][thoroughfare]' => $values['field_business_address']['thoroughfare'],
-      'field_business_address[und][0][postal_code]' => $values['field_business_address']['postal_code'],
-      'field_business_address[und][0][locality]' => $values['field_business_address']['locality'],
-      'field_business_vat[und][0][value]' => $values['field_business_vat'],
-      'field_business_phone[und][0][value]' => $values['field_business_phone'],
-      'field_business_mobile[und][0][value]' => $values['field_business_mobile'],
-      'field_business_bic[und][0][value]' => $values['field_business_bic'],
-      'field_business_iban[und][0][value]' => $values['field_business_iban'],
-    );
   }
 
   /**

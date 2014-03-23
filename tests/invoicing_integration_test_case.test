@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Base class for integration tests for the invoicing platform.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
+
+class InvoicingIntegrationTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use BusinessTestHelper;
+  use ClientTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'invoicing';
+
+  /**
+   * Test user accounts.
+   *
+   * @var array
+   *   An array of user objects.
+   */
+  protected $users;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create a user for each role.
+    $roles = array(
+      'administrator',
+      'authenticated user',
+      'business owner',
+      'client',
+    );
+    foreach ($roles as $role) {
+      $this->users[$role] = $this->drupalCreateUserWithRole($role);
+    }
+  }
+
+}

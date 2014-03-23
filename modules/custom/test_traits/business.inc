@@ -95,7 +95,7 @@ trait BusinessTestHelper {
     $values += $this->randomBusinessValues();
 
     // Convert the entity property values to form values and submit the form.
-    $edit = $this->convertToFormPostValues($values);
+    $edit = $this->convertBusinessValuesToFormPostValues($values);
     $this->drupalPost('business/add', $edit, t('Save'));
 
     // Retrieve the saved business by name and email address and return it.
@@ -129,6 +129,36 @@ trait BusinessTestHelper {
       'field_business_mobile' => $this->randomString(),
       'field_business_phone' => $this->randomString(),
       'field_business_vat' => $this->randomString(),
+    );
+  }
+
+  /**
+   * Returns form post values from the given entity values.
+   *
+   * @see self::randomBusinessValues()
+   *
+   * @param array $values
+   *   An associative array of business values, keyed by property name, as
+   *   returned by self::randomBusinessValues().
+   *
+   * @returns array
+   *   An associative array of values, keyed by form field name, as used by
+   *   parent::drupalPost().
+   */
+  public function convertBusinessValuesToFormPostValues($values) {
+    return array(
+      'name' => $values['name'],
+      'field_business_email[und][0][email]' => $values['field_business_email'],
+      // @todo Support other countries in addition to Belgium.
+      'field_business_address[und][0][country]' => 'BE',
+      'field_business_address[und][0][thoroughfare]' => $values['field_business_address']['thoroughfare'],
+      'field_business_address[und][0][postal_code]' => $values['field_business_address']['postal_code'],
+      'field_business_address[und][0][locality]' => $values['field_business_address']['locality'],
+      'field_business_vat[und][0][value]' => $values['field_business_vat'],
+      'field_business_phone[und][0][value]' => $values['field_business_phone'],
+      'field_business_mobile[und][0][value]' => $values['field_business_mobile'],
+      'field_business_bic[und][0][value]' => $values['field_business_bic'],
+      'field_business_iban[und][0][value]' => $values['field_business_iban'],
     );
   }
 

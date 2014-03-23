@@ -21,3 +21,5 @@ files[] = tests/access/anonymous_user.test
 files[] = tests/access/authenticated_user.test
 files[] = tests/access/business_owner.test
 files[] = tests/access/client.test
+files[] = tests/create_client.test
+files[] = tests/invoicing_integration_test_case.test

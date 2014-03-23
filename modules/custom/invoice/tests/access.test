@@ -53,22 +53,23 @@ class InvoiceAccessTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('invoice');
+    parent::setup('client', 'invoice');
 
     // Create test users.
-    $permissions = array('administer invoices');
+    $permissions = array('administer invoices', 'administer clients');
     $this->administrator = $this->drupalCreateUser($permissions);
     $this->authenticatedUser = $this->drupalCreateUser();
 
     // Create an invoice.
     $this->invoice = $this->createInvoice();
+    debug($this->invoice);
     $this->invoice->save();
   }
 
   /**
    * Tests the 'administer invoices' permission.
    */
-  public function testAdministerinvoicesPermission() {
+  public function testAdministerInvoicesPermission() {
     // Log in as administrator.
     $this->drupalLogin($this->administrator);
 

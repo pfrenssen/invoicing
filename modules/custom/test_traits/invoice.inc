@@ -118,7 +118,8 @@ trait InvoiceTestHelper {
    *   An associative array of random values, keyed by property name.
    */
   function randomInvoiceValues() {
-    $client = client_create();
+    $client = client_create(array('name' => 'Test'));
+    $client->save();
 
     return array(
       'field_invoice_client' => $client->identifier(),

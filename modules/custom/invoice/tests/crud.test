@@ -32,7 +32,7 @@ class InvoiceCRUDTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('invoice');
+    parent::setup('client', 'invoice');
   }
 
   /**

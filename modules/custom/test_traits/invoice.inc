@@ -124,7 +124,6 @@ trait InvoiceTestHelper {
     return array(
       'field_invoice_client' => $client->identifier(),
       'field_invoice_number' => $this->randomString(),
-      'field_invoice_date' => date("Y-m-d H:i:s"),
       'field_invoice_discount' => rand(0, 100),
       'field_invoice_po_number' => $this->randomString(),
       'field_invoice_due_date' => array_rand(array(

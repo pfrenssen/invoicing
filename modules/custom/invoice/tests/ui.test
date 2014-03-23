@@ -8,7 +8,7 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'invoice');
 
-class ClientUITestCase extends DrupalWebTestCase {
+class InvoiceUITestCase extends DrupalWebTestCase {
   use BaseTestHelper;
   use InvoiceTestHelper {
     randomInvoiceValues as traitRandomInvoiceValues;
@@ -41,10 +41,10 @@ class ClientUITestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('invoice');
+    parent::setup('client', 'invoice');
 
     // Create a test user and log in.
-    $permissions = array('administer invoices');
+    $permissions = array('administer invoices', 'administer clients');
     $this->user = $this->drupalCreateUser($permissions);
     $this->drupalLogin($this->user);
   }
@@ -60,11 +60,8 @@ class ClientUITestCase extends DrupalWebTestCase {
     // Check that error messages are displayed about required fields when
     // creating a new invoice.
     $required_fields = array(
-      'field_invoice_client[und]' => t('Invoice client'),
+      'field_invoice_client[und]' => t('Client id'),
       'field_invoice_number[und][0][value]' => t('Invoice number'),
-      'field_invoice_date[und][0][value][month]' => t('Invoice date month'),
-      'field_invoice_date[und][0][value][day]' => t('Invoice date day'),
-      'field_invoice_date[und][0][value][year]' => t('Invoice date year'),
     );
     $messages = array();
     foreach ($required_fields as $required_field) {
@@ -77,7 +74,7 @@ class ClientUITestCase extends DrupalWebTestCase {
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomInvoiceValues();
     $invoice = $this->createUiInvoice($values);
-    $messages = array('status' => array(t('New invoice %invoice_number has been added.', array('%invoice_number' => $values['field_invoice_number']))));
+    $messages = array('status' => array(t('New invoice has been added.')));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been added.');
     $this->assertInvoiceTableNotEmpty('The invoice database table is no longer empty after creating a invoice.');
     $this->assertInvoiceProperties($invoice, $values, 'The invoice has been correctly saved to the database.');
@@ -103,12 +100,12 @@ class ClientUITestCase extends DrupalWebTestCase {
     // the 'Delete' button on the invoice edit page.
     $this->drupalPost('invoice/' . $invoice->iid . '/edit', array(), t('Delete'));
     $this->assertUrl('invoice/' . $invoice->iid . '/delete', array(), 'The user is redirected to the confirmation form when clicking the "Delete" button in the invoice edit form.');
-    $this->assertRaw(t('Are you sure you want to delete the invoice with id: %id?', array('%id' => $invoice->iid)), 'The confirmation message is shown when deleting an invoice.');
+    $this->assertRaw(t('Are you sure you want to delete the invoice?'));
     $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting an invoice.');
 
     // Check that the invoice can be deleted.
     $this->drupalPost('invoice/' .$invoice->iid . '/delete', array(), t('Delete'));
-    $messages = array('status' => array(t('Invoice %id has been deleted.', array('%id' => $invoice->iid))));
+    $messages = array('status' => array(t('The invoice has been deleted.')));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
     $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
@@ -128,8 +125,10 @@ class ClientUITestCase extends DrupalWebTestCase {
    *   parent::drupalPost().
    */
   public function convertToFormPostValues($values) {
+    $client = client_load($values['field_invoice_client']);
+
     return array(
-      'field_invoice_client[und]' => $values['field_invoice_client'],
+      'field_invoice_client[und]' => $client->name . ' (' . $values['field_invoice_client'] . ')',
       'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
       'field_invoice_date[und][0][value][month]' => $values['field_invoice_date']['month'],
       'field_invoice_date[und][0][value][day]' => $values['field_invoice_date']['day'],

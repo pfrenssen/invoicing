@@ -91,6 +91,10 @@ function line_item_schema() {
         'table' => 'line_item_preset',
         'columns' => array('pid' => 'pid'),
       ),
+      'iid' => array(
+        'table' => 'invoice',
+        'columns' => array('iid' => 'iid'),
+      ),
     ),
   );
 

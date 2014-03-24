@@ -8,6 +8,7 @@ dependencies[] = business
 dependencies[] = email
 dependencies[] = entity
 dependencies[] = features
+dependencies[] = link
 dependencies[] = views
 
 features[client_type][] = client
@@ -19,12 +20,14 @@ features[field_base][] = field_client_notes
 features[field_base][] = field_client_phone
 features[field_base][] = field_client_shipping_address
 features[field_base][] = field_client_vat
+features[field_base][] = field_client_website
 features[field_instance][] = client-client-field_client_address
 features[field_instance][] = client-client-field_client_email
 features[field_instance][] = client-client-field_client_notes
 features[field_instance][] = client-client-field_client_phone
 features[field_instance][] = client-client-field_client_shipping_address
 features[field_instance][] = client-client-field_client_vat
+features[field_instance][] = client-client-field_client_website
 features[views_view][] = clients
 
 files[] = client.admin.inc

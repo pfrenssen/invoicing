@@ -13,6 +13,7 @@ dependencies[] = features
 dependencies[] = invoice
 dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard
+dependencies[] = link
 dependencies[] = views
 
 files[] = tests/access/access_web_test_case.php

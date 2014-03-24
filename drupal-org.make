@@ -49,6 +49,11 @@ projects[features][download][revision] = 7.x-2.0
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
 
+projects[link][download][type] = git
+projects[link][download][revision] = 7.x-1.2
+projects[link][download][branch] = 7.x-1.x
+projects[link][subdir] = contrib
+
 projects[strongarm][download][type] = git
 projects[strongarm][download][revision] = 7.x-2.0
 projects[strongarm][download][branch] = 7.x-2.x

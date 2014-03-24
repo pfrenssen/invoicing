@@ -127,14 +127,24 @@ class ClientOverviewTestCase extends DrupalWebTestCase {
           'actual' => (string) $tablerow->td[2],
         ),
         array(
-          'message' => 'The fourth column contains the "edit" action link.',
-          'expected' => t('edit'),
-          'actual' => (string) $tablerow->td[3]->a[0],
+          'message' => 'The fourth column contains the website.',
+          'expected' => $client->field_client_website->value(),
+          'actual' => (string) $tablerow->td[3]->a,
         ),
         array(
-          'message' => 'The fourth column is linked to the client edit page.',
+          'message' => 'The fourth column is linked to the website.',
+          'expected' => 'mailto:' . $client->field_client_website->value(),
+          'actual' => (string) $tablerow->td[3]->a['href'],
+        ),
+        array(
+          'message' => 'The fifth column contains the "edit" action link.',
+          'expected' => t('edit'),
+          'actual' => (string) $tablerow->td[4]->a[0],
+        ),
+        array(
+          'message' => 'The fifth column is linked to the client edit page.',
           'expected' => '/client/' . $client->getIdentifier() . '/edit',
-          'actual' => (string) $tablerow->td[3]->a[0]['href'],
+          'actual' => (string) $tablerow->td[4]->a[0]['href'],
         ),
       );
 

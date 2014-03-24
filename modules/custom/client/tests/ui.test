@@ -74,11 +74,13 @@ class ClientUITestCase extends DrupalWebTestCase {
     // Check form validation errors.
     $invalid_values = array(
       'field_client_email[und][0][email]' => $this->randomString(),
+      'field_client_website[und][0][url]' => $this->randomString(),
     );
     $messages = array(
       'error' => array(
         t('!name field is required.', array('!name' => t('Client name'))),
-        t('"%mail" is not a valid email address', array('%mail' => $invalid_values['field_client_email[und][0][email]']))),
+        t('"%mail" is not a valid email address', array('%mail' => $invalid_values['field_client_email[und][0][email]'])),
+        t('"%website" is not a valid external url', array('%website' => $invalid_values['field_client_website[und][0][url]']))),
     );
     $this->drupalPost('client/add', $invalid_values, t('Save'));
     $this->assertFieldValidationFailed(array_keys($invalid_values));
@@ -155,6 +157,8 @@ class ClientUITestCase extends DrupalWebTestCase {
     $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The phone field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-client-vat")]';
     $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The vat field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-client-website")]';
+    $this->assertXPathElements($this->getClientEntityXpath($xpath), 1, array(), 'The website field is rendered.');
 
     // Check if the tabs are rendered.
     $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';

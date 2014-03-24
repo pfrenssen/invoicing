@@ -10,7 +10,7 @@ projects[ctools][subdir] = contrib
 projects[email] = 1.2
 projects[email][subdir] = contrib
 
-projects[entity] = 1.2
+projects[entity] = 1.4
 projects[entity][subdir] = contrib
 
 projects[entityreference] = 1.1

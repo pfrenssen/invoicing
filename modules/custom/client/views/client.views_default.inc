@@ -94,6 +94,11 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['field_client_phone']['id'] = 'field_client_phone';
   $handler->display->display_options['fields']['field_client_phone']['table'] = 'field_data_field_client_phone';
   $handler->display->display_options['fields']['field_client_phone']['field'] = 'field_client_phone';
+  /* Field: Client: Website */
+  $handler->display->display_options['fields']['field_client_website']['id'] = 'field_client_website';
+  $handler->display->display_options['fields']['field_client_website']['table'] = 'field_data_field_client_website';
+  $handler->display->display_options['fields']['field_client_website']['field'] = 'field_client_website';
+  $handler->display->display_options['fields']['field_client_website']['click_sort_column'] = 'url';
   /* Field: Client: Edit link */
   $handler->display->display_options['fields']['edit_client']['id'] = 'edit_client';
   $handler->display->display_options['fields']['edit_client']['table'] = 'client';

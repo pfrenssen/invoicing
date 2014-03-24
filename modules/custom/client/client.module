@@ -106,11 +106,18 @@ function client_entity_property_info_alter(&$info) {
   $properties['changed']['label'] = t('Date changed');
   $properties['changed']['description'] = t('The date the client was most recently updated.');
   $properties['changed']['type'] = 'date';
+  $properties['changed']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['changed']['setter permission'] = 'administer clients';
 
   $properties['is_new']['label'] = t('Is new');
   $properties['is_new']['description'] = t('Whether the client is new and not saved to the database yet.');
   $properties['is_new']['type'] = 'boolean';
   $properties['is_new']['getter callback'] = 'client_entity_metadata_get_properties';
+
+  $properties['bid']['label'] = t('Business ID');
+  $properties['bid']['description'] = t('The unique ID of the business this client belongs to.');
+  $properties['bid']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['bid']['setter permission'] = 'administer clients';
 }
 
 /**

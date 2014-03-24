@@ -515,6 +515,24 @@ function client_label($entity, $entity_type) {
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function client_form_alter(&$form, &$form_state, $form_id) {
+  if (!empty($form['field_client_website'])) {
+    $form['field_client_website']['#element_validate'][] = 'client_validate_website_field';
+  }
+ }
+
+/**
+ * Validator for the client_website field.
+ */
+function client_validate_website_field($element, &$form_state) {
+  if (!empty($form_state['values']['field_client_website'][LANGUAGE_NONE][0]['url']) && !url_is_external($form_state['values']['field_client_website'][LANGUAGE_NONE][0]['url'])) {
+    form_error($element, t('The "!name" must be an external path', array('!name' => t('Website'))));
+  }
+}
+
+/**
  * The class used for client entities.
  */
 class Client extends Entity {

@@ -1,0 +1,129 @@
+<?php
+
+/**
+ * @file
+ * Unit tests for the Client module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
+
+class ClientUnitTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use BusinessTestHelper;
+  use ClientTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
+   * Test user accounts.
+   *
+   * @var array
+   *   An array of user objects.
+   */
+  protected $users;
+
+  /**
+   * Business entities.
+   *
+   * @var Business[]
+   *   An array of Business entities.
+   */
+  protected $businesses;
+
+  /**
+   * Client entities.
+   *
+   * @var Client[]
+   *   An array of Client entities.
+   */
+  protected $clients;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Unit test',
+      'description' => 'Unit tests for the client module.',
+      'group' => 'Client',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('client');
+  }
+
+  /**
+   * Tests if a new client type can be created.
+   */
+  public function testClientTypeCreation() {
+    // Create a new client type.
+    $type = strtolower($this->randomName());
+    client_type_create($type, $this->randomString());
+
+    // Check if the client properties are set correctly.
+    $values = array('type' => $type) + $this->getClientValues();
+    $client = client_create($values);
+    $this->assertClientProperties($client, $values);
+  }
+
+  /**
+   * Tests setting and getting all properties on a Client object.
+   */
+  public function testClientProperties() {
+    // Create a new client type.
+    $type = strtolower($this->randomName());
+    client_type_create($type, $this->randomString());
+    $this->types = array('client', $type);
+
+    // Check if all properties can be accessed on a freshly created client.
+    $values = $this->getClientValues();
+    $client = client_create($values);
+    $this->assertClientProperties($client, $values);
+
+    // Check if all properties can be accessed on a saved client.
+    $values = $this->getClientValues();
+    $client = client_create($values);
+    $client->save();
+    $this->assertClientProperties($client, $values);
+
+    // Check if all properties can be accessed on a loaded client.
+    $values = $this->getClientValues();
+    $client = client_create($values);
+    $client->save();
+    $client = client_load($client->cid);
+    $this->assertClientProperties($client, $values);
+
+    // Check if an existing client can have its properties updated.
+    $client = $this->createClient();
+    $values = $this->getClientValues();
+    $this->updateClient($client, $values);
+    $this->assertClientProperties($client, $values);
+  }
+
+  /**
+   * Returns an array containing random values for all client properties.
+   *
+   * This is excluding the client id ('cid') which is not writeable.
+   *
+   * @return array
+   *   An associative array of random values, keyed by property name.
+   */
+  protected function getClientValues() {
+    return  $this->randomClientValues() + array(
+      'type' => 'client',
+      'created' => rand(0, 2000000000),
+      'changed' => rand(0, 2000000000),
+      'bid' => rand(1, 100),
+    );
+  }
+
+}

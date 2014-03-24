@@ -480,6 +480,8 @@ function client_type_create($type, $name) {
       'name' => $name,
     ))
     ->execute();
+
+  drupal_static_reset('client_get_types');
 }
 
 /**

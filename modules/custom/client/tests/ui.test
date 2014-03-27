@@ -74,13 +74,14 @@ class ClientUITestCase extends DrupalWebTestCase {
     // Check form validation errors.
     $invalid_values = array(
       'field_client_email[und][0][email]' => $this->randomString(),
-      'field_client_website[und][0][url]' => $this->randomString(),
+      'field_client_website[und][0][url]' => 'node/1',
     );
     $messages = array(
       'error' => array(
         t('!name field is required.', array('!name' => t('Client name'))),
         t('"%mail" is not a valid email address', array('%mail' => $invalid_values['field_client_email[und][0][email]'])),
-        t('"%website" is not a valid external url', array('%website' => $invalid_values['field_client_website[und][0][url]']))),
+        t('The "Website" must be an external path'),
+      ),
     );
     $this->drupalPost('client/add', $invalid_values, t('Save'));
     $this->assertFieldValidationFailed(array_keys($invalid_values));

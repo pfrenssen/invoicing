@@ -100,6 +100,7 @@ class ClientOverviewTestCase extends DrupalWebTestCase {
       /* @var $client EntityDrupalWrapper */
       $client = entity_metadata_wrapper('client', array_shift($this->clients));
 
+      $website = $client->field_client_website->value();
       $testcases = array(
         array(
           'message' => 'The first column contains the client name.',
@@ -127,14 +128,9 @@ class ClientOverviewTestCase extends DrupalWebTestCase {
           'actual' => (string) $tablerow->td[2],
         ),
         array(
-          'message' => 'The fourth column contains the website.',
-          'expected' => $client->field_client_website->value(),
-          'actual' => (string) $tablerow->td[3]->a,
-        ),
-        array(
           'message' => 'The fourth column is linked to the website.',
-          'expected' => 'mailto:' . $client->field_client_website->value(),
-          'actual' => (string) $tablerow->td[3]->a['href'],
+          'expected' => $website['url'],
+          'actual' => (string) $tablerow->td[3]->a[0]['href'],
         ),
         array(
           'message' => 'The fifth column contains the "edit" action link.',

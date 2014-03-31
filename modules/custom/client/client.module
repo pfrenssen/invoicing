@@ -19,10 +19,12 @@ function client_entity_info() {
     'entity class' => 'Client',
     'controller class' => 'ClientAPIController',
     'base table' => 'client',
+    'revision table' => 'client_revision',
     'fieldable' => TRUE,
     'entity keys' => array(
       'id' => 'cid',
       'bundle' => 'type',
+      'revision' => 'vid',
     ),
     'bundle keys' => array(
       'bundle' => 'type',

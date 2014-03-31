@@ -170,6 +170,34 @@ class ClientUITestCase extends DrupalWebTestCase {
   }
 
   /**
+   * Tests the revisions for clients.
+   */
+  public function testClientRevision() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('client_revision'), 'The client revision database table exists.');
+    $this->assertClientRevisionTableEmpty();
+
+    // Check that when creating a client, a revision is made.
+    $client = $this->createUiClient();
+    $this->assertClientTableNotEmpty();
+    $result = db_select('client_revision', 'cr')
+      ->fields('cr')
+      ->condition('cid', $client->cid, '=')
+      ->execute()
+      ->fetchAll();
+    $this->assertEqual(1, $result[0]->vid, 'The first revision has been created.');
+
+    // Check that when editing a client, a new revision is made.
+    $this->drupalPost('client/' . $client->cid . '/edit', array('name' => $this->randomString()), t('Save'));
+    $result = db_select('client_revision', 'cr')
+      ->fields('cr')
+      ->condition('cid', $client->cid, '=')
+      ->execute()
+      ->fetchAll();
+    $this->assertEqual(2, $result[1]->vid, 'The first revision has been created.');
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function randomClientValues() {

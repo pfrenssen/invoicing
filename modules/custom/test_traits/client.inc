@@ -59,6 +59,38 @@ trait ClientTestHelper {
   }
 
   /**
+   * Check if the client revision database table is empty.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertClientRevisionTableEmpty($message = '', $group = 'Other') {
+    $result = (bool) db_select('client_revision', 'cr')->fields('cr')->execute()->fetchAll();
+    return $this->assertFalse($result, $message ?: 'The client revision database table is empty.', $group);
+  }
+
+  /**
+   * Check if the client revision database table is not empty.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertClientRevisionTableNotEmpty($message = '', $group = 'Other') {
+    $result = (bool) db_select('client_revision', 'cr')->fields('cr')->execute()->fetchAll();
+    return $this->assertTrue($result, $message ?: 'The client revision database table is not empty.', $group);
+  }
+
+  /**
    * Creates a new client entity.
    *
    * @param array $values

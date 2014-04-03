@@ -482,6 +482,7 @@ function client_type_create($type, $name) {
     ->execute();
 
   drupal_static_reset('client_get_types');
+  drupal_static_reset('entity_get_info');
 }
 
 /**

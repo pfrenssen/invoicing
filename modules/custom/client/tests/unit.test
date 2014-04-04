@@ -69,9 +69,15 @@ class ClientUnitTestCase extends DrupalWebTestCase {
     $type = strtolower($this->randomName());
     client_type_create($type, $this->randomString());
 
-    // Check if the client properties are set correctly.
-    $values = array('type' => $type) + $this->getClientValues();
+    // Test if the properties can be set during creation.
+    $values = $this->getBasicPropertyValues() + array('type' => $type);
     $client = client_create($values);
+    $this->assertClientProperties($client, $values);
+
+    // Test if the properties can be set using the entity metadata wrapper on an
+    // empty client object.
+    $values = $this->getBasicPropertyValues() + array('type' => $type);
+    $client = $this->createClient($values);
     $this->assertClientProperties($client, $values);
   }
 
@@ -120,6 +126,24 @@ class ClientUnitTestCase extends DrupalWebTestCase {
   protected function getClientValues() {
     return  $this->randomClientValues() + array(
       'type' => 'client',
+      'created' => rand(0, 2000000000),
+      'changed' => rand(0, 2000000000),
+      'bid' => rand(1, 100),
+    );
+  }
+
+  /**
+   * Returns random data for the basic client properties.
+   *
+   * These are values for the properties that are present on every client entity
+   * regardless of the bundle type.
+   *
+   * @return array
+   *   An associative array of property values, keyed by property name.
+   */
+  protected function getBasicPropertyValues() {
+    return array(
+      'name' => $this->randomString(),
       'created' => rand(0, 2000000000),
       'changed' => rand(0, 2000000000),
       'bid' => rand(1, 100),

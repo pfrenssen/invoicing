@@ -10,6 +10,7 @@ module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 
 class ClientUnitTestCase extends DrupalWebTestCase {
+
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
@@ -85,33 +86,47 @@ class ClientUnitTestCase extends DrupalWebTestCase {
    * Tests setting and getting all properties on a Client object.
    */
   public function testClientProperties() {
-    // Create a new client type.
-    $type = strtolower($this->randomName());
-    client_type_create($type, $this->randomString());
-    $this->types = array('client', $type);
-
     // Check if all properties can be accessed on a freshly created client.
-    $values = $this->getClientValues();
-    $client = client_create($values);
-    $this->assertClientProperties($client, $values);
+    $properties = array(
+      'type' => 'client',
+    ) + $this->getBasicPropertyValues();
+    $fields = $this->getFieldValues();
+    $client = client_create($properties + $fields);
+    $this->assertClientProperties($client, $properties);
+    $this->assertClientFieldValues($client, $fields);
 
-    // Check if all properties can be accessed on a saved client.
-    $values = $this->getClientValues();
-    $client = client_create($values);
-    $client->save();
-    $this->assertClientProperties($client, $values);
-
-    // Check if all properties can be accessed on a loaded client.
-    $values = $this->getClientValues();
-    $client = client_create($values);
-    $client->save();
-    $client = client_load($client->cid);
+    // Check if an empty client can have its properties updated.
+    $values = $this->getAllPropertyValues();
+    $client = $this->createClient($values);
     $this->assertClientProperties($client, $values);
 
     // Check if an existing client can have its properties updated.
-    $client = $this->createClient();
-    $values = $this->getClientValues();
+    $values = array(
+      'type' => 'client',
+    ) + $this->getBasicPropertyValues() + $this->getFieldValues();
+    $client = client_create($values);
+    $values = $this->getAllPropertyValues();
     $this->updateClient($client, $values);
+    $this->assertClientProperties($client, $values);
+
+    // Check if all properties can be accessed on a saved client.
+    $values = $this->getAllPropertyValues();
+    $client = $this->createClient($values);
+    $client->save();
+    // When the client is saved, the value for the 'last changed timestamp'
+    // should have been updated.
+    $values['changed'] = REQUEST_TIME;
+    $this->assertClientProperties($client, $values);
+
+    // Check if all properties can be accessed on a loaded client.
+    $values = $this->getAllPropertyValues();
+    $client = $this->createClient($values);
+    $client->save();
+    // When the client is saved, the value for the 'last changed timestamp'
+    // should have been updated.
+    $values['changed'] = REQUEST_TIME;
+
+    $client = client_load($client->cid);
     $this->assertClientProperties($client, $values);
   }
 
@@ -123,13 +138,10 @@ class ClientUnitTestCase extends DrupalWebTestCase {
    * @return array
    *   An associative array of random values, keyed by property name.
    */
-  protected function getClientValues() {
-    return  $this->randomClientValues() + array(
+  protected function getAllPropertyValues() {
+    return array(
       'type' => 'client',
-      'created' => rand(0, 2000000000),
-      'changed' => rand(0, 2000000000),
-      'bid' => rand(1, 100),
-    );
+    ) + $this->getBasicPropertyValues() + $this->randomClientValues();
   }
 
   /**
@@ -144,10 +156,56 @@ class ClientUnitTestCase extends DrupalWebTestCase {
   protected function getBasicPropertyValues() {
     return array(
       'name' => $this->randomString(),
+      'bid' => rand(1, 100),
       'created' => rand(0, 2000000000),
       'changed' => rand(0, 2000000000),
-      'bid' => rand(1, 100),
     );
+  }
+
+  /**
+   * Returns random field data for the fields in the 'client' bundle.
+   *
+   * @return array
+   *   An associative array of field data, keyed by field name.
+   */
+  protected function getFieldValues() {
+    $values = array();
+
+    $values['field_client_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
+    $values['field_client_shipping_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
+    $values['field_client_email'][LANGUAGE_NONE][0]['email'] = $this->randomEmail();
+    $values['field_client_notes'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_client_phone'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_client_vat'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+
+    return $values;
+  }
+
+  /**
+   * Check if the fields on the client contain the expected values.
+   *
+   * @param Client $client
+   *   The client to check.
+   * @param array $values
+   *   An associative array of field values to check, keyed by field name.
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  protected function assertClientFieldValues(Client $client, array $values, $message = '', $group = 'Other') {
+    $success = TRUE;
+    foreach ($values as $field_name => $value) {
+      $actual = field_get_items($client->type, $client, $field_name);
+      $expected = $value[LANGUAGE_NONE];
+      $message = $message ?: format_string('The %field field has the correct value(s).', array('%field' => $field_name));
+      $success &= $this->assertEqual($expected, $actual, $message, $group);
+    }
+
+    return $success;
   }
 
 }

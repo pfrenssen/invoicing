@@ -119,7 +119,7 @@ function invoice_menu() {
   // in the future.
   $invoice_type = invoice_type_load('invoice');
   $items['invoice/add'] = array(
-    'title' => 'Add Invoice',
+    'title' => 'Add invoice',
     'page callback' => 'invoice_add_page',
     'page arguments' => array($invoice_type),
     'access callback' => 'invoice_access',

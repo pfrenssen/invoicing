@@ -28,10 +28,10 @@ features[field_instance][] = client-client-field_client_vat
 features[views_view][] = clients
 
 files[] = client.admin.inc
-files[] = client.views.inc
-files[] = client_handler_delete_link_field.inc
-files[] = client_handler_edit_link_field.inc
-files[] = client_handler_link_field.inc
+files[] = views/client.views.inc
+files[] = views/client_handler_delete_link_field.inc
+files[] = views/client_handler_edit_link_field.inc
+files[] = views/client_handler_link_field.inc
 files[] = tests/access.test
 files[] = tests/crud.test
 files[] = tests/overview.test

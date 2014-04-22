@@ -6,7 +6,7 @@
  */
 
 /**
- * Page callback: Returns the invoice add/edit form to add a new inoice.
+ * Page callback: Returns the invoice add/edit form to add a new invoice.
  *
  * @see invoice_edit_form()
  *

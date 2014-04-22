@@ -36,3 +36,4 @@ files[] = tests/access.test
 files[] = tests/crud.test
 files[] = tests/overview.test
 files[] = tests/ui.test
+files[] = tests/unit.test

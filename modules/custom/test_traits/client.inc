@@ -71,6 +71,9 @@ trait ClientTestHelper {
   function createClient(array $values = array()) {
     // Provide some default values.
     $values += $this->randomClientValues();
+
+    // Creating an empty client and then updating the properties through the
+    // entity metadata wrapper is easier than $field[LANGUAGE_NONE][0][...].
     $client = client_create();
     $this->updateClient($client, $values);
 
@@ -115,6 +118,8 @@ trait ClientTestHelper {
 
   /**
    * Returns random values for all properties on the client entity.
+   *
+   * These include the fields from the 'client' bundle.
    *
    * @returns array
    *   An associative array of random values, keyed by property name.

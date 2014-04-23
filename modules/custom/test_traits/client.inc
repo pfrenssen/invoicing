@@ -133,11 +133,7 @@ trait ClientTestHelper {
       'field_client_notes' => $this->randomString(),
       'field_client_phone' => $this->randomString(),
       'field_client_vat' => $this->randomString(),
-      'field_client_website' => array(
-        'url' => 'http://www.test.be',
-        'title' => NULL,
-        'attributes' => '',
-      ),
+      'field_client_website' => array('url' => 'http://www.test.be'),
     );
   }
 

@@ -66,7 +66,7 @@ trait BaseTestHelper {
     $result = TRUE;
     foreach ($values as $property => $value) {
       if (is_array($value)) {
-        $result &= $this->assertFalse(array_diff($value, $wrapper->$property->value()), format_string('The %property property has the correct value.', array('%property' => $property)));
+        $result &= $this->assertFalse(drupal_array_diff_assoc_recursive($value, $wrapper->$property->value()), format_string('The %property property has the correct value.', array('%property' => $property)));
       }
       else {
         $result &= $this->assertEqual($wrapper->$property->value(), $value, format_string('The %property property has the correct value.', array('%property' => $property)));
@@ -321,7 +321,7 @@ trait BaseTestHelper {
     return array(
       'country' => chr(mt_rand(65, 90)) . chr(mt_rand(65, 90)),
       'locality' => trim(str_replace('  ', ' ', $this->randomString())),
-      'postal_code' => rand(1000, 9999),
+      'postal_code' => (string) rand(1000, 9999),
       'thoroughfare' => trim(str_replace('  ', ' ', $this->randomString())),
     );
   }

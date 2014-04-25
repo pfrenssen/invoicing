@@ -84,7 +84,8 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
       $this->assertBusinessGetBusinessFromUser($this->users[$user_key]->uid, $bids);
 
       // Check that the businesses owned by the global $user are returned by
-      // default.
+      // default. We can simulate this by overwriting the global $user with the
+      // user account being tested.
       $user = user_load($this->users[$user_key]->uid);
       $this->assertBusinessGetBusinessFromUser(NULL, $bids);
     }

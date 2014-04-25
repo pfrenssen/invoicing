@@ -37,6 +37,7 @@ files[] = views/client_handler_edit_link_field.inc
 files[] = views/client_handler_link_field.inc
 files[] = tests/access.test
 files[] = tests/crud.test
+files[] = tests/entity.test
 files[] = tests/overview.test
 files[] = tests/ui.test
 files[] = tests/unit.test

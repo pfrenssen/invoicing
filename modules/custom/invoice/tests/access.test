@@ -62,7 +62,6 @@ class InvoiceAccessTestCase extends DrupalWebTestCase {
 
     // Create an invoice.
     $this->invoice = $this->createInvoice();
-    debug($this->invoice);
     $this->invoice->save();
   }
 

@@ -61,6 +61,8 @@ trait BusinessTestHelper {
   /**
    * Creates a new business entity.
    *
+   * The business only is created and returned, it is not saved.
+   *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.

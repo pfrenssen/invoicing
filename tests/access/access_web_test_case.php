@@ -52,7 +52,7 @@ abstract class AccessWebTestCase extends DrupalWebTestCase {
    * Creates and logs in the test user.
    */
   protected function setupUser() {
-    // Check that a user role has been defined by the test class.
+    // Check that a user role has been defined by the subclass.
     $this->assertTrue($this->role, 'A user role has been defined.');
 
     // Create a user with the defined role.

@@ -85,9 +85,28 @@ class ClientUnitTestCase extends DrupalWebTestCase {
     }
   }
 
-  // Tests client_is_owned_by_user().
+  /**
+   * Tests client_is_owned_by_user().
+   */
   public function testClientIsOwnedByUser() {
-    // @todo Write the test.
+    // Define a list of which clients are owned by which users. The first two
+    // clients belong to the first user, the last two to the second.
+    $ownership = array(
+      0 => array(0, 1),
+      1 => array(2, 3),
+    );
+
+    // Test if client_is_owned_by_user() matches the expected ownership.
+    foreach ($ownership as $user_key => $client_keys) {
+      for ($i = 0; $i < 4; $i++) {
+        $owned = in_array($i, $client_keys);
+        $this->assertEqual($owned, client_is_owned_by_user($this->clients[$i]->identifier(), $this->users[$user_key]->getIdentifier()), format_string('Client :client :owned by user :user.', array(
+          ':client' => $i,
+          ':owned' => $owned ? 'is owned' : 'is not owned',
+          ':user' => $user_key,
+        )));
+      }
+    }
   }
 
 }

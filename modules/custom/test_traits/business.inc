@@ -180,4 +180,17 @@ trait BusinessTestHelper {
     }
   }
 
+  /**
+   * Adds a business to a user, making the user the business owner.
+   *
+   * @param Business $business
+   *   The business to add to the user.
+   * @param object $user
+   *   The user the business should be added to.
+   */
+  function addBusinessToUser(Business $business, stdClass $user) {
+    $user->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $business->identifier();
+    user_save($user);
+  }
+
 }

@@ -5,7 +5,13 @@
  * Access and permission tests for the 'business owner' role.
  */
 
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
 class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
 
   /**
    * {@inheritdoc}
@@ -48,6 +54,20 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   );
 
   /**
+   * A business owned by the business owner.
+   *
+   * @var Business
+   */
+  protected $business1;
+
+  /**
+   * A business which is not owned by the business owner.
+   *
+   * @var Business
+   */
+  protected $business2;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -58,4 +78,25 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create two businesses, of which the first is owned by the business owner.
+    $this->business1 = $this->createBusiness();
+    $this->business1->save();
+    $this->addBusinessToUser($this->business1, $this->user);
+
+    $this->business2 = $this->createBusiness();
+    $this->business2->save();
+
+    // Add the paths to edit and delete the business. These should only be
+    // accessible for the first business.
+    $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/edit';
+    $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/delete';
+  }
 }

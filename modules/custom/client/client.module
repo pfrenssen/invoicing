@@ -130,13 +130,11 @@ function client_menu() {
 
   // We only support one basic client type for the moment. This may be extended
   // in the future.
-  $client_type = client_type_load('client');
   $items['client/add'] = array(
     'title' => 'Add client',
     'page callback' => 'client_add_page',
-    'page arguments' => array($client_type),
     'access callback' => 'client_access',
-    'access arguments' => array('create', $client_type),
+    'access arguments' => array('create'),
     'file' => 'client.pages.inc',
   );
 
@@ -271,9 +269,9 @@ function client_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
- * @param object $client
- *   Optionally a client or a client type to check access for. If nothing is
- *   given, access for all clients is determined.
+ * @param Client $client
+ *   Optionally a Client to check access for. If nothing is given, access for
+ *   all clients is determined.
  * @param object $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
@@ -281,7 +279,7 @@ function client_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  * @return boolean
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function client_access($op, $client = NULL, $account = NULL) {
+function client_access($op, Client $client = NULL, stdClass $account = NULL) {
   if (user_access('administer clients', $account)) {
     return TRUE;
   }

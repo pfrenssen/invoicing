@@ -10,14 +10,11 @@
  *
  * @see client_edit_form()
  *
- * @param object $client_type
- *   The type of client to create.
- *
  * @return array
  *   The client add/edit form render array.
  */
-function client_add_page($client_type) {
-  $client = entity_create('client', array('type' => $client_type->type));
+function client_add_page() {
+  $client = client_create();
 
   return drupal_get_form('client_edit_form', $client);
 }

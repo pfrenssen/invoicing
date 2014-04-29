@@ -256,7 +256,7 @@ function business_access($op, $business = NULL, $account = NULL) {
 
     // Allow access if the user wants to edit or delete their own business.
     $account = $account ?: $user;
-    return in_array($op, array('edit', 'update', 'delete')) && business_is_owned_by_user($business->bid, $account->uid);
+    return in_array($op, array('edit', 'update', 'delete')) && business_is_owned_by_user($business, $account);
   }
 
   return FALSE;
@@ -484,9 +484,9 @@ function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 /**
  * Get the businesses from a specific user, defaults to the logged in user.
  *
- * @param int $uid
- *   The uid of the user to get the businesses for. If omitted, the logged in
- *   user will be used.
+ * @param object $account
+ *   The account of the user to get the businesses for. If omitted, the logged
+ *   in user will be used.
  * @param bool $reset
  *   Whether or not to reset the static cache. Defaults to FALSE.
  *
@@ -494,25 +494,25 @@ function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  *   An array with all the business id's linked to this user, FALSE if none
  *   found.
  */
-function business_get_businesses_from_user($uid = NULL, $reset = FALSE) {
+function business_get_businesses_from_user(stdClass $account = NULL, $reset = FALSE) {
   global $user;
 
   // Default to the logged in user.
-  $uid = $uid ?: $user->uid;
+  $account = $account ?: $user;
 
   $bids = &drupal_static(__FUNCTION__, array());
-  if (empty($bids[$uid]) || $reset) {
+  if (empty($bids[$account->uid]) || $reset) {
     // Retrieve the businesses.
     /* @var $query SelectQuery */
     $query = db_select('business', 'b');
     $query->join('field_data_field_user_businesses', 'u', 'u.field_user_businesses_target_id = b.bid');
     $query
       ->fields('b', array('bid'))
-      ->condition('u.entity_id', $uid);
-    $bids[$uid] = $query->execute()->fetchCol();
+      ->condition('u.entity_id', $account->uid);
+    $bids[$account->uid] = $query->execute()->fetchCol();
   }
 
-  return business_load_multiple($bids[$uid]);
+  return business_load_multiple($bids[$account->uid]);
 }
 
 /**
@@ -533,20 +533,20 @@ function business_get_active_business() {
 /**
  * Returns whether a given business is owned by a given user.
  *
- * @param int $bid
- *   The business id to check.
- * @param int $uid
- *   Optional user id to check. Defaults to the currently logged in user.
+ * @param Business $business
+ *   The business to check.
+ * @param object $account
+ *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the business is owned by the user, FALSE otherwise.
  */
-function business_is_owned_by_user($bid, $uid = NULL) {
+function business_is_owned_by_user(Business $business, stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
-  $uid = $uid ?: $user->uid;
+  $account = $account ?: $user;
 
-  return in_array($bid, array_keys(business_get_businesses_from_user($uid)));
+  return in_array($business->identifier(), array_keys(business_get_businesses_from_user($account)));
 }
 
 /**

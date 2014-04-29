@@ -81,7 +81,7 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
         $bids[] = $this->businesses[$business_key++]->bid;
       }
       // Check that the right businesses are returned for each user.
-      $this->assertBusinessGetBusinessFromUser($this->users[$user_key]->uid, $bids);
+      $this->assertBusinessGetBusinessFromUser($this->users[$user_key], $bids);
 
       // Check that the businesses owned by the global $user are returned by
       // default. We can simulate this by overwriting the global $user with the
@@ -105,7 +105,7 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
       foreach ($this->businesses as $business_key => $business) {
         $is_owned = in_array($business_key, $ownership[$user_key]);
         $message = format_string('Business :business :is_owned by user :user.', array(':business' => $business_key, ':is_owned' => $is_owned ? 'is owned' : 'is not owned', ':user' => $user_key));
-        $this->assertEqual(business_is_owned_by_user($business->bid, $user->uid), in_array($business_key, $ownership[$user_key]), $message);
+        $this->assertEqual(business_is_owned_by_user($business, $user), in_array($business_key, $ownership[$user_key]), $message);
       }
     }
   }
@@ -113,14 +113,14 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
   /**
    * Checks the output of business_get_businesses_from_user().
    *
-   * @param int $uid
-   *   The user id to pass to the function.
+   * @param object $account
+   *   The user account to pass to the function.
    * @param array $bids
    *   An array of business ids which represent the businesses that are expected
    *   to be returned.
    */
-  protected function assertBusinessGetBusinessFromUser($uid = NULL, $bids = array()) {
-    $businesses = business_get_businesses_from_user($uid);
+  protected function assertBusinessGetBusinessFromUser(stdClass $account = NULL, $bids = array()) {
+    $businesses = business_get_businesses_from_user($account);
     $this->assertEqual(count($businesses), count($bids), 'The user has been linked to correct number of businesses.');
     $keys = array_keys($businesses);
     $this->assertEqual($keys, $bids, 'The correct array keys are used.');

@@ -68,17 +68,18 @@ class ClientUnitTestCase extends DrupalWebTestCase {
 
     for ($i = 0; $i < 2; $i++) {
       // Create a business.
-      $this->businesses[$i] = entity_metadata_wrapper('business', $this->createBusiness());
+      $this->businesses[$i] = $this->createBusiness();
       $this->businesses[$i]->save();
 
       // Create a user and link the business to it.
-      $this->users[$i] = entity_metadata_wrapper('user', $this->drupalCreateUser());
-      $this->users[$i]->field_user_businesses->set(array($this->businesses[$i]->getIdentifier()));
-      $this->users[$i]->save();
+      $this->users[$i] = $this->drupalCreateUser();
+      $user = entity_metadata_wrapper('user', $this->users[$i]);
+      $user->field_user_businesses->set(array($this->businesses[$i]->identifier()));
+      $user->save();
 
       // Create two clients for the business.
       for ($j = 0; $j < 2; $j++) {
-        $client = $this->createClient(array('bid' => $this->businesses[$i]->getIdentifier()));
+        $client = $this->createClient(array('bid' => $this->businesses[$i]->identifier()));
         $client->save();
         $this->clients[] = $client;
       }
@@ -100,7 +101,7 @@ class ClientUnitTestCase extends DrupalWebTestCase {
     foreach ($ownership as $user_key => $client_keys) {
       for ($i = 0; $i < 4; $i++) {
         $owned = in_array($i, $client_keys);
-        $this->assertEqual($owned, client_is_owned_by_user($this->clients[$i]->identifier(), $this->users[$user_key]->getIdentifier()), format_string('Client :client :owned by user :user.', array(
+        $this->assertEqual($owned, client_is_owned_by_user($this->clients[$i], $this->users[$user_key]), format_string('Client :client :owned by user :user.', array(
           ':client' => $i,
           ':owned' => $owned ? 'is owned' : 'is not owned',
           ':user' => $user_key,

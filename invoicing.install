@@ -97,6 +97,7 @@ function invoicing_install() {
     'access content',
     'access invoicing dashboard',
     'administer own clients',
+    'create new clients',
     'view own clients',
   );
   user_role_grant_permissions($role->rid, $permissions);

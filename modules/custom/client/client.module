@@ -201,6 +201,9 @@ function client_permission() {
       'title' => t('Administer own clients'),
       'description' => t('Edit and delete your own clients.'),
     ),
+    'create new clients' => array(
+      'title' => t('Create new clients'),
+    ),
     'view own clients' => array(
       'title' => t('View own clients'),
     ),
@@ -283,9 +286,8 @@ function client_access($op, $client = NULL, $account = NULL) {
     return TRUE;
   }
 
-  if (isset($client)) {
+  if (!empty($client)) {
     switch ($op) {
-      case 'create':
       case 'delete':
       case 'edit':
         $access = user_access("edit any $client->type client", $account);
@@ -296,6 +298,11 @@ function client_access($op, $client = NULL, $account = NULL) {
         $access = user_access("view any $client->type client", $account);
         $access |= user_access('view own clients', $account);
         return $access;
+    }
+  }
+  else {
+    if ($op == 'create') {
+      return user_access('create new clients', $account);
     }
   }
 

@@ -262,10 +262,6 @@ function client_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 /**
  * Determines whether the given user has access to a client.
  *
- * @todo: When clients are linked to businesses, check if the user owns the
- *   business for the 'administer own clients' permission.
- * @see http://atrium.pocomas.be/invoicing/node/1170
- *
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
@@ -280,6 +276,11 @@ function client_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
 function client_access($op, Client $client = NULL, stdClass $account = NULL) {
+  global $user;
+
+  // Default to the current user.
+  $account = $account ?: $user;
+
   if (user_access('administer clients', $account)) {
     return TRUE;
   }
@@ -289,12 +290,12 @@ function client_access($op, Client $client = NULL, stdClass $account = NULL) {
       case 'delete':
       case 'edit':
         $access = user_access("edit any $client->type client", $account);
-        $access |= user_access('administer own clients', $account);
+        $access |= user_access('administer own clients', $account) && client_is_owned_by_user($client, $account);
         return $access;
 
       case 'view':
         $access = user_access("view any $client->type client", $account);
-        $access |= user_access('view own clients', $account);
+        $access |= user_access('view own clients', $account) && client_is_owned_by_user($client, $account);
         return $access;
     }
   }

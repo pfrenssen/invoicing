@@ -191,8 +191,8 @@ class BusinessUITestCase extends DrupalWebTestCase {
     $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
     $url = url('business/' . $business->bid);
     $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The business view tab is rendered.');
-    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/edit'), 'The client edit tab is rendered.');
-    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/delete'), 'The client delete tab is rendered.');
+    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/edit'), 'The business edit tab is rendered.');
+    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/delete'), 'The business delete tab is rendered.');
   }
 
   /**

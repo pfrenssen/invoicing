@@ -440,7 +440,6 @@ function client_create($values = array()) {
  *   or SAVED_UPDATED, depending on the operation performed.
  */
 function client_save(Client $client) {
-  $client->is_new = FALSE;
   $client->is_new_revision = TRUE;
   $client->default_revision = TRUE;
   return $client->save();

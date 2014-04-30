@@ -194,7 +194,7 @@ class ClientUITestCase extends DrupalWebTestCase {
       ->condition('cid', $client->cid, '=')
       ->execute()
       ->fetchAll();
-    $this->assertEqual(2, $result[1]->vid, 'The first revision has been created.');
+    $this->assertEqual(2, $result[1]->vid, 'The second revision has been created.');
   }
 
   /**

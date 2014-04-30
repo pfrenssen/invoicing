@@ -169,3 +169,17 @@ function business_delete_confirm_form_submit($form, &$form_state) {
   drupal_set_message(t('Business %name has been deleted.', array('%name' => $business->name)));
   $form_state['redirect'] = '<front>';
 }
+
+/**
+ * Page callback for the business page.
+ */
+function business_detail_page($business) {
+  drupal_set_title($business->name);
+  $output = entity_view($business->type, array($business));
+
+  // Prevent the business title from being rendered twice.
+  $output['business'][$business->bid]['#page'] = TRUE;
+
+  return $output;
+}
+

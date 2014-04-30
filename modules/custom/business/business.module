@@ -139,6 +139,7 @@ function business_menu() {
     'access arguments' => array('update', 1),
     'type' => MENU_LOCAL_TASK,
     'file' => 'business.pages.inc',
+    'weight' => 5,
   );
 
   $items['business/%business/delete'] = array(
@@ -148,6 +149,23 @@ function business_menu() {
     'access callback' => 'business_access',
     'access arguments' => array('delete', 1),
     'type' => MENU_LOCAL_TASK,
+    'file' => 'business.pages.inc',
+    'weight' => 10,
+  );
+
+  $items['business/%business/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 0,
+  );
+
+  $items['business/%business'] = array(
+    'title' => '',
+    'page callback' => 'business_detail_page',
+    'page arguments' => array(1),
+    'access callback' => 'business_access',
+    'access arguments' => array('view', 1),
+    'type' => MENU_CALLBACK,
     'file' => 'business.pages.inc',
   );
 

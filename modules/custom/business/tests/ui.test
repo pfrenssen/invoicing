@@ -153,6 +153,48 @@ class BusinessUITestCase extends DrupalWebTestCase {
     $this->assertRaw('field can contain only unique values');
   }
 
+  /*
+   * Tests the rendering of the business entity.
+   */
+  public function testBusinessViewEntity() {
+    $business = $this->createUiBusiness();
+    $this->drupalGet('business/' . $business->bid);
+
+    // Check that the entity is rendered.
+    $this->assertXPathElements($this->getBusinessEntityXpath(), 1, array(), 'The business entity is rendered.');
+
+    // Check that the page title is set to the business name.
+    // @todo: Change "Drupal" to the project name.
+    // @see http://atrium.pocomas.be/invoicing/node/1169
+    $this->assertTitle($business->name . ' | Drupal');
+
+    $xpath = '//h1[@id = "page-title" and contains(text(), :name)]';
+    $this->assertXPathElements($xpath, 1, array(':name' => $business->name), 'The page title contains the business name.');
+
+    // Check that all fields are rendered.
+    $xpath = '//div[contains(@class, "field-name-field-business-address")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The address field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-business-email")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The email field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-business-phone")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The phone field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-business-vat")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The vat field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-business-iban")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The iban field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-business-bic")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The bic field is rendered.');
+    $xpath = '//div[contains(@class, "field-name-field-business-mobile")]';
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The mobile number field is rendered.');
+
+    // Check if the tabs are rendered.
+    $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
+    $url = url('business/' . $business->bid);
+    $this->assertXPathElements($xpath, 1, array(':href' => $url), 'The business view tab is rendered.');
+    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/edit'), 'The client edit tab is rendered.');
+    $this->assertXPathElements($xpath, 1, array(':href' => $url . '/delete'), 'The client delete tab is rendered.');
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -163,6 +205,25 @@ class BusinessUITestCase extends DrupalWebTestCase {
     $values['field_business_address']['country'] = 'BE';
 
     return $values;
+  }
+
+  /**
+   * Constructs a XPath query to find an element on the business entity page.
+   *
+   * @param string $pxath
+   *   The path seector to search for.
+   */
+  protected function getBusinessEntityXpath($xpath = NULL) {
+    $parts = array(
+      '//div[contains(@class, "entity-business")]',
+    );
+
+    if (!empty($xpath)) {
+      $parts[] = $xpath;
+    }
+
+    $query = implode('', $parts);
+    return $query;
   }
 
 }

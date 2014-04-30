@@ -8,16 +8,15 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 
-class ClientOverviewTestCase extends DrupalWebTestCase {
+class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
+
   use BaseTestHelper;
   use ClientTestHelper;
 
   /**
-   * A test user.
-   *
-   * @var object
+   * {@inheritdoc}
    */
-  protected $user;
+  protected $usersToCreate = array('business owner');
 
   /**
    * An array of test clients.
@@ -25,11 +24,6 @@ class ClientOverviewTestCase extends DrupalWebTestCase {
    * @var array
    */
   protected $clients;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.
@@ -46,15 +40,18 @@ class ClientOverviewTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client');
+    parent::setup();
 
-    // Create a test user and log in.
-    $permissions = array(
-      'access client overview',
-      'administer own clients',
-    );
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a business and link it to the business owner.
+    // @todo The business should be created when the user creates the account.
+    // @see http://atrium.pocomas.be/node/1184
+    $business = entity_metadata_wrapper('business', $this->createBusiness());
+    $business->save();
+    $user = entity_metadata_wrapper('user', $this->users['business owner']);
+    $user->field_user_businesses->set(array($business->getIdentifier()));
+    $user->save();
 
     // Create a number of test clients.
     for ($i = 0; $i < 20; $i++) {
@@ -64,8 +61,7 @@ class ClientOverviewTestCase extends DrupalWebTestCase {
       // collation, while the database can be configured with an arbitrary
       // collation.
       $name = $this->randomName(4) . $this->randomString();
-      $client = $this->createClient(array('name' => $name));
-      $client->save();
+      $client = $this->createUiClient(array('name' => $name));
       $this->clients[$client->cid] = $client;
     }
   }

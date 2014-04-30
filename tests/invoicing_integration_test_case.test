@@ -10,6 +10,7 @@ module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 
 class InvoicingIntegrationTestCase extends DrupalWebTestCase {
+
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
@@ -28,19 +29,25 @@ class InvoicingIntegrationTestCase extends DrupalWebTestCase {
   protected $users;
 
   /**
+   * A list of roles for which to create a user.
+   *
+   * @var array
+   *   The names of the roles for which to create a user.
+   */
+  protected $usersToCreate = array(
+    'administrator',
+    'authenticated user',
+    'business owner',
+    'client',
+  );
+
+  /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  protected function setUp() {
     parent::setUp();
 
-    // Create a user for each role.
-    $roles = array(
-      'administrator',
-      'authenticated user',
-      'business owner',
-      'client',
-    );
-    foreach ($roles as $role) {
+    foreach ($this->usersToCreate as $role) {
       $this->users[$role] = $this->drupalCreateUserWithRole($role);
     }
   }

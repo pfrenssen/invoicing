@@ -19,6 +19,13 @@ class InvoicingCreateClientTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array(
+    'business owner',
+  );
+
+  /**
    * Tests the creation of clients through the user interface.
    */
   public function testClientCreation() {

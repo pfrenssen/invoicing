@@ -289,6 +289,7 @@ function client_access($op, Client $client = NULL, stdClass $account = NULL) {
     switch ($op) {
       case 'delete':
       case 'edit':
+      case 'update':
         $access = user_access("edit any $client->type client", $account);
         $access |= user_access('administer own clients', $account) && client_is_owned_by_user($client, $account);
         return $access;

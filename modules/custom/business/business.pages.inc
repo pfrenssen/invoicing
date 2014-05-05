@@ -182,4 +182,3 @@ function business_detail_page($business) {
 
   return $output;
 }
-

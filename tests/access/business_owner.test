@@ -7,11 +7,13 @@
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
 
 class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
+  use ClientTestHelper;
 
   /**
    * {@inheritdoc}
@@ -68,6 +70,20 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   protected $business2;
 
   /**
+   * A client owned by the business owner.
+   *
+   * @var Client
+   */
+  protected $client1;
+
+  /**
+   * A client which is not owned by the business owner.
+   *
+   * @var Client
+   */
+  protected $client2;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -95,8 +111,24 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     // Add the paths to edit and delete the business. These should only be
     // accessible for the first business.
     $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/edit';
-    $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/edit';
+    $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/delete';
-    $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/delete';
+
+    // Add a client to each business. The business owner should only be able to
+    // view, edit and delete their own clients.
+    $this->client1 = $this->createClient(array('bid' => $this->business1->identifier()));
+    $this->client1->save();
+    $this->client2 = $this->createClient(array('bid' => $this->business2->identifier()));
+    $this->client2->save();
+
+    // Add the paths to view, edit and delete the client. These should only be
+    // accessible for the first client.
+    $this->accessiblePaths[] = 'client/' . $this->client1->identifier();
+    $this->accessiblePaths[] = 'client/' . $this->client1->identifier() . '/edit';
+    $this->accessiblePaths[] = 'client/' . $this->client1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier();
+    $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier() . '/delete';
   }
 }

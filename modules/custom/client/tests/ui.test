@@ -212,10 +212,10 @@ class ClientUITestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Constructs a XPath query to find an element on the client entity page.
+   * Constructs an XPath query to find an element on the client entity page.
    *
    * @param string $pxath
-   *   The path seector to search for.
+   *   The path selector to search for.
    */
   protected function getClientEntityXpath($xpath = NULL) {
     $parts = array(

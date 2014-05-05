@@ -154,7 +154,7 @@ class BusinessUITestCase extends DrupalWebTestCase {
     $this->assertRaw('field can contain only unique values');
   }
 
-  /*
+  /**
    * Tests the rendering of the business entity.
    */
   public function testBusinessViewEntity() {
@@ -209,10 +209,10 @@ class BusinessUITestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Constructs a XPath query to find an element on the business entity page.
+   * Constructs an XPath query to find an element on the business entity page.
    *
    * @param string $pxath
-   *   The path seector to search for.
+   *   The path selector to search for.
    */
   protected function getBusinessEntityXpath($xpath = NULL) {
     $parts = array(

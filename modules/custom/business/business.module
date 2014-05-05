@@ -185,6 +185,13 @@ function business_permission() {
       'title' => t('Administer businesses'),
       'description' => t('Edit and delete all businesses'),
     ),
+    'administer own businesses' => array(
+      'title' => t('Administer own businesses'),
+      'description' => t('Edit and delete own businesses'),
+    ),
+    'view own businesses' => array(
+      'title' => t('View own businesses'),
+    ),
   );
 
   // Generate permissions per business type.
@@ -248,7 +255,7 @@ function business_access($op, $business = NULL, $account = NULL) {
   }
 
   // Allow access for users that can perform operations on any business.
-  if (isset($business)) {
+  if (!empty($business)) {
     $operation = $op == 'view' ? 'view' : 'edit';
     if (user_access("$operation any $business->type business", $account)) {
       return TRUE;
@@ -256,7 +263,15 @@ function business_access($op, $business = NULL, $account = NULL) {
 
     // Allow access if the user wants to edit or delete their own business.
     $account = $account ?: $user;
-    return in_array($op, array('view', 'edit', 'update', 'delete')) && business_is_owned_by_user($business, $account);
+    switch ($op) {
+      case 'delete':
+      case 'edit':
+      case 'update':
+        return user_access('administer own businesses', $account) && business_is_owned_by_user($business, $account);
+
+      case 'view':
+        return user_access('view own businesses', $account) && business_is_owned_by_user($business, $account);
+    }
   }
 
   return FALSE;

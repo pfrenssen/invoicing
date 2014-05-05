@@ -217,17 +217,8 @@ class ClientUITestCase extends DrupalWebTestCase {
    * @param string $pxath
    *   The path selector to search for.
    */
-  protected function getClientEntityXpath($xpath = NULL) {
-    $parts = array(
-      '//div[contains(@class, "entity-client")]',
-    );
-
-    if (!empty($xpath)) {
-      $parts[] = $xpath;
-    }
-
-    $query = implode('', $parts);
-    return $query;
+  protected function getClientEntityXpath($xpath = '') {
+    return '//div[contains(@class, "entity-client")]' . $xpath;
   }
 
 }

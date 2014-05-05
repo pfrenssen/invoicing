@@ -160,17 +160,8 @@ class InvoiceUITestCase extends DrupalWebTestCase {
    * @param string $pxath
    *   The path selector to search for.
    */
-  protected function getInvoiceEntityXpath($xpath = NULL) {
-    $parts = array(
-      '//div[contains(@class, "entity-invoice")]',
-    );
-
-    if (!empty($xpath)) {
-      $parts[] = $xpath;
-    }
-
-    $query = implode('', $parts);
-    return $query;
+  protected function getInvoiceEntityXpath($xpath = '') {
+    return '//div[contains(@class, "entity-invoice")]' . $xpath;
   }
 
 }

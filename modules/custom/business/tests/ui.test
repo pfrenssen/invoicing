@@ -214,17 +214,8 @@ class BusinessUITestCase extends DrupalWebTestCase {
    * @param string $pxath
    *   The path selector to search for.
    */
-  protected function getBusinessEntityXpath($xpath = NULL) {
-    $parts = array(
-      '//div[contains(@class, "entity-business")]',
-    );
-
-    if (!empty($xpath)) {
-      $parts[] = $xpath;
-    }
-
-    $query = implode('', $parts);
-    return $query;
+  protected function getBusinessEntityXpath($xpath = '') {
+    return '//div[contains(@class, "entity-business")]' . $xpath;
   }
 
 }

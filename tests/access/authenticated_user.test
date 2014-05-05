@@ -5,7 +5,15 @@
  * Access and permission tests for the 'authenticated user' role.
  */
 
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
+
 class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
+  use ClientTestHelper;
 
   /**
    * {@inheritdoc}
@@ -44,6 +52,20 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
   );
 
   /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -54,4 +76,28 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create a business.
+    $this->business = $this->createBusiness();
+    $this->business->save();
+    $this->addBusinessToUser($this->business, $this->user);
+
+    // Add the paths to view, edit and delete the business. These should all be
+    // inaccessible.
+    $this->inaccessiblePaths[] = 'business/' . $this->business->identifier();
+    $this->inaccessiblePaths[] = 'business/' . $this->business->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'business/' . $this->business->identifier() . '/delete';
+
+    // Add a client to the business. This should also be inaccessible.
+    $this->client = $this->createClient(array('bid' => $this->business->identifier()));
+    $this->client->save();
+    $this->inaccessiblePaths[] = 'client/' . $this->client->identifier();
+    $this->inaccessiblePaths[] = 'client/' . $this->client->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'client/' . $this->client->identifier() . '/delete';
+  }
 }

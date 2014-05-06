@@ -99,6 +99,7 @@ function invoicing_install() {
     'administer own businesses',
     'administer own clients',
     'create new clients',
+    'create new invoices',
     'view own businesses',
     'view own clients',
   );

@@ -192,8 +192,11 @@ function invoice_access($op, $invoice = NULL, $account = NULL) {
   if (isset($invoice)) {
     switch ($op) {
       case 'create':
+        return user_access('create new invoices', $account);
+
       case 'delete':
       case 'edit':
+      case 'update':
         $access = user_access("edit any $invoice->type invoice", $account);
         $access |= user_access('administer own invoices', $account);
         return $access;
@@ -220,6 +223,9 @@ function invoice_permission() {
     'administer invoice types' => array(
       'title' => t('Administer invoice types'),
       'description' => t('Create and delete fields for invoice types, and set their permissions.'),
+    ),
+    'create new invoices' => array(
+      'title' => t('Create new invoices'),
     ),
   );
 

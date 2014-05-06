@@ -94,7 +94,7 @@ trait InvoiceTestHelper {
     $values += $this->randomInvoiceValues();
 
     // Convert the entity property values to form values and submit the form.
-    $edit = $this->convertToFormPostValues($values);
+    $edit = $this->convertInvoiceValuesToFormPostValues($values);
     $this->drupalPost('invoice/add', $edit, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.

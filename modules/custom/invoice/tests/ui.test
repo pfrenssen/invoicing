@@ -83,14 +83,14 @@ class InvoiceUITestCase extends DrupalWebTestCase {
 
     // Check that the form fields have correct values when the invoice is edited.
     $this->drupalGet('invoice/' . $invoice->iid . '/edit');
-    $form_values = $this->convertToFormPostValues($values);
+    $form_values = $this->convertInvoiceValuesToFormPostValues($values);
     foreach ($form_values as $name => $value) {
       $this->assertFieldByName($name, $value, format_string('When editing an existing invoice the %name field has the right value.', array('%name' => $name)));
     }
 
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomInvoiceValues();
-    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertInvoiceValuesToFormPostValues($new_values), t('Save'));
     $invoice = invoice_load($invoice->iid, TRUE);
     $messages = array('status' => array(t('The changes have been saved.', array('%invoice_number' => $values['field_invoice_number']))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');

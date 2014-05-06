@@ -143,6 +143,36 @@ trait InvoiceTestHelper {
   }
 
   /**
+   * Returns form post values from the given entity values.
+   *
+   * @see self::randomInvoiceValues()
+   *
+   * @param array $values
+   *   An associative array of invoice values, keyed by property name, as
+   *   returned by self::randomInvoiceValues().
+   *
+   * @returns array
+   *   An associative array of values, keyed by form field name, as used by
+   *   parent::drupalPost().
+   */
+  public function convertInvoiceValuesToFormPostValues($values) {
+    $client = client_load($values['field_invoice_client']);
+
+    return array(
+      'field_invoice_client[und]' => $client->name . ' (' . $values['field_invoice_client'] . ')',
+      'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
+      'field_invoice_date[und][0][value][month]' => date('n', $values['field_invoice_date']),
+      'field_invoice_date[und][0][value][day]' => date('j', $values['field_invoice_date']),
+      'field_invoice_date[und][0][value][year]' => date('Y', $values['field_invoice_date']),
+      'field_invoice_discount[und][0][value]' => $values['field_invoice_discount'],
+      'field_invoice_po_number[und][0][value]' => $values['field_invoice_po_number'],
+      'field_invoice_due_date[und]' => $values['field_invoice_due_date'],
+      'field_invoice_terms[und][0][value]' => $values['field_invoice_terms'],
+      'field_invoice_status[und]' => $values['field_invoice_status'],
+    );
+  }
+
+  /**
    * Updates the given invoice with the given properties.
    *
    * @param Invoice $invoice

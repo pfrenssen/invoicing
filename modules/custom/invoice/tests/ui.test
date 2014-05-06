@@ -113,36 +113,6 @@ class InvoiceUITestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Returns form post values from the given entity values.
-   *
-   * @see self::randomInvoiceValues()
-   *
-   * @param array $values
-   *   An associative array of invoice values, keyed by property name, as
-   *   returned by self::randomInvoiceValues().
-   *
-   * @returns array
-   *   An associative array of values, keyed by form field name, as used by
-   *   parent::drupalPost().
-   */
-  public function convertToFormPostValues($values) {
-    $client = client_load($values['field_invoice_client']);
-
-    return array(
-      'field_invoice_client[und]' => $client->name . ' (' . $values['field_invoice_client'] . ')',
-      'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
-      'field_invoice_date[und][0][value][month]' => $values['field_invoice_date']['month'],
-      'field_invoice_date[und][0][value][day]' => $values['field_invoice_date']['day'],
-      'field_invoice_date[und][0][value][year]' => $values['field_invoice_date']['year'],
-      'field_invoice_discount[und][0][value]' => $values['field_invoice_discount'],
-      'field_invoice_po_number[und][0][value]' => $values['field_invoice_po_number'],
-      'field_invoice_due_date[und]' => $values['field_invoice_due_date'],
-      'field_invoice_terms[und][0][value]' => $values['field_invoice_terms'],
-      'field_invoice_status[und]' => $values['field_invoice_status'],
-    );
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function randomInvoiceValues() {

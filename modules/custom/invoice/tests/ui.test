@@ -6,17 +6,35 @@
  */
 
 module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 
 class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
+  use BusinessTestHelper;
+  use ClientTestHelper;
   use InvoiceTestHelper;
 
   /**
    * {@inheritdoc}
    */
   protected $usersToCreate = array('business owner');
+
+  /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
 
   /**
    * Returns test case metadata.
@@ -37,6 +55,18 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Log in the business owner.
     $this->drupalLogin($this->users['business owner']);
+
+    // Create a business. This is done programmatically since at the moment
+    // business owners cannot create their own businesses.
+    // @todo Remove this when a business is created automatically for every
+    //   business owner.
+    // @see http://atrium.pocomas.be/invoicing/node/1184
+    $this->business = $this->createBusiness();
+    $this->business->save();
+    $this->addBusinessToUser($this->business, $this->users['business owner']);
+
+    // Create a client.
+    $this->client = $this->createUiClient(array('bid' => $this->business->identifier()));
   }
 
   /**
@@ -63,6 +93,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomInvoiceValues();
+    $values['field_invoice_client'] = $this->client;
     $invoice = $this->createUiInvoice($values);
     $messages = array('status' => array(t('New invoice has been added.')));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been added.');

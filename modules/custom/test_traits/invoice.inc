@@ -121,8 +121,10 @@ trait InvoiceTestHelper {
    *   An associative array of random values, keyed by property name.
    */
   function randomInvoiceValues() {
+    $date_polarity = rand(0, 1) ? '-' : '+';
+    $date_offset = rand(0, 7);
     return array(
-      'field_invoice_date' => time(),
+      'field_invoice_date' => strtotime($date_polarity . $date_offset . ' day 00:00'),
       'field_invoice_number' => $this->randomString(),
       'field_invoice_discount' => rand(0, 100),
       'field_invoice_po_number' => $this->randomString(),

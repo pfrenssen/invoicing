@@ -450,6 +450,26 @@ function invoice_entity_metadata_get_properties(Invoice $invoice, array $options
 }
 
 /**
+ * Returns whether a given invoice is owned by a given user.
+ *
+ * @param Invoice $invoice
+ *   The invoice to check.
+ * @param object $account
+ *   Optional user account to check. Defaults to the currently logged in user.
+ *
+ * @return bool
+ *   TRUE if the invoice is owned by the user, FALSE otherwise.
+ */
+function invoice_is_owned_by_user(Invoice $invoice, stdClass $account = NULL) {
+  // Default to the logged in user.
+  global $user;
+  $account = $account ?: $user;
+
+  $invoice = entity_metadata_wrapper('invoice', $invoice);
+  return in_array($invoice->bid->value(), array_keys(business_get_businesses_from_user($account)));
+}
+
+/**
  * The class used for invoice entities.
  */
 class Invoice extends Entity {

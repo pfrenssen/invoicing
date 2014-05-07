@@ -31,3 +31,4 @@ files[] = invoice.admin.inc
 files[] = tests/access.test
 files[] = tests/crud.test
 files[] = tests/ui.test
+files[] = tests/unit.test

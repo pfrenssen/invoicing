@@ -219,4 +219,20 @@ trait ClientTestHelper {
     }
   }
 
+  /**
+   * Returns a random client from the database.
+   *
+   * @return Client
+   *   A random client.
+   */
+  function randomClient() {
+    $cid = db_select('client', 'c')
+      ->fields('c', array('cid'))
+      ->orderRandom()
+      ->range(0, 1)
+      ->execute()
+      ->fetchColumn();
+
+    return client_load($cid);
+  }
 }

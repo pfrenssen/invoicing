@@ -11,9 +11,7 @@ module_load_include('inc', 'test_traits', 'invoice');
 class InvoiceUITestCase extends DrupalWebTestCase {
 
   use BaseTestHelper;
-  use InvoiceTestHelper {
-    randomInvoiceValues as traitRandomInvoiceValues;
-  }
+  use InvoiceTestHelper;
 
   /**
    * A test user.
@@ -110,18 +108,6 @@ class InvoiceUITestCase extends DrupalWebTestCase {
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
     $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function randomInvoiceValues() {
-    $values = $this->traitRandomInvoiceValues();
-    $values['field_invoice_date']['month'] = rand(1, 12);
-    $values['field_invoice_date']['day'] = rand(1, 28);
-    $values['field_invoice_date']['year'] = rand(2014, 2017);
-
-    return $values;
   }
 
   /**

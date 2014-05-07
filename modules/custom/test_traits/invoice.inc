@@ -114,15 +114,14 @@ trait InvoiceTestHelper {
   /**
    * Returns random values for all properties on the invoice entity.
    *
-   * @returns array
+   * This does not include the client reference. This should be provided by the
+   * test itself.
+   *
+   * @return array
    *   An associative array of random values, keyed by property name.
    */
   function randomInvoiceValues() {
-    $client = client_create(array('name' => 'Test'));
-    $client->save();
-
     return array(
-      'field_invoice_client' => $client->identifier(),
       'field_invoice_date' => time(),
       'field_invoice_number' => $this->randomString(),
       'field_invoice_discount' => rand(0, 100),

@@ -126,7 +126,7 @@ trait InvoiceTestHelper {
     return array(
       'field_invoice_date' => strtotime($date_polarity . $date_offset . ' day 00:00'),
       'field_invoice_number' => $this->randomString(),
-      'field_invoice_discount' => rand(0, 100),
+      'field_invoice_discount' => rand(0, 100) . '.00',
       'field_invoice_po_number' => $this->randomString(),
       'field_invoice_due_date' => array_rand(array(
         '0' => 'due on receipt',

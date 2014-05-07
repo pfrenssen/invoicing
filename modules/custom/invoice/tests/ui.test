@@ -8,22 +8,15 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'invoice');
 
-class InvoiceUITestCase extends DrupalWebTestCase {
+class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use InvoiceTestHelper;
 
   /**
-   * A test user.
-   *
-   * @var object $user
-   */
-  protected $user;
-
-  /**
    * {@inheritdoc}
    */
-  protected $profile = 'testing';
+  protected $usersToCreate = array('business owner');
 
   /**
    * Returns test case metadata.
@@ -40,12 +33,10 @@ class InvoiceUITestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client', 'invoice');
+    parent::setup();
 
-    // Create a test user and log in.
-    $permissions = array('administer invoices', 'administer clients');
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
   }
 
   /**

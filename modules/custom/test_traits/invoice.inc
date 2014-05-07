@@ -150,17 +150,31 @@ trait InvoiceTestHelper {
    *
    * @param array $values
    *   An associative array of invoice values, keyed by property name, as
-   *   returned by self::randomInvoiceValues().
+   *   returned by self::randomInvoiceValues(). For the client reference, pass a
+   *   full Client object.
    *
    * @returns array
    *   An associative array of values, keyed by form field name, as used by
    *   parent::drupalPost().
    */
   public function convertInvoiceValuesToFormPostValues($values) {
-    $client = client_load($values['field_invoice_client']);
+    $client = '';
+    if (!empty($values['field_invoice_client'])) {
+      if (!$values['field_invoice_client'] instanceof Client) {
+        throw new Exception('The value for field_invoice_client should be an instance of Client.');
+      }
+
+      // Prepare the client field the way entityreference expects it.
+      // @see entityreference_autocomplete_callback_get_matches()
+      $client = "{$values['field_invoice_client']->name} ({$values['field_invoice_client']->identifier()})";
+      $client = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim(decode_entities(strip_tags($client)))));
+      if (strpos($client, ',') !== FALSE || strpos($client, '"') !== FALSE) {
+        $client = '"' . str_replace('"', '""', $client) . '"';
+      }
+    }
 
     return array(
-      'field_invoice_client[und]' => $client->name . ' (' . $values['field_invoice_client'] . ')',
+      'field_invoice_client[und]' => $client,
       'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
       'field_invoice_date[und][0][value][month]' => date('n', $values['field_invoice_date']),
       'field_invoice_date[und][0][value][day]' => date('j', $values['field_invoice_date']),

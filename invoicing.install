@@ -98,10 +98,12 @@ function invoicing_install() {
     'access invoicing dashboard',
     'administer own businesses',
     'administer own clients',
+    'administer own invoices',
     'create new clients',
     'create new invoices',
     'view own businesses',
     'view own clients',
+    'view own invoices',
   );
   user_role_grant_permissions($role->rid, $permissions);
 

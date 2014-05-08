@@ -232,6 +232,13 @@ function invoice_permission() {
     'create new invoices' => array(
       'title' => t('Create new invoices'),
     ),
+    'view own invoices' => array(
+      'title' => t('View own invoices'),
+    ),
+    'administer own invoices' => array(
+      'title' => t('Administer own invoices'),
+      'description' => t('Edit and delete your own invoices.'),
+    ),
   );
 
   // Generate permissions per invoice type.

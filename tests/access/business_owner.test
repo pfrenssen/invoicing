@@ -86,6 +86,20 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   protected $client2;
 
   /**
+   * An invoice owned by the business owner.
+   *
+   * @var Invoice
+   */
+  protected $invoice1;
+
+  /**
+   * An invoice which is not owned by the business owner.
+   *
+   * @var Invoice
+   */
+  protected $invoice2;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {

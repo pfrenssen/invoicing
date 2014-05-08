@@ -30,6 +30,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     'client/add',
     'clients',
     'dashboard',
+    'invoice/add',
     'user',
     'user/password',
     'user/register',
@@ -52,7 +53,6 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     // @see http://atrium.pocomas.be/invoicing/node/1167
     'businesses',
     'business/add',
-    'invoice/add',
     'node',
     'node/add',
   );

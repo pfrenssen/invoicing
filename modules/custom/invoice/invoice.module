@@ -203,12 +203,12 @@ function invoice_access($op, $invoice = NULL, $account = NULL) {
       case 'edit':
       case 'update':
         $access = user_access("edit any $invoice->type invoice", $account);
-        $access |= user_access('administer own invoices', $account) && invoice_is_owned_by_user($invoice);
+        $access |= user_access('administer own invoices', $account) && invoice_is_owned_by_user($invoice, $account);
         return $access;
 
       case 'view':
         $access = user_access("view any $invoice->type invoice", $account);
-        $access |= user_access('view own invoices', $account) && invoice_is_owned_by_user($invoice);
+        $access |= user_access('view own invoices', $account) && invoice_is_owned_by_user($invoice, $account);
         return $access;
     }
   }

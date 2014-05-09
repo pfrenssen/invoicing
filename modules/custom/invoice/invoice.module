@@ -17,7 +17,7 @@ function invoice_entity_info() {
     'label' => t('Invoice'),
     'plural label' => t('Invoices'),
     'entity class' => 'Invoice',
-    'controller class' => 'EntityAPIController',
+    'controller class' => 'InvoiceAPIController',
     'base table' => 'invoice',
     'fieldable' => TRUE,
     'entity keys' => array(
@@ -517,6 +517,25 @@ class Invoice extends Entity {
     $this->changed = REQUEST_TIME;
 
     return parent::save();
+  }
+
+}
+
+/**
+ * The Invoice Entity API controller class.
+ */
+class InvoiceAPIController extends EntityAPIController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function create(array $values = array()) {
+    // Set the business id to the active business of the logged in user.
+    $business = business_get_active_business();
+    if ($business instanceof Business) {
+      $values += array('bid' => $business->bid);
+    }
+    return parent::create($values);
   }
 
 }

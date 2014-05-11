@@ -11,9 +11,12 @@
 function line_item_type_add_page() {
   $types = line_item_get_types();
 
+  $items = array();
   foreach ($types as $type) {
-    
+    $items[] = l($type->name, 'line_item/add/' . $type->type);
   }
+
+  return theme('item_list', array('items' => $items, 'title' => NULL));
 }
 
 /**

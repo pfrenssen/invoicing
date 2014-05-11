@@ -1,4 +1,34 @@
-name = Line item
+name = line_item
 description = Line item related functionality.
 core = 7.x
 package = Invoicing
+
+dependencies[] = entity
+dependencies[] = features
+dependencies[] = list
+dependencies[] = number
+dependencies[] = options
+dependencies[] = text
+
+features[features_api][] = api:2
+features[field_base][] = field_line_item_description
+features[field_base][] = field_line_item_discount
+features[field_base][] = field_line_item_quantity
+features[field_base][] = field_line_item_tax
+features[field_base][] = field_line_item_time_unit
+features[field_base][] = field_line_item_unit_cost
+
+features[field_instance][] = line_item-product-field_line_item_description
+features[field_instance][] = line_item-product-field_line_item_discount
+features[field_instance][] = line_item-product-field_line_item_quantity
+features[field_instance][] = line_item-product-field_line_item_tax
+features[field_instance][] = line_item-product-field_line_item_unit_cost
+features[field_instance][] = line_item-service-field_line_item_description
+features[field_instance][] = line_item-service-field_line_item_discount
+features[field_instance][] = line_item-service-field_line_item_quantity
+features[field_instance][] = line_item-service-field_line_item_tax
+features[field_instance][] = line_item-service-field_line_item_time_unit
+features[field_instance][] = line_item-service-field_line_item_unit_cost
+
+features[line_item_type][] = product
+features[line_item_type][] = service

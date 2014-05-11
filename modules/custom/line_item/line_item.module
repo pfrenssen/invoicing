@@ -5,6 +5,8 @@
  * Main functions and hook implementations for the Invoicing line_item module.
  */
 
+include_once 'line_item.features.inc';
+
 /**
  * Implements hook_entity_info().
  */

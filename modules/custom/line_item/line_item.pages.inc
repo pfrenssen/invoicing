@@ -180,7 +180,7 @@ function line_item_delete_confirm_form_submit($form, &$form_state) {
  * Page callback for the line item page.
  */
 function line_item_detail_page($line_item) {
-  $output = entity_view($line_item->type, array($line_item));
+  $output = entity_view('line_item', array($line_item));
 
   // Prevent the line item title from being rendered twice.
   $output['line_item'][$line_item->lid]['#page'] = TRUE;

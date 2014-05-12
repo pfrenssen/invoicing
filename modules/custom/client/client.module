@@ -25,6 +25,7 @@ function client_entity_info() {
       'id' => 'cid',
       'bundle' => 'type',
       'revision' => 'vid',
+      'label' => 'name',
     ),
     'bundle keys' => array(
       'bundle' => 'type',

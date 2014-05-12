@@ -23,6 +23,7 @@ function business_entity_info() {
     'entity keys' => array(
       'id' => 'bid',
       'bundle' => 'type',
+      'label' => 'name',
     ),
     'bundle keys' => array(
       'bundle' => 'type',

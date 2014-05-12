@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * @file
+ * Access tests for the Line item module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'line_item');
+
+class LineItemAccessTestCase extends DrupalWebTestCase {
+  use BaseTestHelper;
+  use LineItemTestHelper;
+
+  /**
+   * A user with administrator permissions.
+   *
+   * @var object
+   */
+  protected $administrator;
+
+  /**
+   * A user without any relevant permissions.
+   *
+   * @var object
+   */
+  protected $authenticatedUser;
+
+  /**
+   * A test line item.
+   *
+   * @var LineItem
+   */
+  protected $line_item;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Access tests',
+      'description' => 'Tests permissions.',
+      'group' => 'Line Item',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('line_item');
+
+    // Create test users.
+    $permissions = array('administer line items');
+    $this->administrator = $this->drupalCreateUser($permissions);
+    $this->authenticatedUser = $this->drupalCreateUser();
+
+    // Create an line item.
+    $this->line_item = $this->createLineItem();
+    $this->line_item->save();
+  }
+
+  /**
+   * Tests the 'administer line items' permission.
+   */
+  public function testAdministerLineItemsPermission() {
+    // Log in as administrator.
+    $this->drupalLogin($this->administrator);
+
+    // Check if the administrator has access to all pages.
+    $paths = array(
+      'line_item/add',
+      'line_item/add/product',
+      'line_item/add/service',
+      'line_item/' . $this->line_item->identifier() . '/edit',
+      'line_item/' . $this->line_item->identifier() . '/delete',
+    );
+
+    foreach ($paths as $path) {
+      $this->drupalGet($path);
+      $this->assertResponse(200, format_string('A user with permissions "administer line items" can access the %path page.', array('%path' => $path)));
+    }
+
+    // Check if the administrator can see the 'Delete' button on the edit page.
+    $this->drupalGet('line_item/' . $this->line_item->identifier() . '/edit');
+    $this->assertXPathElements('//input[@id="edit-delete"]', 1, array(), 'A user with permission "administer line items" can see the delete button on the line item edit page.');
+
+    // Log in as the user without permissions.
+    $this->drupalLogin($this->authenticatedUser);
+
+    // Check that access is denied on all line item paths.
+    foreach ($paths as $path) {
+      $this->drupalGet($path);
+      $this->assertResponse(403, format_string('A user without permission "administer line items" can not access the %path page.', array('%path' => $path)));
+    }
+
+    // Log out.
+    $this->drupalLogout();
+
+    // Check that access is denied on all line item paths for an anonymous user.
+    foreach ($paths as $path) {
+      $this->drupalGet($path);
+      $this->assertResponse(403, format_string('An anonymous user can not access the %path page.', array('%path' => $path)));
+    }
+  }
+
+}

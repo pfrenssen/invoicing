@@ -1,0 +1,141 @@
+<?php
+
+/**
+ * @file
+ * UI tests for the Line item module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'line_item');
+
+class LineItemUITestCase extends DrupalWebTestCase {
+
+  use BaseTestHelper;
+  use LineItemTestHelper {
+    randomLineItemValues as traitRandomLineItemValues;
+  }
+
+  /**
+   * A test user.
+   *
+   * @var object $user
+   */
+  protected $user;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UI test',
+      'description' => 'Tests the managing of line items through the user interface.',
+      'group' => 'Line item',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('line_item');
+
+    // Create a test user and log in.
+    $permissions = array('administer line items');
+    $this->user = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($this->user);
+  }
+
+  /**
+   * Tests the line item form.
+   */
+  public function testLineItemForm() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('line_item'), 'The line item database table exists.');
+    $this->assertLineItemTableEmpty('The line item database is initially empty.');
+
+    // Fill in all the fields and check if they are saved correctly.
+    $values = $this->randomLineItemValues();
+    $line_item = $this->createUiLineItem($values);
+    $messages = array('status' => array(t('New line item has been added.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the line item has been added.');
+    $this->assertLineItemTableNotEmpty('The line item database table is no longer empty after creating a line item.');
+    $this->assertLineItemProperties($line_item, $values, 'The line item has been correctly saved to the database.');
+    $this->assertUrl('line_items', array(), 'The user is redirected to the line item overview after creating a new line item.');
+
+    // Check that the form fields have correct values when the line item is
+    // edited.
+    $this->drupalGet('line_item/' . $line_item->lid . '/edit');
+    $form_values = $this->convertToFormPostValues($values);
+    foreach ($form_values as $name => $value) {
+      $this->assertFieldByName($name, $value, format_string('When editing an existing line item the %name field has the right value.', array('%name' => $name)));
+    }
+
+    // Change the values and check that the entity is correctly updated.
+    $new_values = $this->randomLineItemValues();
+    $this->drupalPost('line_item/' . $line_item->lid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $line_item = line_item_load($line_item->lid, TRUE);
+    $messages = array('status' => array(t('The changes have been saved.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the line item has been edited.');
+    $this->assertLineItemProperties($line_item, $new_values, 'The updated line item has been correctly saved to the database.');
+    $this->assertUrl('line_items', array(), 'The user is redirected to the line item overview after editing a line item.');
+
+    // Check that the user is redirected to the confirmation page when clicking
+    // the 'Delete' button on the line item edit page.
+    $this->drupalPost('line_item/' . $line_item->lid . '/edit', array(), t('Delete'));
+    $this->assertUrl('line_item/' . $line_item->lid . '/delete', array(), 'The user is redirected to the confirmation form when clicking the "Delete" button in the line item edit form.');
+    $this->assertRaw(t('Are you sure you want to delete the line item?'));
+    $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting a line item.');
+
+    // Check that the line item can be deleted.
+    $this->drupalPost('line_item/' .$line_item->lid . '/delete', array(), t('Delete'));
+    $messages = array('status' => array(t('The line item has been deleted.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the line item has been deleted.');
+    $this->assertLineItemTableEmpty('The line item database is empty after the line item has been deleted.');
+    $this->assertUrl('line_items', array(), 'The user is redirected to the line item overview after deleting a line item.');
+  }
+
+  /**
+   * Returns form post values from the given entity values.
+   *
+   * @see self::randomLineItemValues()
+   *
+   * @param array $values
+   *   An associative array of line item values, keyed by property name, as
+   *   returned by self::randomLineItemValues().
+   *
+   * @returns array
+   *   An associative array of values, keyed by form field name, as used by
+   *   parent::drupalPost().
+   */
+  public function convertToFormPostValues($values) {
+    $fields = array(
+      'field_line_item_description[und][0][value]' => $values['field_line_item_description'],
+      'field_line_item_discount[und][0][value]' => $values['field_line_item_discount'],
+      'field_line_item_quantity[und][0][value][month]' => $values['field_line_item_quantity'],
+      'field_line_item_tax[und][0][value][day]' => $values['field_line_item_tax'],
+      'field_line_item_unit_cost[und][0][value][year]' => $values['field_line_item_unit_cost'],
+    );
+
+    if ($values['type'] == 'service') {
+      $fields['field_line_item_time_unit[und]'] = $values['field_line_item_time_unit'];
+    }
+
+    return $fields;
+  }
+
+  /**
+   * Constructs an XPath query to find an element on the line item entity page.
+   *
+   * @param string $xPath
+   *   The path selector to search for.
+   */
+  protected function getLineItemEntityXPath($xpath = '') {
+    return '//div[contains(@class, "entity-line-item")]' . $xpath;
+  }
+
+}

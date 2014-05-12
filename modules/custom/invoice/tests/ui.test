@@ -80,7 +80,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Check that error messages are displayed about required fields when
     // creating a new invoice.
     $required_fields = array(
-      'field_invoice_client[und]' => t('Client id'),
+      'field_invoice_client[und]' => t('Client'),
       'field_invoice_number[und][0][value]' => t('Invoice number'),
     );
     $messages = array();

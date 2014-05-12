@@ -116,9 +116,9 @@ class LineItemUITestCase extends DrupalWebTestCase {
     $fields = array(
       'field_line_item_description[und][0][value]' => $values['field_line_item_description'],
       'field_line_item_discount[und][0][value]' => $values['field_line_item_discount'],
-      'field_line_item_quantity[und][0][value][month]' => $values['field_line_item_quantity'],
-      'field_line_item_tax[und][0][value][day]' => $values['field_line_item_tax'],
-      'field_line_item_unit_cost[und][0][value][year]' => $values['field_line_item_unit_cost'],
+      'field_line_item_quantity[und][0][value]' => $values['field_line_item_quantity'],
+      'field_line_item_tax[und][0][value]' => $values['field_line_item_tax'],
+      'field_line_item_unit_cost[und][0][value]' => $values['field_line_item_unit_cost'],
     );
 
     if ($values['type'] == 'service') {

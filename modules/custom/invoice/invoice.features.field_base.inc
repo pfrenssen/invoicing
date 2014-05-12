@@ -33,7 +33,7 @@ function invoice_field_default_field_bases() {
     'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
-      'handler' => 'base',
+      'handler' => 'active_business',
       'handler_settings' => array(
         'behaviors' => array(
           'unique_field_behavior' => array(
@@ -44,7 +44,9 @@ function invoice_field_default_field_bases() {
           ),
         ),
         'sort' => array(
-          'type' => 'none',
+          'direction' => 'ASC',
+          'property' => 'name',
+          'type' => 'property',
         ),
         'target_bundles' => array(),
       ),

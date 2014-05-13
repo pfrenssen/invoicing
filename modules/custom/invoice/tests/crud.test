@@ -6,17 +6,26 @@
  */
 
 module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 
 class InvoiceCRUDTestCase extends DrupalWebTestCase {
 
   use BaseTestHelper;
+  use ClientTestHelper;
   use InvoiceTestHelper;
 
   /**
    * {@inheritdoc}
    */
   protected $profile = 'testing';
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
 
   /**
    * Returns test case metadata.
@@ -34,6 +43,10 @@ class InvoiceCRUDTestCase extends DrupalWebTestCase {
    */
   protected function setUp() {
     parent::setup('client', 'invoice');
+
+    // Create a client that can be referenced in invoices.
+    $this->client = $this->createClient();
+    $this->client->save();
   }
 
   /**

@@ -307,6 +307,8 @@ function line_item_type_get_names() {
  *   The new line item entity.
  */
 function line_item_create($values = array()) {
+  // Default to the 'line_item' bundle.
+  $values += array('type' => 'line_item');
   return entity_get_controller('line_item')->create($values);
 }
 

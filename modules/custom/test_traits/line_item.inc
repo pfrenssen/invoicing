@@ -181,6 +181,13 @@ trait LineItemTestHelper {
    *   name.
    */
   function updateLineItem(LineItem $line_item, array $values) {
+    if (isset($values['type'])) {
+      if ($values['type'] == 'product' && isset($values['field_line_item_time_unit'])) {
+        unset($values['field_line_item_time_unit']);
+      }
+      unset($values['type']);
+    }
+
     $wrapper = entity_metadata_wrapper('line_item', $line_item);
     foreach ($values as $property => $value) {
       $wrapper->$property->set($value);

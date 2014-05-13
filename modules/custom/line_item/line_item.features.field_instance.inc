@@ -361,7 +361,11 @@ function line_item_field_default_field_instances() {
   // Exported field_instance: 'line_item-service-field_line_item_time_unit'
   $field_instances['line_item-service-field_line_item_time_unit'] = array(
     'bundle' => 'service',
-    'default_value' => NULL,
+    'default_value' => array(
+      0 => array(
+        'value' => 'minutes',
+      ),
+    ),
     'deleted' => 0,
     'description' => 'The time unit for the line item.',
     'display' => array(
@@ -376,7 +380,7 @@ function line_item_field_default_field_instances() {
     'entity_type' => 'line_item',
     'field_name' => 'field_line_item_time_unit',
     'label' => 'Time unit',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),

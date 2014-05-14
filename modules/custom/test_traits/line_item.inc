@@ -177,7 +177,7 @@ trait LineItemTestHelper {
    *   A random generated decimal number.
    */
   function randomDecimal() {
-    return rand(0, 100) . '.' . rand(0, 99);
+    return rand(0, 99) . '.' . rand(0, 99);
   }
 
   /**

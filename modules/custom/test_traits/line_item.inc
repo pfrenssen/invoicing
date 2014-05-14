@@ -171,7 +171,7 @@ trait LineItemTestHelper {
   }
 
   /**
-   * Generate a random decimale number.
+   * Generate a random decimal number.
    *
    * @return decimal
    *   A random generated decimal number.

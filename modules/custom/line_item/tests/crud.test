@@ -56,7 +56,8 @@ class LineItemCRUDTestCase extends DrupalWebTestCase {
 
     // Update the line item and check that the new values were written to the
     // database.
-    $new_values = $this->randomLineItemValues();
+    $new_values = $this->randomLineItemValues($values['type']);
+    unset($new_values['type']);
     $this->updateLineItem($line_item, $new_values);
     $line_item->save();
     $this->assertLineItemProperties($line_item, $new_values, 'The line item has been updated correctly.');

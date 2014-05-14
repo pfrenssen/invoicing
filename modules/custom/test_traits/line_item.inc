@@ -159,7 +159,7 @@ trait LineItemTestHelper {
 
   /**
    * Generate the type for the line item.
-   * 
+   *
    * @return string
    *   The line item type.
    */

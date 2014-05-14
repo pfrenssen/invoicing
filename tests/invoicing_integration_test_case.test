@@ -8,12 +8,14 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class InvoicingIntegrationTestCase extends DrupalWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
+  use LineItemTestHelper;
 
   /**
    * {@inheritdoc}

@@ -49,6 +49,9 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
     'client/add',
     'dashboard',
     'invoice/add',
+    'line_item/add',
+    'line_item/add/product',
+    'line_item/add/service',
     'node',
     'node/add',
   );

@@ -13,6 +13,7 @@ dependencies[] = features
 dependencies[] = invoice
 dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard
+dependencies[] = line_item
 dependencies[] = link
 dependencies[] = views
 

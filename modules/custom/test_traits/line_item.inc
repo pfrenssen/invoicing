@@ -71,7 +71,7 @@ trait LineItemTestHelper {
   function createLineItem(array $values = array()) {
     // Provide some default values.
     $values += $this->randomLineItemValues();
-    $line_item = line_item_create();
+    $line_item = line_item_create(array('type' => $values['type']));
     $this->updateLineItem($line_item, $values);
 
     return $line_item;

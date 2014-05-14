@@ -76,7 +76,7 @@ class LineItemUITestCase extends DrupalWebTestCase {
     }
 
     // Change the values and check that the entity is correctly updated.
-    $new_values = $this->randomLineItemValues();
+    $new_values = $this->randomLineItemValues($values['type']);
     $this->drupalPost('line_item/' . $line_item->lid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
     $line_item = line_item_load($line_item->lid, TRUE);
     $messages = array('status' => array(t('The changes have been saved.')));

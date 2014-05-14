@@ -23,6 +23,9 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertLineItemProperties(LineItem $line_item, array $values, $message = '', $group = 'Other') {
+    if (isset($values['type'])) {
+      unset($values['type']);
+    }
     return $this->assertEntityProperties('line_item', $line_item, $values, $message, $group);
   }
 
@@ -93,20 +96,21 @@ trait LineItemTestHelper {
     // Provide some default values.
     $values += $this->randomLineItemValues();
 
+    // Convert the entity property values to form values and submit the form.
+    $edit = $this->convertToFormPostValues($values);
+
     // Get the type from the values array and unset afterwards because it is not
     // needed to post it with the other form fields.
     $type = $values['type'];
     unset($values['type']);
 
-    // Convert the entity property values to form values and submit the form.
-    $edit = $this->convertToFormPostValues($values);
     $this->drupalPost('line_item/add/' . $type, $edit, t('Save'));
 
     // Retrieve the saved line _item by line _item number and return it.
     $query = new EntityFieldQuery();
     $query
       ->entityCondition('entity_type', 'line_item')
-      ->entityCondition('bundle', 'line_item')
+      ->entityCondition('bundle', $type)
       ->fieldCondition('field_line_item_description', 'value', $values['field_line_item_description'])
       ->range(0,1);
     $result = $query->execute();

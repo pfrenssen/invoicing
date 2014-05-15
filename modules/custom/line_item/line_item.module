@@ -17,7 +17,7 @@ function line_item_entity_info() {
     'label' => t('Line item'),
     'plural label' => t('Line items'),
     'entity class' => 'LineItem',
-    'controller class' => 'EntityAPIController',
+    'controller class' => 'LineItemAPIController',
     'base table' => 'line_item',
     'fieldable' => TRUE,
     'entity keys' => array(
@@ -487,6 +487,25 @@ class LineItem extends Entity {
     $this->changed = REQUEST_TIME;
 
     return parent::save();
+  }
+
+}
+
+/**
+ * The Line Item Entity API controller class.
+ */
+class LineItemAPIController extends EntityAPIController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function create(array $values = array()) {
+    // Set the business id to the active business of the logged in user.
+    $business = business_get_active_business();
+    if ($business instanceof Business) {
+      $values += array('bid' => $business->bid);
+    }
+    return parent::create($values);
   }
 
 }

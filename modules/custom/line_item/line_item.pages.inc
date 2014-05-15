@@ -37,8 +37,7 @@ function line_item_add_page($line_item_type) {
 }
 
 /**
- * Page callback: Returns the line item add/edit form to edit an existing line
- * item.
+ * Page callback: Returns the add/edit form to edit an existing line item.
  *
  * @see line_item_edit_form()
  *

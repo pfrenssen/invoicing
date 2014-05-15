@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations for the Invoicing line_item module.
+ * Main functions and hook implementations for the Invoicing Line Item module.
  */
 
 include_once 'line_item.features.inc';

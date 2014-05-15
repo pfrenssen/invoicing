@@ -1,4 +1,4 @@
-name = line_item
+name = Line item
 description = Line item related functionality.
 core = 7.x
 package = Invoicing

@@ -23,6 +23,7 @@ function business_entity_info() {
     'entity keys' => array(
       'id' => 'bid',
       'bundle' => 'type',
+      'label' => 'name',
     ),
     'bundle keys' => array(
       'bundle' => 'type',
@@ -228,6 +229,15 @@ function business_field_extra_fields() {
   }
 
   return $extra_fields;
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function business_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'entityreference' && $plugin == 'selection') {
+    return 'plugins/' . $plugin;
+  }
 }
 
 /**

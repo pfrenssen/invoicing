@@ -17,7 +17,7 @@ function invoice_entity_info() {
     'label' => t('Invoice'),
     'plural label' => t('Invoices'),
     'entity class' => 'Invoice',
-    'controller class' => 'EntityAPIController',
+    'controller class' => 'InvoiceAPIController',
     'base table' => 'invoice',
     'fieldable' => TRUE,
     'entity keys' => array(
@@ -107,6 +107,11 @@ function invoice_entity_property_info_alter(&$info) {
   $properties['is_new']['description'] = t('Whether the invoice is new and not saved to the database yet.');
   $properties['is_new']['type'] = 'boolean';
   $properties['is_new']['getter callback'] = 'invoice_entity_metadata_get_properties';
+
+  $properties['bid']['label'] = t('Business ID');
+  $properties['bid']['description'] = t('The unique ID of the business that issued this invoice.');
+  $properties['bid']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['bid']['setter permission'] = 'administer invoices';
 }
 
 /**
@@ -192,15 +197,18 @@ function invoice_access($op, $invoice = NULL, $account = NULL) {
   if (isset($invoice)) {
     switch ($op) {
       case 'create':
+        return user_access('create new invoices', $account);
+
       case 'delete':
       case 'edit':
+      case 'update':
         $access = user_access("edit any $invoice->type invoice", $account);
-        $access |= user_access('administer own invoices', $account);
+        $access |= user_access('administer own invoices', $account) && invoice_is_owned_by_user($invoice, $account);
         return $access;
 
       case 'view':
         $access = user_access("view any $invoice->type invoice", $account);
-        $access |= user_access('view own invoices', $account);
+        $access |= user_access('view own invoices', $account) && invoice_is_owned_by_user($invoice, $account);
         return $access;
     }
   }
@@ -223,6 +231,16 @@ function invoice_permission() {
     'administer invoice types' => array(
       'title' => t('Administer invoice types'),
       'description' => t('Create and delete fields for invoice types, and set their permissions.'),
+    ),
+    'create new invoices' => array(
+      'title' => t('Create new invoices'),
+    ),
+    'view own invoices' => array(
+      'title' => t('View own invoices'),
+    ),
+    'administer own invoices' => array(
+      'title' => t('Administer own invoices'),
+      'description' => t('Edit and delete your own invoices.'),
     ),
   );
 
@@ -442,6 +460,26 @@ function invoice_entity_metadata_get_properties(Invoice $invoice, array $options
 }
 
 /**
+ * Returns whether a given invoice is owned by a given user.
+ *
+ * @param Invoice $invoice
+ *   The invoice to check.
+ * @param object $account
+ *   Optional user account to check. Defaults to the currently logged in user.
+ *
+ * @return bool
+ *   TRUE if the invoice is owned by the user, FALSE otherwise.
+ */
+function invoice_is_owned_by_user(Invoice $invoice, stdClass $account = NULL) {
+  // Default to the logged in user.
+  global $user;
+  $account = $account ?: $user;
+
+  $invoice = entity_metadata_wrapper('invoice', $invoice);
+  return in_array($invoice->bid->value(), array_keys(business_get_businesses_from_user($account)));
+}
+
+/**
  * The class used for invoice entities.
  */
 class Invoice extends Entity {
@@ -482,6 +520,25 @@ class Invoice extends Entity {
     $this->changed = REQUEST_TIME;
 
     return parent::save();
+  }
+
+}
+
+/**
+ * The Invoice Entity API controller class.
+ */
+class InvoiceAPIController extends EntityAPIController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function create(array $values = array()) {
+    // Set the business id to the active business of the logged in user.
+    $business = business_get_active_business();
+    if ($business instanceof Business) {
+      $values += array('bid' => $business->bid);
+    }
+    return parent::create($values);
   }
 
 }

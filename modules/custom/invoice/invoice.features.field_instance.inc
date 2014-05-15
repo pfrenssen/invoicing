@@ -29,7 +29,7 @@ function invoice_field_default_field_instances() {
     ),
     'entity_type' => 'invoice',
     'field_name' => 'field_invoice_client',
-    'label' => 'Client id',
+    'label' => 'Client',
     'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
@@ -308,7 +308,7 @@ function invoice_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Client id');
+  t('Client');
   t('Date');
   t('Discount');
   t('Due date');

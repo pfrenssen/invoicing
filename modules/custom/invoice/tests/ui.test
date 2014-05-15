@@ -6,26 +6,35 @@
  */
 
 module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 
-class InvoiceUITestCase extends DrupalWebTestCase {
+class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
-  use InvoiceTestHelper {
-    randomInvoiceValues as traitRandomInvoiceValues;
-  }
-
-  /**
-   * A test user.
-   *
-   * @var object $user
-   */
-  protected $user;
+  use BusinessTestHelper;
+  use ClientTestHelper;
+  use InvoiceTestHelper;
 
   /**
    * {@inheritdoc}
    */
-  protected $profile = 'testing';
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
 
   /**
    * Returns test case metadata.
@@ -42,12 +51,22 @@ class InvoiceUITestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client', 'invoice');
+    parent::setup();
 
-    // Create a test user and log in.
-    $permissions = array('administer invoices', 'administer clients');
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a business. This is done programmatically since at the moment
+    // business owners cannot create their own businesses.
+    // @todo Remove this when a business is created automatically for every
+    //   business owner.
+    // @see http://atrium.pocomas.be/invoicing/node/1184
+    $this->business = $this->createBusiness();
+    $this->business->save();
+    $this->addBusinessToUser($this->business, $this->users['business owner']);
+
+    // Create a client.
+    $this->client = $this->createUiClient(array('bid' => $this->business->identifier()));
   }
 
   /**
@@ -61,7 +80,7 @@ class InvoiceUITestCase extends DrupalWebTestCase {
     // Check that error messages are displayed about required fields when
     // creating a new invoice.
     $required_fields = array(
-      'field_invoice_client[und]' => t('Client id'),
+      'field_invoice_client[und]' => t('Client'),
       'field_invoice_number[und][0][value]' => t('Invoice number'),
     );
     $messages = array();
@@ -74,6 +93,7 @@ class InvoiceUITestCase extends DrupalWebTestCase {
 
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomInvoiceValues();
+    $values['field_invoice_client'] = $this->client;
     $invoice = $this->createUiInvoice($values);
     $messages = array('status' => array(t('New invoice has been added.')));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been added.');
@@ -83,14 +103,14 @@ class InvoiceUITestCase extends DrupalWebTestCase {
 
     // Check that the form fields have correct values when the invoice is edited.
     $this->drupalGet('invoice/' . $invoice->iid . '/edit');
-    $form_values = $this->convertToFormPostValues($values);
+    $form_values = $this->convertInvoiceValuesToFormPostValues($values);
     foreach ($form_values as $name => $value) {
       $this->assertFieldByName($name, $value, format_string('When editing an existing invoice the %name field has the right value.', array('%name' => $name)));
     }
 
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomInvoiceValues();
-    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertToFormPostValues($new_values), t('Save'));
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertInvoiceValuesToFormPostValues($new_values), t('Save'));
     $invoice = invoice_load($invoice->iid, TRUE);
     $messages = array('status' => array(t('The changes have been saved.', array('%invoice_number' => $values['field_invoice_number']))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');
@@ -110,48 +130,6 @@ class InvoiceUITestCase extends DrupalWebTestCase {
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
     $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
-  }
-
-  /**
-   * Returns form post values from the given entity values.
-   *
-   * @see self::randomInvoiceValues()
-   *
-   * @param array $values
-   *   An associative array of invoice values, keyed by property name, as
-   *   returned by self::randomInvoiceValues().
-   *
-   * @returns array
-   *   An associative array of values, keyed by form field name, as used by
-   *   parent::drupalPost().
-   */
-  public function convertToFormPostValues($values) {
-    $client = client_load($values['field_invoice_client']);
-
-    return array(
-      'field_invoice_client[und]' => $client->name . ' (' . $values['field_invoice_client'] . ')',
-      'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
-      'field_invoice_date[und][0][value][month]' => $values['field_invoice_date']['month'],
-      'field_invoice_date[und][0][value][day]' => $values['field_invoice_date']['day'],
-      'field_invoice_date[und][0][value][year]' => $values['field_invoice_date']['year'],
-      'field_invoice_discount[und][0][value]' => $values['field_invoice_discount'],
-      'field_invoice_po_number[und][0][value]' => $values['field_invoice_po_number'],
-      'field_invoice_due_date[und]' => $values['field_invoice_due_date'],
-      'field_invoice_terms[und][0][value]' => $values['field_invoice_terms'],
-      'field_invoice_status[und]' => $values['field_invoice_status'],
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function randomInvoiceValues() {
-    $values = $this->traitRandomInvoiceValues();
-    $values['field_invoice_date']['month'] = rand(1, 12);
-    $values['field_invoice_date']['day'] = rand(1, 28);
-    $values['field_invoice_date']['year'] = rand(2014, 2017);
-
-    return $values;
   }
 
   /**

@@ -94,7 +94,7 @@ trait InvoiceTestHelper {
     $values += $this->randomInvoiceValues();
 
     // Convert the entity property values to form values and submit the form.
-    $edit = $this->convertToFormPostValues($values);
+    $edit = $this->convertInvoiceValuesToFormPostValues($values);
     $this->drupalPost('invoice/add', $edit, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.
@@ -114,18 +114,17 @@ trait InvoiceTestHelper {
   /**
    * Returns random values for all properties on the invoice entity.
    *
-   * @returns array
+   * @return array
    *   An associative array of random values, keyed by property name.
    */
   function randomInvoiceValues() {
-    $client = client_create(array('name' => 'Test'));
-    $client->save();
-
+    $date_polarity = rand(0, 1) ? '-' : '+';
+    $date_offset = rand(0, 7);
     return array(
-      'field_invoice_client' => $client->identifier(),
-      'field_invoice_date' => time(),
+      'field_invoice_client' => $this->randomClient(),
+      'field_invoice_date' => strtotime($date_polarity . $date_offset . ' day 00:00'),
       'field_invoice_number' => $this->randomString(),
-      'field_invoice_discount' => rand(0, 100),
+      'field_invoice_discount' => rand(0, 100) . '.00',
       'field_invoice_po_number' => $this->randomString(),
       'field_invoice_due_date' => array_rand(array(
         '0' => 'due on receipt',
@@ -139,6 +138,50 @@ trait InvoiceTestHelper {
         'draft' => 'draft',
         'sent' => 'sent',
       ))
+    );
+  }
+
+  /**
+   * Returns form post values from the given entity values.
+   *
+   * @see self::randomInvoiceValues()
+   *
+   * @param array $values
+   *   An associative array of invoice values, keyed by property name, as
+   *   returned by self::randomInvoiceValues(). For the client reference, pass a
+   *   full Client object.
+   *
+   * @returns array
+   *   An associative array of values, keyed by form field name, as used by
+   *   parent::drupalPost().
+   */
+  public function convertInvoiceValuesToFormPostValues($values) {
+    $client = '';
+    if (!empty($values['field_invoice_client'])) {
+      if (!$values['field_invoice_client'] instanceof Client) {
+        throw new Exception('The value for field_invoice_client should be an instance of Client.');
+      }
+
+      // Prepare the client field the way entityreference expects it.
+      // @see entityreference_autocomplete_callback_get_matches()
+      $client = "{$values['field_invoice_client']->name} ({$values['field_invoice_client']->identifier()})";
+      $client = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim(decode_entities(strip_tags($client)))));
+      if (strpos($client, ',') !== FALSE || strpos($client, '"') !== FALSE) {
+        $client = '"' . str_replace('"', '""', $client) . '"';
+      }
+    }
+
+    return array(
+      'field_invoice_client[und]' => $client,
+      'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
+      'field_invoice_date[und][0][value][month]' => date('n', $values['field_invoice_date']),
+      'field_invoice_date[und][0][value][day]' => date('j', $values['field_invoice_date']),
+      'field_invoice_date[und][0][value][year]' => date('Y', $values['field_invoice_date']),
+      'field_invoice_discount[und][0][value]' => $values['field_invoice_discount'],
+      'field_invoice_po_number[und][0][value]' => $values['field_invoice_po_number'],
+      'field_invoice_due_date[und]' => $values['field_invoice_due_date'],
+      'field_invoice_terms[und][0][value]' => $values['field_invoice_terms'],
+      'field_invoice_status[und]' => $values['field_invoice_status'],
     );
   }
 

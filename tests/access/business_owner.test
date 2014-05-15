@@ -8,12 +8,14 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
+module_load_include('inc', 'test_traits', 'invoice');
 
 class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
+  use InvoiceTestHelper;
 
   /**
    * {@inheritdoc}
@@ -28,6 +30,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     'client/add',
     'clients',
     'dashboard',
+    'invoice/add',
     'user',
     'user/password',
     'user/register',
@@ -50,7 +53,6 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     // @see http://atrium.pocomas.be/invoicing/node/1167
     'businesses',
     'business/add',
-    'invoice/add',
     'node',
     'node/add',
   );
@@ -82,6 +84,20 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
    * @var Client
    */
   protected $client2;
+
+  /**
+   * An invoice owned by the business owner.
+   *
+   * @var Invoice
+   */
+  protected $invoice1;
+
+  /**
+   * An invoice which is not owned by the business owner.
+   *
+   * @var Invoice
+   */
+  protected $invoice2;
 
   /**
    * Returns test case metadata.
@@ -132,5 +148,27 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier();
     $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier() . '/delete';
+
+    // File an invoice to each client. The business owner should only be able to
+    // view, edit and delete their own invoices.
+    $this->invoice1 = $this->createInvoice(array(
+      'bid' => $this->business1->identifier(),
+      'field_invoice_client' => $this->client1,
+    ));
+    $this->invoice1->save();
+    $this->invoice2 = $this->createInvoice(array(
+      'bid' => $this->business2->identifier(),
+      'field_invoice_client' => $this->client2,
+    ));
+    $this->invoice2->save();
+
+    // Add the paths to view, edit and delete the invoice. These should only be
+    // accessible for the first invoice.
+    $this->accessiblePaths[] = 'invoice/' . $this->invoice1->identifier();
+    $this->accessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/edit';
+    $this->accessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier();
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
   }
 }

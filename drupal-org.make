@@ -21,6 +21,11 @@ projects[email][download][revision] = 7.x-1.2
 projects[email][download][branch] = 7.x-1.x
 projects[email][subdir] = contrib
 
+projects[email_registration][download][type] = git
+projects[email_registration][download][revision] = 7.x-1.1
+projects[email_registration][download][branch] = 7.x-1.x
+projects[email_registration][subdir] = contrib
+
 projects[entity][download][type] = git
 projects[entity][download][revision] = 7.x-1.4
 projects[entity][download][branch] = 7.x-1.x

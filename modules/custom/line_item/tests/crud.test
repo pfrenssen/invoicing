@@ -25,7 +25,7 @@ class LineItemCRUDTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'CRUD test',
       'description' => 'Tests the creating, reading, updating and deleting of line items.',
-      'group' => 'Line item',
+      'group' => 'Invoicing - Line item',
     );
   }
 

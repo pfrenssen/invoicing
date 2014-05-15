@@ -34,7 +34,7 @@ class LineItemUITestCase extends DrupalWebTestCase {
     return array(
       'name' => 'UI test',
       'description' => 'Tests the managing of line items through the user interface.',
-      'group' => 'Line item',
+      'group' => 'Invoicing - Line item',
     );
   }
 

@@ -46,7 +46,7 @@ class LineItemAccessTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'Access tests',
       'description' => 'Tests permissions.',
-      'group' => 'Line item',
+      'group' => 'Invoicing - Line item',
     );
   }
 

@@ -107,6 +107,11 @@ function line_item_entity_property_info_alter(&$info) {
   $properties['is_new']['description'] = t('Whether the line item is new and not saved to the database yet.');
   $properties['is_new']['type'] = 'boolean';
   $properties['is_new']['getter callback'] = 'line_item_entity_metadata_get_properties';
+
+  $properties['bid']['label'] = t('Business ID');
+  $properties['bid']['description'] = t('The unique ID of the business for which this line item was created.');
+  $properties['bid']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['bid']['setter permission'] = 'administer line items';
 }
 
 /**

@@ -436,6 +436,25 @@ function line_item_type_create($type, $name) {
 }
 
 /**
+ * Composes the label of a line item type.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function line_item_type_label($entity, $entity_type) {
+  if (empty($entity->is_new)) {
+    return $entity->name;
+  }
+}
+
+/**
  * Callback for getting line item properties.
  *
  * @see line_item_entity_property_info()

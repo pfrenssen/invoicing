@@ -13,7 +13,7 @@ projects[date][subdir] = contrib
 projects[email] = 1.2
 projects[email][subdir] = contrib
 
-projects[email_registration] = 1.1
+projects[email_registration] = 1.2
 projects[email_registration][subdir] = contrib
 
 projects[entity] = 1.4

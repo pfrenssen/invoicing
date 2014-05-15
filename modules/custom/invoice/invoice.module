@@ -213,6 +213,9 @@ function invoice_access($op, $invoice = NULL, $account = NULL) {
  */
 function invoice_permission() {
   $permissions = array(
+    'access invoice overview' => array(
+      'title' => t('Access invoice overview'),
+    ),
     'administer invoices' => array(
       'title' => t('Administer invoices'),
       'description' => t('Create new invoices, and edit and delete all invoices.'),

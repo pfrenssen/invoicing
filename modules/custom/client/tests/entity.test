@@ -27,7 +27,7 @@ class ClientEntityTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'Entity test',
       'description' => 'Tests for the Client entity.',
-      'group' => 'Client',
+      'group' => 'Invoicing - Client',
     );
   }
 

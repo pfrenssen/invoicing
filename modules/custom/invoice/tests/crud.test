@@ -34,7 +34,7 @@ class InvoiceCRUDTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'CRUD test',
       'description' => 'Tests the creating, reading, updating and deleting of invoices.',
-      'group' => 'Invoice',
+      'group' => 'Invoicing - Invoice',
     );
   }
 

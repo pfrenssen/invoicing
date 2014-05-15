@@ -61,7 +61,7 @@ class InvoiceUnitTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'Unit test',
       'description' => 'Unit tests for the invoice module.',
-      'group' => 'Invoice',
+      'group' => 'Invoicing - Invoice',
     );
   }
 

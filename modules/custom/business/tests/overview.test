@@ -38,7 +38,7 @@ class BusinessOverviewTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'Overview test',
       'description' => 'Tests the business overview.',
-      'group' => 'Business',
+      'group' => 'Invoicing - Business',
     );
   }
 

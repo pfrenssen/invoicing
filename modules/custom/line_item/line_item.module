@@ -355,10 +355,6 @@ function line_item_label($entity, $entity_type) {
   return $entity->lid;
 }
 
-function line_item_type_label($entity, $entity_type) {
-  return $entity->name;
-}
-
 /**
  * Saves a line item to the database.
  *

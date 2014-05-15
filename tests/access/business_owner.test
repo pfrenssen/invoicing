@@ -9,6 +9,7 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
@@ -16,6 +17,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * {@inheritdoc}
@@ -103,6 +105,20 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   protected $invoice2;
 
   /**
+   * A line item owned by the business owner.
+   *
+   * @var LineItem
+   */
+  protected $lineItem1;
+
+  /**
+   * A line item which is not owned by the business owner.
+   *
+   * @var LineItem
+   */
+  protected $lineItem2;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -173,5 +189,21 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier();
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
+
+    // File a line item to each busniess. The business owner should only be able
+    // to view, edit and delete their own line items.
+    $this->lineItem1 = $this->createLineItem(array('bid' => $this->business1->identifier()));
+    $this->lineItem1->save();
+    $this->lineItem2 = $this->createLineItem(array('bid' => $this->business2->identifier()));
+    $this->lineItem2->save();
+
+    // Add the paths to view, edit and delete the line item. These should only
+    // be accessible for the first line item.
+    $this->accessiblePaths[] = 'line_item/' . $this->lineItem1->identifier();
+    $this->accessiblePaths[] = 'line_item/' . $this->lineItem1->identifier() . '/edit';
+    $this->accessiblePaths[] = 'line_item/' . $this->lineItem1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem2->identifier();
+    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem2->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem2->identifier() . '/delete';
   }
 }

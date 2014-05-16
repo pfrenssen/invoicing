@@ -190,7 +190,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
 
-    // File a line item to each busniess. The business owner should only be able
+    // File a line item to each business. The business owner should only be able
     // to view, edit and delete their own line items.
     $this->lineItem1 = $this->createLineItem(array('bid' => $this->business1->identifier()));
     $this->lineItem1->save();

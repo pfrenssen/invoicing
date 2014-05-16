@@ -207,7 +207,7 @@ function line_item_access($op, $line_item = NULL, $account = NULL) {
     return $access;
   }
 
-  if (isset($line_item)) {
+  if (!empty($line_item)) {
     switch ($op) {
       case 'delete':
       case 'update':

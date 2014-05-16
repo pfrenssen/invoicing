@@ -123,8 +123,6 @@ function line_item_edit_form_submit($form, &$form_state) {
     drupal_set_message(t('The line item could not be saved.'), 'error');
     watchdog('line_item', 'Line item could not be saved.', WATCHDOG_ERROR);
   }
-
-  $form_state['redirect'] = 'line_items';
 }
 
 /**
@@ -172,7 +170,7 @@ function line_item_delete_confirm_form_submit($form, &$form_state) {
   $line_item = $form_state['line_item'];
   line_item_delete($line_item);
   drupal_set_message(t('The line item has been deleted.'));
-  $form_state['redirect'] = 'line_items';
+  $form_state['redirect'] = '<front>';
 }
 
 /**

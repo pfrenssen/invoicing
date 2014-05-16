@@ -100,11 +100,14 @@ function invoicing_install() {
     'administer own businesses',
     'administer own clients',
     'administer own invoices',
+    'administer own line items',
     'create new clients',
     'create new invoices',
+    'create new line items',
     'view own businesses',
     'view own clients',
     'view own invoices',
+    'view own line items',
   );
   user_role_grant_permissions($role->rid, $permissions);
 

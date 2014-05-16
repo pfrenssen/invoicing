@@ -201,18 +201,24 @@ function line_item_access($op, $line_item = NULL, $account = NULL) {
     return TRUE;
   }
 
+  if ($op == 'create') {
+    $access = user_access('create new line items', $account);
+    $access |= user_access('administer own line items', $account);
+    return $access;
+  }
+
   if (isset($line_item)) {
     switch ($op) {
-      case 'create':
       case 'delete':
-      case 'edit':
+      case 'update':
         $access = user_access("edit any $line_item->type line item", $account);
-        $access |= user_access('administer own line items', $account);
+        $access |= user_access('administer own line items', $account) && line_item_is_owned_by_user($line_item, $account);
+        debug($access);
         return $access;
 
       case 'view':
         $access = user_access("view any $line_item->type line item", $account);
-        $access |= user_access('view own line items', $account);
+        $access |= user_access('view own line items', $account) && line_item_is_owned_by_user($line_item, $account);
         return $access;
     }
   }
@@ -232,6 +238,16 @@ function line_item_permission() {
     'administer line item types' => array(
       'title' => t('Administer line item types'),
       'description' => t('Create and delete fields for line item types, and set their permissions.'),
+    ),
+    'create new line items' => array(
+      'title' => t('Create new line items'),
+    ),
+    'view own line items' => array(
+      'title' => t('View own line items'),
+    ),
+    'administer own line items' => array(
+      'title' => t('Administer own line items'),
+      'description' => t('Edit and delete your own line items.'),
     ),
   );
 
@@ -452,6 +468,26 @@ function line_item_type_label($entity, $entity_type) {
   if (empty($entity->is_new)) {
     return $entity->name;
   }
+}
+
+/**
+ * Returns whether a given line item is owned by a given user.
+ *
+ * @param LineItem $line_item
+ *   The line item to check.
+ * @param object $account
+ *   Optional user account to check. Defaults to the currently logged in user.
+ *
+ * @return bool
+ *   TRUE if the line item is owned by the user, FALSE otherwise.
+ */
+function line_item_is_owned_by_user(LineItem $line_item, stdClass $account = NULL) {
+  // Default to the logged in user.
+  global $user;
+  $account = $account ?: $user;
+
+  $line_item = entity_metadata_wrapper('line_item', $line_item);
+  return in_array($line_item->bid->value(), array_keys(business_get_businesses_from_user($account)));
 }
 
 /**

@@ -34,7 +34,7 @@ class ClientUITestCase extends DrupalWebTestCase {
     return array(
       'name' => 'UI test',
       'description' => 'Tests the managing of clients through the user interface.',
-      'group' => 'Client',
+      'group' => 'Invoicing - Client',
     );
   }
 

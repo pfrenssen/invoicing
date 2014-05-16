@@ -32,7 +32,7 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
     return array(
       'name' => 'Overview test',
       'description' => 'Tests the client overview.',
-      'group' => 'Client',
+      'group' => 'Invoicing - Client',
     );
   }
 

@@ -8,11 +8,13 @@ dependencies[] = business
 dependencies[] = client
 dependencies[] = ctools
 dependencies[] = date
+dependencies[] = email_registration
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = invoice
 dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard
+dependencies[] = line_item
 dependencies[] = link
 dependencies[] = views
 

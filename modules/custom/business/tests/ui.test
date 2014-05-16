@@ -34,7 +34,7 @@ class BusinessUITestCase extends DrupalWebTestCase {
     return array(
       'name' => 'UI test',
       'description' => 'Tests the managing of businesses through the user interface.',
-      'group' => 'Business',
+      'group' => 'Invoicing - Business',
     );
   }
 

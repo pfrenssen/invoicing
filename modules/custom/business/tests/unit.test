@@ -40,7 +40,7 @@ class BusinessUnitTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'Unit test',
       'description' => 'Unit tests for the business module.',
-      'group' => 'Business',
+      'group' => 'Invoicing - Business',
     );
   }
 

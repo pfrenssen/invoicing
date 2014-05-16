@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * CRUD tests for the Line item module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'line_item');
+
+class LineItemCRUDTestCase extends DrupalWebTestCase {
+
+  use BaseTestHelper;
+  use LineItemTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'testing';
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'CRUD test',
+      'description' => 'Tests the creating, reading, updating and deleting of line items.',
+      'group' => 'Invoicing - Line item',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('line_item');
+  }
+
+  /**
+   * Tests creating, reading, updating and deleting of line items.
+   */
+  public function testLineItemCRUD() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('line_item'), 'The line_item database table exists.');
+    $this->assertLineItemTableEmpty('The line item database is initially empty.');
+
+    // Check if a new line item can be saved to the database.
+    $values = $this->randomLineItemValues();
+    $line_item = $this->createLineItem($values);
+    $line_item->save();
+    $this->assertLineItemTableNotEmpty('The line item database table is no longer empty after creating a line item.');
+
+    // Check that the line item data can be read from the database.
+    $retrieved_line_item = line_item_load($line_item->lid);
+    $this->assertLineItemProperties($retrieved_line_item, $values, 'The line item that was saved to the database can be read correctly.');
+
+    // Update the line item and check that the new values were written to the
+    // database.
+    $new_values = $this->randomLineItemValues($values['type']);
+    unset($new_values['type']);
+    $this->updateLineItem($line_item, $new_values);
+    $line_item->save();
+    $this->assertLineItemProperties($line_item, $new_values, 'The line item has been updated correctly.');
+
+    // Delete the line item. The database should be empty again.
+    $line_item->delete();
+    $this->assertLineItemTableEmpty('The line item can be deleted from the database.');
+  }
+
+}

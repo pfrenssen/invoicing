@@ -213,7 +213,6 @@ function line_item_access($op, $line_item = NULL, $account = NULL) {
       case 'update':
         $access = user_access("edit any $line_item->type line item", $account);
         $access |= user_access('administer own line items', $account) && line_item_is_owned_by_user($line_item, $account);
-        debug($access);
         return $access;
 
       case 'view':

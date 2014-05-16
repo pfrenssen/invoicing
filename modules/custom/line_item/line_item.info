@@ -3,6 +3,7 @@ description = Line item related functionality.
 core = 7.x
 package = Invoicing
 
+dependencies[] = business
 dependencies[] = entity
 dependencies[] = features
 dependencies[] = list

@@ -79,17 +79,12 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Check that error messages are displayed about required fields when
     // creating a new invoice.
+    $this->drupalPost('invoice/add', array(), t('Save'));
     $required_fields = array(
       'field_invoice_client[und]' => t('Client'),
       'field_invoice_number[und][0][value]' => t('Invoice number'),
     );
-    $messages = array();
-    foreach ($required_fields as $required_field) {
-      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
-    }
-    $this->drupalPost('invoice/add', array(), t('Save'));
-    $this->assertFieldValidationFailed(array_keys($required_fields));
-    $this->assertStatusMessages($messages, 'Error messages are shown informing the user about required fields.');
+    $this->assertRequiredFieldMessages($required_fields);
 
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomInvoiceValues();

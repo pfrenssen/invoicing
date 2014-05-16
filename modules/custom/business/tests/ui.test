@@ -60,16 +60,9 @@ class BusinessUITestCase extends DrupalWebTestCase {
 
     // Check that error messages are displayed about required fields when
     // creating a new business.
-    $required_fields = array(
-      'name' => t('Business name'),
-    );
-    $messages = array();
-    foreach ($required_fields as $required_field) {
-      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
-    }
     $this->drupalPost('business/add', array(), t('Save'));
-    $this->assertFieldValidationFailed(array_keys($required_fields));
-    $this->assertStatusMessages($messages);
+    $required_fields = array('name' => t('Business name'));
+    $this->assertRequiredFieldMessages($required_fields);
 
     // Check form validation errors.
     $invalid_values = array(

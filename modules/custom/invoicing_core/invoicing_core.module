@@ -61,4 +61,8 @@ function invoicing_core_form_user_register_form_submit($form, &$form_state) {
   // Set the value of the referenced business so it can get saved when the user
   // is created.
   $form_state['values']['field_user_businesses'][LANGUAGE_NONE][0]['target_id'] = $business->identifier();
+
+  // Assign the 'business owner' role.
+  $role = user_role_load_by_name('business owner');
+  $form_state['values']['roles'][$role->rid] = TRUE;
 }

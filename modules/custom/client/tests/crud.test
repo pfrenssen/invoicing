@@ -24,7 +24,7 @@ class ClientCRUDTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'CRUD test',
       'description' => 'Tests the creating, reading, updating and deleting of clients.',
-      'group' => 'Client',
+      'group' => 'Invoicing - Client',
     );
   }
 

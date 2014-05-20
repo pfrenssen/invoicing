@@ -9,6 +9,7 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
 
@@ -16,6 +17,7 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * {@inheritdoc}
@@ -49,6 +51,9 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
     'clients',
     'dashboard',
     'invoice/add',
+    'line_item/add',
+    'line_item/add/product',
+    'line_item/add/service',
     'node',
     'node/add',
   );
@@ -73,6 +78,13 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
    * @var Invoice
    */
   protected $invoice;
+
+  /**
+   * A test line item.
+   *
+   * @var LineItem
+   */
+  protected $lineItem;
 
   /**
    * Returns test case metadata.
@@ -118,5 +130,15 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier();
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier() . '/delete';
+
+    // Create a line item.
+    $this->lineItem = $this->createLineItem(array('bid' => $this->business->identifier()));
+    $this->lineItem->save();
+
+    // Add the paths to view, edit and delete the line item. These should all be
+    // inaccessible.
+    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem->identifier();
+    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem->identifier() . '/delete';
   }
 }

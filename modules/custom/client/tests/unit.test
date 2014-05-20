@@ -51,7 +51,7 @@ class ClientUnitTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'Unit test',
       'description' => 'Unit tests for the client module.',
-      'group' => 'Client',
+      'group' => 'Invoicing - Client',
     );
   }
 

@@ -34,7 +34,7 @@ class ClientUITestCase extends DrupalWebTestCase {
     return array(
       'name' => 'UI test',
       'description' => 'Tests the managing of clients through the user interface.',
-      'group' => 'Client',
+      'group' => 'Invoicing - Client',
     );
   }
 
@@ -60,17 +60,12 @@ class ClientUITestCase extends DrupalWebTestCase {
 
     // Check that error messages are displayed about required fields when
     // creating a new client.
+    $this->drupalPost('client/add', array(), t('Save'));
     $required_fields = array(
       'name' => t('Client name'),
       'field_client_email[und][0][email]' => t('Email address'),
     );
-    $messages = array();
-    foreach ($required_fields as $required_field) {
-      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
-    }
-    $this->drupalPost('client/add', array(), t('Save'));
-    $this->assertFieldValidationFailed(array_keys($required_fields));
-    $this->assertStatusMessages($messages, 'Error messages are shown informing the user about required fields.');
+    $this->assertRequiredFieldMessages($required_fields);
 
     // Check form validation errors.
     $invalid_values = array(

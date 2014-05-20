@@ -311,6 +311,25 @@ function invoice_type_get_names() {
 }
 
 /**
+ * Composes the label of an invoice type.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function invoice_type_label($entity, $entity_type) {
+  if (empty($entity->is_new)) {
+    return $entity->name;
+  }
+}
+
+/**
  * Creates a new invoice entity.
  *
  * @param array $values
@@ -361,10 +380,6 @@ function invoice_delete_multiple(array $iids) {
  */
 function invoice_label($entity, $entity_type) {
   return $entity->iid;
-}
-
-function invoice_type_label($entity, $entity_type) {
-  return $entity->name;
 }
 
 /**

@@ -203,6 +203,38 @@ trait BaseTestHelper {
     return $this->assertTrue($result, $message ?: 'The correct messages are shown.', $group);
   }
 
+
+  /**
+   * Check if the status messages about required fields are shown.
+   *
+   * This will fail if any other messages are shown.
+   *
+   * @param array $required_fields
+   *   An associative array of required fields, keyed on field name, with the
+   *   human readable name as value. For example:
+   *   array(
+   *     'name' => t('Client name'),
+   *     'field_client_email[und][0][email]' => t('Email address'),
+   *   );
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertRequiredFieldMessages($required_fields, $message = '', $group = 'Other') {
+    $messages = array();
+    $success = TRUE;
+
+    foreach ($required_fields as $required_field) {
+      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
+    }
+    $success &= $this->assertFieldValidationFailed(array_keys($required_fields));
+    return $success &= $this->assertStatusMessages($messages, $message ?: 'The error messages about required fields are present.', $group);
+  }
+
   /**
    * Check if element(s) that match the given XPath expression are present.
    *

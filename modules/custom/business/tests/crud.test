@@ -24,7 +24,7 @@ class BusinessCRUDTestCase extends DrupalWebTestCase {
     return array(
       'name' => 'CRUD test',
       'description' => 'Tests the creating, reading, updating and deleting of businesses.',
-      'group' => 'Business',
+      'group' => 'Invoicing - Business',
     );
   }
 

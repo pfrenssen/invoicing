@@ -12,3 +12,57 @@ function invoicing_core_menu_alter(&$items) {
   // Deny access to the 'node' page.
   $items['node']['access callback'] = FALSE;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function invoicing_core_form_user_register_form_alter(&$form, &$form_state, $form_id) {
+  // Add a field for the business name.
+  $form['business'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Company name'),
+    '#required' => TRUE,
+  );
+
+  // Attach our validate and submit handlers. Make sure our submit handler runs
+  // first so we can directly link the new business when the user is created.
+  $form['#validate'][] = 'invoicing_core_form_user_register_form_validate';
+  array_unshift($form['#submit'], 'invoicing_core_form_user_register_form_submit');
+}
+
+/**
+ * Validate handler for user_register_form().
+ *
+ * Checks whether the business name is still available.
+ */
+function invoicing_core_form_user_register_form_validate($form, &$form_state) {
+  // Check if the business name is already taken.
+  $business_exists = db_select('business', 'b')
+    ->condition('b.name', $form_state['values']['business'])
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+  if ($business_exists) {
+    form_set_error('business', t('The company name you chose is not longer available. Please choose a different name.'));
+  }
+}
+
+/**
+ * Submit handler for user_register_form().
+ *
+ * Creates a new business with the chosen name and links it to the user.
+ */
+function invoicing_core_form_user_register_form_submit($form, &$form_state) {
+  // Create a new business with the given name.
+  $business = business_create(array('name' => $form_state['values']['business']));
+  $business->save();
+
+  // Set the value of the referenced business so it can get saved when the user
+  // is created.
+  $form_state['values']['field_user_businesses'][LANGUAGE_NONE][0]['target_id'] = $business->identifier();
+
+  // Assign the 'business owner' role.
+  $role = user_role_load_by_name('business owner');
+  $form_state['values']['roles'][$role->rid] = TRUE;
+}

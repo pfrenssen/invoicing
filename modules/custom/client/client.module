@@ -289,6 +289,12 @@ function client_access($op, Client $client = NULL, stdClass $account = NULL) {
   if (!empty($client)) {
     switch ($op) {
       case 'delete':
+        // Clients may only be deleted if they are not used in invoices.
+        $access = user_access("edit any $client->type client", $account);
+        $access |= user_access('administer own clients', $account) && client_is_owned_by_user($client, $account);
+        $access &= !client_has_invoices($client);
+        return $access;
+
       case 'edit':
       case 'update':
         $access = user_access("edit any $client->type client", $account);

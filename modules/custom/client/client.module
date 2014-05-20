@@ -634,6 +634,13 @@ class Client extends Entity {
   public $name;
 
   /**
+   * The id of the business to which the client belongs.
+   *
+   * @var int
+   */
+  public $bid;
+
+  /**
    * The Unix timestamp when the client was created.
    *
    * @var int

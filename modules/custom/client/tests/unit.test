@@ -8,12 +8,14 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
+module_load_include('inc', 'test_traits', 'invoice');
 
 class ClientUnitTestCase extends DrupalWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
+  use InvoiceTestHelper;
 
   /**
    * {@inheritdoc}
@@ -45,6 +47,14 @@ class ClientUnitTestCase extends DrupalWebTestCase {
   protected $clients;
 
   /**
+   * Test invoice entities.
+   *
+   * @var Invoice[]
+   *   An array of Invoice entities.
+   */
+  protected $invoices;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -59,11 +69,12 @@ class ClientUnitTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client');
+    parent::setup('client', 'invoice');
 
     // Create two test users, each owning one business with two clients.
     $this->businesses = array();
     $this->clients = array();
+    $this->invoices = array();
     $this->users = array();
 
     for ($i = 0; $i < 2; $i++) {
@@ -84,12 +95,35 @@ class ClientUnitTestCase extends DrupalWebTestCase {
         $this->clients[] = $client;
       }
     }
+
+    // Create three invoices for the first client, two invoices for the second
+    // client and a single invoice for the third client. The fourth doesn't get
+    // any invoices.
+    for ($i = 0; $i < 6; $i++) {
+      $invoice = $this->createInvoice(array(
+        'bid' => $this->clients[$i%4%3]->bid,
+        'field_invoice_client' => $this->clients[$i%4%3],
+      ));
+      $invoice->save();
+      $this->invoices[] = $invoice;
+    }
+  }
+
+  /**
+   * Executes the unit tests.
+   *
+   * It is faster to run all unit tests in a single test run.
+   */
+  public function testRunner() {
+    $this->doTestClientIsOwnedByUser();
+    $this->doTestClientHasInvoices();
+    $this->doTestClientGetInvoiceIds();
   }
 
   /**
    * Tests client_is_owned_by_user().
    */
-  public function testClientIsOwnedByUser() {
+  public function doTestClientIsOwnedByUser() {
     // Define a list of which clients are owned by which users. The first two
     // clients belong to the first user, the last two to the second.
     $ownership = array(
@@ -107,6 +141,55 @@ class ClientUnitTestCase extends DrupalWebTestCase {
           ':user' => $user_key,
         )));
       }
+    }
+  }
+
+  /**
+   * Tests client_has_invoices().
+   */
+  public function doTestClientHasInvoices() {
+    // A list of which clients have invoices. Only the last client doesn't have
+    // any invoices.
+    $ownership = array(
+      0 => TRUE,
+      1 => TRUE,
+      2 => TRUE,
+      3 => FALSE,
+    );
+
+    // Tests if client_has_invoices() returns the expected results.
+    foreach ($ownership as $client_key => $can_has_invoice) {
+      $this->assertEqual(client_has_invoices($this->clients[$client_key]), $can_has_invoice, format_string('Client :client :has invoice(s).', array(
+        ':client' => $client_key,
+        ':has' => $can_has_invoice ? 'has' : 'does not have',
+      )));
+    }
+  }
+
+  /**
+   * Tests client_get_invoice_ids().
+   */
+  public function doTestClientGetInvoiceIds() {
+    // Define which clients have which invoices. The first client has 3
+    // invoices, the second has 2, the third has 1, the fourth has none.
+    $ownership = array(
+      0 => array(0, 3, 4),
+      1 => array(1, 5),
+      2 => array(2),
+      3 => array(),
+    );
+
+    // Test if client_get_invoice_ids() matches the expected ownership.
+    foreach ($ownership as $client_key => $invoice_keys) {
+      // Get the invoice ids from our stored invoices.
+      $expected_ids = array();
+      foreach ($invoice_keys as $key) {
+        $expected_ids[] = $this->invoices[$key]->identifier();
+      }
+
+      // Compare with the ids that are returned by client_get_invoice_ids().
+      $actual_ids = client_get_invoice_ids($this->clients[$client_key]);
+      $this->assertEqual($expected_ids, $actual_ids, format_string('Client :client has the expected invoices.', array(':client' => $client_key)));
     }
   }
 

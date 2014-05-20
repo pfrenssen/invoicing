@@ -565,6 +565,49 @@ function client_is_owned_by_user(Client $client, stdClass $account = NULL) {
 }
 
 /**
+ * Returns whether the client is used in any invoices.
+ *
+ * @param Client $client
+ *   The client to check.
+ *
+ * @return bool
+ *   TRUE if the client is used in invoices, FALSE otherwise.
+ */
+function client_has_invoices(Client $client) {
+  return (bool) client_get_invoice_ids($client);
+}
+
+/**
+ * Returns the invoices that are issued for the given client.
+ *
+ * @param Client $client
+ *   The client for which to retrieve the invoices.
+ *
+ * @return Invoice[]
+ *   An array of invoices.
+ */
+function client_get_invoices(Client $client) {
+  return entity_load('invoice', client_get_invoice_ids($client));
+}
+
+/**
+ * Returns the ids of the invoices that are issued for the given client.
+ *
+ * @param Client $client
+ *   The client for which to retrieve the invoices.
+ *
+ * @return array
+ *   An array of invoice ids.
+ */
+function client_get_invoice_ids(Client $client) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'invoice')
+    ->fieldCondition('field_invoice_client', 'target_id', $client->identifier());
+  $result = $query->execute();
+  return isset($result['invoice']) ? array_keys($result['invoice']) : array();
+}
+
+/**
  * The class used for client entities.
  */
 class Client extends Entity {

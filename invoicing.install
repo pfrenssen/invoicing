@@ -80,6 +80,7 @@ function invoicing_install() {
   $permissions = array(
     'access client overview',
     'access content',
+    'access invoice overview',
     'access invoicing dashboard',
     'administer clients',
     'administer businesses',
@@ -96,6 +97,7 @@ function invoicing_install() {
   $permissions = array(
     'access client overview',
     'access content',
+    'access invoice overview',
     'access invoicing dashboard',
     'administer own businesses',
     'administer own clients',

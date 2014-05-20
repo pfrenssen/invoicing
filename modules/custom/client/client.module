@@ -614,26 +614,36 @@ class Client extends Entity {
 
   /**
    * The primary identifier for a client.
+   *
+   * @var int
    */
   public $cid;
 
   /**
    * The type of this client.
+   *
+   * @var string
    */
   public $type;
 
   /**
    * The name of the client.
+   *
+   * @var string
    */
   public $name;
 
   /**
    * The Unix timestamp when the client was created.
+   *
+   * @var int
    */
   public $created;
 
   /**
    * The Unix timestamp when the client was most recently saved.
+   *
+   * @var int
    */
   public $changed;
 

@@ -237,6 +237,90 @@ function invoice_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'invoice-invoice-field_invoice_products'
+  $field_instances['invoice-invoice-field_invoice_products'] = array(
+    'bundle' => 'invoice',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 8,
+      ),
+    ),
+    'entity_type' => 'invoice',
+    'field_name' => 'field_invoice_products',
+    'label' => 'Products',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'inline_entity_form',
+      'settings' => array(
+        'fields' => array(),
+        'type_settings' => array(
+          'allow_existing' => 1,
+          'delete_references' => 0,
+          'label_plural' => 'entities',
+          'label_singular' => 'entity',
+          'match_operator' => 'CONTAINS',
+          'override_labels' => 0,
+        ),
+      ),
+      'type' => 'inline_entity_form',
+      'weight' => 10,
+    ),
+  );
+
+  // Exported field_instance: 'invoice-invoice-field_invoice_services'
+  $field_instances['invoice-invoice-field_invoice_services'] = array(
+    'bundle' => 'invoice',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 9,
+      ),
+    ),
+    'entity_type' => 'invoice',
+    'field_name' => 'field_invoice_services',
+    'label' => 'Services',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'inline_entity_form',
+      'settings' => array(
+        'fields' => array(),
+        'type_settings' => array(
+          'allow_existing' => 1,
+          'delete_references' => 0,
+          'label_plural' => 'entities',
+          'label_singular' => 'entity',
+          'match_operator' => 'CONTAINS',
+          'override_labels' => 0,
+        ),
+      ),
+      'type' => 'inline_entity_form',
+      'weight' => 9,
+    ),
+  );
+
   // Exported field_instance: 'invoice-invoice-field_invoice_status'
   $field_instances['invoice-invoice-field_invoice_status'] = array(
     'bundle' => 'invoice',
@@ -314,6 +398,8 @@ function invoice_field_default_field_instances() {
   t('Due date');
   t('Invoice number');
   t('PO number');
+  t('Products');
+  t('Services');
   t('Status');
   t('Terms and conditions');
 

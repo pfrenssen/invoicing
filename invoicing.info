@@ -11,6 +11,7 @@ dependencies[] = date
 dependencies[] = email_registration
 dependencies[] = entityreference
 dependencies[] = features
+dependencies[] = inline_entity_form
 dependencies[] = invoice
 dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard

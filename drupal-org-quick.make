@@ -40,6 +40,9 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22091
 projects[features] = 2.0
 projects[features][subdir] = contrib
 
+projects[inline_entity_form] = 1.5
+projects[inline_entity_form][subdir] = contrib
+
 projects[link] = 1.2
 projects[link][subdir] = contrib
 

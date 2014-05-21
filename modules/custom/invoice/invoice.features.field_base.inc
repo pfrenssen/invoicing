@@ -193,6 +193,98 @@ function invoice_field_default_field_bases() {
     'type' => 'text',
   );
 
+  // Exported field_base: 'field_invoice_products'
+  $field_bases['field_invoice_products'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_invoice_products',
+    'foreign keys' => array(
+      'line_item' => array(
+        'columns' => array(
+          'target_id' => 'lid',
+        ),
+        'table' => 'line_item',
+      ),
+    ),
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'handler' => 'active_business',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'unique_field_behavior' => array(
+            'status' => 0,
+          ),
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'product' => 'product',
+        ),
+      ),
+      'target_type' => 'line_item',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
+  );
+
+  // Exported field_base: 'field_invoice_services'
+  $field_bases['field_invoice_services'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_invoice_services',
+    'foreign keys' => array(
+      'line_item' => array(
+        'columns' => array(
+          'target_id' => 'lid',
+        ),
+        'table' => 'line_item',
+      ),
+    ),
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'handler' => 'active_business',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'unique_field_behavior' => array(
+            'status' => 0,
+          ),
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'service' => 'service',
+        ),
+      ),
+      'target_type' => 'line_item',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
+  );
+
   // Exported field_base: 'field_invoice_status'
   $field_bases['field_invoice_status'] = array(
     'active' => 1,

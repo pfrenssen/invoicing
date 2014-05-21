@@ -16,6 +16,7 @@ function show_help {
   echo -e "-h\t--help\tShow this help text."
   echo -e "-g\t--git\tRetain the git repositories of all downloaded projects."
   echo -e "-q\t--quick\tDo a quick install, using packaged downloads rather than full git repositories."
+  echo -e "-v\t--verbose\tShow what is going on during the build."
 }
 
 # Check command line arguments.
@@ -24,6 +25,7 @@ while [[ "$1" == -* ]]; do
     -h|--help|-\?) show_help; exit 0;;
     -g|--git) GIT=true; shift;;
     -q|--quick) QUICK=true; shift;;
+    -v|--verbose) VERBOSE=true; shift;;
     --) shift; break;;
     -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
   esac
@@ -39,6 +41,10 @@ fi
 # Set up Drush make options
 if [ $GIT ] ; then
   DRUSH_MAKE_OPTIONS="$DRUSH_MAKE_OPTIONS --working-copy"
+fi
+
+if [ $VERBOSE ] ; then
+  DRUSH_MAKE_OPTIONS="$DRUSH_MAKE_OPTIONS --debug"
 fi
 
 # Move the distribution files into a profile.

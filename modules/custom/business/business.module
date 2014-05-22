@@ -575,6 +575,19 @@ function business_is_owned_by_user(Business $business, stdClass $account = NULL)
 }
 
 /**
+ * Adds a business to a user, making the user the business owner.
+ *
+ * @param Business $business
+ *   The business to add to the user.
+ * @param object $account
+ *   The user account the business should be added to.
+ */
+function business_add_to_user(Business $business, stdClass $account) {
+  $account->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $business->identifier();
+  user_save($account);
+}
+
+/**
  * Composes the label of a business.
  *
  * @see entity_label()

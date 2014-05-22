@@ -38,3 +38,4 @@ files[] = tests/crud.test
 files[] = tests/overview.test
 files[] = tests/ui.test
 files[] = tests/unit.test
+files[] = views/views_plugin_argument_default_business_active.inc

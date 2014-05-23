@@ -6,6 +6,7 @@ package = Invoicing
 dependencies[] = business
 dependencies[] = entity
 dependencies[] = features
+dependencies[] = inline_entity_form
 dependencies[] = list
 dependencies[] = number
 dependencies[] = options

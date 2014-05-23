@@ -28,4 +28,7 @@ drush user-add-role "authenticated user" "authenticated user"
 drush user-add-role "business owner" "business owner"
 drush user-add-role client client
 
+# Create a business and link it to the business owner.
+drush business-create 'Porcelain & Elephant' 'business owner'
+
 exit 0

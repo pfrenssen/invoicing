@@ -189,8 +189,7 @@ trait BusinessTestHelper {
    *   The user the business should be added to.
    */
   function addBusinessToUser(Business $business, stdClass $user) {
-    $user->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $business->identifier();
-    user_save($user);
+    business_add_to_user($business, $user);
   }
 
 }

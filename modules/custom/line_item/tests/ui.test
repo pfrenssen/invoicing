@@ -8,7 +8,7 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class LineItemUITestCase extends DrupalWebTestCase {
+class LineItemUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use LineItemTestHelper {
@@ -16,16 +16,9 @@ class LineItemUITestCase extends DrupalWebTestCase {
   }
 
   /**
-   * A test user.
-   *
-   * @var object $user
-   */
-  protected $user;
-
-  /**
    * {@inheritdoc}
    */
-  protected $profile = 'testing';
+  protected $usersToCreate = array('business owner');
 
   /**
    * Returns test case metadata.
@@ -42,12 +35,9 @@ class LineItemUITestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('line_item');
+    parent::setup();
 
-    // Create a test user and log in.
-    $permissions = array('administer line items');
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
+    $this->drupalLogin($this->users['business owner']);
   }
 
   /**

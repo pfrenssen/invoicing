@@ -1,0 +1,40 @@
+language: php
+
+php:
+  - 5.5
+
+matrix:
+  env:
+    global:
+      - DATABASE='drupal'
+      - DB_USERNAME='root'
+      - DB_ENCODE='utf8'
+      - MODULE_PATH='build/sites/all/modules'
+      - ES_REQUIRE='no-dev'
+    matrix:
+      - DRUPAL_3RD_PARTY='composer_manager'
+      - DRUPAL_3RD_PARTY='libraries'
+
+mysql:
+  database: $DATABASE
+  username: $DB_USERNAME
+  encoding: $DB_ENCODE
+
+before_install:
+  - pear channel-discover pear.drush.org
+
+install:
+  - pear install drush/drush
+  - phpenv rehash
+
+before_script:
+  - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - ./build.sh
+  - drush si --db-url="mysql://$DB_USERNAME@127.0.0.1/$DATABASE" invoicing -y
+  - drush en simpletest -y
+
+script:
+  - drush test-run 'Invoicing - Invoice' --debug
+
+notifications:
+  irc: irc.freenode.org#pocomas

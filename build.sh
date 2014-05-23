@@ -60,7 +60,7 @@ else
   FILE=drupal-org-core-quick.make
 fi
 
-drush make --prepare-install --drupal-org=core "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS
+drush make --prepare-install "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS
 if [ $? -ne 0 ] ; then { echo "error: Drupal core build failed" ; exit 1 ; } fi
 
 # Install contrib.

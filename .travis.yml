@@ -25,7 +25,12 @@ before_script:
   - drush en simpletest -y
 
 script:
+  - drush test-run 'Invoicing - Access' --debug
+  - drush test-run 'Invoicing - Business' --debug
+  - drush test-run 'Invoicing - Client' --debug
+  - drush test-run 'Invoicing - Line item' --debug
   - drush test-run 'Invoicing - Invoice' --debug
+  - drush test-run 'Invoicing - Registration' --debug
 
 notifications:
   irc: irc.freenode.org#pocomas

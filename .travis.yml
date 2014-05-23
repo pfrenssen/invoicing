@@ -1,32 +1,35 @@
 language: php
 
 php:
-  - "5.5"
-
-env:
-  - DB=mysql
+  - 5.4
 
 mysql:
   database: drupal
   username: root
+  encoding: utf8
 
 before_install:
   - pear channel-discover pear.drush.org
 
 install:
+  - sudo apt-get install php5-cgi php5-mysql -y --force-yes
   - pear install drush/drush
   - phpenv rehash
 
 before_script:
+  - echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
+  - sudo service mysql restart
   - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - ./build.sh --quick
   - cd build/
   - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
   - drush --version
   - drush en simpletest -y
+  - drush runserver 127.0.0.1:8080 &
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
-  - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --debug
+  - drush test-run 'Invoicing - Access' --debug --uri=http://127.0.0.1:8080
 
 notifications:
   irc: irc.freenode.org#pocomas

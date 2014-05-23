@@ -42,7 +42,7 @@ class InvoiceCRUDTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client', 'invoice');
+    parent::setup('client', 'invoice', 'line_item');
 
     // Create a client that can be referenced in invoices.
     $this->client = $this->createClient();

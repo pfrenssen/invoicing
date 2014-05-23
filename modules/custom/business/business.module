@@ -186,9 +186,11 @@ function business_permission() {
       'title' => t('Administer businesses'),
       'description' => t('Edit and delete all businesses'),
     ),
-    'administer own businesses' => array(
-      'title' => t('Administer own businesses'),
-      'description' => t('Edit and delete own businesses'),
+    'delete own businesses' => array(
+      'title' => t('Delete own businesses'),
+    ),
+    'edit own businesses' => array(
+      'title' => t('Edit own businesses'),
     ),
     'view own businesses' => array(
       'title' => t('View own businesses'),
@@ -275,9 +277,11 @@ function business_access($op, $business = NULL, $account = NULL) {
     $account = $account ?: $user;
     switch ($op) {
       case 'delete':
+        return user_access('delete own businesses', $account) && business_is_owned_by_user($business, $account);
+
       case 'edit':
       case 'update':
-        return user_access('administer own businesses', $account) && business_is_owned_by_user($business, $account);
+        return user_access('edit own businesses', $account) && business_is_owned_by_user($business, $account);
 
       case 'view':
         return user_access('view own businesses', $account) && business_is_owned_by_user($business, $account);
@@ -572,6 +576,19 @@ function business_is_owned_by_user(Business $business, stdClass $account = NULL)
   $account = $account ?: $user;
 
   return in_array($business->identifier(), array_keys(business_get_businesses_from_user($account)));
+}
+
+/**
+ * Adds a business to a user, making the user the business owner.
+ *
+ * @param Business $business
+ *   The business to add to the user.
+ * @param object $account
+ *   The user account the business should be added to.
+ */
+function business_add_to_user(Business $business, stdClass $account) {
+  $account->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $business->identifier();
+  user_save($account);
 }
 
 /**

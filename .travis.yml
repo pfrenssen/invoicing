@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 5.4
+  - 5.5
 
 mysql:
   database: drupal
@@ -12,19 +12,23 @@ before_install:
   - pear channel-discover pear.drush.org
 
 install:
+  # Install the packages needed to run the built-in webserver.
   - sudo apt-get install php5-cgi php5-mysql -y --force-yes
   - pear install drush/drush
   - phpenv rehash
 
 before_script:
+  # Increase max allowed packet size so that MySQL does not go away.
   - echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
   - sudo service mysql restart
+  # Make sure the installation doesn't fail when it can't send an email.
   - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - ./build.sh --quick
   - cd build/
   - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
   - drush --version
   - drush en simpletest -y
+  # Start the built-in webserver and wait until it is up and running before continuing.
   - drush runserver 127.0.0.1:8080 &
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 

@@ -29,7 +29,7 @@ before_script:
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
-  - drush test-run 'Invoicing - Access' --debug --uri=http://127.0.0.1:8080
+  - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080
 
 notifications:
   irc: irc.freenode.org#pocomas

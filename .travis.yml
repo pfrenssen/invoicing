@@ -22,6 +22,7 @@ before_script:
   - ./build.sh --quick
   - cd build/
   - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
+  - drush --version
   - drush en simpletest -y
 
 script:

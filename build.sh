@@ -53,24 +53,14 @@ find "${ROOT_DIR}" -mindepth 1 -maxdepth 1 ! -iname "build" -exec cp -r {} "${BU
 
 cd "${BUILD_DIR}"
 
-# Install Drupal core.
-if [ -z $QUICK ] ; then
-  FILE=drupal-org-core.make
-else
-  FILE=drupal-org-core-quick.make
-fi
-
-drush make --prepare-install "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS
-if [ $? -ne 0 ] ; then { echo "error: Drupal core build failed" ; exit 1 ; } fi
-
-# Install contrib.
+# Make the build.
 if [ -z $QUICK ] ; then
   FILE=drupal-org.make
 else
   FILE=drupal-org-quick.make
 fi
 
-drush make --contrib-destination=profiles/invoicing "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS --drupal-org
+drush make --contrib-destination=profiles/invoicing "${ROOT_DIR}/${FILE}" -y $DRUSH_MAKE_OPTIONS
 if [ $? -ne 0 ] ; then { echo "error: contributed modules could not be built" ; exit 1 ; } fi
 
 # Remove all .git directories if they are not needed.

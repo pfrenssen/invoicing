@@ -9,13 +9,10 @@ mysql:
   encoding: utf8
 
 before_install:
-  - wget https://github.com/drush-ops/drush/archive/master.tar.gz
-  - tar xf master.tar.gz
-  - mkdir bin
-  - ln -s drush-master/drush bin/drush
-  - export PATH=$PATH:$PWD/bin/
+  - pear channel-discover pear.drush.org
 
 install:
+  - pear install drush/drush
   - phpenv rehash
 
 before_script:

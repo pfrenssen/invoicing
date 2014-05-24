@@ -9,15 +9,19 @@ mysql:
   encoding: utf8
 
 before_install:
+  - pwd
   - wget https://github.com/drush-ops/drush/archive/master.tar.gz
+  - ls -al
   - tar xf master.tar.gz
+  - ls -al
   - mkdir bin
   - ln -s drush-master/drush bin/drush
+  - ls -al bin/
   - export PATH=$PATH:$PWD/bin/
   - echo $PATH
   - alias drush6=$PWD/bin/drush
-  - drush6 st
   - drush st
+  - drush6 st
 
 install:
   - phpenv rehash

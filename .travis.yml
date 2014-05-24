@@ -21,6 +21,8 @@ before_install:
   - drush st
 
 install:
+  # Install the packages needed to run the built-in webserver.
+  - sudo apt-get install php5-cgi php5-mysql -y --force-yes
   - phpenv rehash
 
 before_script:

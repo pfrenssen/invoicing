@@ -15,7 +15,7 @@ before_install:
   - tar xf master.tar.gz
   - ls -al
   - mkdir bin
-  - ln -s drush-master/drush bin/drush
+  - ln -s $PWD/drush-master/drush $PWD/bin/drush
   - ls -al bin/
   - export PATH=$PATH:$PWD/bin/
   - echo $PATH

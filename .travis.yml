@@ -9,6 +9,7 @@ mysql:
   encoding: utf8
 
 before_install:
+  - composer global require "youngj/httpserver" "dev-master#41dd2b7 as 1.0.1"
   - wget https://github.com/drush-ops/drush/archive/master.tar.gz
   - tar xf master.tar.gz
   - mkdir bin

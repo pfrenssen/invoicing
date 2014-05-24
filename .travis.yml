@@ -9,12 +9,17 @@ mysql:
   encoding: utf8
 
 before_install:
-  - pear channel-discover pear.drush.org
+  - wget https://github.com/drush-ops/drush/archive/master.tar.gz
+  - tar xf master.tar.gz
+  - mkdir bin
+  - ln -s drush-master/drush bin/drush
+  - export PATH=$PATH:$PWD/bin/
+  - echo $PATH
+  - alias drush6=$PWD/bin/drush
+  - drush6 st
+  - drush st
 
 install:
-  - pear install drush/drush
-  - whereis drush
-  - echo $PATH
   - phpenv rehash
 
 before_script:

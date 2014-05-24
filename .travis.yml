@@ -13,9 +13,9 @@ before_install:
   - tar xf master.tar.gz
   - mkdir bin
   - ln -s $PWD/drush-master/drush $PWD/bin/drush
+  - export PATH=$PATH:$PWD/bin/
   - cd drush-master
   - composer install
-  - export PATH=$PATH:$PWD/bin/
   - drush st
 
 install:

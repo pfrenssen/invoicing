@@ -16,6 +16,7 @@ before_install:
   - export PATH=$PATH:$PWD/bin/
   - cd drush-master
   - composer install
+  - cd ..
   - drush st
 
 install:

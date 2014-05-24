@@ -43,7 +43,6 @@ class BusinessCRUDTestCase extends DrupalWebTestCase {
     $this->assertTrue(db_table_exists('business'), 'The business database table exists.');
     $this->assertBusinessTableEmpty('The business database is initially empty.');
 
-    $this->fail();
     // Check if a new business can be saved to the database.
     $values = $this->randomBusinessValues();
     $business = $this->createBusiness($values);

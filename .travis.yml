@@ -9,18 +9,19 @@ mysql:
   encoding: utf8
 
 before_install:
+  # Download drush.
   - wget https://github.com/drush-ops/drush/archive/master.tar.gz
   - tar xf master.tar.gz
   - mkdir bin
   - ln -s $PWD/drush-master/drush $PWD/bin/drush
   - export PATH=$PATH:$PWD/bin/
+
+install:
+  # Install drush.
   - cd drush-master
   - composer install
   - cd ..
-  - drush st
-
-install:
-  # Install the packages needed to run the built-in webserver.
+  # Install the packages needed for PHP's built-in webserver.
   - sudo apt-get install php5-cgi php5-mysql -y --force-yes
   - phpenv rehash
 

@@ -143,13 +143,15 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->business2 = $this->createBusiness();
     $this->business2->save();
 
-    // Add the paths to view, edit and delete the business. These should only be
+    // Add the paths to view and edit the business. These should only be
     // accessible for the first business.
     $this->accessiblePaths[] = 'business/' . $this->business1->identifier();
     $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/edit';
-    $this->accessiblePaths[] = 'business/' . $this->business1->identifier() . '/delete';
     $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier();
     $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/edit';
+
+    // Deleting the businesses should not be possible at all.
+    $this->inaccessiblePaths[] = 'business/' . $this->business1->identifier() . '/delete';
     $this->inaccessiblePaths[] = 'business/' . $this->business2->identifier() . '/delete';
 
     // Add a client to each business. The business owner should only be able to

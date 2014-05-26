@@ -37,5 +37,6 @@ features[invoice_type][] = invoice
 features[views_view][] = invoices
 files[] = invoice.admin.inc
 files[] = tests/crud.test
+files[] = tests/overview.test
 files[] = tests/ui.test
 files[] = tests/unit.test

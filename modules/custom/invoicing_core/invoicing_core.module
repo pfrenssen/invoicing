@@ -66,3 +66,20 @@ function invoicing_core_form_user_register_form_submit($form, &$form_state) {
   $role = user_role_load_by_name('business owner');
   $form_state['values']['roles'][$role->rid] = TRUE;
 }
+
+/**
+ * Implements hook_views_pre_view().
+ *
+ * This hook is implements to avoid business owners to be able to see invoices
+ * which are not linked to their active business. This was possible due to a
+ * security hole where they could just go to an url like "invoices/all".
+ */
+function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
+  if (!empty($view->display['default']->handler->options['arguments']['bid'])) {
+    $bid_argument_handler = $view->display['default']->handler->options['arguments']['bid'];
+    dsm($bid_argument_handler);
+    if ($bid_argument_handler['default_argument_type'] == 'business_active') {
+      $args = NULL;
+    }
+  }
+}

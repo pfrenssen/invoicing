@@ -32,6 +32,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     'client/add',
     'clients',
     'dashboard',
+    'invoices',
     'invoice/add',
     'line_item/add',
     'line_item/add/product',

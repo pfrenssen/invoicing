@@ -22,6 +22,7 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
     'clients',
     'client/add',
     'dashboard',
+    'invoices',
     'invoice/add',
     'line_item/add',
     'line_item/add/product',

@@ -96,6 +96,15 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Contextual filter: Invoice: Business ID */
+  $handler->display->display_options['arguments']['bid']['id'] = 'bid';
+  $handler->display->display_options['arguments']['bid']['table'] = 'invoice';
+  $handler->display->display_options['arguments']['bid']['field'] = 'bid';
+  $handler->display->display_options['arguments']['bid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['bid']['default_argument_type'] = 'business_active';
+  $handler->display->display_options['arguments']['bid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['bid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['bid']['summary_options']['items_per_page'] = '25';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');

@@ -59,7 +59,7 @@ trait InvoiceTestHelper {
   }
 
   /**
-   * Creates a new invoice entity.
+   * Creates a new invoice entity without saving it.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random

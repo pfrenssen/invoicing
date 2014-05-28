@@ -92,6 +92,13 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   protected $client2;
 
   /**
+   * A client owned by the business owner but without any invoices.
+   *
+   * @var Client
+   */
+  protected $client3;
+
+  /**
    * An invoice owned by the business owner.
    *
    * @var Invoice
@@ -162,14 +169,23 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->client2 = $this->createClient(array('bid' => $this->business2->identifier()));
     $this->client2->save();
 
-    // Add the paths to view, edit and delete the client. These should only be
-    // accessible for the first client.
+    // Add a third client which is owned by the business owner but does not have
+    // any invoices. Clients without invoices can be deleted.
+    $this->client3 = $this->createClient(array('bid' => $this->business1->identifier()));
+    $this->client3->save();
+
+    // Add the paths to view, edit and delete the clients. These should only be
+    // accessible for the first and third clients. The first client will have an
+    // invoice and cannot be deleted.
     $this->accessiblePaths[] = 'client/' . $this->client1->identifier();
     $this->accessiblePaths[] = 'client/' . $this->client1->identifier() . '/edit';
-    $this->accessiblePaths[] = 'client/' . $this->client1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'client/' . $this->client1->identifier() . '/delete';
     $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier();
     $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'client/' . $this->client2->identifier() . '/delete';
+    $this->accessiblePaths[] = 'client/' . $this->client3->identifier();
+    $this->accessiblePaths[] = 'client/' . $this->client3->identifier() . '/edit';
+    $this->accessiblePaths[] = 'client/' . $this->client3->identifier() . '/delete';
 
     // File an invoice to each client. The business owner should only be able to
     // view, edit and delete their own invoices.

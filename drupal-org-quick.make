@@ -1,6 +1,26 @@
 api = 2
 core = 7.x
 
+projects[drupal][version] = 7.28
+
+; Recursive module dependencies of installation profile are not enabled in
+; DrupalWebTestCase::setUp.
+; https://drupal.org/node/1093420
+projects[drupal][patch][] = http://drupal.org/files/simpletest-module_enable_dependencies-1093420-9.patch
+
+; Remove static cache in drupal_valid_test_ua().
+; https://drupal.org/node/1436684
+projects[drupal][patch][] = http://drupal.org/files/1436684_failing_tests_d7.patch
+
+; DrupalWebTestCase::buildXPathQuery() tries to handle backreferences in
+; argument values.
+; https://drupal.org/node/1988780
+projects[drupal][patch][] = http://drupal.org/files/1988780-6-simpletest-backreferences.patch
+
+; prepareInstallDirectory() doesn't create installation directory.
+; https://drupal.org/node/2061333
+projects[drupal][patch][] = http://drupal.org/files/updater-installation_directory_not_created-2061333-1.patch
+
 projects[addressfield] = 1.0-beta5
 projects[addressfield][subdir] = contrib
 
@@ -24,7 +44,7 @@ projects[entityreference][subdir] = contrib
 
 ; Issue #2266735: Entity labels are not sanitized consistently.
 ; @see https://drupal.org/node/2266735
-projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-1-entityreference-inconsistent_sanitizing.patch
+projects[entityreference][patch][] = http://drupal.org/files/issues/2266735-1-entityreference-inconsistent_sanitizing.patch
 
 projects[entityreference_unique] = 7.x-1.0-alpha1
 projects[entityreference_unique][subdir] = contrib

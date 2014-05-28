@@ -289,6 +289,12 @@ function client_access($op, Client $client = NULL, stdClass $account = NULL) {
   if (!empty($client)) {
     switch ($op) {
       case 'delete':
+        // Clients may only be deleted if they are not used in invoices.
+        $access = user_access("edit any $client->type client", $account);
+        $access |= user_access('administer own clients', $account) && client_is_owned_by_user($client, $account);
+        $access &= !client_has_invoices($client);
+        return $access;
+
       case 'edit':
       case 'update':
         $access = user_access("edit any $client->type client", $account);
@@ -565,32 +571,92 @@ function client_is_owned_by_user(Client $client, stdClass $account = NULL) {
 }
 
 /**
+ * Returns whether the client is used in any invoices.
+ *
+ * @param Client $client
+ *   The client to check.
+ *
+ * @return bool
+ *   TRUE if the client is used in invoices, FALSE otherwise.
+ */
+function client_has_invoices(Client $client) {
+  return (bool) client_get_invoice_ids($client);
+}
+
+/**
+ * Returns the invoices that are issued for the given client.
+ *
+ * @param Client $client
+ *   The client for which to retrieve the invoices.
+ *
+ * @return Invoice[]
+ *   An array of invoices.
+ */
+function client_get_invoices(Client $client) {
+  return entity_load('invoice', client_get_invoice_ids($client));
+}
+
+/**
+ * Returns the ids of the invoices that are issued for the given client.
+ *
+ * @param Client $client
+ *   The client for which to retrieve the invoices.
+ *
+ * @return array
+ *   An array of invoice ids.
+ */
+function client_get_invoice_ids(Client $client) {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'invoice')
+    ->fieldCondition('field_invoice_client', 'target_id', $client->identifier());
+  $result = $query->execute();
+  return isset($result['invoice']) ? array_keys($result['invoice']) : array();
+}
+
+/**
  * The class used for client entities.
  */
 class Client extends Entity {
 
   /**
    * The primary identifier for a client.
+   *
+   * @var int
    */
   public $cid;
 
   /**
    * The type of this client.
+   *
+   * @var string
    */
   public $type;
 
   /**
    * The name of the client.
+   *
+   * @var string
    */
   public $name;
 
   /**
+   * The id of the business to which the client belongs.
+   *
+   * @var int
+   */
+  public $bid;
+
+  /**
    * The Unix timestamp when the client was created.
+   *
+   * @var int
    */
   public $created;
 
   /**
    * The Unix timestamp when the client was most recently saved.
+   *
+   * @var int
    */
   public $changed;
 

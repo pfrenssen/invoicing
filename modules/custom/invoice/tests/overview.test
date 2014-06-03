@@ -54,7 +54,6 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Create a number of test invoices.
     for ($i = 0; $i < 20; $i++) {
-      $name = $this->randomName(4) . $this->randomString();
       $invoice = $this->createInvoice();
       $invoice->save();
       $this->invoices[$invoice->iid] = $invoice;
@@ -69,78 +68,61 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
   public function testOverview() {
     $this->drupalGet('invoices');
 
-//    // Check that the "Add business" local action is present.
-//    $xpath = '//ul[@class="action-links"]/li/a[@href="/business/add" and contains(text(), :text)]';
-//    $this->assertXPathElements($xpath, 1, array(':text' => t('Add business')), 'The "Add business" local action is present.');
-//
-//    // Check that the pager is not present. We added 20 businesses which is the
-//    // maximum number that fits on one page.
-//    $this->assertNoPager().
-//
-//    // Check that the businesses are present in the overview in alphabetical
-//    // order.
-//    uasort($this->businesses, function ($a, $b) {
-//      return strcasecmp($a->name, $b->name);
-//    });
-//
-//    // Loop over the displayed table rows and compare them with each business in
-//    // order.
-//    $tablerows = $this->xpath('//div[contains(@class, "view-businesses")]//table/tbody/tr');
-//    foreach ($tablerows as $tablerow) {
-//      /* @var $tablerow SimpleXMLElement */
-//      /* @var $business EntityDrupalWrapper */
-//      $business = entity_metadata_wrapper('business', array_shift($this->businesses));
-//
-//      $testcases = array(
-//        array(
-//          'message' => 'The first column contains the business name.',
-//          'expected' => $business->name->value(),
-//          'actual' => (string) $tablerow->td[0]->a,
-//        ),
-//        array(
-//          'message' => 'The first column is linked to the business detail page.',
-//          'expected' => '/business/' . $business->getIdentifier(),
-//          'actual' => (string) $tablerow->td[0]->a['href'],
-//        ),
-//        array(
-//          'message' => 'The second column contains the email address.',
-//          'expected' => $business->field_business_email->value(),
-//          'actual' => (string) $tablerow->td[1]->a,
-//        ),
-//        array(
-//          'message' => 'The second column is linked to the email address.',
-//          'expected' => 'mailto:' . $business->field_business_email->value(),
-//          'actual' => (string) $tablerow->td[1]->a['href'],
-//        ),
-//        array(
-//          'message' => 'The third column contains the phone number.',
-//          'expected' => $business->field_business_phone->value(),
-//          'actual' => (string) $tablerow->td[2],
-//        ),
-//        array(
-//          'message' => 'The fourth column contains the "edit" action link.',
-//          'expected' => t('edit'),
-//          'actual' => (string) $tablerow->td[3]->a,
-//        ),
-//        array(
-//          'message' => 'The fourth column is linked to the business edit page.',
-//          'expected' => '/business/' . $business->getIdentifier() . '/edit',
-//          'actual' => (string) $tablerow->td[3]->a['href'],
-//        ),
-//      );
-//
-//      foreach ($testcases as $testcase) {
-//        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
-//      }
-//    }
-//
-//    // Check that all businesses were displayed.
-//    $this->assertFalse($this->businesses, 'All businesses are shown in the table.');
-//
-//    // Add one more business and assert that a pager now appears.
-//    $this->createBusiness()->save();
-//    $this->drupalGet('businesses');
-//    $this->assertPager();
+    // Check that the "Add invoice" local action is present.
+    $xpath = '//ul[@class="action-links"]/li/a[@href="/invoice/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add invoice')), 'The "Add invoice" local action is present.');
+
+    // Check that the pager is not present. We added 20 invoices which is the
+    // maximum number that fits on one page.
+    $this->assertNoPager().
+debug($this->invoices);
+    // Check that the invoices are present in the overview in alphabetical
+    // order.
+    uasort($this->invoices, function ($a, $b) {
+      return strcasecmp($a->name, $b->name);
+    });
+
+    // Loop over the displayed table rows and compare them with each business in
+    // order.
+    $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table/tbody/tr');
+    foreach ($tablerows as $tablerow) {
+      /* @var $tablerow SimpleXMLElement */
+      /* @var $invoice EntityDrupalWrapper */
+      $invoice = entity_metadata_wrapper('invoices', array_shift($this->invoices));
+
+      $testcases = array(
+        array(
+          'message' => 'The first column contains the invoice number.',
+          'expected' => $invoice->name->value(),
+          'actual' => (string) $tablerow->td[0]->a,
+        ),
+        array(
+          'message' => 'The second column contains the client.',
+          'expected' => $invoice->field_invoice_client->value(),
+          'actual' => (string) $tablerow->td[1]->a,
+        ),
+        array(
+          'message' => 'The third column contains the date.',
+          'expected' => $invoice->field_invoice_date->value(),
+          'actual' => (string) $tablerow->td[2],
+        ),
+      );
+
+      foreach ($testcases as $testcase) {
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
+      }
+    }
+
+    // Check that all invoices were displayed.
+    $this->assertFalse($this->invoices, 'All invoices are shown in the table.');
+
+    // Add one more invoice and assert that a pager now appears.
+    $this->createInvoice()->save();
+    $this->drupalGet('invoices');
+    $this->assertPager();
+
+    // Create a different user with the role business owner and verify it does
+    // not see the invoices created by another business owner.
   }
 
 }

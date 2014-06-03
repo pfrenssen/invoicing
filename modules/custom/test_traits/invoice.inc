@@ -5,6 +5,8 @@
  * Asserts and helper methods concerning the invoice module.
  */
 
+module_load_include('inc', 'test_traits', 'client');
+
 trait InvoiceTestHelper {
 
   /**
@@ -120,8 +122,13 @@ trait InvoiceTestHelper {
   function randomInvoiceValues() {
     $date_polarity = rand(0, 1) ? '-' : '+';
     $date_offset = rand(0, 7);
+
+    // Make sure a client has been created.
+    $client = $this->createClient();
+    $client->save();
+
     return array(
-      'field_invoice_client' => $this->randomClient(),
+      'field_invoice_client' => $client,
       'field_invoice_date' => strtotime($date_polarity . $date_offset . ' day 00:00'),
       'field_invoice_number' => $this->randomString(),
       'field_invoice_discount' => rand(0, 100) . '.00',

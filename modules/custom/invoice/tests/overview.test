@@ -55,6 +55,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     // Create a number of test invoices.
     for ($i = 0; $i < 20; $i++) {
       $invoice = $this->createInvoice();
+      $invoice->bid = $business->getIdentifier();
       $invoice->save();
       $this->invoices[$invoice->iid] = $invoice;
     }

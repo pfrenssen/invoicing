@@ -46,6 +46,10 @@ projects[entityreference][subdir] = contrib
 ; @see https://drupal.org/node/2266735
 projects[entityreference][patch][] = http://drupal.org/files/issues/2266735-1-entityreference-inconsistent_sanitizing.patch
 
+; Issue #1837650: Allow referencing a specific revision ID.
+; @see https://drupal.org/node/1837650
+projects[entityreference][patch][] = https://drupal.org/files/issues/entityreference-n1837650-45.patch
+
 projects[entityreference_unique] = 7.x-1.0-alpha1
 projects[entityreference_unique][subdir] = contrib
 

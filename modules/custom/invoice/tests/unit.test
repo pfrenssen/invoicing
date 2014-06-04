@@ -94,11 +94,11 @@ class InvoiceUnitTestCase extends DrupalWebTestCase {
         $client->save();
         $this->clients[] = $client;
 
-	// Create an invoice for each client.
-	$this->invoices[] = $this->createInvoice(array(
-	  'field_invoice_client' => $client,
-	  'bid' => $this->businesses[$i]->identifier(),
-	));
+        // Create an invoice for each client.
+        $this->invoices[] = $this->createInvoice(array(
+          'field_invoice_client' => $client,
+          'bid' => $this->businesses[$i]->identifier(),
+        ));
       }
     }
   }

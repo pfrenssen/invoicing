@@ -23,13 +23,6 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
   protected $usersToCreate = array('business owner');
 
   /**
-   * A test business.
-   *
-   * @var Business
-   */
-  protected $business;
-
-  /**
    * A test client.
    *
    * @var Client
@@ -55,15 +48,6 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Log in the business owner.
     $this->drupalLogin($this->users['business owner']);
-
-    // Create a business. This is done programmatically since at the moment
-    // business owners cannot create their own businesses.
-    // @todo Remove this when a business is created automatically for every
-    //   business owner.
-    // @see http://atrium.pocomas.be/invoicing/node/1184
-    $this->business = $this->createBusiness();
-    $this->business->save();
-    $this->addBusinessToUser($this->business, $this->users['business owner']);
 
     // Create a client.
     $this->client = $this->createUiClient(array('bid' => $this->business->identifier()));

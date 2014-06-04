@@ -80,7 +80,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     // Check that the invoices are present in the overview in alphabetical
     // order.
     uasort($this->invoices, function ($a, $b) {
-      return strcasecmp($a->field_invoice_number[LANGUAGE_NONE][0]['value'], $b->field_invoice_number[LANGUAGE_NONE][0]['value']);
+      return strcasecmp((string) $a->field_invoice_number[LANGUAGE_NONE][0]['value'], (string) $b->field_invoice_number[LANGUAGE_NONE][0]['value']);
     });
 
     // Loop over the displayed table rows and compare them with each business in
@@ -89,23 +89,26 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     foreach ($tablerows as $tablerow) {
       /* @var $tablerow SimpleXMLElement */
       /* @var $invoice EntityDrupalWrapper */
-      $invoice = entity_metadata_wrapper('invoices', array_shift($this->invoices));
-
-      $client = client_load($invoice->field_invoice_client[LANGUAGE_NONE][0]['target_id']);
+      $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
+      $client = $invoice->field_invoice_client->value();
+//debug($invoice->field_invoice_client);
+//debug($invoice->field_invoice_number->value());
+//debug(field_get_items('invoices', $invoice, 'field_invoice_client'));
+//debug($invoice->field_invoice_number->value());
       $testcases = array(
         array(
           'message' => 'The first column contains the invoice number.',
-          'expected' => $invoice->field_invoice_number[LANGUAGE_NONE][0]['value'],
+          'expected' => $invoice->field_invoice_number->value(),
           'actual' => (string) $tablerow->td[0]->a,
         ),
         array(
           'message' => 'The second column contains the client.',
-          'expected' => $client->name->value(),
+          'expected' => $client->name,
           'actual' => (string) $tablerow->td[1]->a,
         ),
         array(
           'message' => 'The third column contains the date.',
-          'expected' => format_date($invoice->field_invoice_date[LANGUAGE_NONE][0]['value']),
+          'expected' => format_date($invoice->field_invoice_date->value()),
           'actual' => (string) $tablerow->td[2],
         ),
       );

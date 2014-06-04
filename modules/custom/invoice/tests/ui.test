@@ -127,14 +127,4 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
   }
 
-  /**
-   * Constructs an XPath query to find an element on the invoice entity page.
-   *
-   * @param string $pxath
-   *   The path selector to search for.
-   */
-  protected function getInvoiceEntityXPath($xpath = '') {
-    return '//div[contains(@class, "entity-invoice")]' . $xpath;
-  }
-
 }

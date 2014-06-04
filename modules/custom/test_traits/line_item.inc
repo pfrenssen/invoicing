@@ -62,7 +62,10 @@ trait LineItemTestHelper {
   }
 
   /**
-   * Creates a new line item entity.
+   * Returns a newly created line item entity without saving it.
+   *
+   * This is intended for unit tests. It will not set a business ID. If you are
+   * doing a functionality test use $this->createUiLineItem() instead.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random

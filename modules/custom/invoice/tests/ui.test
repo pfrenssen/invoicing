@@ -50,7 +50,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->drupalLogin($this->users['business owner']);
 
     // Create a client.
-    $this->client = $this->createUiClient(array('bid' => $this->business->identifier()));
+    $this->client = $this->createUiClient();
   }
 
   /**

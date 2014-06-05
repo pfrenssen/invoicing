@@ -77,12 +77,6 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     // maximum number that fits on one page.
     $this->assertNoPager().
 
-    // Check that the invoices are present in the overview in alphabetical
-    // order.
-    uasort($this->invoices, function ($a, $b) {
-      return strcasecmp((string) $a->field_invoice_number[LANGUAGE_NONE][0]['value'], (string) $b->field_invoice_number[LANGUAGE_NONE][0]['value']);
-    });
-
     // Loop over the displayed table rows and compare them with each business in
     // order.
     $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table//tbody/tr');
@@ -91,10 +85,6 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
       /* @var $invoice EntityDrupalWrapper */
       $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
       $client = $invoice->field_invoice_client->value();
-//debug($invoice->field_invoice_client);
-//debug($invoice->field_invoice_number->value());
-//debug(field_get_items('invoices', $invoice, 'field_invoice_client'));
-//debug($invoice->field_invoice_number->value());
       $testcases = array(
         array(
           'message' => 'The first column contains the invoice number.',
@@ -108,8 +98,8 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The third column contains the date.',
-          'expected' => format_date($invoice->field_invoice_date->value()),
-          'actual' => (string) $tablerow->td[2],
+          'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y'),
+          'actual' => (string) $tablerow->td[2]->span[0],
         ),
       );
 
@@ -122,7 +112,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->assertFalse($this->invoices, 'All invoices are shown in the table.');
 
     // Add one more invoice and assert that a pager now appears.
-    $this->createInvoice()->save();
+    $this->createUIInvoice();
     $this->drupalGet('invoices');
     $this->assertPager();
 

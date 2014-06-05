@@ -85,7 +85,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Loop over the displayed table rows and compare them with each business in
     // order.
-    $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table/tbody/tr');
+    $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table//tbody/tr');
     foreach ($tablerows as $tablerow) {
       /* @var $tablerow SimpleXMLElement */
       /* @var $invoice EntityDrupalWrapper */
@@ -99,12 +99,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         array(
           'message' => 'The first column contains the invoice number.',
           'expected' => $invoice->field_invoice_number->value(),
-          'actual' => (string) $tablerow->td[0]->a,
+          'actual' => (string) $tablerow->td[0],
         ),
         array(
           'message' => 'The second column contains the client.',
           'expected' => $client->name,
-          'actual' => (string) $tablerow->td[1]->a,
+          'actual' => (string) $tablerow->td[1],
         ),
         array(
           'message' => 'The third column contains the date.',

@@ -124,7 +124,7 @@ trait InvoiceTestHelper {
     $date_offset = rand(0, 7);
 
     // Make sure a client has been created.
-    $client = $this->createClient();
+    $client = $this->createUIClient();
     $client->save();
 
     return array(

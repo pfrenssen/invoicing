@@ -91,7 +91,10 @@ trait ClientTestHelper {
   }
 
   /**
-   * Creates a new client entity.
+   * Returns a newly created client entity without saving it.
+   *
+   * This is intended for unit tests. It will not set a business ID. If you are
+   * doing a functionality test use $this->createUiClient() instead.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random

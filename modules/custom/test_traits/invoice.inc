@@ -61,7 +61,10 @@ trait InvoiceTestHelper {
   }
 
   /**
-   * Creates a new invoice entity without saving it.
+   * Returns a newly created invoice entity without saving it.
+   *
+   * This is intended for unit tests. It will not set a business ID. If you are
+   * doing a functionality test use $this->createUiInvoice() instead.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random

@@ -33,6 +33,7 @@ features[field_instance][] = invoice-invoice-field_invoice_status
 features[field_instance][] = invoice-invoice-field_invoice_terms
 features[invoice_type][] = invoice
 files[] = invoice.admin.inc
+files[] = tests/client_reference.test
 files[] = tests/crud.test
 files[] = tests/ui.test
 files[] = tests/unit.test

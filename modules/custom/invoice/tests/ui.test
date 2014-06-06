@@ -105,6 +105,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomInvoiceValues();
+    $new_values['field_invoice_client'] = $values['field_invoice_client'];
     $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertInvoiceValuesToFormPostValues($new_values), t('Save'));
     $invoice = invoice_load($invoice->iid, TRUE);
     $messages = array('status' => array(t('The changes have been saved.', array('%invoice_number' => $values['field_invoice_number']))));

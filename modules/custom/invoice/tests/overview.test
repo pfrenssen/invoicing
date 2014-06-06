@@ -118,6 +118,18 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Create a different user with the role business owner and verify it does
     // not see the invoices created by another business owner.
+    $business_owner = $this->drupalCreateUserWithRole('business owner');
+    $business = $this->createBusiness();
+    $business->save();
+    $this->addBusinessToUser($business, $business_owner);
+    $this->drupalLogin($business_owner);
+
+    $this->drupalGet('invoices');
+    // Check that the "Add invoice" local action is present.
+    $xpath = '//ul[@class="action-links"]/li/a[@href="/invoice/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add invoice')), 'The "Add invoice" local action is present.');
+    $this->assertFalse($this->xpath('//div[contains(@class, "view-invoices")]//table'), 'The table containing invoices is not shown when no invoice is linked to the user.');
+
   }
 
 }

@@ -40,7 +40,9 @@ projects[entity] = 1.4
 projects[entity][subdir] = contrib
 
 ; A recent version is pinned so that the patches can be applied.
-projects[entityreference] = 1.1+3-dev
+projects[entityreference][download][type] = git
+projects[entityreference][download][revision] = dc4196b4e97e11ff
+projects[entityreference][download][branch] = 7.x-1.x
 projects[entityreference][subdir] = contrib
 
 ; Issue #2266735: Entity labels are not sanitized consistently.

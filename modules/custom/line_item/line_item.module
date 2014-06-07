@@ -397,10 +397,15 @@ function line_item_save(LineItem $line_item) {
  *
  * @return
  *   A fully-populated line item object, or FALSE if the line item is not found.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the passed ID is not valid.
  */
-function line_item_load($lid = NULL, $reset = FALSE) {
-  $lids = isset($lid) ? array($lid) : array();
-  $line_items = line_item_load_multiple($lids, $reset);
+function line_item_load($lid, $reset = FALSE) {
+  if (empty($lid) || !is_int($lid)) {
+    throw new InvalidArgumentException('Invalid line item id.');
+  }
+  $line_items = line_item_load_multiple((array) $lid, $reset);
 
   return $line_items ? reset($line_items) : FALSE;
 }

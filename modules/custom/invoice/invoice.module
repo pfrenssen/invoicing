@@ -403,10 +403,15 @@ function invoice_save(Invoice $invoice) {
  *
  * @return
  *   A fully-populated invoice object, or FALSE if the invoice is not found.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the passed ID is not valid.
  */
-function invoice_load($iid = NULL, $reset = FALSE) {
-  $iids = isset($iid) ? array($iid) : array();
-  $invoices = invoice_load_multiple($iids, $reset);
+function invoice_load($iid, $reset = FALSE) {
+  if (empty($iid) || !is_int($iid)) {
+    throw new InvalidArgumentException('Invalid invoice id.');
+  }
+  $invoices = invoice_load_multiple((array) $iid, $reset);
 
   return $invoices ? reset($invoices) : FALSE;
 }

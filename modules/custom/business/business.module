@@ -374,10 +374,15 @@ function business_load_multiple($bids = array(), $reset = FALSE) {
  *
  * @return
  *   A fully-populated business object, or FALSE if the business is not found.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the passed ID is not valid.
  */
-function business_load($bid = NULL, $reset = FALSE) {
-  $bids = isset($bid) ? array($bid) : array();
-  $businesses = business_load_multiple($bids, $reset);
+function business_load($bid, $reset = FALSE) {
+  if (empty($bid) || !is_int($bid)) {
+    throw new InvalidArgumentException('Invalid business id.');
+  }
+  $businesses = business_load_multiple((array) $bid, $reset);
 
   return $businesses ? reset($businesses) : FALSE;
 }

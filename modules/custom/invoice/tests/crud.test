@@ -64,7 +64,7 @@ class InvoiceCRUDTestCase extends DrupalWebTestCase {
     $this->assertInvoiceTableNotEmpty('The invoice database table is no longer empty after creating an invoice.');
 
     // Check that the invoice data can be read from the database.
-    $retrieved_invoice = invoice_load($invoice->iid);
+    $retrieved_invoice = invoice_load((int) $invoice->iid);
     $this->assertInvoiceProperties($retrieved_invoice, $values, 'The invoice that was saved to the database can be read correctly.');
 
     // Update the invoice and check that the new values were written to the

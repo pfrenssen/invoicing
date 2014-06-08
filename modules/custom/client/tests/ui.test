@@ -8,7 +8,7 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 
-class ClientUITestCase extends DrupalWebTestCase {
+class ClientUITestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use ClientTestHelper {
@@ -21,11 +21,6 @@ class ClientUITestCase extends DrupalWebTestCase {
    * @var object $user
    */
   protected $user;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.

@@ -8,15 +8,10 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class LineItemCRUDTestCase extends DrupalWebTestCase {
+class LineItemCRUDTestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use LineItemTestHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.

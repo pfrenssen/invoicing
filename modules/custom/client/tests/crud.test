@@ -8,14 +8,9 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 
-class ClientCRUDTestCase extends DrupalWebTestCase {
+class ClientCRUDTestCase extends InvoicingWebTestCase {
   use BaseTestHelper;
   use ClientTestHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.

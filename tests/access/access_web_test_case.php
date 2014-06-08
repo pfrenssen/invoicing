@@ -4,12 +4,7 @@
  * @file
  * Base class for access and permission tests.
  */
-abstract class AccessWebTestCase extends DrupalWebTestCase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'invoicing';
+abstract class AccessWebTestCase extends InvoicingWebTestCase {
 
   /**
    * The user account that is being tested.

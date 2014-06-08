@@ -10,17 +10,12 @@ module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 
-class InvoiceUnitTestCase extends DrupalWebTestCase {
+class InvoiceUnitTestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * Test user accounts.

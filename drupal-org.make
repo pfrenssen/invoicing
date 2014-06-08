@@ -54,6 +54,10 @@ projects[entity][download][revision] = 7.x-1.4
 projects[entity][download][branch] = 7.x-1.x
 projects[entity][subdir] = contrib
 
+; entity_metadata_wrapper() does not load correct revisions.
+; @see https://drupal.org/node/1788568
+projects[entity][patch][] = https://drupal.org/files/issues/entity-1788568-12-entity_metadata_wrapper_revisions.patch
+
 ; A recent version is pinned so that the patches can be applied.
 projects[entityreference][download][type] = git
 projects[entityreference][download][revision] = dc4196b4e97e11ff

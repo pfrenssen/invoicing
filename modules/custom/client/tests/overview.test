@@ -167,7 +167,7 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->assertFalse($this->clients, 'All clients are shown in the table.');
 
     // Add one more client and assert that a pager now appears.
-    $this->createClient()->save();
+    $this->createUiClient();
     $this->drupalGet('clients');
     $this->assertPager();
   }

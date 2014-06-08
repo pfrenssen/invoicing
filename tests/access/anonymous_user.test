@@ -27,6 +27,11 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
   /**
    * {@inheritdoc}
    */
+  protected $usersToCreate = array();
+
+  /**
+   * {@inheritdoc}
+   */
   protected $accessiblePaths = array(
     'user',
     'user/password',

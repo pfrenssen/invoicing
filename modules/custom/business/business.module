@@ -379,7 +379,8 @@ function business_load_multiple($bids = array(), $reset = FALSE) {
  *   Thrown when the passed ID is not valid.
  */
 function business_load($bid, $reset = FALSE) {
-  if (empty($bid) || !is_int($bid)) {
+  $bid = (int) $bid;
+  if (empty($bid)) {
     throw new InvalidArgumentException('Invalid business id.');
   }
   $businesses = business_load_multiple((array) $bid, $reset);

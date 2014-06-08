@@ -408,7 +408,8 @@ function invoice_save(Invoice $invoice) {
  *   Thrown when the passed ID is not valid.
  */
 function invoice_load($iid, $reset = FALSE) {
-  if (empty($iid) || !is_int($iid)) {
+  $iid = (int) $iid;
+  if (empty($iid)) {
     throw new InvalidArgumentException('Invalid invoice id.');
   }
   $invoices = invoice_load_multiple((array) $iid, $reset);

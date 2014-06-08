@@ -402,7 +402,8 @@ function line_item_save(LineItem $line_item) {
  *   Thrown when the passed ID is not valid.
  */
 function line_item_load($lid, $reset = FALSE) {
-  if (empty($lid) || !is_int($lid)) {
+  $lid = (int) $lid;
+  if (empty($lid)) {
     throw new InvalidArgumentException('Invalid line item id.');
   }
   $line_items = line_item_load_multiple((array) $lid, $reset);

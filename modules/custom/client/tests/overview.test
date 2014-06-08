@@ -26,6 +26,20 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
   protected $clients;
 
   /**
+   * A business owned by the second business owner.
+   *
+   * @var Business
+   */
+  protected $business2;
+
+  /**
+   * A client owned by the second business owner.
+   *
+   * @var Client
+   */
+  protected $client2;
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -42,9 +56,19 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
   protected function setUp() {
     parent::setup();
 
-    $this->drupalLogin($this->users['business owner']);
+    // Create a second business owner with a business and client to test
+    // negative cases.
+    $this->users['business owner 2'] = $this->drupalCreateUserWithRole('business owner');
 
-    // Create a number of test clients.
+    $this->business2 = $this->createBusiness();
+    $this->business2->save();
+    $this->addBusinessToUser($this->business2, $this->users['business owner 2']);
+
+    $this->drupalLogin($this->users['business owner 2']);
+    $this->client2 = $this->createUiClient();
+
+    // Log in the test user and create a number of test clients.
+    $this->drupalLogin($this->users['business owner']);
     for ($i = 0; $i < 20; $i++) {
       // Make sure the client name starts with letters to avoid random test
       // failures to due differences in sorting of special characters between
@@ -65,6 +89,9 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
   public function testOverview() {
     $this->drupalGet('clients');
     $this->assertResponse(200, 'The client overview is accessible.');
+
+    // Check that the client of the other business owner is not visible.
+    $this->assertNoText(trim(check_plain($this->client2->name)), 'A client from another business owner is not visible.');
 
     // Check that the "Add client" local action is present.
     $xpath = '//ul[@class="action-links"]/li/a[@href="/client/add" and contains(text(), :text)]';

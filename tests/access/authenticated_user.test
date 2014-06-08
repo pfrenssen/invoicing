@@ -27,6 +27,11 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
   /**
    * {@inheritdoc}
    */
+  protected $usersToCreate = array('authenticated user');
+
+  /**
+   * {@inheritdoc}
+   */
   protected $accessiblePaths = array(
     'user',
     'user/password',
@@ -106,7 +111,7 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
     // Create a business.
     $this->business = $this->createBusiness();
     $this->business->save();
-    $this->addBusinessToUser($this->business, $this->user);
+    $this->addBusinessToUser($this->business, $this->users['authenticated user']);
 
     // Add the paths to view, edit and delete the business. These should all be
     // inaccessible.

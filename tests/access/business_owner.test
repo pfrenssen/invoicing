@@ -27,6 +27,11 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   /**
    * {@inheritdoc}
    */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * {@inheritdoc}
+   */
   protected $accessiblePaths = array(
     '<front>',
     'client/add',
@@ -145,7 +150,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     // Create two businesses, of which the first is owned by the business owner.
     $this->business1 = $this->createBusiness();
     $this->business1->save();
-    $this->addBusinessToUser($this->business1, $this->user);
+    $this->addBusinessToUser($this->business1, $this->users['business owner']);
 
     $this->business2 = $this->createBusiness();
     $this->business2->save();

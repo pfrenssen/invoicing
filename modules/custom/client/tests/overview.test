@@ -170,6 +170,11 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->createUiClient();
     $this->drupalGet('clients');
     $this->assertPager();
+
+    // Check that adding "/all" to the URL does not reveal the clients of the
+    // other business owner.
+    $this->drupalGet('clients/all');
+    $this->assertNoText(trim(check_plain($this->client2->name)), 'A client from another business owner is not visible when adding "/all" to the URL.');
   }
 
 }

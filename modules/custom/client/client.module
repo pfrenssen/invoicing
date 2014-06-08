@@ -404,7 +404,8 @@ function client_load_multiple($cids = array(), $reset = FALSE) {
  *   Thrown when the passed ID is not valid.
  */
 function client_load($cid, $reset = FALSE) {
-  if (empty($cid) || !is_int($cid)) {
+  $cid = (int) $cid;
+  if (empty($cid)) {
     throw new InvalidArgumentException('Invalid client id.');
   }
   $clients = client_load_multiple((array) $cid, $reset);

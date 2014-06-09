@@ -70,6 +70,7 @@ class InvoiceUnitTestCase extends InvoicingWebTestCase {
     // file an invoice for each client.
     $this->businesses = array();
     $this->clients = array();
+    $this->invoices = array();
     $this->users = array();
 
     for ($i = 0; $i < 2; $i++) {

@@ -35,6 +35,13 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
   protected $inaccessiblePaths = array();
 
   /**
+   * A list of paths that should not exist.
+   *
+   * @var array
+   */
+  protected $nonExistingPaths = array();
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {
@@ -60,6 +67,7 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
   public function testAccess() {
     $this->doAccessiblePathsTest();
     $this->doInaccessiblePathsTest();
+    $this->doNonExistingPathsTest();
   }
 
   /**
@@ -79,6 +87,16 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
     foreach ($this->inaccessiblePaths as $path) {
       $this->drupalGet($path);
       $this->assertResponse('403', format_string('The path %path is inaccessible.', array('%path' => $path)));
+    }
+  }
+
+  /**
+   * Checks if the defined paths return page not found errors.
+   */
+  protected function doNonExistingPathsTest() {
+    foreach ($this->nonExistingPaths as $path) {
+      $this->drupalGet($path);
+      $this->assertResponse('404', format_string('The path %path does not exist.', array('%path' => $path)));
     }
   }
 

@@ -84,46 +84,6 @@ trait LineItemTestHelper {
   }
 
   /**
-   * Creates a new line item entity through the user interface.
-   *
-   * The saved line item is retrieved by the line item number.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name. Random
-   *   values will be applied to all omitted properties.
-   *
-   * @return LineItem
-   *   A new line item entity.
-   */
-  function createUiLineItem(array $values = array()) {
-    // Provide some default values.
-    $values += $this->randomLineItemValues();
-
-    // Convert the entity property values to form values and submit the form.
-    $edit = $this->convertToFormPostValues($values);
-
-    // Get the type from the values array and unset afterwards because it is not
-    // needed to post it with the other form fields.
-    $type = $values['type'];
-    unset($values['type']);
-
-    $this->drupalPost('line_item/add/' . $type, $edit, t('Save'));
-
-    // Retrieve the saved line _item by line _item number and return it.
-    $query = new EntityFieldQuery();
-    $query
-      ->entityCondition('entity_type', 'line_item')
-      ->entityCondition('bundle', $type)
-      ->fieldCondition('field_line_item_description', 'value', $values['field_line_item_description'])
-      ->range(0,1);
-    $result = $query->execute();
-    $lids = array_keys($result['line_item']);
-    $this->assertTrue($lids, 'Line_item was successfully created through the UI.');
-
-    return line_item_load($lids[0]);
-  }
-
-  /**
    * Returns random values for all properties on the line item entity.
    *
    * @param string $type

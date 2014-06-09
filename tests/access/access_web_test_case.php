@@ -59,7 +59,7 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    */
   public function testAccess() {
     $this->doAccessiblePathsTest();
-    $this->doInAccessiblePathsTest();
+    $this->doInaccessiblePathsTest();
   }
 
   /**
@@ -75,7 +75,7 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
   /**
    * Checks if the defined paths are inaccessible.
    */
-  protected function doInAccessiblePathsTest() {
+  protected function doInaccessiblePathsTest() {
     foreach ($this->inaccessiblePaths as $path) {
       $this->drupalGet($path);
       $this->assertResponse('403', format_string('The path %path is inaccessible.', array('%path' => $path)));

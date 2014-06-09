@@ -49,15 +49,6 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
   );
 
   /**
-   * {@inheritdoc}
-   */
-  protected $nonExistingPaths = array(
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
-  );
-
-  /**
    * Returns test case metadata.
    */
   public static function getInfo() {

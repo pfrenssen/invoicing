@@ -39,7 +39,11 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    *
    * @var array
    */
-  protected $nonExistingPaths = array();
+  protected $nonExistingPaths = array(
+    'line_item/add',
+    'line_item/add/product',
+    'line_item/add/service',
+  );
 
   /**
    * {@inheritdoc}

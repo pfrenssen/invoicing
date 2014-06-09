@@ -65,15 +65,6 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   );
 
   /**
-   * {@inheritdoc}
-   */
-  protected $nonExistingPaths = array(
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
-  );
-
-  /**
    * A business owned by the business owner.
    *
    * @var Business

@@ -28,9 +28,6 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
     'client/add',
     'dashboard',
     'invoice/add',
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
     'user',
     'user/password',
     'user/register',
@@ -49,6 +46,15 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
     'admin/structure',
     'node',
     'node/add',
+  );
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $nonExistingPaths = array(
+    'line_item/add',
+    'line_item/add/product',
+    'line_item/add/service',
   );
 
   /**

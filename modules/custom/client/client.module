@@ -35,6 +35,9 @@ function client_entity_info() {
     'uri callback' => 'client_uri',
     'access callback' => 'client_access',
     'module' => 'client',
+    'inline entity form' => array(
+      'controller' => 'LineItemInlineEntityFormController',
+    ),
   );
 
   // Add bundle info but bypass entity_load() as we cannot use it here.
@@ -698,4 +701,10 @@ class ClientAPIController extends EntityAPIController {
     return parent::create($values);
   }
 
+}
+
+/**
+ * The Client Inline Entity Form controller class.
+ */
+class ClientInlineEntityFormController extends EntityInlineEntityFormController {
 }

@@ -15,6 +15,11 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
   /**
    * {@inheritdoc}
    */
+  protected $usersToCreate = array('administrator');
+
+  /**
+   * {@inheritdoc}
+   */
   protected $accessiblePaths = array(
     '<front>',
     'businesses',
@@ -24,9 +29,6 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
     'dashboard',
     'invoices',
     'invoice/add',
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
     'user',
     'user/password',
     'user/register',

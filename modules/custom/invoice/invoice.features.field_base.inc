@@ -43,6 +43,8 @@ function invoice_field_default_field_bases() {
             'status' => 0,
           ),
         ),
+        'lock_revision' => 1,
+        'reference_revisions' => 1,
         'sort' => array(
           'direction' => 'ASC',
           'property' => 'name',

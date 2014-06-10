@@ -399,10 +399,16 @@ function client_load_multiple($cids = array(), $reset = FALSE) {
  *
  * @return
  *   A fully-populated client object, or FALSE if the client is not found.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the passed ID is not valid.
  */
-function client_load($cid = NULL, $reset = FALSE) {
-  $cids = isset($cid) ? array($cid) : array();
-  $clients = client_load_multiple($cids, $reset);
+function client_load($cid, $reset = FALSE) {
+  $cid = (int) $cid;
+  if (empty($cid)) {
+    throw new InvalidArgumentException('Invalid client id.');
+  }
+  $clients = client_load_multiple((array) $cid, $reset);
 
   return $clients ? reset($clients) : FALSE;
 }

@@ -23,13 +23,6 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
   protected $usersToCreate = array('business owner');
 
   /**
-   * A test business.
-   *
-   * @var Business
-   */
-  protected $business;
-
-  /**
    * A test client.
    *
    * @var Client
@@ -56,17 +49,8 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Log in the business owner.
     $this->drupalLogin($this->users['business owner']);
 
-    // Create a business. This is done programmatically since at the moment
-    // business owners cannot create their own businesses.
-    // @todo Remove this when a business is created automatically for every
-    //   business owner.
-    // @see http://atrium.pocomas.be/invoicing/node/1184
-    $this->business = $this->createBusiness();
-    $this->business->save();
-    $this->addBusinessToUser($this->business, $this->users['business owner']);
-
     // Create a client.
-    $this->client = $this->createUiClient(array('bid' => $this->business->identifier()));
+    $this->client = $this->createUiClient();
   }
 
   /**
@@ -126,16 +110,6 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
     $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
-  }
-
-  /**
-   * Constructs an XPath query to find an element on the invoice entity page.
-   *
-   * @param string $pxath
-   *   The path selector to search for.
-   */
-  protected function getInvoiceEntityXPath($xpath = '') {
-    return '//div[contains(@class, "entity-invoice")]' . $xpath;
   }
 
 }

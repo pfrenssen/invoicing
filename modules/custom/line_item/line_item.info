@@ -37,4 +37,3 @@ features[line_item_type][] = service
 
 files[] = line_item.admin.inc
 files[] = tests/crud.test
-files[] = tests/ui.test

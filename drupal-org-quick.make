@@ -39,12 +39,23 @@ projects[email_registration][subdir] = contrib
 projects[entity] = 1.4
 projects[entity][subdir] = contrib
 
-projects[entityreference] = 1.1
+; entity_metadata_wrapper() does not load correct revisions.
+; @see https://drupal.org/node/1788568
+projects[entity][patch][] = https://drupal.org/files/issues/entity-1788568-12-entity_metadata_wrapper_revisions.patch
+
+; A recent version is pinned so that the patches can be applied.
+projects[entityreference][download][type] = git
+projects[entityreference][download][revision] = dc4196b4e97e11ff
+projects[entityreference][download][branch] = 7.x-1.x
 projects[entityreference][subdir] = contrib
 
 ; Issue #2266735: Entity labels are not sanitized consistently.
 ; @see https://drupal.org/node/2266735
-projects[entityreference][patch][] = http://drupal.org/files/issues/2266735-1-entityreference-inconsistent_sanitizing.patch
+projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-1-entityreference-inconsistent_sanitizing.patch
+
+; Issue #1837650: Allow referencing a specific revision ID.
+; @see https://drupal.org/node/1837650
+projects[entityreference][patch][] = https://drupal.org/files/issues/entityreference-n1837650-47.patch
 
 projects[entityreference_unique] = 7.x-1.0-alpha1
 projects[entityreference_unique][subdir] = contrib

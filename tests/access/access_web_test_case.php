@@ -4,12 +4,7 @@
  * @file
  * Base class for access and permission tests.
  */
-abstract class AccessWebTestCase extends DrupalWebTestCase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'invoicing';
+abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
 
   /**
    * The user account that is being tested.
@@ -40,6 +35,17 @@ abstract class AccessWebTestCase extends DrupalWebTestCase {
   protected $inaccessiblePaths = array();
 
   /**
+   * A list of paths that should not exist.
+   *
+   * @var array
+   */
+  protected $nonExistingPaths = array(
+    'line_item/add',
+    'line_item/add/product',
+    'line_item/add/service',
+  );
+
+  /**
    * {@inheritdoc}
    */
   public function setUp() {
@@ -55,14 +61,8 @@ abstract class AccessWebTestCase extends DrupalWebTestCase {
     // Check that a user role has been defined by the subclass.
     $this->assertTrue($this->role, 'A user role has been defined.');
 
-    // Create a user with the defined role.
-    $this->user = $this->drupalCreateUser();
-    $role = user_role_load_by_name($this->role);
-    $this->user->roles[$role->rid] = $role->rid;
-    user_save($this->user);
-
     // Log in the user.
-    $this->drupalLogin($this->user);
+    $this->drupalLogin($this->users[$this->role]);
   }
 
   /**
@@ -70,7 +70,8 @@ abstract class AccessWebTestCase extends DrupalWebTestCase {
    */
   public function testAccess() {
     $this->doAccessiblePathsTest();
-    $this->doInAccessiblePathsTest();
+    $this->doInaccessiblePathsTest();
+    $this->doNonExistingPathsTest();
   }
 
   /**
@@ -86,10 +87,20 @@ abstract class AccessWebTestCase extends DrupalWebTestCase {
   /**
    * Checks if the defined paths are inaccessible.
    */
-  protected function doInAccessiblePathsTest() {
+  protected function doInaccessiblePathsTest() {
     foreach ($this->inaccessiblePaths as $path) {
       $this->drupalGet($path);
       $this->assertResponse('403', format_string('The path %path is inaccessible.', array('%path' => $path)));
+    }
+  }
+
+  /**
+   * Checks if the defined paths return page not found errors.
+   */
+  protected function doNonExistingPathsTest() {
+    foreach ($this->nonExistingPaths as $path) {
+      $this->drupalGet($path);
+      $this->assertResponse('404', format_string('The path %path does not exist.', array('%path' => $path)));
     }
   }
 

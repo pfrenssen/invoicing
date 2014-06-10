@@ -40,9 +40,6 @@ class ClientPathAccessTestCase extends AccessWebTestCase {
     'dashboard',
     'invoices',
     'invoice/add',
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
     'node',
     'node/add',
   );

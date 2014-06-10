@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Tests the referencing of clients in invoices.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
+module_load_include('inc', 'test_traits', 'invoice');
+
+class InvoiceClientReferenceTestCase extends InvoicingIntegrationTestCase {
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
+  use ClientTestHelper;
+  use InvoiceTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
+
+
+  /**
+   * A test invoice.
+   *
+   * @var Invoice
+   */
+  protected $invoice;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Client reference test',
+      'description' => 'Tests the referencing of clients in invoices.',
+      'group' => 'Invoicing - Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup();
+
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a client.
+    $this->client = $this->createUiClient();
+
+    // Create an invoice for the client.
+    $this->invoice = $this->createUiInvoice(array('field_invoice_client' => $this->client));
+  }
+
+  /**
+   * Tests the referencing of clients in invoices.
+   */
+  public function testClientReference() {
+    // Retrieve the original name of the client.
+    $original_name = $this->client->name;
+
+    // Edit the client, creating a new revision.
+    $new_name = $this->randomString();
+    $this->drupalPost('client/' . $this->client->identifier() . '/edit', array('name' => $new_name), t('Save'));
+
+    // Check that the invoice still uses the client name as it was at the time
+    // the invoice was created.
+    $this->drupalGet('invoice/' . $this->invoice->identifier());
+    $this->assertText(trim(check_plain($original_name)), 'The invoice still refers to the original client name after a new revision has been created.');
+
+    // Edit the invoice and check that the name still remains the same.
+    $this->drupalPost('invoice/' . $this->invoice->identifier() . '/edit', array(), t('Save'));
+    $this->drupalGet('invoice/' . $this->invoice->identifier());
+    $this->assertText(trim(check_plain($original_name)), 'The invoice still refers to the original client name after a new revision has been created.');
+
+    // Create a new invoice. Check that it uses the new name of the client.
+    $new_invoice = $this->createUiInvoice(array('field_invoice_client' => $this->client));
+    $this->drupalGet('invoice/' . $new_invoice->identifier());
+    $this->assertText(trim(check_plain($new_name)), 'The new client name is used for new invoices.');
+  }
+
+}

@@ -10,7 +10,7 @@ module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class InvoicingIntegrationTestCase extends DrupalWebTestCase {
+class InvoicingIntegrationTestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
@@ -21,6 +21,13 @@ class InvoicingIntegrationTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    */
   protected $profile = 'invoicing';
+
+  /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
 
   /**
    * Test user accounts.
@@ -56,9 +63,9 @@ class InvoicingIntegrationTestCase extends DrupalWebTestCase {
 
     // If a business user was created, also create a business.
     if (in_array('business owner', $this->usersToCreate)) {
-      $business = $this->createBusiness();
-      $business->save();
-      $this->addBusinessToUser($business, $this->users['business owner']);
+      $this->business = $this->createBusiness();
+      $this->business->save();
+      $this->addBusinessToUser($this->business, $this->users['business owner']);
     }
   }
 

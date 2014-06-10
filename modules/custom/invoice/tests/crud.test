@@ -9,16 +9,11 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 
-class InvoiceCRUDTestCase extends DrupalWebTestCase {
+class InvoiceCRUDTestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * A test client.
@@ -64,7 +59,7 @@ class InvoiceCRUDTestCase extends DrupalWebTestCase {
     $this->assertInvoiceTableNotEmpty('The invoice database table is no longer empty after creating an invoice.');
 
     // Check that the invoice data can be read from the database.
-    $retrieved_invoice = invoice_load($invoice->iid);
+    $retrieved_invoice = invoice_load((int) $invoice->iid);
     $this->assertInvoiceProperties($retrieved_invoice, $values, 'The invoice that was saved to the database can be read correctly.');
 
     // Update the invoice and check that the new values were written to the

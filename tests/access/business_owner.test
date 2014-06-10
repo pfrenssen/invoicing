@@ -27,6 +27,11 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
   /**
    * {@inheritdoc}
    */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * {@inheritdoc}
+   */
   protected $accessiblePaths = array(
     '<front>',
     'client/add',
@@ -34,9 +39,6 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     'dashboard',
     'invoices',
     'invoice/add',
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
     'user',
     'user/password',
     'user/register',
@@ -146,7 +148,7 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     // Create two businesses, of which the first is owned by the business owner.
     $this->business1 = $this->createBusiness();
     $this->business1->save();
-    $this->addBusinessToUser($this->business1, $this->user);
+    $this->addBusinessToUser($this->business1, $this->users['business owner']);
 
     $this->business2 = $this->createBusiness();
     $this->business2->save();
@@ -209,20 +211,21 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
 
-    // File a line item to each business. The business owner should only be able
-    // to view, edit and delete their own line items.
+    // File a line item to each business. The business owner should not be able
+    // to view, edit and delete any line items. They are managed in invoices.
     $this->lineItem1 = $this->createLineItem(array('bid' => $this->business1->identifier()));
     $this->lineItem1->save();
     $this->lineItem2 = $this->createLineItem(array('bid' => $this->business2->identifier()));
     $this->lineItem2->save();
 
-    // Add the paths to view, edit and delete the line item. These should only
-    // be accessible for the first line item.
-    $this->accessiblePaths[] = 'line_item/' . $this->lineItem1->identifier();
-    $this->accessiblePaths[] = 'line_item/' . $this->lineItem1->identifier() . '/edit';
-    $this->accessiblePaths[] = 'line_item/' . $this->lineItem1->identifier() . '/delete';
-    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem2->identifier();
-    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem2->identifier() . '/edit';
-    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem2->identifier() . '/delete';
+    // Add the paths to view, edit and delete the line item. These should not be
+    // accessible for any line items, since line items are managed in invoices.
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem1->identifier();
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem1->identifier() . '/edit';
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem1->identifier() . '/delete';
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem2->identifier();
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem2->identifier() . '/edit';
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem2->identifier() . '/delete';
   }
+
 }

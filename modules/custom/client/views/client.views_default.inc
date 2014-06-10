@@ -80,7 +80,7 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['cid']['table'] = 'client';
   $handler->display->display_options['fields']['cid']['field'] = 'cid';
   $handler->display->display_options['fields']['cid']['exclude'] = TRUE;
-  /* Field: Client: Name */
+  /* Field: Client: Label */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'client';
   $handler->display->display_options['fields']['name']['field'] = 'name';
@@ -104,6 +104,15 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['edit_client']['table'] = 'client';
   $handler->display->display_options['fields']['edit_client']['field'] = 'edit_client';
   $handler->display->display_options['fields']['edit_client']['label'] = 'Actions';
+  /* Contextual filter: Client: Business ID */
+  $handler->display->display_options['arguments']['bid']['id'] = 'bid';
+  $handler->display->display_options['arguments']['bid']['table'] = 'client';
+  $handler->display->display_options['arguments']['bid']['field'] = 'bid';
+  $handler->display->display_options['arguments']['bid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['bid']['default_argument_type'] = 'business_active';
+  $handler->display->display_options['arguments']['bid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['bid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['bid']['summary_options']['items_per_page'] = '25';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');

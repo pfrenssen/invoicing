@@ -9,16 +9,11 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 
-class ClientEntityTestCase extends DrupalWebTestCase {
+class ClientEntityTestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'testing';
 
   /**
    * Returns test case metadata.

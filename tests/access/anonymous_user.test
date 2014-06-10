@@ -27,6 +27,11 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
   /**
    * {@inheritdoc}
    */
+  protected $usersToCreate = array();
+
+  /**
+   * {@inheritdoc}
+   */
   protected $accessiblePaths = array(
     'user',
     'user/password',
@@ -52,9 +57,6 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
     'dashboard',
     'invoices',
     'invoice/add',
-    'line_item/add',
-    'line_item/add/product',
-    'line_item/add/service',
     'node',
     'node/add',
   );
@@ -137,9 +139,9 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
 
     // Add the paths to view, edit and delete the line item. These should all be
     // inaccessible.
-    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem->identifier();
-    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem->identifier() . '/edit';
-    $this->inaccessiblePaths[] = 'line_item/' . $this->lineItem->identifier() . '/delete';
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier();
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier() . '/edit';
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier() . '/delete';
   }
 
   /**

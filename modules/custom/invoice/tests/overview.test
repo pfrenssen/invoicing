@@ -89,12 +89,22 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         array(
           'message' => 'The first column contains the invoice number.',
           'expected' => $invoice->field_invoice_number->value(),
-          'actual' => (string) $tablerow->td[0],
+          'actual' => (string) $tablerow->td[0]->a,
+        ),
+        array(
+          'message' => 'The first column is linked to the invoice detail page.',
+          'expected' => '/invoice/' . $invoice->getIdentifier(),
+          'actual' => (string) $tablerow->td[0]->a['href'],
         ),
         array(
           'message' => 'The second column contains the client.',
           'expected' => $client->name,
-          'actual' => (string) $tablerow->td[1],
+          'actual' => (string) $tablerow->td[1]->a,
+        ),
+        array(
+          'message' => 'The first column is linked to the client detail page.',
+          'expected' => '/client/' . $client->cid,
+          'actual' => (string) $tablerow->td[1]->a['href'],
         ),
         array(
           'message' => 'The third column contains the date.',

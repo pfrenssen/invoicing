@@ -106,7 +106,7 @@ trait InvoiceTestHelper {
       ->entityCondition('entity_type', 'invoice')
       ->entityCondition('bundle', 'invoice')
       ->fieldCondition('field_invoice_number', 'value', $values['field_invoice_number'])
-      ->range(0,1);
+      ->range(0, 1);
     $result = $query->execute();
     $iids = array_keys($result['invoice']);
     $this->assertTrue($iids, 'Invoice was successfully created through the UI.');

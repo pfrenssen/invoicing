@@ -9,6 +9,7 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'invoice');
 
 class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
+
   use BaseTestHelper;
   use InvoiceTestHelper;
 

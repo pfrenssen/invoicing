@@ -5,8 +5,6 @@
  * Asserts and helper methods concerning the invoice module.
  */
 
-module_load_include('inc', 'test_traits', 'client');
-
 trait InvoiceTestHelper {
 
   /**

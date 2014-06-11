@@ -52,6 +52,10 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $user->field_user_businesses->set(array($business->getIdentifier()));
     $user->save();
 
+    // Make sure a client has been created.
+    $client = $this->createUIClient();
+    $client->save();
+
     // Create a number of test invoices.
     for ($i = 0; $i < 20; $i++) {
       $invoice = $this->createInvoice();

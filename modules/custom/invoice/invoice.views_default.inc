@@ -78,12 +78,14 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_number']['id'] = 'field_invoice_number';
   $handler->display->display_options['fields']['field_invoice_number']['table'] = 'field_data_field_invoice_number';
   $handler->display->display_options['fields']['field_invoice_number']['field'] = 'field_invoice_number';
+  $handler->display->display_options['fields']['field_invoice_number']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_invoice_number']['alter']['path'] = 'invoice/[iid]';
   /* Field: Invoice: Client */
   $handler->display->display_options['fields']['field_invoice_client']['id'] = 'field_invoice_client';
   $handler->display->display_options['fields']['field_invoice_client']['table'] = 'field_data_field_invoice_client';
   $handler->display->display_options['fields']['field_invoice_client']['field'] = 'field_invoice_client';
   $handler->display->display_options['fields']['field_invoice_client']['settings'] = array(
-    'link' => 0,
+    'link' => 1,
   );
   /* Field: Invoice: Date */
   $handler->display->display_options['fields']['field_invoice_date']['id'] = 'field_invoice_date';

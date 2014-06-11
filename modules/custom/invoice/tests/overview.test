@@ -79,7 +79,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Check that the pager is not present. We added 20 invoices which is the
     // maximum number that fits on one page.
-    $this->assertNoPager().
+    $this->assertNoPager();
 
     // Loop over the displayed table rows and compare them with each business in
     // order.

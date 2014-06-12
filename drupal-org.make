@@ -105,6 +105,13 @@ projects[strongarm][download][revision] = 7.x-2.0
 projects[strongarm][download][branch] = 7.x-2.x
 projects[strongarm][subdir] = contrib
 
+; The current release of the module is old so we use the newest release
+; candidate.
+projects[user_registrationpassword][download][type] = git
+projects[user_registrationpassword][download][revision] = 235d87e90077d53a8c6cdf028a38ff0891baa4f7
+projects[user_registrationpassword][download][branch] = 7.x-1.x
+projects[user_registrationpassword][subdir] = contrib
+
 projects[views][download][type] = git
 projects[views][download][revision] = 7.x-3.7
 projects[views][download][branch] = 7.x-3.x

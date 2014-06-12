@@ -80,5 +80,12 @@ projects[link][subdir] = contrib
 projects[strongarm] = 2.0
 projects[strongarm][subdir] = contrib
 
+; The current release of the module is old so we use the newest release
+; candidate.
+projects[user_registrationpassword][download][type] = git
+projects[user_registrationpassword][download][revision] = 235d87e90077d53a8c6cdf028a38ff0891baa4f7
+projects[user_registrationpassword][download][branch] = 7.x-1.x
+projects[user_registrationpassword][subdir] = contrib
+
 projects[views] = 3.7
 projects[views][subdir] = contrib

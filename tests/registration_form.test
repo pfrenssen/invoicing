@@ -35,13 +35,17 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
     $this->drupalPost('user/register', array(), t('Create new account'));
     $required_fields = array(
       'mail' => t('E-mail'),
+      'pass[pass1]' => t('Password'),
       'business' => t('Company name'),
     );
     $this->assertRequiredFieldMessages($required_fields);
 
     // Fill in the fields and submit the form.
+    $password = $this->randomString();
     $values = array(
       'mail' => $this->randomEmail(),
+      'pass[pass1]' => $password,
+      'pass[pass2]' => $password,
       'business' => $this->randomString(),
     );
     $this->drupalPost('user/register', $values, t('Create new account'));
@@ -56,7 +60,7 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
     // Check that the user account was created correctly.
     $accounts = user_load_multiple(array(), array('mail' => $values['mail']));
     $user = reset($accounts);
-    $this->assertTrue($user->status, 'New account is active after registration.');
+    $this->assertFalse($user->status, 'New account is not active after registration.');
     $this->assertTrue(in_array('business owner', $user->roles), 'The account has the business owner role.');
     $this->assertTrue(in_array('authenticated user', $user->roles), 'The account has the authenticated user role.');
     $this->assertEqual(count($user->roles), 2, 'The account does not have any other roles.');
@@ -73,20 +77,10 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
     $captured_emails = variable_get('drupal_test_email_collector', array());
     $email = end($captured_emails);
     $matches = array();
-    preg_match('/user\/reset\/.+/', $email['body'], $matches);
+    preg_match('/user\/registrationpassword\/.+/', $email['body'], $matches);
     $activation_path = $matches[0];
-    $this->drupalPost($activation_path, array(), t('Log in'));
-    $this->assertText(t('You have just used your one-time login link. It is no longer necessary to use this link to log in. Please change your password.'));
-
-    // Set the password.
-    // @todo When issue #1187 is in the user can supply a password when
-    //   registering, and this won't be necessary any more.
-    $password = $this->randomString();
-    $edit = array(
-      'pass[pass1]' => $password,
-      'pass[pass2]' => $password,
-    );
-    $this->drupalPost(NULL, $edit, t('Save'));
+    $this->drupalGet($activation_path);
+    $this->assertText(t('You have just used your one-time login link. Your account is now active.'));
   }
 
 }

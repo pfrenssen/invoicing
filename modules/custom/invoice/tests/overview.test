@@ -44,15 +44,6 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
     $this->drupalLogin($this->users['business owner']);
 
-    // Create a business and link it to the business owner.
-    // @todo The business should be created when the user creates the account.
-    // @see http://atrium.pocomas.be/node/1184
-    $business = entity_metadata_wrapper('business', $this->createBusiness());
-    $business->save();
-    $user = entity_metadata_wrapper('user', $this->users['business owner']);
-    $user->field_user_businesses->set(array($business->getIdentifier()));
-    $user->save();
-
     // Make sure a client has been created.
     $client = $this->createUIClient();
     $client->save();

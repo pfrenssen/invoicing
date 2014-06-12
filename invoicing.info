@@ -17,6 +17,7 @@ dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard
 dependencies[] = line_item
 dependencies[] = link
+dependencies[] = user_registrationpassword
 dependencies[] = views
 
 files[] = tests/access/access_web_test_case.php

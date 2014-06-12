@@ -142,7 +142,6 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $xpath = '//ul[@class="action-links"]/li/a[@href="/invoice/add" and contains(text(), :text)]';
     $this->assertXPathElements($xpath, 1, array(':text' => t('Add invoice')), 'The "Add invoice" local action is present.');
     $this->assertFalse($this->xpath('//div[contains(@class, "view-invoices")]//table'), 'The table containing invoices is not shown when no invoice is linked to the user.');
-
   }
 
 }

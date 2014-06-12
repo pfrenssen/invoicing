@@ -68,8 +68,6 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
   /**
    * Tests the invoice overview.
-   *
-   * @var SimpleXMLElement $tablerow
    */
   public function testOverview() {
     $this->drupalGet('invoices');
@@ -82,7 +80,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     // maximum number that fits on one page.
     $this->assertNoPager();
 
-    // Loop over the displayed table rows and compare them with each business in
+    // Loop over the displayed table rows and compare them with each invoice in
     // order.
     $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table//tbody/tr');
     foreach ($tablerows as $tablerow) {

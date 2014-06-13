@@ -169,7 +169,10 @@ trait InvoiceTestHelper {
       // Prepare the client field the way entityreference expects it.
       // @see entityreference_autocomplete_callback_get_matches()
       $client = "{$values['field_invoice_client']->name} ({$values['field_invoice_client']->identifier()})";
-      $client = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim(decode_entities(strip_tags($client)))));
+      // Contrary to entityreference_autocomplete_callback_get_matches() we do
+      // not start with an HTML safe string so we don't need to strip tags and
+      // decode HTML entities.
+      $client = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim($client)));
       if (strpos($client, ',') !== FALSE || strpos($client, '"') !== FALSE) {
         $client = '"' . str_replace('"', '""', $client) . '"';
       }

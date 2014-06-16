@@ -12,7 +12,7 @@ function invoice_views_default_views() {
 
   $view = new view();
   $view->name = 'invoices';
-  $view->description = '';
+  $view->description = 'Invoice overview';
   $view->tag = 'default';
   $view->base_table = 'invoice';
   $view->human_name = 'Invoices';

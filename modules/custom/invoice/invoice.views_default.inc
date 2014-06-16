@@ -69,6 +69,13 @@ function invoice_views_default_views() {
       'empty_column' => 0,
     ),
   );
+  /* No results behavior: Global: Text area */
+  $handler->display->display_options['empty']['area']['id'] = 'area';
+  $handler->display->display_options['empty']['area']['table'] = 'views';
+  $handler->display->display_options['empty']['area']['field'] = 'area';
+  $handler->display->display_options['empty']['area']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area']['content'] = 'No invoices yet! Why don\'t you go ahead and create one?';
+  $handler->display->display_options['empty']['area']['format'] = 'plain_text';
   /* Field: Invoice: Invoice ID */
   $handler->display->display_options['fields']['iid']['id'] = 'iid';
   $handler->display->display_options['fields']['iid']['table'] = 'invoice';

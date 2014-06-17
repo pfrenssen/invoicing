@@ -51,7 +51,7 @@ projects[entityreference][subdir] = contrib
 
 ; Issue #2266735: Entity labels are not sanitized consistently.
 ; @see https://drupal.org/node/2266735
-projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-1-entityreference-inconsistent_sanitizing.patch
+projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-2-entityreference-inconsistent_sanitizing.patch
 
 ; Issue #1837650: Allow referencing a specific revision ID.
 ; @see https://drupal.org/node/1837650

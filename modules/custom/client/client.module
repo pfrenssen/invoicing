@@ -707,4 +707,26 @@ class ClientAPIController extends EntityAPIController {
  * The Client Inline Entity Form controller class.
  */
 class ClientInlineEntityFormController extends EntityInlineEntityFormController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function entityForm($entity_form, &$form_state) {
+    $client = $entity_form['#entity'];
+    $extra_fields = field_info_extra_fields('client', $client->type, 'form');
+
+    $entity_form['name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Name'),
+      '#required' => TRUE,
+      '#default_value' => $client->name,
+      '#maxlength' => 255,
+      '#weight' => !empty($extra_fields['name']) ? $extra_fields['name']['weight'] : -5,
+    );
+
+    $langcode = entity_language('client', $client);
+    field_attach_form('client', $client, $entity_form, $form_state, $langcode);
+
+    return $entity_form;
+  }
 }

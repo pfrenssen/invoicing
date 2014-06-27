@@ -99,7 +99,7 @@ projects[inline_entity_form][subdir] = contrib
 ; Issue #2134035: Allow to add existing entities using the single value field
 ; widget.
 ; @see https://drupal.org/node/2134035
-projects[entityreference_unique][patch][] = https://www.drupal.org/files/issues/2134035-24-inline_entity_form-add_existing_single_value.patch
+projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/2134035-28-inline_entity_form-add_existing_single_value.patch
 
 projects[link][download][type] = git
 projects[link][download][revision] = 7.x-1.2

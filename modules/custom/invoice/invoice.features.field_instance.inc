@@ -42,10 +42,10 @@ function invoice_field_default_field_instances() {
         'type_settings' => array(
           'allow_existing' => 1,
           'delete_references' => 0,
-          'label_plural' => 'entities',
-          'label_singular' => 'entity',
+          'label_plural' => 'clients',
+          'label_singular' => 'client',
           'match_operator' => 'CONTAINS',
-          'override_labels' => 0,
+          'override_labels' => 1,
         ),
       ),
       'type' => 'inline_entity_form_single',

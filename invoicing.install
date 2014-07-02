@@ -130,4 +130,6 @@ function invoicing_install() {
   // Allow visitor account creation.
   variable_set('user_register', USER_REGISTER_VISITORS);
 
+  // Disable poor man's cron.
+  variable_set('cron_safe_threshold', 0);
 }

@@ -216,6 +216,11 @@ trait BaseTestHelper {
    *     'name' => t('Client name'),
    *     'field_client_email[und][0][email]' => t('Email address'),
    *   );
+   * @param array $messages
+   *   An associative array of status messages that should be displayed, keyed
+   *   by message type (either 'status', 'warning' or 'error'). Every type
+   *   contains an indexed array of status messages. When omitted the standard
+   *   messages of the Field module will be used.
    * @param string $message
    *   The message to display along with the assertion.
    * @param string $group
@@ -224,12 +229,14 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertRequiredFieldMessages($required_fields, $message = '', $group = 'Other') {
-    $messages = array();
+  function assertRequiredFieldMessages($required_fields, $messages = array(), $message = '', $group = 'Other') {
     $success = TRUE;
 
-    foreach ($required_fields as $required_field) {
-      $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
+    // Use the standard message of the Field module by default.
+    if (!$messages) {
+      foreach ($required_fields as $required_field) {
+        $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
+      }
     }
     $success &= $this->assertFieldValidationFailed(array_keys($required_fields));
     return $success &= $this->assertStatusMessages($messages, $message ?: 'The error messages about required fields are present.', $group);

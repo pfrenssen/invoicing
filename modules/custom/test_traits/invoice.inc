@@ -188,7 +188,7 @@ trait InvoiceTestHelper {
     }
 
     return array(
-      'field_invoice_client[und]' => $client,
+      'field_invoice_client[und][form][entity_id]' => $client,
       'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
       'field_invoice_date[und][0][value][month]' => date('n', $values['field_invoice_date']),
       'field_invoice_date[und][0][value][day]' => date('j', $values['field_invoice_date']),

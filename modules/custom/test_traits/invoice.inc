@@ -98,7 +98,16 @@ trait InvoiceTestHelper {
 
     // Convert the entity property values to form values and submit the form.
     $edit = $this->convertInvoiceValuesToFormPostValues($values);
-    $this->drupalPost('invoice/add', $edit, t('Save'));
+
+    // Click on the 'Add existing entity' button to display the autocomplete
+    // field. We have to pass the name of the submit button but this contains a
+    // hash, so we retrieve the button by ID first.
+    // @todo If no client is passed, open the 'Add new entity' form instead and
+    //   create a new client with random values on the fly.
+    $this->drupalGet('invoice/add');
+    $button_element = $this->xpath('//input[@id = "edit-field-invoice-client-und-actions-ief-add-existing"]');
+    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+    $this->drupalPost(NULL, $edit, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.
     $query = new EntityFieldQuery();

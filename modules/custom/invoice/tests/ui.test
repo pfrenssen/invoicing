@@ -78,8 +78,8 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     );
     $messages = array(
       'error' => array(
-        t('!name field is required.', array('!name' => t('Entity'))),
-        t('The selected @label is not valid.', array('@label' => t('entity'))),
+        t('!name field is required.', array('!name' => t('Client'))),
+        t('The selected @label is not valid.', array('@label' => t('client'))),
         t('!name field is required.', array('!name' => t('Invoice number'))),
       ),
     );

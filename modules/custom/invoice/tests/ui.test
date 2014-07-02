@@ -61,14 +61,29 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertTrue(db_table_exists('invoice'), 'The invoice database table exists.');
     $this->assertInvoiceTableEmpty('The invoice database is initially empty.');
 
+    // Click on the "Add existing entity" button to display the autocomplete
+    // field, so we can check if it will be marked as required.
+    // @todo Rework this once we have the unified autocomplete field.
+    // @see https://github.com/pfrenssen/invoicing/issues/20
+    $this->drupalGet('invoice/add');
+    $button_element = $this->xpath('//input[@id = "edit-field-invoice-client-und-actions-ief-add-existing"]');
+    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+
     // Check that error messages are displayed about required fields when
     // creating a new invoice.
-    $this->drupalPost('invoice/add', array(), t('Save'));
+    $this->drupalPost(NULL, array(), t('Save'));
     $required_fields = array(
-      'field_invoice_client[und]' => t('Client'),
+      'field_invoice_client[und][form][entity_id]' => t('Client'),
       'field_invoice_number[und][0][value]' => t('Invoice number'),
     );
-    $this->assertRequiredFieldMessages($required_fields);
+    $messages = array(
+      'error' => array(
+        t('!name field is required.', array('!name' => t('Entity'))),
+        t('The selected @label is not valid.', array('@label' => t('entity'))),
+        t('!name field is required.', array('!name' => t('Invoice number'))),
+      ),
+    );
+    $this->assertRequiredFieldMessages($required_fields, $messages);
 
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomInvoiceValues();
@@ -83,14 +98,27 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Check that the form fields have correct values when the invoice is edited.
     $this->drupalGet('invoice/' . $invoice->iid . '/edit');
     $form_values = $this->convertInvoiceValuesToFormPostValues($values);
+    // The client name is not shown as a field but as an inline table. Test this
+    // separately.
+    $this->assertXPathElements('//td[contains(@class, "inline-entity-form-client-name") and text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in an inline table.');
+    unset($form_values['field_invoice_client[und][form][entity_id]']);
+
     foreach ($form_values as $name => $value) {
       $this->assertFieldByName($name, $value, format_string('When editing an existing invoice the %name field has the right value.', array('%name' => $name)));
     }
 
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomInvoiceValues();
+
+    // Disregard the client field, it is currently displayed as an inline table
+    // and it will become an autocomplete in the future.
+    // @todo Test this when issue #20 is in.
+    // @see https://github.com/pfrenssen/invoicing/issues/20
     $new_values['field_invoice_client'] = $values['field_invoice_client'];
-    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $this->convertInvoiceValuesToFormPostValues($new_values), t('Save'));
+    $edit = $this->convertInvoiceValuesToFormPostValues($new_values);
+    unset($edit['field_invoice_client[und][form][entity_id]']);
+
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $edit, t('Save'));
     $invoice = invoice_load($invoice->iid, TRUE);
     $messages = array('status' => array(t('The changes have been saved.', array('%invoice_number' => $values['field_invoice_number']))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');

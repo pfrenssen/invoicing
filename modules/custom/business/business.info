@@ -35,6 +35,7 @@ features[views_view][] = businesses
 
 files[] = business.admin.inc
 files[] = tests/crud.test
+files[] = tests/entity.test
 files[] = tests/overview.test
 files[] = tests/ui.test
 files[] = tests/unit.test

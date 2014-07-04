@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Tests for the Business entity.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+
+class BusinessEntityTestCase extends EntityTestCase {
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity test',
+      'description' => 'Tests for the Business entity.',
+      'group' => 'Invoicing - Business',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup('business');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'business';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTypes() {
+    return array('business');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntityType($type, $name) {
+    business_type_create($type, $name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntity(array $values = array()) {
+    return business_create($values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateEntityUsingEntityMetadataWrapper(Entity $entity, array $values) {
+    $this->updateBusiness($entity, $values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadEntity($id) {
+    return business_load($id, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getBasicPropertyValues() {
+    return $this->randomBusinessPropertyValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getFieldValues($type) {
+    return $this->randomBusinessFieldValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityMetaDataWrapperValues($type) {
+    return $this->randomBusinessValues();
+  }
+
+}

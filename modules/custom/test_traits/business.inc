@@ -135,6 +135,46 @@ trait BusinessTestHelper {
   }
 
   /**
+   * Returns random field data for the fields in the business entity.
+   *
+   * @returns array
+   *   An associative array of field data, keyed by field name.
+   */
+  public function randomBusinessFieldValues() {
+    $values = array();
+
+    $values['field_business_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
+    $values['field_business_bic'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_business_email'][LANGUAGE_NONE][0]['email'] = $this->randomEmail();
+    $values['field_business_iban'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_business_mobile'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_business_phone'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_business_vat'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+
+    return $values;
+  }
+
+  /**
+   * Returns random data for the basic business properties.
+   *
+   * These are values for the properties that are present on every business
+   * entity regardless of the bundle type.
+   *
+   * This excludes the Business ID ('bid') property which is immutable.
+   *
+   * @return array
+   *   An associative array of property values, keyed by property name.
+   */
+  protected function randomBusinessPropertyValues() {
+    return array(
+      'name' => $this->randomString(),
+      'type' => $this->randomName(),
+      'created' => rand(0, 2000000000),
+      'changed' => rand(0, 2000000000),
+    );
+  }
+
+  /**
    * Returns form post values from the given entity values.
    *
    * @see self::randomBusinessValues()

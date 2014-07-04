@@ -1,0 +1,236 @@
+<?php
+
+/**
+ * @file
+ * Base class for entity tests.
+ */
+
+abstract class EntityTestCase extends InvoicingIntegrationTestCase {
+
+  /**
+   * Returns the machine name of the entity under test.
+   *
+   * @return string
+   *   The machine name of the entity under test.
+   */
+  abstract public function getName();
+
+  /**
+   * Returns the available entity types.
+   *
+   * @return array
+   *   An array of entity type machine names.
+   */
+  abstract public function getTypes();
+
+  /**
+   * Creates a new entity type.
+   *
+   * @param string $type
+   *   The entity type machine name. Consists only of lowercase characters and
+   *   underscores.
+   * @param string $name
+   *   The human readable name of the entity type.
+   */
+  abstract public function createEntityType($type, $name);
+
+  /**
+   * Creates a new entity.
+   *
+   * @param array $values
+   *   An optional array of property and field values to assign to the new
+   *   entity. These are passed in the same format as on the entity object, with
+   *   properties as flat key-value pairs, and fields in the format
+   *   $field[$language][$delta].
+   *
+   * @return Entity
+   *   The created entity.
+   */
+  abstract public function createEntity(array $values = array());
+
+  /**
+   * Updates an entity with new values using the entity metadata wrapper.
+   *
+   * @param Entity $entity
+   *   The entity to update.
+   * @param array $values
+   *   An array of property values to apply to the entity, keyed by property
+   *   name. These is the simplified format used by the entity metadata wrapper
+   *   which does not include the language or delta (for single value fields).
+   */
+  abstract public function updateEntityUsingEntityMetadataWrapper(Entity $entity, array $values);
+
+  /**
+   * Loads the entity with the given identifier.
+   *
+   * The entity is loaded from the database, bypassing the entity cache.
+   *
+   * @param int $id
+   *   The entity ID.
+   *
+   * @return Entity
+   *   The requested entity.
+   */
+  abstract public function loadEntity($id);
+
+  /**
+   * Returns random data for the basic entity properties.
+   *
+   * These are values for the properties that are present on every entity
+   * regardless of the bundle type.
+   *
+   * @return array
+   *   An associative array of property values, keyed by property name.
+   */
+  abstract protected function getBasicPropertyValues();
+
+  /**
+   * Returns random field data for the fields in the given bundle.
+   *
+   * @param string $type
+   *   The entity type for which to return the random data.
+   *
+   * @return array
+   *   An associative array of field data, keyed by field name. This is in the
+   *   format used by the field module: $field[$language][$delta] = $value.
+   */
+  abstract protected function getFieldValues($type);
+
+  /**
+   * Returns random field data for the fields in the given bundle.
+   *
+   * @param string $type
+   *   The entity type for which to return the random data.
+   *
+   * @return array
+   *   An associative array of random values, keyed by field name, in the
+   *   simplified format used by the entity metadata wrapper which does not
+   *   include the language or delta (for single value fields).
+   */
+  abstract protected function getEntityMetadataWrapperValues($type);
+
+  /**
+   * Tests if a new entity type can be created.
+   */
+  public function testEntityTypeCreation() {
+    // Create a new entity type.
+    $type = strtolower($this->randomName());
+    $this->createEntityType($type, $this->randomString());
+
+    // Test if the properties can be set during creation.
+    $values = array('type' => $type) + $this->getBasicPropertyValues();
+    $entity = $this->createEntity($values);
+    $this->assertEntityProperties($this->getName(), $entity, $values);
+
+    // Test if the properties can be set using the entity metadata wrapper on an
+    // empty entity.
+    $entity = $this->createEntity();
+    $values = array('type' => $type) + $this->getBasicPropertyValues();
+    $this->updateEntityUsingEntityMetadataWrapper($entity, $values);
+    $this->assertEntityProperties($this->getName(), $entity, $values);
+  }
+
+  /**
+   * Tests all properties and fields on the bundles that exist for the entity.
+   *
+   * Tests are done both using the regular field API as well as entity metadata
+   * wrappers.
+   */
+  public function testBundles() {
+    // Loop over the available bundles.
+    foreach ($this->getTypes() as $type) {
+      // Check if all properties can be accessed on a freshly created entity.
+      $properties = array('type' => $type) + $this->getBasicPropertyValues();
+      $fields = $this->getFieldValues($type);
+      $entity = $this->createEntity($properties + $fields);
+      $this->assertEntityProperties($this->getName(), $entity, $properties);
+      $this->assertEntityFieldValues($entity, $fields);
+
+      // Check if an empty entity can have its properties updated.
+      $entity = $this->createEntity();
+      $values = $this->getAllValues($type);
+      $this->updateEntityUsingEntityMetadataWrapper($entity, $values);
+      $this->assertEntityProperties($this->getName(), $entity, $values);
+
+      // Check if an existing entity can have its properties updated.
+      $values = array('type' => $type) + $this->getBasicPropertyValues() + $this->getFieldValues($type);
+      $entity = $this->createEntity($values);
+      $values = $this->getAllValues($type);
+      $this->updateEntityUsingEntityMetadataWrapper($entity, $values);
+      $this->assertEntityProperties($entity->entityType(), $entity, $values);
+
+      // Check if all properties can be accessed on a saved entity.
+      $properties = array('type' => $type) + $this->getBasicPropertyValues();
+      $fields = $this->getFieldValues($type);
+      $entity = $this->createEntity($properties + $fields);
+      $entity->save();
+      // When the entity is saved, the value for the 'last changed timestamp'
+      // should be set to the request time.
+      $properties['changed'] = REQUEST_TIME;
+      $this->assertEntityProperties($entity->entityType(), $entity, $properties);
+      $this->assertEntityFieldValues($entity, $fields);
+
+      // Check if all properties can be accessed on a loaded entity.
+      $entity = $this->loadEntity($entity->identifier());
+      $this->assertEntityProperties($entity->entityType(), $entity, $properties);
+      $this->assertEntityFieldValues($entity, $fields);
+    }
+  }
+
+  /**
+   * Returns an array with random data for all entity properties and fields.
+   *
+   * This is excluding the entity id which is not writeable.
+   *
+   * @param string $type
+   *   The entity type for which to return the property and field values.
+   *
+   * @return array
+   *   An associative array of random values, keyed by property name. This is in
+   *   the format of the entity metadata wrapper which offers a unified
+   *   interface for properties and fields.
+   */
+  protected function getAllValues($type) {
+    return array(
+      'type' => $type,
+    ) + $this->getBasicPropertyValues() + $this->getEntityMetadataWrapperValues($type);
+  }
+
+  /**
+   * Check if the fields on the entity contain the expected values.
+   *
+   * @param Entity $entity
+   *   The entity to check.
+   * @param array $values
+   *   An associative array of field values to check, keyed by field name.
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  public function assertEntityFieldValues(Entity $entity, array $values, $message = '', $group = 'Other') {
+    $success = TRUE;
+    foreach ($values as $field_name => $value) {
+      $actual = field_get_items($entity->entityType(), $entity, $field_name);
+      $langcode = field_language($entity->entityType(), $entity, $field_name);
+      $assert_message = format_string('The %field field has the correct value(s).', array('%field' => $field_name));
+      // If the field value is an array, filter out all unexpected keys. Fields
+      // may populate the array with additional properties in hook_field_load()
+      // and hook_field_prepare_view(). For example we might find a sanitized
+      // 'safe_value'.
+      if (is_array($value)) {
+        $success &= $this->assertFalse(drupal_array_diff_assoc_recursive($value[$langcode], $actual), $assert_message, $group);
+      }
+      else {
+        $success &= $this->assertEqual($value[$langcode], $actual, $assert_message, $group);
+      }
+    }
+
+    $message = $message ?: 'The entity contains the correct field values.';
+    return $this->assertTrue($success, $message);
+  }
+
+}

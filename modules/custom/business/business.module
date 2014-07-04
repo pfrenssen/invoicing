@@ -107,6 +107,8 @@ function business_entity_property_info_alter(&$info) {
   $properties['changed']['label'] = t('Date changed');
   $properties['changed']['description'] = t('The date the business was most recently updated.');
   $properties['changed']['type'] = 'date';
+  $properties['changed']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['changed']['setter permission'] = 'administer businesses';
 
   $properties['is_new']['label'] = t('Is new');
   $properties['is_new']['description'] = t('Whether the business is new and not saved to the database yet.');

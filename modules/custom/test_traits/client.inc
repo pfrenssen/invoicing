@@ -152,8 +152,9 @@ trait ClientTestHelper {
   }
 
   /**
-   * Returns random values for all properties on the client entity.
+   * Returns random values for all editable properties on the client entity.
    *
+   * Intended to be used with the entity metadata wrapper.
    * These include the fields from the 'client' bundle.
    *
    * @returns array

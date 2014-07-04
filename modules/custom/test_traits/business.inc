@@ -118,6 +118,8 @@ trait BusinessTestHelper {
   /**
    * Returns random values for all properties on the business entity.
    *
+   * Intended to be used with the entity metadata wrapper.
+   *
    * @returns array
    *   An associative array of random values, keyed by property name.
    */

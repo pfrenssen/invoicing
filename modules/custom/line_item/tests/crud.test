@@ -41,7 +41,7 @@ class LineItemCRUDTestCase extends InvoicingWebTestCase {
 
     // Check if a new line item can be saved to the database.
     $values = $this->randomLineItemValues();
-    $line_item = $this->createLineItem($values);
+    $line_item = $this->createLineItem($values['type'], $values);
     $line_item->save();
     $this->assertLineItemTableNotEmpty('The line item database table is no longer empty after creating a line item.');
 

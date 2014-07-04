@@ -67,6 +67,8 @@ trait LineItemTestHelper {
    * This is intended for unit tests. It will not set a business ID. If you are
    * doing a functionality test use $this->createUiLineItem() instead.
    *
+   * @param string $type
+   *   Optional line item type, either 'product' or 'service'.
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
@@ -74,9 +76,10 @@ trait LineItemTestHelper {
    * @return LineItem
    *   A new line item entity.
    */
-  function createLineItem(array $values = array()) {
+  function createLineItem($type = NULL, array $values = array()) {
     // Provide some default values.
-    $values += $this->randomLineItemValues();
+    $type = $type ?: $this->randomType();
+    $values += $this->randomLineItemValues($type);
     $line_item = line_item_create(array('type' => $values['type']));
     $this->updateLineItem($line_item, $values);
 

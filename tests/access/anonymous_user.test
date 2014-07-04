@@ -134,7 +134,7 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier() . '/delete';
 
     // Create a line item.
-    $this->lineItem = $this->createLineItem(array('bid' => $this->business->identifier()));
+    $this->lineItem = $this->createLineItem(NULL, array('bid' => $this->business->identifier()));
     $this->lineItem->save();
 
     // Add the paths to view, edit and delete the line item. These should all be

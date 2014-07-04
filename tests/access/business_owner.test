@@ -213,9 +213,9 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
     // File a line item to each business. The business owner should not be able
     // to view, edit and delete any line items. They are managed in invoices.
-    $this->lineItem1 = $this->createLineItem(array('bid' => $this->business1->identifier()));
+    $this->lineItem1 = $this->createLineItem(NULL, array('bid' => $this->business1->identifier()));
     $this->lineItem1->save();
-    $this->lineItem2 = $this->createLineItem(array('bid' => $this->business2->identifier()));
+    $this->lineItem2 = $this->createLineItem(NULL, array('bid' => $this->business2->identifier()));
     $this->lineItem2->save();
 
     // Add the paths to view, edit and delete the line item. These should not be

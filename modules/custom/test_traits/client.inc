@@ -174,6 +174,47 @@ trait ClientTestHelper {
   }
 
   /**
+   * Returns random data for the basic client properties.
+   *
+   * These are values for the properties that are present on every client entity
+   * regardless of the bundle type.
+   *
+   * This excludes the client ID ('cid') which is immutable.
+   *
+   * @return array
+   *   An associative array of property values, keyed by property name.
+   */
+  protected function randomClientPropertyValues() {
+    return array(
+      'name' => $this->randomString(),
+      'type' => $this->randomName(),
+      'bid' => rand(1, 100),
+      'created' => rand(0, 2000000000),
+      'changed' => rand(0, 2000000000),
+    );
+  }
+
+  /**
+   * Returns random field data for the fields in the client entity.
+   *
+   * @returns array
+   *   An associative array of field data, keyed by field name.
+   */
+  public function randomClientFieldValues() {
+    $values = array();
+
+    $values['field_client_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
+    $values['field_client_shipping_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
+    $values['field_client_email'][LANGUAGE_NONE][0]['email'] = $this->randomEmail();
+    $values['field_client_notes'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_client_phone'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_client_vat'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_client_website'][LANGUAGE_NONE][0]['url'] = 'http://www.test.be';
+
+    return $values;
+  }
+
+  /**
    * Returns form post values from the given entity values.
    *
    * @see self::randomClientValues()

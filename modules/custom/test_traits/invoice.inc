@@ -139,19 +139,39 @@ trait InvoiceTestHelper {
       'field_invoice_number' => $this->randomString(),
       'field_invoice_discount' => rand(0, 100) . '.00',
       'field_invoice_po_number' => $this->randomString(),
-      'field_invoice_due_date' => array_rand(array(
-        '0' => 'due on receipt',
-        '7' => '7 days',
-        '15' => '15 days',
-        '30' => '30 days',
-        '60' => '60 days',
-      )),
+      'field_invoice_due_date' => $this->randomDueDate(),
       'field_invoice_terms' => $this->randomString(),
-      'field_invoice_status' => array_rand(array(
-        'draft' => 'draft',
-        'sent' => 'sent',
-      ))
+      'field_invoice_status' => $this->randomInvoiceStatus(),
     );
+  }
+
+  /**
+   * Returns a random due date.
+   *
+   * @return int
+   *   The key of one of the due date values.
+   */
+  public function randomDueDate() {
+    return array_rand(array(
+      '0' => 'due on receipt',
+      '7' => '7 days',
+      '15' => '15 days',
+      '30' => '30 days',
+      '60' => '60 days',
+    ));
+  }
+
+  /**
+   * Returns a random invoice status.
+   *
+   * @return string
+   *   Either 'draft' or 'sent'.
+   */
+  public function randomInvoiceStatus() {
+    return array_rand(array(
+      'draft' => 'draft',
+      'sent' => 'sent',
+    ));
   }
 
   /**

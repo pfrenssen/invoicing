@@ -27,13 +27,6 @@ class BusinessEntityTestCase extends EntityTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
-    parent::setup('business');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getName() {
     return 'business';
   }

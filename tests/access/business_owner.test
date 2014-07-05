@@ -189,6 +189,10 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->accessiblePaths[] = 'client/' . $this->client3->identifier() . '/edit';
     $this->accessiblePaths[] = 'client/' . $this->client3->identifier() . '/delete';
 
+    // Create a line item of each type so they can be referenced by invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
+
     // File an invoice to each client. The business owner should only be able to
     // view, edit and delete their own invoices.
     $this->invoice1 = $this->createInvoice(array(

@@ -123,6 +123,10 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'client/' . $this->client->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'client/' . $this->client->identifier() . '/delete';
 
+    // Create a line item of each type so they can be referenced by invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
+
     // Add an invoice to the business. This should also be inaccessible.
     $this->invoice = $this->createInvoice(array(
       'bid' => $this->business->identifier(),

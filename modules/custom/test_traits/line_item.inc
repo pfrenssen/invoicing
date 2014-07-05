@@ -130,10 +130,20 @@ trait LineItemTestHelper {
    *   The line item type.
    */
   function randomLineItemType() {
-    return array_rand(array(
-      'product' => 'Product',
-      'service' => 'Service',
-    ));
+    return array_rand($this->getLineItemTypes());
+  }
+
+  /**
+   * Returns the supported line item types.
+   *
+   * @return array
+   *   An associative array of line item names, keyed by bundle name.
+   */
+  public function getLineItemTypes() {
+    return array(
+      'product' => t('Product'),
+      'service' => t('Service'),
+    );
   }
 
   /**

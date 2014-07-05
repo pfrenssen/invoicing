@@ -9,6 +9,7 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class ClientUnitTestCase extends InvoicingWebTestCase {
 
@@ -16,6 +17,7 @@ class ClientUnitTestCase extends InvoicingWebTestCase {
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * Test user accounts.
@@ -90,6 +92,10 @@ class ClientUnitTestCase extends InvoicingWebTestCase {
         $this->clients[] = $client;
       }
     }
+
+    // Create a line item of each type so it can be referenced in invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
 
     // Create three invoices for the first client, two invoices for the second
     // client and a single invoice for the third client. The fourth doesn't get

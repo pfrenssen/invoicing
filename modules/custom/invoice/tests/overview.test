@@ -7,11 +7,13 @@
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * {@inheritdoc}
@@ -48,6 +50,10 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     for ($i = 0; $i < 5; $i++) {
       $this->createUIClient();
     }
+
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
 
     // Create a number of test invoices.
     for ($i = 0; $i < 20; $i++) {

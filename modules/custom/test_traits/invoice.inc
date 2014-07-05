@@ -142,6 +142,8 @@ trait InvoiceTestHelper {
       'field_invoice_due_date' => $this->randomDueDate(),
       'field_invoice_terms' => $this->randomString(),
       'field_invoice_status' => $this->randomInvoiceStatus(),
+      'field_invoice_products' => array($this->randomLineItem('product')),
+      'field_invoice_services' => array($this->randomLineItem('service')),
     );
   }
 

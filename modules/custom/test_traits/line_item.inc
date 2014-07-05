@@ -169,4 +169,29 @@ trait LineItemTestHelper {
     }
   }
 
+  /**
+   * Returns a random line item from the database.
+   *
+   * @param string $type
+   *   Optional line item type. Either 'product' or 'service'.
+   *
+   * @return LineItem
+   *   A random line item.
+   */
+  function randomLineItem($type = NULL) {
+    $query = db_select('line_item', 'li')
+      ->fields('li', array('lid'))
+      ->orderRandom()
+      ->range(0, 1);
+
+    if ($type) {
+      $query->condition('type', $type);
+    }
+
+    $lid = $query->execute()
+      ->fetchColumn();
+
+    return line_item_load($lid);
+  }
+
 }

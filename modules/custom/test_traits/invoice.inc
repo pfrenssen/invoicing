@@ -190,8 +190,8 @@ trait InvoiceTestHelper {
    *
    * @param array $values
    *   An associative array of invoice values, keyed by property name, as
-   *   returned by self::randomInvoiceValues(). For the client reference, pass a
-   *   full Client object.
+   *   returned by self::randomInvoiceValues(). For the entity references
+   *   (the client, products and services), pass full Entity objects.
    *
    * @returns array
    *   An associative array of values, keyed by form field name, as used by
@@ -208,6 +208,25 @@ trait InvoiceTestHelper {
       $values['field_invoice_client'] = $this->entityReferenceFieldValue($values['field_invoice_client']->name, $values['field_invoice_client']->identifier());
     }
 
+    // Prepare the input for the products and services entity reference fields.
+    // @todo Support creating new line items as well as referencing existing
+    //   ones.
+    // @todo Support creating multiple items.
+    $line_items = array();
+    foreach (array_keys($this->getLineItemTypes()) as $type) {
+      if (!empty($values["field_invoice_${type}s"])) {
+        /* @var $line_item LineItem */
+        $line_item = reset($values["field_invoice_${type}s"]);
+        if (!$line_item instanceof LineItem) {
+          throw new Exception("The values for field_invoice_${type}s should be instances of LineItem.");
+        }
+        if ($line_item->bundle() != $type) {
+          throw new Exception("The values for field_invoice_${type}s should have the '$type' bundle.");
+        }
+        $line_items[$type] = $this->entityReferenceFieldValue($line_item->identifier(), $line_item->identifier());
+      }
+    }
+
     return array(
       'field_invoice_client[und][form][entity_id]' => $values['field_invoice_client'],
       'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
@@ -219,6 +238,8 @@ trait InvoiceTestHelper {
       'field_invoice_due_date[und]' => $values['field_invoice_due_date'],
       'field_invoice_terms[und][0][value]' => $values['field_invoice_terms'],
       'field_invoice_status[und]' => $values['field_invoice_status'],
+      'field_invoice_products[und][form][entity_id]' => !empty($line_items['product']) ? $line_items['product'] : '',
+      'field_invoice_services[und][form][entity_id]' => !empty($line_items['service']) ? $line_items['service'] : '',
     );
   }
 

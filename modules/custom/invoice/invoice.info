@@ -8,6 +8,7 @@ dependencies[] = date
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = inline_entity_form
+dependencies[] = line_item
 dependencies[] = list
 dependencies[] = number
 dependencies[] = text

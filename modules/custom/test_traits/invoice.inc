@@ -107,6 +107,13 @@ trait InvoiceTestHelper {
     $this->drupalGet('invoice/add');
     $button_element = $this->xpath('//input[@id = "edit-field-invoice-client-und-actions-ief-add-existing"]');
     $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+
+    // Also click on 'Add existing entity' for products and services.
+    $button_element = $this->xpath('//input[@id = "edit-field-invoice-services-und-actions-ief-add-existing"]');
+    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+    $button_element = $this->xpath('//input[@id = "edit-field-invoice-products-und-actions-ief-add-existing"]');
+    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+
     $this->drupalPost(NULL, $edit, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.

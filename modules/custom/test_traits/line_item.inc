@@ -78,7 +78,7 @@ trait LineItemTestHelper {
    */
   function createLineItem($type = NULL, array $values = array()) {
     // Provide some default values.
-    $type = $type ?: $this->randomType();
+    $type = $type ?: $this->randomLineItemType();
     $values += $this->randomLineItemValues($type);
     $line_item = line_item_create(array('type' => $values['type']));
     $this->updateLineItem($line_item, $values);
@@ -97,7 +97,7 @@ trait LineItemTestHelper {
    */
   function randomLineItemValues($type = NULL) {
     if (empty($type)) {
-      $type = $this->randomType();
+      $type = $this->randomLineItemType();
     }
 
     $values =  array(
@@ -129,7 +129,7 @@ trait LineItemTestHelper {
    * @return string
    *   The line item type.
    */
-  function randomType() {
+  function randomLineItemType() {
     return array_rand(array(
       'product' => 'Product',
       'service' => 'Service',

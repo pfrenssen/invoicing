@@ -198,26 +198,18 @@ trait InvoiceTestHelper {
    *   parent::drupalPost().
    */
   public function convertInvoiceValuesToFormPostValues($values) {
-    $client = '';
+    // Prepare the input for the client entity reference field.
+    // @todo Support creating a new client as well as referencing an existing
+    //   one.
     if (!empty($values['field_invoice_client'])) {
       if (!$values['field_invoice_client'] instanceof Client) {
         throw new Exception('The value for field_invoice_client should be an instance of Client.');
       }
-
-      // Prepare the client field the way entityreference expects it.
-      // @see entityreference_autocomplete_callback_get_matches()
-      $client = "{$values['field_invoice_client']->name} ({$values['field_invoice_client']->identifier()})";
-      // Contrary to entityreference_autocomplete_callback_get_matches() we do
-      // not start with an HTML safe string so we don't need to strip tags and
-      // decode HTML entities.
-      $client = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim($client)));
-      if (strpos($client, ',') !== FALSE || strpos($client, '"') !== FALSE) {
-        $client = '"' . str_replace('"', '""', $client) . '"';
-      }
+      $values['field_invoice_client'] = $this->entityReferenceFieldValue($values['field_invoice_client']->name, $values['field_invoice_client']->identifier());
     }
 
     return array(
-      'field_invoice_client[und][form][entity_id]' => $client,
+      'field_invoice_client[und][form][entity_id]' => $values['field_invoice_client'],
       'field_invoice_number[und][0][value]' => $values['field_invoice_number'],
       'field_invoice_date[und][0][value][month]' => date('n', $values['field_invoice_date']),
       'field_invoice_date[und][0][value][day]' => date('j', $values['field_invoice_date']),

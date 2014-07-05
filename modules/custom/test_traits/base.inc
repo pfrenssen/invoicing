@@ -393,4 +393,27 @@ trait BaseTestHelper {
     return $str;
   }
 
+  /**
+   * Prepares the input for the entity reference autocomplete field.
+   *
+   * @param string $name
+   *   The name of the entity that is referenced.
+   * @param string $id
+   *   The id of the entity that is referenced.
+   */
+  public function entityReferenceFieldValue($name, $id) {
+    // Prepare the field input the way entityreference expects it.
+    // @see entityreference_autocomplete_callback_get_matches()
+    $value = "{$name} ({$id})";
+    // Contrary to entityreference_autocomplete_callback_get_matches() we do
+    // not start with an HTML safe string so we don't need to strip tags and
+    // decode HTML entities.
+    $value = preg_replace('/\s\s+/', ' ', str_replace("\n", '', trim($value)));
+    if (strpos($value, ',') !== FALSE || strpos($value, '"') !== FALSE) {
+      $value = '"' . str_replace('"', '""', $value) . '"';
+    }
+
+    return $value;
+  }
+
 }

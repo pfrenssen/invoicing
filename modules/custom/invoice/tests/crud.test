@@ -8,12 +8,14 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class InvoiceCRUDTestCase extends InvoicingWebTestCase {
 
   use BaseTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * A test client.
@@ -42,6 +44,10 @@ class InvoiceCRUDTestCase extends InvoicingWebTestCase {
     // Create a client that can be referenced in invoices.
     $this->client = $this->createClient();
     $this->client->save();
+
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
   }
 
   /**

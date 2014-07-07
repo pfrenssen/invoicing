@@ -9,6 +9,7 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
@@ -16,6 +17,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * {@inheritdoc}
@@ -28,6 +30,20 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
    * @var Client
    */
   protected $client;
+
+  /**
+   * A test product.
+   *
+   * @var LineItem
+   */
+  protected $product;
+
+  /**
+   * A test service.
+   *
+   * @var LineItem
+   */
+  protected $service;
 
   /**
    * Returns test case metadata.
@@ -51,6 +67,12 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Create a client.
     $this->client = $this->createUiClient();
+
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->product = $this->createLineItem('product');
+    $this->product->save();
+    $this->service = $this->createLineItem('service');
+    $this->service->save();
   }
 
   /**
@@ -98,11 +120,17 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Check that the form fields have correct values when the invoice is edited.
     $this->drupalGet('invoice/' . $invoice->iid . '/edit');
     $form_values = $this->convertInvoiceValuesToFormPostValues($values);
-    // The client name is not shown as a field but as an inline table. Test this
-    // separately.
+
+    // The entity reference fields (client name, products and services) are not
+    // shown as fields but as inline tables. Test these separately.
     $this->assertXPathElements('//td[contains(@class, "inline-entity-form-client-name") and text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in an inline table.');
     unset($form_values['field_invoice_client[und][form][entity_id]']);
+    $this->assertXPathElements('//td[contains(@class, "inline-entity-form-line_item-lid") and text() = :lid]', 1, array(':lid' => $this->product->identifier()), 'The product id is shown in an inline table.');
+    unset($form_values['field_invoice_products[und][form][entity_id]']);
+    $this->assertXPathElements('//td[contains(@class, "inline-entity-form-line_item-lid") and text() = :lid]', 1, array(':lid' => $this->service->identifier()), 'The service id is shown in an inline table.');
+    unset($form_values['field_invoice_services[und][form][entity_id]']);
 
+    // Test the remaining values.
     foreach ($form_values as $name => $value) {
       $this->assertFieldByName($name, $value, format_string('When editing an existing invoice the %name field has the right value.', array('%name' => $name)));
     }
@@ -110,13 +138,18 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Change the values and check that the entity is correctly updated.
     $new_values = $this->randomInvoiceValues();
 
-    // Disregard the client field, it is currently displayed as an inline table
-    // and it will become an autocomplete in the future.
+    // Disregard the entity reference fields (client name, products and
+    // services), these are currently displayed as inline tables. They will be
+    // reworked in the future.
     // @todo Test this when issue #20 is in.
     // @see https://github.com/pfrenssen/invoicing/issues/20
     $new_values['field_invoice_client'] = $values['field_invoice_client'];
+    $new_values['field_invoice_products'] = $values['field_invoice_products'];
+    $new_values['field_invoice_services'] = $values['field_invoice_services'];
     $edit = $this->convertInvoiceValuesToFormPostValues($new_values);
     unset($edit['field_invoice_client[und][form][entity_id]']);
+    unset($edit['field_invoice_products[und][form][entity_id]']);
+    unset($edit['field_invoice_services[und][form][entity_id]']);
 
     $this->drupalPost('invoice/' . $invoice->iid . '/edit', $edit, t('Save'));
     $invoice = invoice_load($invoice->iid, TRUE);

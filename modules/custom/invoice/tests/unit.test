@@ -9,6 +9,7 @@ module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
 
 class InvoiceUnitTestCase extends InvoicingWebTestCase {
 
@@ -16,6 +17,7 @@ class InvoiceUnitTestCase extends InvoicingWebTestCase {
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
+  use LineItemTestHelper;
 
   /**
    * Test user accounts.
@@ -65,6 +67,10 @@ class InvoiceUnitTestCase extends InvoicingWebTestCase {
    */
   protected function setUp() {
     parent::setup('invoice');
+
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
 
     // Create two test users, each owning one business that has two clients, and
     // file an invoice for each client.

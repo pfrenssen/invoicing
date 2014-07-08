@@ -82,7 +82,7 @@ function invoice_field_default_field_bases() {
       ),
       'timezone_db' => '',
       'todate' => '',
-      'tz_handling' => 'none',
+      'tz_handling' => 'utc',
     ),
     'translatable' => 0,
     'type' => 'datetime',

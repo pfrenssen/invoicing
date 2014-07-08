@@ -102,6 +102,8 @@ function invoice_entity_property_info_alter(&$info) {
   $properties['changed']['label'] = t('Date changed');
   $properties['changed']['description'] = t('The date the invoice was most recently updated.');
   $properties['changed']['type'] = 'date';
+  $properties['changed']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['changed']['setter permission'] = 'administer invoices';
 
   $properties['is_new']['label'] = t('Is new');
   $properties['is_new']['description'] = t('Whether the invoice is new and not saved to the database yet.');

@@ -143,4 +143,3 @@ projects[views][subdir] = contrib
 
 libraries[libphonenumber-for-php][download][type] = file
 libraries[libphonenumber-for-php][download][url] = https://github.com/giggsey/libphonenumber-for-php/archive/6.2.tar.gz
-libraries[libphonenumber-for-php][directory_name] = libphonenumber

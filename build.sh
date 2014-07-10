@@ -68,6 +68,10 @@ if [ -z $GIT ] ;  then
   find . -type d -name ".git" -print0 | xargs -0 rm -rf
 fi
 
+# Download composer dependencies for libphonenumber.
+cd "${BUILD_DIR}/profiles/invoicing/libraries/libphonenumber-for-php/"
+composer install
+
 cd "${ROOT_DIR}"
 
 echo -e "\nBuild is available in ${BUILD_DIR}."

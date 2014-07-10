@@ -82,6 +82,9 @@ projects[inline_entity_form][subdir] = contrib
 ; @see https://www.drupal.org/node/2134035
 projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/2134035-28-inline_entity_form-add_existing_single_value.patch
 
+projects[libraries] = 2.2
+projects[libraries][subdir] = contrib
+
 projects[link] = 1.2
 projects[link][subdir] = contrib
 

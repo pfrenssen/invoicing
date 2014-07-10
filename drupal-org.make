@@ -101,6 +101,11 @@ projects[inline_entity_form][subdir] = contrib
 ; @see https://drupal.org/node/2134035
 projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/2134035-28-inline_entity_form-add_existing_single_value.patch
 
+projects[libraries][download][type] = git
+projects[libraries][download][revision] = 7.x-2.2
+projects[libraries][download][branch] = 7.x-2.x
+projects[libraries][subdir] = contrib
+
 projects[link][download][type] = git
 projects[link][download][revision] = 7.x-1.2
 projects[link][download][branch] = 7.x-1.x

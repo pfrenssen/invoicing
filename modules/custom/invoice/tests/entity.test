@@ -1,0 +1,104 @@
+<?php
+
+/**
+ * @file
+ * Tests for the Invoice entity.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'invoice');
+module_load_include('inc', 'test_traits', 'line_item');
+
+class InvoiceEntityTestCase extends EntityTestCase {
+
+  use BaseTestHelper;
+  use InvoiceTestHelper;
+  use LineItemTestHelper;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity test',
+      'description' => 'Tests for the Invoice entity.',
+      'group' => 'Invoicing - Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Save a client and a line item of each type so they can be referenced.
+    $this->createClient()->save();
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'invoice';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTypes() {
+    return array('invoice');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntityType($type, $name) {
+    invoice_type_create($type, $name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntity(array $values = array()) {
+    return invoice_create($values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateEntityUsingEntityMetadataWrapper(Entity $entity, array $values) {
+    $this->updateInvoice($entity, $values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadEntity($id) {
+    return invoice_load($id, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getBasicPropertyValues() {
+    return $this->randomInvoicePropertyValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getFieldValues($type) {
+    return $this->randomInvoiceFieldValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityMetaDataWrapperValues($type) {
+    return $this->randomInvoiceValues();
+  }
+
+}

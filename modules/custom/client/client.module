@@ -623,6 +623,14 @@ function client_get_invoice_ids(Client $client) {
 
 /**
  * The class used for client entities.
+ *
+ * @param array field_client_address
+ * @param array field_client_email
+ * @param array field_client_notes
+ * @param array field_client_phone
+ * @param array field_client_shipping_address
+ * @param array field_client_vat
+ * @param array field_client_website
  */
 class Client extends Entity {
 

@@ -85,16 +85,16 @@ projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/2134
 projects[link] = 1.2
 projects[link][subdir] = contrib
 
-projects[phone_libphonenumber][type] = module
-projects[phone_libphonenumber][download][type] = git
-projects[phone_libphonenumber][download][branch] = 7.x-1.x
-projects[phone_libphonenumber][download][revision] = 995a080
-projects[phone_libphonenumber][download][url] = http://git.drupal.org/sandbox/cdale/1925578.git
-projects[phone_libphonenumber][subdir] = contrib
+projects[phone][type] = module
+projects[phone][download][type] = git
+projects[phone][download][branch] = 7.x-1.x
+projects[phone][download][revision] = 995a080
+projects[phone][download][url] = http://git.drupal.org/sandbox/cdale/1925578.git
+projects[phone][subdir] = contrib
 
 ; Issue #2214569: Use the current fork of libphonenumber by giggsey.
 ; @see https://www.drupal.org/node/2214569
-projects[phone_libphonenumber][patch][] = https://www.drupal.org/files/issues/2214569-2-phone_libphonenumber-update_library.patch
+projects[phone][patch][] = https://www.drupal.org/files/issues/2214569-2-phone_libphonenumber-update_library.patch
 
 projects[strongarm] = 2.0
 projects[strongarm][subdir] = contrib

@@ -326,9 +326,11 @@ function invoice_type_get_names() {
  *   The entity label or FALSE if not found.
  */
 function invoice_type_label($entity, $entity_type) {
+  // If the entity type is being created it does not have a name yet.
   if (empty($entity->is_new)) {
     return $entity->name;
   }
+  return FALSE;
 }
 
 /**

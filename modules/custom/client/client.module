@@ -370,6 +370,27 @@ function client_type_get_names() {
 }
 
 /**
+ * Composes the label of a client type.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function client_type_label($entity, $entity_type) {
+  // If the entity type is being created it does not have a name yet.
+  if (empty($entity->is_new)) {
+    return $entity->name;
+  }
+  return FALSE;
+}
+
+/**
  * Loads clients from the database.
  *
  * This function should be used whenever you need to load more than one client

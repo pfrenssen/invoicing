@@ -85,8 +85,10 @@ projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/2134
 projects[link] = 1.2
 projects[link][subdir] = contrib
 
+projects[phone_libphonenumber][type] = module
 projects[phone_libphonenumber][download][type] = git
 projects[phone_libphonenumber][download][branch] = 7.x-1.x
+projects[phone_libphonenumber][download][revision] = 995a080
 projects[phone_libphonenumber][download][url] = http://git.drupal.org/sandbox/cdale/1925578.git
 projects[phone_libphonenumber][subdir] = contrib
 

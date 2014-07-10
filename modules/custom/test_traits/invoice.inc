@@ -155,6 +155,58 @@ trait InvoiceTestHelper {
   }
 
   /**
+   * Returns random data for the basic invoice properties.
+   *
+   * These are values for the properties that are present on every invoice
+   * entity regardless of the bundle type.
+   *
+   * This excludes the invoice ID ('iid') which is immutable.
+   *
+   * @return array
+   *   An associative array of property values, keyed by property name.
+   */
+  protected function randomInvoicePropertyValues() {
+    return array(
+      'type' => $this->randomName(),
+      'bid' => rand(1, 100),
+      'created' => rand(0, 2000000000),
+      'changed' => rand(0, 2000000000),
+    );
+  }
+
+  /**
+   * Returns random field data for the fields in the invoice entity.
+   *
+   * @returns array
+   *   An associative array of field data, keyed by field name.
+   */
+  public function randomInvoiceFieldValues() {
+    $values = array();
+
+    $date_polarity = rand(0, 1) ? '-' : '+';
+    $date_offset = rand(0, 7);
+
+    $client = $this->randomClient();
+    $product = $this->randomLineItem('product');
+    $service = $this->randomLineItem('service');
+
+    $values['field_invoice_client'][LANGUAGE_NONE][0]['target_id'] = $client->identifier();
+    $values['field_invoice_date'][LANGUAGE_NONE][0]['value'] = date('Y-m-d H:i:s', strtotime($date_polarity . $date_offset . ' day 00:00'));
+    $values['field_invoice_number'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    // Round the discount so it will match the field data as returned by the
+    // Number module.
+    $values['field_invoice_discount'][LANGUAGE_NONE][0]['value'] = (string) round(mt_rand(0, 9999) / 100, 2);
+    $values['field_invoice_po_number'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_invoice_due_date'][LANGUAGE_NONE][0]['value'] = (string) $this->randomDueDate();
+    $values['field_invoice_terms'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_invoice_status'][LANGUAGE_NONE][0]['value'] = $this->randomInvoiceStatus();
+    $values['field_invoice_products'][LANGUAGE_NONE][0]['target_id'] = $product->identifier();
+    $values['field_invoice_services'][LANGUAGE_NONE][0]['target_id'] = $service->identifier();
+
+    return $values;
+  }
+
+  /**
    * Returns a random due date.
    *
    * @return int

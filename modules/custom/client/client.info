@@ -10,6 +10,7 @@ dependencies[] = entity
 dependencies[] = features
 dependencies[] = inline_entity_form
 dependencies[] = link
+dependencies[] = phone
 dependencies[] = views
 
 features[client_type][] = client

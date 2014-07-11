@@ -120,7 +120,7 @@ projects[phone][subdir] = contrib
 
 ; Issue #2214569: Use the current fork of libphonenumber by giggsey.
 ; @see https://www.drupal.org/node/2214569
-projects[phone][patch][] = https://www.drupal.org/files/issues/2214569-2-phone_libphonenumber-update_library.patch
+projects[phone][patch][] = https://www.drupal.org/files/issues/2214569-3-phone_libphonenumber-update_library.patch
 
 projects[strongarm][download][type] = git
 projects[strongarm][download][revision] = 7.x-2.0

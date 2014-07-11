@@ -107,26 +107,28 @@ function business_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_business_mobile',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
+    'foreign keys' => array(),
     'indexes' => array(
-      'format' => array(
-        0 => 'format',
+      'countrycode' => array(
+        0 => 'countrycode',
+      ),
+      'numbertype' => array(
+        0 => 'numbertype',
       ),
     ),
     'locked' => 0,
-    'module' => 'text',
+    'module' => 'phone',
     'settings' => array(
-      'max_length' => 255,
+      'enable_numbertype' => 0,
+      'numbertype_allowed_values' => array(
+        'cell' => 'cell',
+        'fax' => 'fax',
+        'home' => 'home',
+        'work' => 'work',
+      ),
     ),
     'translatable' => 0,
-    'type' => 'text',
+    'type' => 'phone',
   );
 
   // Exported field_base: 'field_business_phone'
@@ -136,26 +138,28 @@ function business_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_business_phone',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
+    'foreign keys' => array(),
     'indexes' => array(
-      'format' => array(
-        0 => 'format',
+      'countrycode' => array(
+        0 => 'countrycode',
+      ),
+      'numbertype' => array(
+        0 => 'numbertype',
       ),
     ),
     'locked' => 0,
-    'module' => 'text',
+    'module' => 'phone',
     'settings' => array(
-      'max_length' => 255,
+      'enable_numbertype' => 0,
+      'numbertype_allowed_values' => array(
+        'cell' => 'cell',
+        'fax' => 'fax',
+        'home' => 'home',
+        'work' => 'work',
+      ),
     ),
     'translatable' => 0,
-    'type' => 'text',
+    'type' => 'phone',
   );
 
   // Exported field_base: 'field_business_vat'

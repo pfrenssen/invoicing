@@ -9,6 +9,7 @@ dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = entityreference_unique
 dependencies[] = features
+dependencies[] = phone
 dependencies[] = text
 dependencies[] = views
 

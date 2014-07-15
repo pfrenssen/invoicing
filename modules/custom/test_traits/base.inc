@@ -376,6 +376,49 @@ trait BaseTestHelper {
   }
 
   /**
+   * Returns a random Belgian phone number.
+   *
+   * @todo Add support for international numbers.
+   *
+   * @param string $countrycode
+   *   The country code for which to return a phone number. Currently unused.
+   *
+   * @return string
+   *   A random phone number.
+   */
+  public static function randomPhoneNumber($countrycode = 'BE') {
+    $matches = NULL;
+    do {
+      $number = rand(10000000, 89000000);
+      // This regex is taken from libphonenumber. See PhoneNumberMetadata_BE.
+      preg_match('/(?:1[0-69]|[49][23]|5\\d|6[013-57-9]|71|8[0-79])[1-9]\\d{5}|[23][2-8]\\d{6}/', $number, $matches);
+    }
+    while (empty($matches[0]));
+
+    return (string) $number;
+  }
+
+  /**
+   * Returns random data for a Phone Number field.
+   *
+   * @todo Support countries other than Belgium.
+   *
+   * @param string $countrycode
+   *   The country code for which to return a phone number.
+   *
+   * @return array
+   *   An array with the following keys:
+   *   - number: the phone number, without country code or leading zeroes.
+   *   - countrycode: the country code for the phone number.
+   */
+  public function randomPhoneNumberField($countrycode = 'BE') {
+    return array(
+      'number' => $this->randomPhoneNumber($countrycode),
+      'countrycode' => $countrycode,
+    );
+  }
+
+  /**
    * {@inheritdoc}
    *
    * Like DrupalTestCase::randomString(), but includes additional special

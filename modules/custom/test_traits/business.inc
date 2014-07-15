@@ -130,8 +130,8 @@ trait BusinessTestHelper {
       'field_business_bic' => $this->randomString(),
       'field_business_email' => $this->randomEmail(),
       'field_business_iban' => $this->randomString(),
-      'field_business_mobile' => $this->randomString(),
-      'field_business_phone' => $this->randomString(),
+      'field_business_mobile' => $this->randomPhoneNumberField(),
+      'field_business_phone' => $this->randomPhoneNumberField(),
       'field_business_vat' => $this->randomString(),
     );
   }
@@ -149,8 +149,8 @@ trait BusinessTestHelper {
     $values['field_business_bic'][LANGUAGE_NONE][0]['value'] = $this->randomString();
     $values['field_business_email'][LANGUAGE_NONE][0]['email'] = $this->randomEmail();
     $values['field_business_iban'][LANGUAGE_NONE][0]['value'] = $this->randomString();
-    $values['field_business_mobile'][LANGUAGE_NONE][0]['value'] = $this->randomString();
-    $values['field_business_phone'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_business_mobile'][LANGUAGE_NONE][0] = $this->randomPhoneNumberField();
+    $values['field_business_phone'][LANGUAGE_NONE][0] = $this->randomPhoneNumberField();
     $values['field_business_vat'][LANGUAGE_NONE][0]['value'] = $this->randomString();
 
     return $values;
@@ -199,8 +199,8 @@ trait BusinessTestHelper {
       'field_business_address[und][0][postal_code]' => $values['field_business_address']['postal_code'],
       'field_business_address[und][0][locality]' => $values['field_business_address']['locality'],
       'field_business_vat[und][0][value]' => $values['field_business_vat'],
-      'field_business_phone[und][0][value]' => $values['field_business_phone'],
-      'field_business_mobile[und][0][value]' => $values['field_business_mobile'],
+      'field_business_phone[und][0][number]' => $values['field_business_phone']['number'],
+      'field_business_mobile[und][0][number]' => $values['field_business_mobile']['number'],
       'field_business_bic[und][0][value]' => $values['field_business_bic'],
       'field_business_iban[und][0][value]' => $values['field_business_iban'],
     );

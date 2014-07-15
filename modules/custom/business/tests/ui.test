@@ -8,7 +8,7 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
-class BusinessUITestCase extends InvoicingWebTestCase {
+class BusinessUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper {
@@ -16,11 +16,9 @@ class BusinessUITestCase extends InvoicingWebTestCase {
   }
 
   /**
-   * A test user.
-   *
-   * @var object $user
+   * {@inheritdoc}
    */
-  protected $user;
+  protected $usersToCreate = array('administrator');
 
   /**
    * Returns test case metadata.
@@ -37,12 +35,9 @@ class BusinessUITestCase extends InvoicingWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('business');
+    parent::setup();
 
-    // Create a test user and log in.
-    $permissions = array('administer businesses');
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
+    $this->drupalLogin($this->users['administrator']);
   }
 
   /**
@@ -116,7 +111,7 @@ class BusinessUITestCase extends InvoicingWebTestCase {
     $business2 = $this->createUiBusiness();
 
     // Go to the edit screen of the user.
-    $this->drupalGet('user/' . $this->user->uid . '/edit');
+    $this->drupalGet('user/' . $this->users['administrator']->uid . '/edit');
     $this->assertFieldById('edit-field-user-businesses-und-0-target-id', '', 'The field_user_businesses is shown on the page.');
 
     // Add the businesses to the user.
@@ -128,7 +123,7 @@ class BusinessUITestCase extends InvoicingWebTestCase {
     $this->assertRaw('The changes have been saved.', 'The user was saved successfully.');
 
     // Check that the businesses are linked to the user.
-    $user = user_load($this->user->uid);
+    $user = user_load($this->users['administrator']->uid);
     $this->assertEqual($user->field_user_businesses[LANGUAGE_NONE][0]['target_id'], $business1->bid, 'The first business has been linked to the user.');
     $this->assertEqual($user->field_user_businesses[LANGUAGE_NONE][1]['target_id'], $business2->bid, 'The second business has been linked to the user.');
 

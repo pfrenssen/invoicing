@@ -99,6 +99,11 @@ projects[phone][subdir] = contrib
 ; @see https://www.drupal.org/node/2214569
 projects[phone][patch][] = https://www.drupal.org/files/issues/2214569-3-phone_libphonenumber-update_library.patch
 
+; Issue #2304071: Use drupal_static() to indicate whether libphonenumber is
+; loaded.
+; @see https://www.drupal.org/node/2304071
+projects[phone][patch][] = https://www.drupal.org/files/issues/2304071-1-phone_libphonenumber-static.patch
+
 projects[strongarm] = 2.0
 projects[strongarm][subdir] = contrib
 

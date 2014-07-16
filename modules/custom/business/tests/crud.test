@@ -8,9 +8,14 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
-class BusinessCRUDTestCase extends InvoicingWebTestCase {
+class BusinessCRUDTestCase extends InvoicingIntegrationTestCase {
   use BaseTestHelper;
   use BusinessTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
 
   /**
    * Returns test case metadata.
@@ -21,13 +26,6 @@ class BusinessCRUDTestCase extends InvoicingWebTestCase {
       'description' => 'Tests the creating, reading, updating and deleting of businesses.',
       'group' => 'Invoicing - Business',
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setup('business');
   }
 
   /**

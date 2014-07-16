@@ -167,7 +167,7 @@ trait ClientTestHelper {
       'field_client_shipping_address' => $this->randomAddressField(),
       'field_client_email' => $this->randomEmail(),
       'field_client_notes' => $this->randomString(),
-      'field_client_phone' => $this->randomString(),
+      'field_client_phone' => $this->randomPhoneNumberField(),
       'field_client_vat' => $this->randomString(),
       'field_client_website' => array('url' => 'http://www.test.be'),
     );
@@ -207,7 +207,7 @@ trait ClientTestHelper {
     $values['field_client_shipping_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
     $values['field_client_email'][LANGUAGE_NONE][0]['email'] = $this->randomEmail();
     $values['field_client_notes'][LANGUAGE_NONE][0]['value'] = $this->randomString();
-    $values['field_client_phone'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_client_phone'][LANGUAGE_NONE][0] = $this->randomPhoneNumberField();
     $values['field_client_vat'][LANGUAGE_NONE][0]['value'] = $this->randomString();
     $values['field_client_website'][LANGUAGE_NONE][0]['url'] = 'http://www.test.be';
 
@@ -242,7 +242,7 @@ trait ClientTestHelper {
       'field_client_shipping_address[und][0][postal_code]' => $values['field_client_shipping_address']['postal_code'],
       'field_client_shipping_address[und][0][locality]' => $values['field_client_shipping_address']['locality'],
       'field_client_vat[und][0][value]' => $values['field_client_vat'],
-      'field_client_phone[und][0][value]' => $values['field_client_phone'],
+      'field_client_phone[und][0][number]' => $values['field_client_phone']['number'],
       'field_client_notes[und][0][value]' => $values['field_client_notes'],
       'field_client_website[und][0][url]' => $values['field_client_website']['url'],
     );

@@ -8,7 +8,8 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
-class BusinessUnitTestCase extends InvoicingWebTestCase {
+class BusinessUnitTestCase extends InvoicingIntegrationTestCase {
+
   use BaseTestHelper;
   use BusinessTestHelper;
 
@@ -29,6 +30,11 @@ class BusinessUnitTestCase extends InvoicingWebTestCase {
   protected $businesses;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -43,7 +49,7 @@ class BusinessUnitTestCase extends InvoicingWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('business');
+    parent::setup();
 
     // Create some test users and businesses. Link two businesses to the first
     // user and one business to the second user. A third user is created without

@@ -8,16 +8,9 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
-class BusinessOverviewTestCase extends InvoicingWebTestCase {
+class BusinessOverviewTestCase extends InvoicingIntegrationTestCase {
   use BaseTestHelper;
   use BusinessTestHelper;
-
-  /**
-   * A test user.
-   *
-   * @var object
-   */
-  protected $user;
 
   /**
    * An array of test businesses.
@@ -25,6 +18,11 @@ class BusinessOverviewTestCase extends InvoicingWebTestCase {
    * @var array
    */
   protected $businesses;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array('administrator');
 
   /**
    * Returns test case metadata.
@@ -44,9 +42,7 @@ class BusinessOverviewTestCase extends InvoicingWebTestCase {
     parent::setup('business');
 
     // Create a test user and log in.
-    $permissions = array('administer businesses');
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
+    $this->drupalLogin($this->users['administrator']);
 
     // Create a number of test business.
     for ($i = 0; $i < 20; $i++) {
@@ -92,6 +88,10 @@ class BusinessOverviewTestCase extends InvoicingWebTestCase {
       /* @var $business EntityDrupalWrapper */
       $business = entity_metadata_wrapper('business', array_shift($this->businesses));
 
+      // Format the phone number as an international number.
+      $phone = $business->field_business_phone->value();
+      $number = phone_libphonenumber_format($phone['number'], $phone['countrycode'], $phone['extension']);
+
       $testcases = array(
         array(
           'message' => 'The first column contains the business name.',
@@ -115,8 +115,8 @@ class BusinessOverviewTestCase extends InvoicingWebTestCase {
         ),
         array(
           'message' => 'The third column contains the phone number.',
-          'expected' => $business->field_business_phone->value(),
-          'actual' => (string) $tablerow->td[2],
+          'expected' => $number,
+          'actual' => (string) $tablerow->td[2]->div->span,
         ),
         array(
           'message' => 'The fourth column contains the "edit" action link.',

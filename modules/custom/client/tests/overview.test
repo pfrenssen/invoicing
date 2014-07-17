@@ -115,6 +115,11 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
       $client = entity_metadata_wrapper('client', array_shift($this->clients));
 
       $website = $client->field_client_website->value();
+
+      // Format the phone number as an international number.
+      $phone = $client->field_client_phone->value();
+      $number = phone_libphonenumber_format($phone['number'], $phone['countrycode'], $phone['extension']);
+
       $testcases = array(
         array(
           'message' => 'The first column contains the client name.',
@@ -138,8 +143,8 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The third column contains the phone number.',
-          'expected' => $client->field_client_phone->value(),
-          'actual' => (string) $tablerow->td[2],
+          'expected' => $number,
+          'actual' => (string) $tablerow->td[2]->div->span,
         ),
         array(
           'message' => 'The fourth column is linked to the website.',

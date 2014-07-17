@@ -11,21 +11,13 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class ClientUnitTestCase extends InvoicingWebTestCase {
+class ClientUnitTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
   use LineItemTestHelper;
-
-  /**
-   * Test user accounts.
-   *
-   * @var array
-   *   An array of user objects.
-   */
-  protected $users;
 
   /**
    * Test business entities.
@@ -52,6 +44,11 @@ class ClientUnitTestCase extends InvoicingWebTestCase {
   protected $invoices;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -66,7 +63,7 @@ class ClientUnitTestCase extends InvoicingWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client', 'invoice');
+    parent::setup();
 
     // Create two test users, each owning one business with two clients.
     $this->businesses = array();

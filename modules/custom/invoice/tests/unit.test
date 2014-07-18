@@ -11,21 +11,13 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class InvoiceUnitTestCase extends InvoicingWebTestCase {
+class InvoiceUnitTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
   use LineItemTestHelper;
-
-  /**
-   * Test user accounts.
-   *
-   * @var array
-   *   An array of user objects.
-   */
-  protected $users;
 
   /**
    * Test business entities.
@@ -52,6 +44,11 @@ class InvoiceUnitTestCase extends InvoicingWebTestCase {
   protected $invoices;
 
   /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
+
+  /**
    * Returns test case metadata.
    */
   public static function getInfo() {
@@ -66,7 +63,7 @@ class InvoiceUnitTestCase extends InvoicingWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('invoice');
+    parent::setup();
 
     // Create a line item of each type so they can be referenced in invoices.
     $this->createLineItem('product')->save();

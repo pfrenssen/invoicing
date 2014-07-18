@@ -10,7 +10,7 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class InvoiceCRUDTestCase extends InvoicingWebTestCase {
+class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use ClientTestHelper;
@@ -23,6 +23,11 @@ class InvoiceCRUDTestCase extends InvoicingWebTestCase {
    * @var Client
    */
   protected $client;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
 
   /**
    * Returns test case metadata.
@@ -39,7 +44,7 @@ class InvoiceCRUDTestCase extends InvoicingWebTestCase {
    * {@inheritdoc}
    */
   protected function setUp() {
-    parent::setup('client', 'invoice', 'line_item');
+    parent::setup();
 
     // Create a client that can be referenced in invoices.
     $this->client = $this->createClient();

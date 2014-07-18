@@ -8,9 +8,15 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 
-class ClientCRUDTestCase extends InvoicingWebTestCase {
+class ClientCRUDTestCase extends InvoicingIntegrationTestCase {
+
   use BaseTestHelper;
   use ClientTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
 
   /**
    * Returns test case metadata.
@@ -21,13 +27,6 @@ class ClientCRUDTestCase extends InvoicingWebTestCase {
       'description' => 'Tests the creating, reading, updating and deleting of clients.',
       'group' => 'Invoicing - Client',
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setup('client');
   }
 
   /**

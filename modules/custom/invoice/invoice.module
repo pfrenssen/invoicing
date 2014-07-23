@@ -110,10 +110,11 @@ function invoice_entity_property_info_alter(&$info) {
   $properties['is_new']['type'] = 'boolean';
   $properties['is_new']['getter callback'] = 'invoice_entity_metadata_get_properties';
 
-  $properties['bid']['label'] = t('Business ID');
-  $properties['bid']['description'] = t('The unique ID of the business that issued this invoice.');
+  $properties['bid']['label'] = t('Business');
+  $properties['bid']['description'] = t('The business that issued this invoice.');
   $properties['bid']['setter callback'] = 'entity_property_verbatim_set';
   $properties['bid']['setter permission'] = 'administer invoices';
+  $properties['bid']['type'] = 'business';
 }
 
 /**

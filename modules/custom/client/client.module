@@ -597,7 +597,7 @@ function client_is_owned_by_user(Client $client, stdClass $account = NULL) {
   $account = $account ?: $user;
 
   $client = entity_metadata_wrapper('client', $client);
-  return in_array($client->bid->value(), array_keys(business_get_businesses_from_user($account)));
+  return in_array($client->bid->getIdentifier(), array_keys(business_get_businesses_from_user($account)));
 }
 
 /**
@@ -725,7 +725,7 @@ class ClientAPIController extends EntityAPIController {
     // Set the business id to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
-      $values += array('bid' => $business->bid);
+      $values += array('bid' => $business);
     }
     return parent::create($values);
   }

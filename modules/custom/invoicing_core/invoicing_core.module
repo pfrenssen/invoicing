@@ -70,12 +70,22 @@ function invoicing_core_form_user_register_form_submit($form, &$form_state) {
 /**
  * Implements hook_views_pre_view().
  *
- * This hook is implements to avoid business owners to be able to see invoices
- * which are not linked to their active business. This was possible due to a
- * security hole where they could just go to an url like "invoices/all".
+ * Alters the "Invoices" view:
+ * - Prevent business owners from bypassing the active business filter by
+ *   providing an argument like "/all".
+ * - Change the display of the invoice overview to the 'Admin overview' if the
+ *   user is an administrator.
  */
 function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
-  if (!empty($view->display['default']->handler->options['arguments']['bid'])) {
+  // Change the display of the invoice overview to the 'Admin overview' if the
+  // user is an administrator.
+  if (user_access('administer businesses') && $view->name == 'invoices' && $display_id == 'overview') {
+    $view->set_display('admin_overview');
+  }
+  // Prevent business owners from seeing items which are not linked to their
+  // active business by going to an url like "invoices/all". This works on all
+  // views that have the "active business" argument.
+  elseif (!empty($view->display['default']->handler->options['arguments']['bid'])) {
     $bid_argument_handler = $view->display['default']->handler->options['arguments']['bid'];
     if ($bid_argument_handler['default_argument_type'] == 'business_active') {
       $args = NULL;

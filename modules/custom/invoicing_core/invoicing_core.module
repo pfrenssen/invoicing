@@ -92,3 +92,17 @@ function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
     }
   }
 }
+
+/**
+ * Entity API setter callback. Sets the property to the given entity.
+ *
+ * This will load the full entity and make it available on the property.
+ */
+function invoicing_core_entity_property_entity_set(&$data, $name, $value, $langcode, $type, $info) {
+  // If the entity itself is not passed, we got the entity ID. Load the entity.
+  if (!is_object($value)) {
+    $entities = entity_load($info['type'], array($value));
+    $value = reset($entities);
+  }
+  entity_property_verbatim_set($data, $name, $value, $langcode, $type, $info);
+}

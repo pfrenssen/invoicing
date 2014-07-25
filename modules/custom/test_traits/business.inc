@@ -234,4 +234,20 @@ trait BusinessTestHelper {
     business_add_to_user($business, $user);
   }
 
+  /**
+   * Returns a random business from the database.
+   *
+   * @return Business
+   *   A random business.
+   */
+  function randomBusiness() {
+    $bid = db_select('business', 'b')
+      ->fields('b', array('bid'))
+      ->orderRandom()
+      ->range(0, 1)
+      ->execute()
+      ->fetchColumn();
+
+    return business_load($bid);
+  }
 }

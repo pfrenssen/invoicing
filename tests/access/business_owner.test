@@ -39,6 +39,10 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     'dashboard',
     'invoices',
     'invoice/add',
+    // Business owners don't see the admin overview at this path, but their own
+    // overview which bubbles up from /invoices.
+    // @see InvoiceOverviewTestCase::testAdministratorOverviewAccess()
+    'invoices/admin',
     'user',
     'user/password',
     'user/register',

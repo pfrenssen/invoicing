@@ -102,8 +102,16 @@ trait ClientTestHelper {
    *
    * @return Client
    *   A new client entity.
+   *
+   * @throws Exception
+   *   Thrown if the required business ID parameter is not set.
    */
   function createClient(array $values = array()) {
+    // Check if the business ID is set, this is a required parameter.
+    if (!isset($values['bid'])) {
+      throw new Exception('The "bid" property is required.');
+    }
+
     // Provide some default values.
     $values += $this->randomClientValues();
 

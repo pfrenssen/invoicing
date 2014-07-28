@@ -725,7 +725,7 @@ class ClientAPIController extends EntityAPIController {
     // Set the business id to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
-      $values += array('bid' => $business);
+      $values += array('bid' => $business->bid);
     }
     return parent::create($values);
   }

@@ -730,6 +730,23 @@ class ClientAPIController extends EntityAPIController {
     return parent::create($values);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function save($entity, \DatabaseTransaction $transaction = NULL) {
+    // Change the 'bid' property from a Business entity into the entity ID
+    // before saving. It is stored as an integer in the database.
+    $business = $entity->bid;
+    $entity->bid = $business->identifier();
+
+    $result = parent::save($entity, $transaction);
+
+    // Restore the original Business entity.
+    $entity->bid = $business;
+
+    return $result;
+  }
+
 }
 
 /**

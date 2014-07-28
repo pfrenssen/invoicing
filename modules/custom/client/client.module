@@ -678,9 +678,9 @@ class Client extends Entity {
   public $name;
 
   /**
-   * The business to which the client belongs.
+   * The id of the business to which the client belongs.
    *
-   * @var Business
+   * @var int
    */
   public $bid;
 

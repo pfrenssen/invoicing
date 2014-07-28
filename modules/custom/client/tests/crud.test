@@ -30,6 +30,17 @@ class ClientCRUDTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    // Create a business to reference.
+    $this->business = $this->createBusiness();
+    $this->business->save();
+  }
+
+  /**
    * Tests creating, reading, updating and deleting of clients.
    */
   public function testClientCRUD() {
@@ -39,6 +50,7 @@ class ClientCRUDTestCase extends InvoicingIntegrationTestCase {
 
     // Check if a new client can be saved to the database.
     $values = $this->randomClientValues();
+    $values['bid'] = $this->randomBusiness();
     $client = $this->createClient($values);
     $client->save();
     $this->assertClientTableNotEmpty('The client database table is no longer empty after creating a client.');

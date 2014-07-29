@@ -596,8 +596,7 @@ function client_is_owned_by_user(Client $client, stdClass $account = NULL) {
   global $user;
   $account = $account ?: $user;
 
-  $client = entity_metadata_wrapper('client', $client);
-  return in_array($client->bid->getIdentifier(), array_keys(business_get_businesses_from_user($account)));
+  return in_array($client->bid, array_keys(business_get_businesses_from_user($account)));
 }
 
 /**

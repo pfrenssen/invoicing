@@ -501,8 +501,7 @@ function invoice_is_owned_by_user(Invoice $invoice, stdClass $account = NULL) {
   global $user;
   $account = $account ?: $user;
 
-  $invoice = entity_metadata_wrapper('invoice', $invoice);
-  return in_array($invoice->bid->getIdentifier(), array_keys(business_get_businesses_from_user($account)));
+  return in_array($invoice->bid, array_keys(business_get_businesses_from_user($account)));
 }
 
 /**

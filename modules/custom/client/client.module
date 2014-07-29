@@ -122,7 +122,7 @@ function client_entity_property_info_alter(&$info) {
 
   $properties['bid']['label'] = t('Business');
   $properties['bid']['description'] = t('The business this client belongs to.');
-  $properties['bid']['setter callback'] = 'invoicing_core_entity_property_entity_set';
+  $properties['bid']['setter callback'] = 'entity_property_verbatim_set';
   $properties['bid']['setter permission'] = 'administer clients';
   $properties['bid']['type'] = 'business';
 }

@@ -127,6 +127,7 @@ function invoice_views_default_views() {
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
+
   /* Display: Admin overview */
   $handler = $view->new_display('page', 'Admin overview', 'admin_overview');
   $handler->display->display_options['display_comment'] = 'This is altered by invoicing_core_views_pre_view() to be also visible on the /invoices path for administrators.';
@@ -140,12 +141,20 @@ function invoice_views_default_views() {
   $handler->display->display_options['relationships']['bid']['table'] = 'invoice';
   $handler->display->display_options['relationships']['bid']['field'] = 'bid';
   $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Business: Business ID */
+  $handler->display->display_options['fields']['bid']['id'] = 'bid';
+  $handler->display->display_options['fields']['bid']['table'] = 'business';
+  $handler->display->display_options['fields']['bid']['field'] = 'bid';
+  $handler->display->display_options['fields']['bid']['relationship'] = 'bid';
+  $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
   /* Field: Business: Label */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'business';
   $handler->display->display_options['fields']['name']['field'] = 'name';
   $handler->display->display_options['fields']['name']['relationship'] = 'bid';
   $handler->display->display_options['fields']['name']['label'] = 'Business';
+  $handler->display->display_options['fields']['name']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['name']['alter']['path'] = 'business/[bid]';
   /* Field: Invoice: Invoice ID */
   $handler->display->display_options['fields']['iid']['id'] = 'iid';
   $handler->display->display_options['fields']['iid']['table'] = 'invoice';

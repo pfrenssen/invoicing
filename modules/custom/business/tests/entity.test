@@ -87,4 +87,10 @@ class BusinessEntityTestCase extends EntityTestCase {
     return $this->randomBusinessValues();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+  }
+
 }

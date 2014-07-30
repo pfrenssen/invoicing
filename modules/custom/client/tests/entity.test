@@ -89,4 +89,14 @@ class ClientEntityTestCase extends EntityTestCase {
     return $this->randomClientValues();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+    // Convert the bid into a full Business object.
+    $properties['bid'] = business_load($properties['bid']);
+
+    return $properties;
+  }
+
 }

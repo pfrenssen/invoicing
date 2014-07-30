@@ -110,6 +110,17 @@ abstract class EntityTestCase extends InvoicingIntegrationTestCase {
   abstract protected function getEntityMetadataWrapperValues($type);
 
   /**
+   * Converts basic properties to the entity metadata wrapper format.
+   *
+   * @param array $properties
+   *   An array of properties as returned by self::getBasicPropertyValues().
+   *
+   * @return array
+   *   The converted properties.
+   */
+  abstract protected function convertPropertiesToEntityMetadataWrapperValues($properties);
+
+  /**
    * Tests if a new entity type can be created.
    */
   public function testEntityTypeCreation() {
@@ -118,16 +129,22 @@ abstract class EntityTestCase extends InvoicingIntegrationTestCase {
     $this->createEntityType($type, $this->randomString());
 
     // Test if the properties can be set during creation.
-    $values = array('type' => $type) + $this->getBasicPropertyValues();
-    $entity = $this->createEntity($values);
-    $this->assertEntityProperties($this->getName(), $entity, $values);
+    $properties = array('type' => $type) + $this->getBasicPropertyValues();
+    $entity = $this->createEntity($properties);
+    // The entity is created using the standard Entity API controller, but
+    // when we assert the properties we use the entity metadata wrapper.
+    // Convert the properties that are known to be different between both to
+    // the correct format.
+    $properties = $this->convertPropertiesToEntityMetaDataWrapperValues($properties);
+    $this->assertEntityProperties($this->getName(), $entity, $properties);
 
     // Test if the properties can be set using the entity metadata wrapper on an
     // empty entity.
     $entity = $this->createEntity();
-    $values = array('type' => $type) + $this->getBasicPropertyValues();
-    $this->updateEntityUsingEntityMetadataWrapper($entity, $values);
-    $this->assertEntityProperties($this->getName(), $entity, $values);
+    $properties = array('type' => $type) + $this->getBasicPropertyValues();
+    $properties = $this->convertPropertiesToEntityMetaDataWrapperValues($properties);
+    $this->updateEntityUsingEntityMetadataWrapper($entity, $properties);
+    $this->assertEntityProperties($this->getName(), $entity, $properties);
   }
 
   /**
@@ -143,6 +160,11 @@ abstract class EntityTestCase extends InvoicingIntegrationTestCase {
       $properties = array('type' => $type) + $this->getBasicPropertyValues();
       $fields = $this->getFieldValues($type);
       $entity = $this->createEntity($properties + $fields);
+      // The entity is created using the standard Entity API controller, but
+      // when we assert the properties we use the entity metadata wrapper.
+      // Convert the properties that are known to be different between both to
+      // the correct format.
+      $properties = $this->convertPropertiesToEntityMetaDataWrapperValues($properties);
       $this->assertEntityProperties($this->getName(), $entity, $properties);
       $this->assertEntityFieldValues($entity, $fields);
 
@@ -164,6 +186,11 @@ abstract class EntityTestCase extends InvoicingIntegrationTestCase {
       $fields = $this->getFieldValues($type);
       $entity = $this->createEntity($properties + $fields);
       $entity->save();
+      // The entity is created using the standard Entity API controller, but
+      // when we assert the properties we use the entity metadata wrapper.
+      // Convert the properties that are known to be different between both to
+      // the correct format.
+      $properties = $this->convertPropertiesToEntityMetaDataWrapperValues($properties);
       // When the entity is saved, the value for the 'last changed timestamp'
       // should be set to the request time.
       $properties['changed'] = REQUEST_TIME;
@@ -193,7 +220,7 @@ abstract class EntityTestCase extends InvoicingIntegrationTestCase {
   protected function getAllValues($type) {
     return array(
       'type' => $type,
-    ) + $this->getBasicPropertyValues() + $this->getEntityMetadataWrapperValues($type);
+    ) + $this->convertPropertiesToEntityMetadataWrapperValues($this->getBasicPropertyValues()) + $this->getEntityMetadataWrapperValues($type);
   }
 
   /**

@@ -101,4 +101,14 @@ class InvoiceEntityTestCase extends EntityTestCase {
     return $this->randomInvoiceValues();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+    // Convert the bid into a full Business object.
+    $properties['bid'] = business_load($properties['bid']);
+
+    return $properties;
+  }
+
 }

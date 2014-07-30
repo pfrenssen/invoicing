@@ -91,6 +91,7 @@ class BusinessEntityTestCase extends EntityTestCase {
    * {@inheritdoc}
    */
   protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+    return $properties;
   }
 
 }

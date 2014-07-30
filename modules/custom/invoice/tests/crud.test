@@ -6,6 +6,7 @@
  */
 
 module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
@@ -13,9 +14,17 @@ module_load_include('inc', 'test_traits', 'line_item');
 class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
+  use BusinessTestHelper;
   use ClientTestHelper;
   use InvoiceTestHelper;
   use LineItemTestHelper;
+
+  /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
 
   /**
    * A test client.
@@ -46,8 +55,12 @@ class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
   protected function setUp() {
     parent::setup();
 
+    // Create a business that can be referenced in invoices.
+    $this->business = $this->createBusiness();
+    $this->business->save();
+
     // Create a client that can be referenced in invoices.
-    $this->client = $this->createClient();
+    $this->client = $this->createClient(array('bid' => $this->business->identifier()));
     $this->client->save();
 
     // Create a line item of each type so they can be referenced in invoices.

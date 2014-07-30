@@ -46,6 +46,9 @@ trait BaseTestHelper {
   /**
    * Check if the properties of the given entity match the given values.
    *
+   * This uses the entity metadata wrapper, so the values passed should match
+   * the format used by the wrapper.
+   *
    * @param string $entity_type
    *   The type of the entity.
    * @param Entity $entity

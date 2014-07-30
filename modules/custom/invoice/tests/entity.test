@@ -32,8 +32,11 @@ class InvoiceEntityTestCase extends EntityTestCase {
   public function setUp() {
     parent::setUp();
 
-    // Save a client and a line item of each type so they can be referenced.
-    $this->createClient()->save();
+    // Save a business, a client and a line item of each type so they can be
+    // referenced.
+    $business = $this->createBusiness();
+    $business->save();
+    $this->createClient(array('bid' => $business->identifier()))->save();
     $this->createLineItem('product')->save();
     $this->createLineItem('service')->save();
   }

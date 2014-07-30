@@ -196,7 +196,7 @@ trait ClientTestHelper {
     return array(
       'name' => $this->randomString(),
       'type' => $this->randomName(),
-      'bid' => $this->randomBusiness(),
+      'bid' => $this->randomBusiness()->identifier(),
       'created' => rand(0, 2000000000),
       'changed' => rand(0, 2000000000),
     );

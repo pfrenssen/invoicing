@@ -16,9 +16,18 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
   use LineItemTestHelper;
 
   /**
-   * {@inheritdoc}
+   * Test businesses.
+   *
+   * @var Business[]
    */
-  protected $usersToCreate = array('business owner');
+  protected $businesses;
+
+  /**
+   * Test clients
+   *
+   * @var Client[]
+   */
+  protected $clients;
 
   /**
    * An array of test invoices.
@@ -26,6 +35,14 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
    * @var array
    */
   protected $invoices;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array(
+    'administrator',
+    'business owner',
+  );
 
   /**
    * Returns test case metadata.
@@ -41,9 +58,19 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
-    parent::setup();
+  public function setUp() {
+    parent::setUp();
 
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
+  }
+
+  /**
+   * Tests the invoice overview.
+   */
+  public function testOverview() {
+    // Log in as business owner.
     $this->drupalLogin($this->users['business owner']);
 
     // Create some test clients.
@@ -51,21 +78,13 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
       $this->createUIClient();
     }
 
-    // Create a line item of each type so they can be referenced in invoices.
-    $this->createLineItem('product')->save();
-    $this->createLineItem('service')->save();
-
     // Create a number of test invoices.
     for ($i = 0; $i < 20; $i++) {
       $invoice = $this->createUiInvoice();
       $this->invoices[$invoice->iid] = $invoice;
     }
-  }
 
-  /**
-   * Tests the invoice overview.
-   */
-  public function testOverview() {
+    // Go to the invoice overview.
     $this->drupalGet('invoices');
 
     // Check that the "Add invoice" local action is present.
@@ -139,6 +158,124 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->assertXPathElements($xpath, 1, array(':text' => t('Add invoice')), 'The "Add invoice" local action is present.');
     $this->assertFalse($this->xpath('//div[contains(@class, "view-invoices")]//table'), 'The table containing invoices is not shown when no invoice is linked to the user.');
     $this->assertTrue($this->xpath('//div[contains(@class, "view-invoices")]//div[contains(@class, "view-empty")]'), 'The no results message is shown.');
+  }
+
+  /**
+   * Tests the invoice overview for administrators.
+   */
+  public function testAdministratorOverview() {
+    // Log in as administrator.
+    $this->drupalLogin($this->users['administrator']);
+
+    // Create 2 business owners, each owning a business with 2 clients, with 2
+    // invoices each.
+    for ($i = 0; $i < 2; $i++) {
+      $user = $this->drupalCreateUserWithRole('business owner');
+      $business = $this->createBusiness();
+      $business->save();
+      $this->addBusinessToUser($business, $user);
+      $this->users[] = $user;
+      $this->businesses[] = $business;
+      for ($j = 0; $j < 2; $j++) {
+        $client = $this->createClient(array('bid' => $business->identifier()));
+        $client->save();
+        $this->clients[] = $client;
+        for ($k = 0; $k < 2; $k++) {
+          $invoice = $this->createInvoice(array(
+            'bid' => $business->identifier(),
+            'field_invoice_client' => $client,
+          ));
+          $invoice->save();
+          $this->invoices[] = $invoice;
+        }
+      }
+    }
+
+    // Go to the invoice overview.
+    $this->drupalGet('invoices');
+
+    // Check that the "Add invoice" local action is present.
+    $xpath = '//ul[@class="action-links"]/li/a[@href="/invoice/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add invoice')), 'The "Add invoice" local action is present.');
+
+    // Loop over the displayed table rows and compare them with each invoice in
+    // order.
+    $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table//tbody/tr');
+    foreach ($tablerows as $tablerow) {
+      /* @var $tablerow SimpleXMLElement */
+      /* @var $invoice EntityDrupalWrapper */
+      /* @var $business Business */
+      $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
+      $business = $invoice->bid->value();
+      $client = $invoice->field_invoice_client->value();
+      $testcases = array(
+        array(
+          'message' => 'The first column contains the business name.',
+          'expected' => $business->name,
+          'actual' => (string) $tablerow->td[0]->a,
+        ),
+        array(
+          'message' => 'The first column is linked to the business.',
+          'expected' => '/business/' . $business->identifier(),
+          'actual' => (string) $tablerow->td[0]->a['href'],
+        ),
+        array(
+          'message' => 'The second column contains the invoice number.',
+          'expected' => $invoice->field_invoice_number->value(),
+          'actual' => (string) $tablerow->td[1]->a,
+        ),
+        array(
+          'message' => 'The second column is linked to the invoice detail page.',
+          'expected' => '/invoice/' . $invoice->getIdentifier(),
+          'actual' => (string) $tablerow->td[1]->a['href'],
+        ),
+        array(
+          'message' => 'The third column contains the client.',
+          'expected' => $client->name,
+          'actual' => (string) $tablerow->td[2]->a,
+        ),
+        array(
+          'message' => 'The third column is linked to the client detail page.',
+          'expected' => '/client/' . $client->cid,
+          'actual' => (string) $tablerow->td[2]->a['href'],
+        ),
+        array(
+          'message' => 'The fourth column contains the date.',
+          'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y', 'UTC'),
+          'actual' => (string) $tablerow->td[3]->span[0],
+        ),
+      );
+
+      foreach ($testcases as $testcase) {
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
+      }
+    }
+
+    // Check that all invoices were displayed.
+    $this->assertFalse($this->invoices, 'All invoices are shown in the table.');
+  }
+
+  /**
+   * Tests that users without admin rights cannot access the admin overview.
+   */
+  function testAdministratorOverviewAccess() {
+    // Log in as business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a test client.
+    $this->createUIClient();
+
+    // Create a test invoice.
+    $this->createUiInvoice();
+
+    // Go to the invoice admin overview.
+    $this->drupalGet('invoices/admin');
+
+    // Check that the regular overview is shown here and not the admin overview.
+    $elements = $this->xpath('//div[contains(@class, "view-display-id-admin_overview")]');
+    $this->assertFalse($elements, 'The admin overview is not shown to a non-administrator.');
+    $elements = $this->xpath('//div[contains(@class, "view-display-id-overview")]');
+    $this->assertTrue($elements, 'Instead the regular overview is shown.');
   }
 
 }

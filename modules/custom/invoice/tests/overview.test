@@ -120,7 +120,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'actual' => (string) $tablerow->td[1]->a,
         ),
         array(
-          'message' => 'The first column is linked to the client detail page.',
+          'message' => 'The second column is linked to the client detail page.',
           'expected' => '/client/' . $client->cid,
           'actual' => (string) $tablerow->td[1]->a['href'],
         ),

@@ -50,6 +50,9 @@ script:
   # SIMPLETEST_RESULT=$?
   # Run PHP CodeSniffer tests.
   - cd ..
+  - ls -al
+  - ls -al vendor
+  - ls -al vendor/bin
   - ./vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* ./build/profiles/invoicing
   - CODESNIFFER_RESULT=$?
   - if [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi

@@ -45,7 +45,14 @@ before_script:
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
-  - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080
+  # Run Simpletests.
+  # drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080
+  # SIMPLETEST_RESULT=$?
+  # Run PHP CodeSniffer tests.
+  - cd ..
+  - ./vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* ./build/profiles/invoicing
+  - CODESNIFFER_RESULT=$?
+  - if [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
 
 notifications:
   irc: irc.freenode.org#pocomas

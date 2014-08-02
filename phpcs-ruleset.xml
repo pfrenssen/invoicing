@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- PHP_CodeSniffer standard -->
+<!-- See https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml -->
+<ruleset name="Invoicing">
+    <description>Invoicing coding standard</description>
+
+    <rule ref="./vendor/drupal/coder/coder_sniffer/Drupal">
+    </rule>
+
+    <!-- Exclude files (such as Views handlers) that do not follow Drupal class name conventions. -->
+    <rule ref="Drupal.NamingConventions.ValidClassName">
+        <exclude-pattern>*/modules/custom/*/views/*.inc</exclude-pattern>
+        <exclude-pattern>*/modules/custom/business/plugins/selection/EntityReference_SelectionHandler_Active_Business.class.php</exclude-pattern>
+    </rule>
+
+    <!-- Exclude files (such as Views handlers) that do not follow Drupal method name conventions. -->
+    <rule ref="Drupal.NamingConventions.ValidFunctionName">
+        <exclude-pattern>*/modules/custom/*/views/*.inc</exclude-pattern>
+    </rule>
+</ruleset>

@@ -179,6 +179,7 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['edit_client']['table'] = 'client';
   $handler->display->display_options['fields']['edit_client']['field'] = 'edit_client';
   $handler->display->display_options['fields']['edit_client']['label'] = 'Actions';
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['path'] = 'admin/clients';
   $export['clients'] = $view;
 

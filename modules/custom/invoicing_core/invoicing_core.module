@@ -73,13 +73,13 @@ function invoicing_core_form_user_register_form_submit($form, &$form_state) {
  * Alters the "Invoices" view:
  * - Prevent business owners from bypassing the active business filter by
  *   providing an argument like "/all".
- * - Change the display of the invoice overview to the 'Admin overview' if the
- *   user is an administrator.
+ * - Change the display of the invoice and client overviews to the 'Admin
+ *   overview' if the user is an administrator.
  */
 function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
-  // Change the display of the invoice overview to the 'Admin overview' if the
-  // user is an administrator.
-  if (user_access('administer businesses') && $view->name == 'invoices' && $display_id == 'overview') {
+  // Change the display of the invoice and client overviews to the 'Admin
+  // overview' if the user is an administrator.
+  if (user_access('administer businesses') && in_array($view->name, array('clients', 'invoices')) && $display_id == 'overview') {
     $view->set_display('admin_overview');
   }
   // Prevent business owners from seeing items which are not linked to their

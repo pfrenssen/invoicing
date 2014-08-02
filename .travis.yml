@@ -55,7 +55,7 @@ script:
   - cd ..
   - ./vendor/bin/phpcs --standard=./phpcs-ruleset.xml --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* --ignore=*/drush-master/* ./build/profiles/invoicing
   - CODESNIFFER_RESULT=$?
-  - if [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
+  - if [ $CODESNIFFER_RESULT -eq 0 ] ; then return 0 ; else return 1 ; fi
 
 notifications:
   irc: irc.freenode.org#pocomas

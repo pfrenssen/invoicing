@@ -3,7 +3,7 @@ core = 7.x
 
 projects[drupal][type] = core
 projects[drupal][download][type] = git
-projects[drupal][download][revision] = 7.29
+projects[drupal][download][revision] = 7.30
 projects[drupal][download][branch] = 7.x
 
 ; Recursive module dependencies of installation profile are not enabled in
@@ -35,7 +35,7 @@ projects[ctools][download][branch] = 7.x-1.x
 projects[ctools][subdir] = contrib
 
 projects[date][download][type] = git
-projects[date][download][revision] = 7.x-2.7
+projects[date][download][revision] = 7.x-2.8
 projects[date][download][branch] = 7.x-2.x
 projects[date][subdir] = contrib
 
@@ -86,7 +86,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
 projects[features][download][type] = git
-projects[features][download][revision] = 7.x-2.0
+projects[features][download][revision] = 7.x-2.1
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
 

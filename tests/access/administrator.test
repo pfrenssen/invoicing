@@ -22,6 +22,7 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
    */
   protected $accessiblePaths = array(
     '<front>',
+    'admin/clients',
     'businesses',
     'business/add',
     'clients',

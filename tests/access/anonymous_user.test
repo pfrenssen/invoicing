@@ -44,6 +44,7 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
   protected $inaccessiblePaths = array(
     '<front>',
     'admin',
+    'admin/clients',
     'admin/config',
     'admin/config/people',
     'admin/content',

@@ -50,7 +50,7 @@ function business_type_form($form, &$form_state, $business_type, $op = 'edit') {
       '#value' => t('Delete business type'),
       '#weight' => 45,
       '#limit_validation_errors' => array(),
-      '#submit' => array('business_type_form_submit_delete')
+      '#submit' => array('business_type_form_submit_delete'),
     );
   }
 

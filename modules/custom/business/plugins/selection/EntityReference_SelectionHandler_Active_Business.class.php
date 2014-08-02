@@ -4,6 +4,7 @@
  * @file
  * Entity Reference selection handler that filters on the active business.
  */
+
 class EntityReference_SelectionHandler_Active_Business extends EntityReference_SelectionHandler_Generic {
 
   /**

@@ -151,7 +151,7 @@ trait ClientTestHelper {
       ->entityCondition('bundle', 'client')
       ->propertyCondition('name', $values['name'])
       ->fieldCondition('field_client_email', 'email', $values['field_client_email'])
-      ->range(0,1);
+      ->range(0, 1);
     $result = $query->execute();
     $cids = array_keys($result['client']);
     $this->assertTrue($cids, 'Client was successfully created through the UI.');

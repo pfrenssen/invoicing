@@ -13,7 +13,7 @@ class client_handler_link_field extends views_handler_field {
   /**
    * Constructs a client_handler_link_field object.
    */
-  function construct() {
+  public function construct() {
     parent::construct();
 
     // Make sure the client id and type are available in the query.
@@ -24,7 +24,7 @@ class client_handler_link_field extends views_handler_field {
   /**
    * {@inheritdoc}
    */
-  function option_definition() {
+  public function option_definition() {
     // Provide an option to override the link text.
     $options = parent::option_definition();
     $options['text'] = array('default' => '', 'translatable' => TRUE);
@@ -35,7 +35,7 @@ class client_handler_link_field extends views_handler_field {
   /**
    * {@inheritdoc}
    */
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     // The form field to set the link text.
     $form['text'] = array(
       '#type' => 'textfield',
@@ -52,7 +52,7 @@ class client_handler_link_field extends views_handler_field {
   /**
    * {@inheritdoc}
    */
-  function query() {
+  public function query() {
     // Make sure the table and additional fields are added to the query.
     $this->ensure_my_table();
     $this->add_additional_fields();
@@ -61,7 +61,7 @@ class client_handler_link_field extends views_handler_field {
   /**
    * {@inheritdoc}
    */
-  function render($values) {
+  public function render($values) {
     // Default to 'view' if no link text is specified.
     $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
 
@@ -84,7 +84,7 @@ class client_handler_link_field extends views_handler_field {
    * @return string
    *   The rendered link.
    */
-  function render_link($client, $values) {
+  public function render_link($client, $values) {
     if (client_access('view', $client)) {
       $this->options['alter']['make_link'] = TRUE;
       $this->options['alter']['path'] = "client/$client->cid";

@@ -23,8 +23,7 @@ function business_add_page($business_type) {
 }
 
 /**
- * Page callback: Returns the business add/edit form to edit an existing
- * business.
+ * Page callback: Returns the add/edit form to edit an existing business.
  *
  * @see business_edit_form()
  *
@@ -114,7 +113,9 @@ function business_edit_form_submit($form, &$form_state) {
 
   if (business_save($business)) {
     $message = $operation == 'add' ? 'New business %name has been added.' : 'The changes have been saved.';
+    // @codingStandardsIgnoreStart
     drupal_set_message(t($message, array('%name' => $business->name)));
+    // @codingStandardsIgnoreEnd
   }
   else {
     drupal_set_message(t('The business could not be saved.'), 'error');

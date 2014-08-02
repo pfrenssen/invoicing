@@ -50,7 +50,7 @@ function client_type_form($form, &$form_state, $client_type, $op = 'edit') {
       '#value' => t('Delete client type'),
       '#weight' => 45,
       '#limit_validation_errors' => array(),
-      '#submit' => array('client_type_form_submit_delete')
+      '#submit' => array('client_type_form_submit_delete'),
     );
   }
 

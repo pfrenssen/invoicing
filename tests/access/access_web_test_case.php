@@ -4,6 +4,7 @@
  * @file
  * Base class for access and permission tests.
  */
+
 abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
 
   /**

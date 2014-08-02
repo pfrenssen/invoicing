@@ -117,7 +117,9 @@ function line_item_edit_form_submit($form, &$form_state) {
 
   if (line_item_save($line_item)) {
     $message = $operation == 'add' ? 'New line item has been added.' : 'The changes have been saved.';
+    // @codingStandardsIgnoreStart
     drupal_set_message(t($message));
+    // @codingStandardsIgnoreEnd
   }
   else {
     drupal_set_message(t('The line item could not be saved.'), 'error');
@@ -164,7 +166,7 @@ function line_item_delete_confirm_form($form, &$form_state, LineItem $line_item)
  *
  * Deletes the line item.
  *
- * @see line item_delete_confirm_form()
+ * @see line_item_delete_confirm_form()
  */
 function line_item_delete_confirm_form_submit($form, &$form_state) {
   $line_item = $form_state['line_item'];

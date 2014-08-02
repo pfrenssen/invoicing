@@ -107,7 +107,7 @@ trait BusinessTestHelper {
       ->entityCondition('bundle', 'business')
       ->propertyCondition('name', $values['name'])
       ->fieldCondition('field_business_email', 'email', $values['field_business_email'])
-      ->range(0,1);
+      ->range(0, 1);
     $result = $query->execute();
     $bids = array_keys($result['business']);
     $this->assertTrue($bids, 'Business was successfully created through the UI.');

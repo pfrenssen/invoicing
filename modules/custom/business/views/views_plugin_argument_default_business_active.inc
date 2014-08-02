@@ -13,7 +13,7 @@ class views_plugin_argument_default_business_active extends views_plugin_argumen
   /**
    * {@inheritdoc}
    */
-  function get_argument() {
+  public function get_argument() {
     $business = business_get_active_business();
     return !empty($business) ? $business->identifier() : FALSE;
   }

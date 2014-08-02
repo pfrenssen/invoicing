@@ -312,10 +312,12 @@ trait BaseTestHelper {
         // it outputs it as text preceded by an <h2> element that is provided
         // for accessibility reasons. An example:
         //
+        // @code
         //   <div class="messages status">
         //     <h2 class="element-invisible">Status message</h2>
         //     Email field is required.
         //   </div>
+        // @endcode
         //
         // While this is valid HTML, it is invalid XML, so this can't be parsed
         // with XPath. We can turn it into valid XML again by removing the
@@ -395,8 +397,7 @@ trait BaseTestHelper {
       $number = rand(10000000, 89000000);
       // This regex is taken from libphonenumber. See PhoneNumberMetadata_BE.
       preg_match('/(?:1[0-69]|[49][23]|5\\d|6[013-57-9]|71|8[0-79])[1-9]\\d{5}|[23][2-8]\\d{6}/', $number, $matches);
-    }
-    while (empty($matches[0]));
+    } while (empty($matches[0]));
 
     return (string) $number;
   }

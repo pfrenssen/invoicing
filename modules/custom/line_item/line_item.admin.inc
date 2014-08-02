@@ -50,7 +50,7 @@ function line_item_type_form($form, &$form_state, $line_item_type, $op = 'edit')
       '#value' => t('Delete line item type'),
       '#weight' => 45,
       '#limit_validation_errors' => array(),
-      '#submit' => array('line_item_type_form_submit_delete')
+      '#submit' => array('line_item_type_form_submit_delete'),
     );
   }
 

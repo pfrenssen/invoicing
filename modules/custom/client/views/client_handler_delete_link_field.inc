@@ -13,7 +13,7 @@ class client_handler_delete_link_field extends client_handler_link_field {
   /**
    * {@inheritdoc}
    */
-  function render_link($client, $values) {
+  public function render_link($client, $values) {
     if (client_access('delete', $client)) {
       $this->options['alter']['make_link'] = TRUE;
       $this->options['alter']['path'] = "client/$client->cid/delete";

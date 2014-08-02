@@ -14,11 +14,11 @@ function business_drush_command() {
       'description' => 'Create a new business and link it to a user.',
       'arguments' => array(
         'business' => 'Name of the business to create.',
-        'user' => 'Name of the user the business will be linked to.'
+        'user' => 'Name of the user the business will be linked to.',
       ),
       'drupal dependencies' => array('business'),
       'examples' => array(
-        'drush business-create \'My Company\' \'business owner\'' => 'Creates a company names \'My Company\' and links it to the user \'business owner\'.'
+        'drush business-create \'My Company\' \'business owner\'' => 'Creates a company names \'My Company\' and links it to the user \'business owner\'.',
       ),
       'required-arguments' => TRUE,
       'category' => 'invoicing',

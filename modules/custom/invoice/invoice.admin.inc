@@ -50,7 +50,7 @@ function invoice_type_form($form, &$form_state, $invoice_type, $op = 'edit') {
       '#value' => t('Delete invoice type'),
       '#weight' => 45,
       '#limit_validation_errors' => array(),
-      '#submit' => array('invoice_type_form_submit_delete')
+      '#submit' => array('invoice_type_form_submit_delete'),
     );
   }
 

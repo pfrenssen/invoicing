@@ -103,7 +103,9 @@ function invoice_edit_form_submit($form, &$form_state) {
 
   if (invoice_save($invoice)) {
     $message = $operation == 'add' ? 'New invoice has been added.' : 'The changes have been saved.';
+    // @codingStandardsIgnoreStart
     drupal_set_message(t($message));
+    // @codingStandardsIgnoreEnd
   }
   else {
     drupal_set_message(t('The invoice could not be saved.'), 'error');

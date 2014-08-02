@@ -255,27 +255,4 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->assertFalse($this->invoices, 'All invoices are shown in the table.');
   }
 
-  /**
-   * Tests that users without admin rights cannot access the admin overview.
-   */
-  function testAdministratorOverviewAccess() {
-    // Log in as business owner.
-    $this->drupalLogin($this->users['business owner']);
-
-    // Create a test client.
-    $this->createUIClient();
-
-    // Create a test invoice.
-    $this->createUiInvoice();
-
-    // Go to the invoice admin overview.
-    $this->drupalGet('invoices/admin');
-
-    // Check that the regular overview is shown here and not the admin overview.
-    $elements = $this->xpath('//div[contains(@class, "view-display-id-admin_overview")]');
-    $this->assertFalse($elements, 'The admin overview is not shown to a non-administrator.');
-    $elements = $this->xpath('//div[contains(@class, "view-display-id-overview")]');
-    $this->assertTrue($elements, 'Instead the regular overview is shown.');
-  }
-
 }

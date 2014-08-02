@@ -51,11 +51,11 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
-   * {@inheritdoc}
+   * Tests the client overview.
+   *
+   * @var SimpleXMLElement $tablerow
    */
-  protected function setUp() {
-    parent::setup();
-
+  public function testOverview() {
     // Create a second business owner with a business and client to test
     // negative cases.
     $this->users['business owner 2'] = $this->drupalCreateUserWithRole('business owner');
@@ -79,14 +79,8 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
       $client = $this->createUiClient(array('name' => $name));
       $this->clients[$client->cid] = $client;
     }
-  }
 
-  /**
-   * Tests the client overview.
-   *
-   * @var SimpleXMLElement $tablerow
-   */
-  public function testOverview() {
+    // Load the client overview.
     $this->drupalGet('clients');
     $this->assertResponse(200, 'The client overview is accessible.');
 

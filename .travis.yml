@@ -40,22 +40,20 @@ before_script:
   - ./build.sh --quick
   - cd build/
   # Run the installer.
-  # drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
+  - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
   # Enable Simpletest.
-  # drush en simpletest -y
+  - drush en simpletest -y
   # Start the built-in webserver and wait until it is up and running before continuing.
-  # drush runserver 127.0.0.1:8080 &
-  # until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
+  - drush runserver 127.0.0.1:8080 &
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
 script:
   # Run Simpletests.
-  # drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080
-  # SIMPLETEST_RESULT=$?
+  - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080 ; SIMPLETEST_RESULT=$?
   # Run PHP CodeSniffer tests.
   - cd ..
   - ./vendor/bin/phpcs --standard=./phpcs-ruleset.xml --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* --ignore=*/drush-master/* ./build/profiles/invoicing ; CODESNIFFER_RESULT=$?
-  - echo $CODESNIFFER_RESULT
-  - if [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
+  - if [ $SIMPLETEST_RESULT -eq 0 ] && [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
 
 notifications:
   irc: irc.freenode.org#pocomas

@@ -12,6 +12,7 @@ before_install:
   # Download drush.
   - wget https://github.com/drush-ops/drush/archive/master.tar.gz
   - tar xf master.tar.gz
+  - rm master.tar.gz
   - mkdir bin
   - ln -s $PWD/drush-master/drush $PWD/bin/drush
   - export PATH=$PATH:$PWD/bin/

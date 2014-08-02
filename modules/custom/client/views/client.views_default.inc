@@ -123,6 +123,7 @@ function client_views_default_views() {
   $handler->display->display_options['path'] = 'clients';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Clients';
+
   /* Display: Admin overview */
   $handler = $view->new_display('page', 'Admin overview', 'admin_overview');
   $handler->display->display_options['display_comment'] = 'This is altered by invoicing_core_views_pre_view() to be also visible on the /clients path for administrators.';

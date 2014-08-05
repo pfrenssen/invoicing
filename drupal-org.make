@@ -50,7 +50,7 @@ projects[email_registration][download][branch] = 7.x-1.x
 projects[email_registration][subdir] = contrib
 
 projects[entity][download][type] = git
-projects[entity][download][revision] = 7.x-1.4
+projects[entity][download][revision] = 7.x-1.5
 projects[entity][download][branch] = 7.x-1.x
 projects[entity][subdir] = contrib
 

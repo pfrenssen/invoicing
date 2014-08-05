@@ -36,7 +36,7 @@ projects[email][subdir] = contrib
 projects[email_registration] = 1.2
 projects[email_registration][subdir] = contrib
 
-projects[entity] = 1.4
+projects[entity] = 1.5
 projects[entity][subdir] = contrib
 
 ; entity_metadata_wrapper() does not load correct revisions.

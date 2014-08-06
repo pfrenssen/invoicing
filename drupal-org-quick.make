@@ -88,6 +88,9 @@ projects[libraries][subdir] = contrib
 projects[link] = 1.2
 projects[link][subdir] = contrib
 
+projects[panels] = 3.4
+projects[panels][subdir] = contrib
+
 projects[phone][type] = module
 projects[phone][download][type] = git
 projects[phone][download][branch] = master

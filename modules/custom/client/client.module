@@ -165,22 +165,6 @@ function client_menu() {
     'weight' => 10,
   );
 
-  $items['client/%client/view'] = array(
-    'title' => 'View',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => 0,
-  );
-
-  $items['client/%client'] = array(
-    'title' => '',
-    'page callback' => 'client_detail_page',
-    'page arguments' => array(1),
-    'access callback' => 'client_access',
-    'access arguments' => array('view', 1),
-    'type' => MENU_CALLBACK,
-    'file' => 'client.pages.inc',
-  );
-
   return $items;
 }
 

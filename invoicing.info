@@ -9,6 +9,7 @@ dependencies[] = client
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = email_registration
+dependencies[] = entity_token
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = inline_entity_form

@@ -265,6 +265,15 @@ function client_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function client_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'access') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
  * Determines whether the given user has access to a client.
  *
  * @param string $op

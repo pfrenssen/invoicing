@@ -205,6 +205,54 @@ function invoice_views_default_views() {
     5 => 0,
   );
   $handler->display->display_options['path'] = 'admin/invoices';
+
+  /* Display: Client invoices */
+  $handler = $view->new_display('panel_pane', 'Client invoices', 'panel_pane_1');
+  $handler->display->display_options['display_description'] = 'Pane listing the invoices for the given client.';
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Invoice: Invoice ID */
+  $handler->display->display_options['fields']['iid']['id'] = 'iid';
+  $handler->display->display_options['fields']['iid']['table'] = 'invoice';
+  $handler->display->display_options['fields']['iid']['field'] = 'iid';
+  $handler->display->display_options['fields']['iid']['exclude'] = TRUE;
+  /* Field: Invoice: Invoice number */
+  $handler->display->display_options['fields']['field_invoice_number']['id'] = 'field_invoice_number';
+  $handler->display->display_options['fields']['field_invoice_number']['table'] = 'field_data_field_invoice_number';
+  $handler->display->display_options['fields']['field_invoice_number']['field'] = 'field_invoice_number';
+  $handler->display->display_options['fields']['field_invoice_number']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_invoice_number']['alter']['path'] = 'invoice/[iid]';
+  /* Field: Invoice: Date */
+  $handler->display->display_options['fields']['field_invoice_date']['id'] = 'field_invoice_date';
+  $handler->display->display_options['fields']['field_invoice_date']['table'] = 'field_data_field_invoice_date';
+  $handler->display->display_options['fields']['field_invoice_date']['field'] = 'field_invoice_date';
+  $handler->display->display_options['fields']['field_invoice_date']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+  );
+  $handler->display->display_options['defaults']['arguments'] = FALSE;
+  /* Contextual filter: Invoice: Client (field_invoice_client:target_id) */
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['id'] = 'field_invoice_client_target_id';
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['table'] = 'field_data_field_invoice_client';
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['field'] = 'field_invoice_client_target_id';
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['default_argument_type'] = 'fixed';
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_invoice_client_target_id']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['pane_title'] = 'Client invoices';
+  $handler->display->display_options['pane_description'] = 'Pane listing the invoices for the given client.';
+  $handler->display->display_options['argument_input'] = array(
+    'field_invoice_client_target_id' => array(
+      'type' => 'context',
+      'context' => 'entity:client.cid',
+      'context_optional' => 0,
+      'panel' => '0',
+      'fixed' => '',
+      'label' => 'Invoice: Client (field_invoice_client:target_id)',
+    ),
+  );
   $export['invoices'] = $view;
 
   return $export;

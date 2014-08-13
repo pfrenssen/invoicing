@@ -17,4 +17,9 @@
     <rule ref="Drupal.NamingConventions.ValidFunctionName">
         <exclude-pattern>*/modules/custom/*/views/*.inc</exclude-pattern>
     </rule>
+
+    <!-- Exclude files (such as Page Manager exports) that do not follow Drupal indentation conventions. -->
+    <rule ref="Drupal.WhiteSpace.ScopeIndent.IncorrectExact">
+        <exclude-pattern>*/modules/custom/*/*.pages_default.inc</exclude-pattern>
+    </rule>
 </ruleset>

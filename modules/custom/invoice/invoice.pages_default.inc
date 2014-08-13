@@ -110,6 +110,29 @@ function invoice_default_page_manager_pages() {
     $pane->uuid = '902793e8-84b1-4b65-af58-26230e138462';
     $display->content['new-902793e8-84b1-4b65-af58-26230e138462'] = $pane;
     $display->panels['middle'][0] = 'new-902793e8-84b1-4b65-af58-26230e138462';
+    $pane = new stdClass();
+    $pane->pid = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
+    $pane->panel = 'middle';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'invoices-panel_pane_1';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'context' => array(
+        0 => 'argument_entity_id:client_1',
+      ),
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $pane->uuid = '744f8e6a-86ca-4abc-b7ec-c66820a576e8';
+    $display->content['new-744f8e6a-86ca-4abc-b7ec-c66820a576e8'] = $pane;
+    $display->panels['middle'][1] = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = 'new-902793e8-84b1-4b65-af58-26230e138462';
   $handler->conf['display'] = $display;

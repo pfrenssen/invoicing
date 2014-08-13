@@ -40,7 +40,7 @@ function client_crud_access_ctools_access_settings($form, &$form_state, $conf) {
  * Checks for access.
  */
 function client_crud_access_ctools_access_check($conf, $context) {
-  if (empty($context->data) || !is_object($context->data) || ! $context->data instanceof Client) {
+  if (empty($context->data) || !is_object($context->data) || !$context->data instanceof Client) {
     return FALSE;
   }
   return client_access($conf['operation'], $context->data);

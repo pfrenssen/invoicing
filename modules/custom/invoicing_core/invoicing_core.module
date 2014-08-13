@@ -85,8 +85,8 @@ function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
   // Prevent business owners from seeing items which are not linked to their
   // active business by going to an url like "invoices/all". This works on all
   // views that have the "active business" argument.
-  elseif (!empty($view->display['default']->handler->options['arguments']['bid'])) {
-    $bid_argument_handler = $view->display['default']->handler->options['arguments']['bid'];
+  elseif (!empty($view->display[$display_id]->handler->options['arguments']['bid'])) {
+    $bid_argument_handler = $view->display[$display_id]->handler->options['arguments']['bid'];
     if ($bid_argument_handler['default_argument_type'] == 'business_active') {
       $args = NULL;
     }

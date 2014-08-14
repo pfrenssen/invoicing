@@ -75,8 +75,17 @@ function invoicing_core_form_user_register_form_submit($form, &$form_state) {
  *   providing an argument like "/all".
  * - Change the display of the invoice and client overviews to the 'Admin
  *   overview' if the user is an administrator.
+ *
+ * @param View $view
+ *   The view object about to be processed.
+ * @param string $display_id
+ *   The machine name of the active display.
+ * @param array $args
+ *   An array of arguments passed into the view.
  */
 function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
+  $contextual_arguments = $view->display_handler->get_option('arguments');
+
   // Change the display of the invoice and client overviews to the 'Admin
   // overview' if the user is an administrator.
   if (user_access('administer businesses') && in_array($view->name, array('clients', 'invoices')) && $display_id == 'overview') {
@@ -85,10 +94,7 @@ function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
   // Prevent business owners from seeing items which are not linked to their
   // active business by going to an url like "invoices/all". This works on all
   // views that have the "active business" argument.
-  elseif (!empty($view->display[$display_id]->handler->options['arguments']['bid'])) {
-    $bid_argument_handler = $view->display[$display_id]->handler->options['arguments']['bid'];
-    if ($bid_argument_handler['default_argument_type'] == 'business_active') {
-      $args = NULL;
-    }
+  elseif (array_key_exists('bid', $contextual_arguments) && $contextual_arguments['bid']['default_argument_type'] == 'business_active') {
+    $args = NULL;
   }
 }

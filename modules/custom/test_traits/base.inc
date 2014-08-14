@@ -248,7 +248,7 @@ trait BaseTestHelper {
   /**
    * Check if element(s) that match the given XPath expression are present.
    *
-   * @param array $xpath
+   * @param string $xpath
    *   The XPath expression to execute on the page.
    * @param int $count
    *   The number of elements that should match the expression.

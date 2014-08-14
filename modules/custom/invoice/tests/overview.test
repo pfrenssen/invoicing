@@ -255,4 +255,83 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->assertFalse($this->invoices, 'All invoices are shown in the table.');
   }
 
+  /**
+   * Tests the client invoice overview.
+   */
+  public function testClientInvoiceOverview() {
+    // Log in as business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create some test clients.
+    for ($i = 0; $i < 2; $i++) {
+      $this->clients[$i] = $this->createUIClient();
+    }
+
+    // Create a number of test invoices for the first client.
+    $values = array('field_invoice_client' => $this->clients[0]);
+    for ($i = 0; $i < 20; $i++) {
+      $invoice = $this->createUiInvoice($values);
+      $this->invoices[$invoice->iid] = $invoice;
+    }
+
+    // Create a single invoice for the second client.
+    $values = array('field_invoice_client' => $this->clients[1]);
+    $client2_invoice = $this->createUiInvoice($values);
+
+    // Go to the detail page of the first client.
+    $this->drupalGet('client/' . $this->clients[0]->identifier());
+
+    // Check that the 'Invoices' title is present.
+    $this->assertXPathElements('//h2[text()=:text]', 1, array(':text' => t('Invoices')), 'The title of the overview is present.');
+
+    // Check that the pager is not present. We added 20 invoices which is the
+    // maximum number that fits on one page.
+    $this->assertNoPager();
+
+    // Loop over the displayed table rows and compare them with each invoice in
+    // order.
+    $tablerows = $this->xpath('//div[contains(@class, "view-invoices")]//table//tbody/tr');
+    foreach ($tablerows as $tablerow) {
+      /* @var $tablerow SimpleXMLElement */
+      /* @var $invoice EntityDrupalWrapper */
+      $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
+      $client = $invoice->field_invoice_client->value();
+      $testcases = array(
+        array(
+          'message' => 'The first column contains the invoice number.',
+          'expected' => $invoice->field_invoice_number->value(),
+          'actual' => (string) $tablerow->td[0]->a,
+        ),
+        array(
+          'message' => 'The first column is linked to the invoice detail page.',
+          'expected' => '/invoice/' . $invoice->getIdentifier(),
+          'actual' => (string) $tablerow->td[0]->a['href'],
+        ),
+        array(
+          'message' => 'The second column contains the date.',
+          'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y'),
+          'actual' => (string) $tablerow->td[1]->span[0],
+        ),
+      );
+
+      foreach ($testcases as $testcase) {
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
+      }
+    }
+
+    // Check that all invoices were displayed.
+    $this->assertFalse($this->invoices, 'All invoices are shown in the table.');
+
+    // Add one more invoice and assert that a pager now appears.
+    $values = array('field_invoice_client' => $this->clients[0]);
+    $this->createUIInvoice($values);
+    $this->drupalGet('invoices');
+    $this->assertPager();
+
+    // Go to the detail page of the second client and check it contains only one
+    // invoice.
+    $this->drupalGet('client/' . $this->clients[1]->identifier());
+    $this->assertXPathElements('//div[contains(@class, "view-invoices")]//table//tbody/tr', 1, array(), 'The invoice overview on the detail page of the second client only contains one invoice.');
+  }
+
 }

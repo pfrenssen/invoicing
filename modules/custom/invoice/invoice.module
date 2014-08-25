@@ -173,6 +173,18 @@ function invoice_menu() {
     'file' => 'invoice.pages.inc',
   );
 
+  $items['invoice/%invoice/html'] = array(
+    'title' => 'HTML version of the client invoice',
+    'page callback' => 'invoice_generate_html',
+    'page arguments' => array(1),
+    // This is protected with a token in the page callback. No session based
+    // access control can be done since this path needs to be accessible by the
+    // PDF converter.
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'invoice.pages.inc',
+  );
+
   return $items;
 }
 
@@ -260,6 +272,89 @@ function invoice_permission() {
   }
 
   return $permissions;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function invoice_theme($existing, $type, $theme, $path) {
+  return array(
+    'invoice_export' => array(
+      'variables' => array('invoice' => NULL),
+      'template' => 'invoice_export',
+      'path' => drupal_get_path('module', 'invoice') . '/theme',
+    ),
+  );
+}
+
+/**
+ * Process variables for invoice templates that will be exported to PDF.
+ *
+ * @param $vars
+ *   An associative array with the following keys:
+ *   - 'invoice': contains the Invoice entity that will be rendered.
+ */
+function template_preprocess_invoice_export(&$vars) {
+  $invoice_entity = $vars['invoice'];
+  $invoice = entity_metadata_wrapper('invoice', $invoice_entity);
+
+  // Make all invoice properties available.
+  $vars['invoice_client'] = field_view_field('invoice', $invoice_entity, 'field_invoice_client');
+  $vars['invoice_date'] = field_view_field('invoice', $invoice_entity, 'field_invoice_date');
+  $vars['invoice_discount'] = field_view_field('invoice', $invoice_entity, 'field_invoice_discount');
+  $vars['invoice_due_date'] = field_view_field('invoice', $invoice_entity, 'field_invoice_due_date');
+  $vars['invoice_number'] = field_view_field('invoice', $invoice_entity, 'field_invoice_number');
+  $vars['invoice_po_number'] = field_view_field('invoice', $invoice_entity, 'field_invoice_po_number');
+  $vars['invoice_products'] = field_view_field('invoice', $invoice_entity, 'field_invoice_products');
+  $vars['invoice_services'] = field_view_field('invoice', $invoice_entity, 'field_invoice_services');
+  $vars['invoice_terms'] = field_view_field('invoice', $invoice_entity, 'field_invoice_terms');
+
+  // Provide the full business entity that issued the invoice as a variable.
+  $business_entity = $invoice->bid->value();
+  $vars['business'] = $business_entity;
+  $business = entity_metadata_wrapper('business', $business_entity);
+
+  // Make all business properties available.
+  $vars['business_name'] = $business->name->value(array('sanitize' => TRUE));
+  $vars['business_address'] = field_view_field('business', $business_entity, 'field_business_address');
+  $vars['business_bic'] = field_view_field('business', $business_entity, 'field_business_bic');
+  $vars['business_email'] = field_view_field('business', $business_entity, 'field_business_email');
+  $vars['business_iban'] = field_view_field('business', $business_entity, 'field_business_iban');
+  $vars['business_mobile'] = field_view_field('business', $business_entity, 'field_business_mobile');
+  $vars['business_phone'] = field_view_field('business', $business_entity, 'field_business_phone');
+  $vars['business_vat'] = field_view_field('business', $business_entity, 'field_business_vat');
+
+  // Provide the full client entity as a variable.
+  $client_entity = $invoice->field_invoice_client->value();
+  $vars['client'] = $client_entity;
+  $client = entity_metadata_wrapper('client', $client_entity);
+
+  // Make all client properties available.
+  $vars['client_name'] = $client->name->value(array('sanitize' => TRUE));
+  $vars['client_address'] = field_view_field('client', $client_entity, 'field_client_address');
+  $vars['client_email'] = field_view_field('client', $client_entity, 'field_client_email');
+  $vars['client_phone'] = field_view_field('client', $client_entity, 'field_client_phone');
+  $vars['client_shipping_address'] = field_view_field('client', $client_entity, 'field_client_shipping_address');
+  $vars['client_vat'] = field_view_field('client', $client_entity, 'field_client_vat');
+  $vars['client_website'] = field_view_field('client', $client_entity, 'field_client_website');
+
+  // Provide the tables for products and services.
+  $vars['products'] = views_embed_view('line_items', 'products', $invoice_entity->identifier());
+  $vars['services'] = views_embed_view('line_items', 'services', $invoice_entity->identifier());
+
+  // Provide a list of CSS files.
+  // @todo Generate this with drupal_get_css() when we have PDF templates.
+  $css_path = drupal_get_path('module', 'invoice') . '/theme/invoice_export.css';
+  $css_url = url($css_path, array('absolute' => TRUE));
+  $vars['styles'] = <<<HTML
+    <style type="text/css" media="all">@import url("$css_url");</style>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+HTML;
+
+  // @todo Render CSS styles inline. On Travis wkhtmltopdf cannot access these
+  //   external stylesheets and hangs.
+  // @see https://github.com/pfrenssen/invoicing/issues/48
+  $vars['styles'] = '';
 }
 
 /**

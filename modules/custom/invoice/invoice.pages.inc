@@ -190,3 +190,23 @@ function invoice_detail_page($invoice) {
 
   return $output;
 }
+
+/**
+ * Generates the HTML version of an invoice.
+ *
+ * @param Invoice $invoice
+ *   The invoice to generate the HTML for.
+ *
+ * @return string
+ *   The generated HTML.
+ */
+function invoice_generate_html(Invoice $invoice) {
+  global $language;
+
+  drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
+  drupal_add_http_header('Content-Language', $language->language);
+
+  $output = theme('invoice_export', array('invoice' => $invoice));
+  echo $output;
+  drupal_exit();
+}

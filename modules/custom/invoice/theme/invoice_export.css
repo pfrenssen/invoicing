@@ -1,0 +1,98 @@
+body {
+  font-family: Ubuntu, sans-serif;
+  margin: 4em;
+}
+
+/* Layout */
+#first-column {
+  float: left;
+}
+
+#second-column {
+  margin-left: 50%;
+}
+
+/* Generic positioning */
+.field-label {
+  float: left;
+}
+
+.field-items {
+  margin-left: 9em;
+}
+
+/* Business */
+#business-name {
+  margin-bottom: 0.25em;
+}
+
+#business-address .field-label {
+  display: none;
+}
+
+#business-address .field-items {
+  margin-left: 0;
+}
+
+#business-contact {
+  margin: 1.25em 0;
+}
+
+#business-email .field,
+#business-phone .field,
+#business-iban .field {
+  margin-bottom: 0;
+}
+
+#business-phone .field,
+#business-mobile .field,
+#business-bic .field {
+  margin-top: 0;
+}
+
+#business-vat {
+  margin-bottom: 1.25em;
+}
+
+/* Invoice number and date */
+#invoice {
+  padding: 1.5em 0;
+}
+
+#invoice-number .field-label,
+#invoice-date .field-label {
+  font-weight: bold;
+}
+
+/* Client */
+#client-name {
+  margin-left: 9em;
+}
+
+#client-contact {
+  margin: 1.25em 0;
+}
+
+/* Products and services */
+#tables {
+  clear: both;
+  padding: 1.25em 0;
+}
+
+#tables th {
+  background-color: #ddd;
+  font-size: 0.9em;
+}
+
+.view-line-items table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+}
+
+.view-line-items table th,
+.view-line-items table td {
+  border: thin solid #ccc;
+  padding: 0.5em;
+}

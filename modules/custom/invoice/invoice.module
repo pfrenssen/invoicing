@@ -304,13 +304,19 @@ function invoice_type_load($type) {
 }
 
 /**
- * Returns a list of invoice type machine names.
+ * Returns a list of invoice type names.
  *
  * @return array
- *   An indexed array of invoice type machine names.
+ *   An associative array of invoice type labels, keyed by invoice type.
  */
 function invoice_type_get_names() {
-  return array_keys(invoice_get_types());
+  $types = array();
+
+  foreach (invoice_get_types() as $machine_name => $type) {
+    $types[$machine_name] = $type->name;
+  }
+
+  return $types;
 }
 
 /**

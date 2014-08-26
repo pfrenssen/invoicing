@@ -182,7 +182,7 @@ function invoice_menu() {
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
- * @param object $invoice
+ * @param Invoice $invoice
  *   Optionally an invoice to check access for. If nothing is given, access for
  *   all invoices is determined.
  * @param object $account

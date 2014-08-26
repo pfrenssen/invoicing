@@ -228,7 +228,7 @@ function line_item_type_access($op, $type = NULL, $account = NULL) {
  * Returns an array of line item types, keyed by the type name.
  *
  * @return array
- *   An associative array of line item types, keyed by line item type.
+ *   An associative array of line item types, keyed by line item machine name.
  */
 function line_item_get_types() {
   $types = &drupal_static(__FUNCTION__);

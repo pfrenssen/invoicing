@@ -35,6 +35,10 @@ function line_item_entity_info() {
     'inline entity form' => array(
       'controller' => 'LineItemInlineEntityFormController',
     ),
+    // Explicitly declare the Views controller, since this is not automatically
+    // set for modules that implement hook_views_data().
+    // @see entity_views_data()
+    'views controller class' => 'EntityDefaultViewsController',
   );
 
   // Add bundle info but bypass entity_load() as we cannot use it here.
@@ -77,6 +81,10 @@ function line_item_entity_info() {
       'file' => 'line_item.admin.inc',
       'controller class' => 'EntityDefaultUIController',
     ),
+    // Explicitly declare the Views controller, since this is not automatically
+    // set for modules that implement hook_views_data().
+    // @see entity_views_data()
+    'views controller class' => 'EntityDefaultViewsController',
   );
 
   return $entity_info;

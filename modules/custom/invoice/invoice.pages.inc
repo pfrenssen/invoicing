@@ -5,6 +5,8 @@
  * Page callbacks for adding, editing and deleting invoices.
  */
 
+use mikehaertl\wkhtmlto\Pdf;
+
 /**
  * Page callback: Returns the invoice add/edit form to add a new invoice.
  *
@@ -201,12 +203,65 @@ function invoice_detail_page($invoice) {
  *   The generated HTML.
  */
 function invoice_generate_html(Invoice $invoice) {
-  global $language;
+  // Check if a valid token is present.
+  if (isset($_REQUEST['token']) && invoice_get_token($invoice) == $_REQUEST['token']) {
+    global $language;
 
-  drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
-  drupal_add_http_header('Content-Language', $language->language);
+    drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
+    drupal_add_http_header('Content-Language', $language->language);
 
-  $output = theme('invoice_export', array('invoice' => $invoice));
-  echo $output;
-  drupal_exit();
+    $output = theme('invoice_export', array('invoice' => $invoice));
+    echo $output;
+    drupal_exit();
+  }
+  return MENU_ACCESS_DENIED;
+}
+
+/**
+ * Generates the HTML version of an invoice.
+ *
+ * @param Invoice $invoice
+ *   The invoice to generate the HTML for.
+ *
+ * @return string
+ *   The generated HTML.
+ *
+ * @throws Exception
+ *   Thrown when the PDF to download could not be created.
+ */
+function invoice_download(Invoice $invoice) {
+  // Check if a valid token is present.
+  if (isset($_REQUEST['token']) && drupal_valid_token($_REQUEST['token'], 'invoice-download-link-' . $invoice->identifier())) {
+    $file_uri = file_build_uri('invoices/' . $invoice->iid . '.pdf');
+
+    // Generate the PDF if it doesn't exist yet.
+    if (!file_exists($file_uri)) {
+      require_once drupal_get_path('profile', 'invoicing') . '/vendor/autoload.php';
+      $pdf = new Pdf(array('binary' => invoicing_core_get_wkhtmltopdf_path()));
+      $html = theme('invoice_export', array('invoice' => $invoice));
+      $pdf->addPage($html);
+
+      // Save the generated PDF for future reference.
+      if (!$pdf->saveAs(drupal_realpath($file_uri))) {
+        throw new Exception('Could not create PDF: ' . $pdf->getError());
+      }
+    }
+
+    // Generate a filename in the format 'invoice-{invoice number}.pdf'.
+    // @todo Add transliteration support.
+    // @see https://github.com/pfrenssen/invoicing/issues/37
+    $invoice_wrapped = entity_metadata_wrapper('invoice', $invoice);
+    $invoice_number = $invoice_wrapped->field_invoice_number->value();
+    $filename = t('invoice-@invoice-number.pdf', array('@invoice-number' => $invoice_number));
+
+    // Send the PDF to the browser as a file download.
+    $headers = array(
+      'Cache-Control' => 'private',
+      'Content-Type' => 'application/pdf',
+      'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+    );
+
+    file_transfer($file_uri, $headers);
+  }
+  return MENU_ACCESS_DENIED;
 }

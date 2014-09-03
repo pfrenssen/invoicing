@@ -185,6 +185,15 @@ function invoice_menu() {
     'file' => 'invoice.pages.inc',
   );
 
+  $items['invoice/%invoice/download'] = array(
+    'title' => 'Download',
+    'page callback' => 'invoice_download',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'invoice.pages.inc',
+  );
+
   return $items;
 }
 
@@ -607,16 +616,56 @@ function invoice_is_owned_by_user(Invoice $invoice, \stdClass $account = NULL) {
  * Implements hook_menu_local_tasks_alter().
  */
 function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
-  // Add action link to 'client/add' on the Clients overview.
-  if ($root_path == 'invoices') {
-    $item = menu_get_item('invoice/add');
-    if ($item['access']) {
-      $data['actions']['output'][] = array(
-        '#theme' => 'menu_local_action',
-        '#link' => $item,
+  switch ($root_path) {
+    // Add action link to 'invoice/add' on the invoices overview.
+    case 'invoices':
+      $item = menu_get_item('invoice/add');
+      break;
+
+    // Add action link to download a PDF on the invoice detail page.
+    case 'invoice/%':
+      $invoice = menu_get_object('invoice');
+      $item = menu_get_item('invoice/' . $invoice->identifier() . '/download');
+      $item['localized_options'] = array(
+        'attributes' => array('class' => 'download'),
+        'query' => array('token' => drupal_get_token('invoice-download-link-' . $invoice->identifier())),
       );
-    }
+      break;
   }
+
+  if (isset($item) && $item['access']) {
+    $data['actions']['output'][] = array(
+      '#theme' => 'menu_local_action',
+      '#link' => $item,
+    );
+  }
+}
+
+/**
+ * Generates a non-session-safe token for an invoice.
+ *
+ * This is based on drupal_get_token() but is not taking the user session into
+ * account. These tokens are used to protect the HTML versions of the invoices
+ * at invoice/%/html. The PDF converter needs to be able to access these paths
+ * without having a user session.
+ *
+ * This is reasonably safe because the tokens are never exposed to end users and
+ * are calculated using data that is not available to the users.
+ *
+ * >> These tokens should never be used on any page accessible by end users! <<
+ *
+ * @param Invoice $invoice
+ *   The invoice to base the token on.
+ *
+ * @return string
+ *   A 43-character URL-safe token based on the invoice, the hash salt provided
+ *   by drupal_get_hash_salt(), and the 'drupal_private_key' configuration
+ *   variable.
+ *
+ * @see drupal_get_token()
+ */
+function invoice_get_token(Invoice $invoice) {
+  return drupal_hmac_base64($invoice->identifier() . $invoice->created . $invoice->changed, drupal_get_private_key() . drupal_get_hash_salt());
 }
 
 /**
@@ -678,6 +727,12 @@ class Invoice extends Entity {
     // @see number_field_presave()
     if (isset($this->field_invoice_discount[LANGUAGE_NONE][0]['value'])) {
       $this->field_invoice_discount[LANGUAGE_NONE][0]['value'] = number_format($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 2);
+    }
+
+    // Delete the cached PDF if it exists.
+    $file_uri = file_build_uri('invoices/' . $this->iid . '.pdf');
+    if (file_exists($file_uri)) {
+      unlink($file_uri);
     }
 
     return $return;

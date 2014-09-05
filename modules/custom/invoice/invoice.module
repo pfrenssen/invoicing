@@ -322,20 +322,18 @@ function invoice_type_get_names() {
 /**
  * Composes the label of an invoice type.
  *
- * @param object $entity
- *   The entity for which to generate the label.
- * @param string $entity_type
- *   The entity type; e.g., 'node' or 'user'.
+ * @param Entity $invoice
+ *   The invoice for which to generate the label.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
  *
  * @see entity_label()
  */
-function invoice_type_label($entity, $entity_type) {
+function invoice_type_label(Entity $invoice) {
   // If the entity type is being created it does not have a name yet.
-  if (empty($entity->is_new)) {
-    return $entity->name;
+  if (empty($invoice->is_new)) {
+    return $invoice->name;
   }
   return FALSE;
 }

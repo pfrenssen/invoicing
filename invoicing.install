@@ -145,4 +145,7 @@ function invoicing_install() {
 
   // Disable poor man's cron.
   variable_set('cron_safe_threshold', 0);
+
+  // Enable the private file system by default.
+  variable_set('file_default_scheme', 'private');
 }

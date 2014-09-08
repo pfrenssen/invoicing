@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall, update and schema hooks for the Invoicing Core module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function invoicing_core_install() {
+  // Create the private folders and ensure they are writable. We have to ensure
+  // these folders exist before we can enable the private file system.
+  foreach (array('public://private', 'public://private/invoices') as $folder) {
+    file_prepare_directory($folder, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  }
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function invoicing_core_requirements($phase) {
+  $t = get_t();
+
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    // Check if the private file system is enabled.
+    $is_enabled = variable_get('file_default_scheme', 'public') == 'private';
+    $requirements['invoicing_private_files']['title'] = $t('Private file system');
+    $requirements['invoicing_private_files']['value'] = $is_enabled ? $t('Enabled') : $t('Disabled');
+    if (!$is_enabled) {
+      $requirements['invoicing_private_files']['description'] = $t('The private file system should be enabled. See !link.', array(
+        '!link' => l($t('File system'), 'admin/config/media/file-system'),
+      ));
+      $requirements['invoicing_private_files']['severity'] = REQUIREMENT_ERROR;
+    }
+  }
+
+  return $requirements;
+}

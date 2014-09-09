@@ -174,7 +174,7 @@ function invoice_menu() {
   );
 
   $items['invoice/%invoice/html'] = array(
-    'title' => 'HTML version of the client invoice',
+    'title' => 'HTML',
     'page callback' => 'invoice_generate_html',
     'page arguments' => array(1),
     // This is protected with a token in the page callback. No session based
@@ -265,6 +265,10 @@ function invoice_permission() {
     'administer own invoices' => array(
       'title' => t('Administer own invoices'),
       'description' => t('Edit and delete your own invoices.'),
+    ),
+    'view html version of any invoice' => array(
+      'title' => t('View HTML version of any invoice'),
+      'description' => t('This is intended to help in developing and theming PDF templates.'),
     ),
   );
 
@@ -619,24 +623,42 @@ function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   switch ($root_path) {
     // Add action link to 'invoice/add' on the invoices overview.
     case 'invoices':
-      $item = menu_get_item('invoice/add');
+      $action = menu_get_item('invoice/add');
       break;
 
-    // Add action link to download a PDF on the invoice detail page.
+    // Add links to the invoice detail page to download a PDF and view the HTML
+    // version.
     case 'invoice/%':
       $invoice = menu_get_object('invoice');
-      $item = menu_get_item('invoice/' . $invoice->identifier() . '/download');
-      $item['localized_options'] = array(
+
+      // Add an action link to download a PDF.
+      $action = menu_get_item('invoice/' . $invoice->identifier() . '/download');
+      $action['localized_options'] = array(
         'attributes' => array('class' => 'download'),
         'query' => array('token' => drupal_get_token('invoice-download-link-' . $invoice->identifier())),
       );
+
+      // Add a tab to view the HTML version for administrators. This is mainly
+      // intended to help in theming and debugging.
+      $tab = menu_get_item('invoice/' . $invoice->identifier() . '/html');
+      $tab['localized_options'] = array(
+        'query' => array('token' => invoice_get_token($invoice)),
+      );
+      $tab['access'] = user_access('view html version of any invoice');
       break;
   }
 
-  if (isset($item) && $item['access']) {
+  if (isset($action) && $action['access']) {
     $data['actions']['output'][] = array(
       '#theme' => 'menu_local_action',
-      '#link' => $item,
+      '#link' => $action,
+    );
+  }
+
+  if (isset($tab) && $tab['access']) {
+    $data['tabs'][0]['output'][] = array(
+      '#theme' => 'menu_local_action',
+      '#link' => $tab,
     );
   }
 }

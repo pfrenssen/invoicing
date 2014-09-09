@@ -96,6 +96,7 @@ function invoicing_install() {
     'administer invoices',
     'administer line items',
     'administer tax rates',
+    'view html version of any invoice',
   );
   user_role_grant_permissions($role->rid, $permissions);
 

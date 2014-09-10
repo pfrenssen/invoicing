@@ -28,6 +28,10 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    * A list of paths that should be accessible.
    *
    * @var array
+   *   An array of paths. These may be either strings, or an array with the
+   *   following keys:
+   *   - path: Drupal path or external URL to load into internal browser.
+   *   - options: Options to be forwarded to url().
    */
   protected $accessiblePaths = array();
 
@@ -35,6 +39,10 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    * A list of paths that should be inaccessible.
    *
    * @var array
+   *   An array of paths. These may be either strings, or an array with the
+   *   following keys:
+   *   - path: Drupal path or external URL to load into internal browser.
+   *   - options: Options to be forwarded to url().
    */
   protected $inaccessiblePaths = array();
 
@@ -42,6 +50,10 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    * A list of paths that should not exist.
    *
    * @var array
+   *   An array of paths. These may be either strings, or an array with the
+   *   following keys:
+   *   - path: Drupal path or external URL to load into internal browser.
+   *   - options: Options to be forwarded to url().
    */
   protected $nonExistingPaths = array(
     'line_item/add',
@@ -83,8 +95,9 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    */
   protected function doAccessiblePathsTest() {
     foreach ($this->accessiblePaths as $path) {
-      $this->drupalGet($path);
-      $this->assertResponse('200', format_string('The path %path is accessible.', array('%path' => $path)));
+      $url_arguments = $this->convertPathToUrlArguments($path);
+      $this->drupalGet($url_arguments['path'], $url_arguments['options']);
+      $this->assertResponse('200', format_string('The path %path is accessible.', array('%path' => $url_arguments['path'])));
     }
   }
 
@@ -93,8 +106,9 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    */
   protected function doInaccessiblePathsTest() {
     foreach ($this->inaccessiblePaths as $path) {
-      $this->drupalGet($path);
-      $this->assertResponse('403', format_string('The path %path is inaccessible.', array('%path' => $path)));
+      $url_arguments = $this->convertPathToUrlArguments($path);
+      $this->drupalGet($url_arguments['path'], $url_arguments['options']);
+      $this->assertResponse('403', format_string('The path %path is inaccessible.', array('%path' => $url_arguments['path'])));
     }
   }
 
@@ -103,9 +117,32 @@ abstract class AccessWebTestCase extends InvoicingIntegrationTestCase {
    */
   protected function doNonExistingPathsTest() {
     foreach ($this->nonExistingPaths as $path) {
-      $this->drupalGet($path);
-      $this->assertResponse('404', format_string('The path %path does not exist.', array('%path' => $path)));
+      $url_arguments = $this->convertPathToUrlArguments($path);
+      $this->drupalGet($url_arguments['path'], $url_arguments['options']);
+      $this->assertResponse('404', format_string('The path %path does not exist.', array('%path' => $url_arguments['path'])));
     }
+  }
+
+  /**
+   * Converts the path into arguments for the url() function.
+   *
+   * @param string|array $path
+   *   Either a string representing an internal path or an external url, or an
+   *   array with the following keys:
+   *   - path: Drupal path or external URL to load into internal browser.
+   *   - options: Options to be forwarded to url().
+   *
+   * @return array
+   *   An array with the following keys:
+   *   - path: Drupal path or external URL to load into internal browser.
+   *   - options: Options to be forwarded to url().
+   */
+  protected function convertPathToUrlArguments($path) {
+    if (!is_array($path)) {
+      $path = array('path' => $path, 'options' => array());
+    }
+
+    return $path;
   }
 
 }

@@ -25,6 +25,10 @@ projects[drupal][patch][] = http://drupal.org/files/updater-installation_directo
 ; https://www.drupal.org/node/2386903
 projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simpletest-domdocument_warning-7.x-do-not-test.patch
 
+; DrupalWebTestCase::drupalGetToken() does not add hash salt.
+; @see https://www.drupal.org/node/1555862
+projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetToken_hash_salt-D7-do-not-test.patch
+
 projects[addressfield][version] = 1.0-rc1
 projects[addressfield][subdir] = contrib
 

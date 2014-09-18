@@ -128,15 +128,53 @@ class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
     $this->createLineItem('product')->save();
     $this->createLineItem('service')->save();
 
-    // Add an invoice to the business. This should also be inaccessible.
-    $this->invoice = $this->createInvoice(array(
+    // Add two invoices to the business. These should also be inaccessible.
+    $this->invoice1 = $this->createInvoice(array(
       'bid' => $this->business->identifier(),
       'field_invoice_client' => $this->client,
     ));
-    $this->invoice->save();
-    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier();
-    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier() . '/edit';
-    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice->identifier() . '/delete';
+    $this->invoice1->save();
+    $this->invoice2 = $this->createInvoice(array(
+      'bid' => $this->business->identifier(),
+      'field_invoice_client' => $this->client,
+    ));
+    $this->invoice2->save();
+
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier();
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/download';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/html';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier();
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/download';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/html';
+
+    // An anonymous user should not be able to directly download the PDF version
+    // of an invoice, even if supplied with the correct token since anonymous
+    // user don't have a session. Anonymous users will be able to download
+    // invoices once we have a landing page for them.
+    // @see https://github.com/pfrenssen/invoicing/issues/46
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice1->identifier()))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice2->identifier()))),
+    );
+
+    // The PDF download should be inaccessible with invalid tokens. To test this
+    // we try to access the paths using the tokens of the other invoices.
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice2->identifier()))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice1->identifier()))),
+    );
 
     // Create a line item.
     $this->lineItem = $this->createLineItem(NULL, array('bid' => $this->business->identifier()));

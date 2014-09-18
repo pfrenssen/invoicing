@@ -216,6 +216,60 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
     $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
 
+    // The HTML and PDF versions of the invoices should not be accessible. These
+    // are protected with tokens.
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/download';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/download';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/html';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/html';
+
+    // Try accessing the HTML and PDF versions using valid tokens. Drupal binds
+    // tokens to the user that is logged in when they are generated. We are
+    // going to calculate these for both invoices using the currently logged in
+    // test user so we should have access to both.
+    // There is a separate test to test this properly using two different users.
+    // @see InvoiceExportTestCase::testAccess()
+    $this->accessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice1->identifier()))),
+    );
+    $this->accessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice2->identifier()))),
+    );
+
+    // For the HTML versions knowing the token should be enough to get access.
+    // The HTML versions are solely intended to be accessed by the PDF
+    // converter. The tokens for these pages are never shown to end users so
+    // they should be reasonably secure.
+    $this->accessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/html',
+      'options' => array('query' => array('token' => invoice_get_token($this->invoice1))),
+    );
+    $this->accessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/html',
+      'options' => array('query' => array('token' => invoice_get_token($this->invoice2))),
+    );
+
+    // Check that the HTML and PDF versions are not accessible with the wrong
+    // tokens. We're swapping the tokens for invoices 1 and 2.
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice2->identifier()))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice1->identifier()))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/html',
+      'options' => array('query' => array('token' => invoice_get_token($this->invoice2))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/html',
+      'options' => array('query' => array('token' => invoice_get_token($this->invoice1))),
+    );
+
     // File a line item to each business. The business owner should not be able
     // to view, edit and delete any line items. They are managed in invoices.
     $this->lineItem1 = $this->createLineItem(NULL, array('bid' => $this->business1->identifier()));

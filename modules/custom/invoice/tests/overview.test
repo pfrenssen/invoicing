@@ -242,7 +242,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fourth column contains the date.',
-          'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y', 'UTC'),
+          'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y'),
           'actual' => (string) $tablerow->td[3]->span[0],
         ),
       );

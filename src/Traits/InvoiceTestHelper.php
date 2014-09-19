@@ -134,7 +134,7 @@ trait InvoiceTestHelper {
 
     return array(
       'field_invoice_client' => $this->randomClient(),
-      'field_invoice_date' => strtotime($date_polarity . $date_offset . ' day 00:00 UTC'),
+      'field_invoice_date' => (string) strtotime($date_polarity . $date_offset . ' day 00:00'),
       'field_invoice_number' => $this->randomString(),
       'field_invoice_discount' => rand(0, 100) . '.00',
       'field_invoice_po_number' => $this->randomString(),
@@ -183,7 +183,7 @@ trait InvoiceTestHelper {
     $service = $this->randomLineItem('service');
 
     $values['field_invoice_client'][LANGUAGE_NONE][0]['target_id'] = $client->identifier();
-    $values['field_invoice_date'][LANGUAGE_NONE][0]['value'] = date('Y-m-d H:i:s', strtotime($date_polarity . $date_offset . ' day 00:00'));
+    $values['field_invoice_date'][LANGUAGE_NONE][0]['value'] = (string) strtotime($date_polarity . $date_offset . ' day 00:00');
     $values['field_invoice_number'][LANGUAGE_NONE][0]['value'] = $this->randomString();
     // Round the discount and format it to use two decimals so it matches the
     // expected format.

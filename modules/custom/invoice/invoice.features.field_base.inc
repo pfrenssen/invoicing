@@ -82,10 +82,10 @@ function invoice_field_default_field_bases() {
       ),
       'timezone_db' => '',
       'todate' => '',
-      'tz_handling' => 'utc',
+      'tz_handling' => 'none',
     ),
     'translatable' => 0,
-    'type' => 'datetime',
+    'type' => 'datestamp',
   );
 
   // Exported field_base: 'field_invoice_discount'

@@ -7,9 +7,12 @@
 
 /**
  * Page callback: Create a new tax rate.
+ *
+ * @param object $tax_rate_type
+ *   The type of tax rate to create.
  */
-function tax_rate_add_page() {
-  $tax_rate = entity_create('tax_rate', array());
+function tax_rate_add_page($tax_rate_type) {
+  $tax_rate = entity_create('tax_rate', array('type' => $tax_rate_type->type));
 
   return drupal_get_form('tax_rate_edit_form', $tax_rate);
 }

@@ -1,0 +1,385 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations for the Invoicing Tax Rate module.
+ */
+
+include_once 'tax_rate.features.inc';
+
+/**
+ * Implements hook_entity_info().
+ */
+function tax_rate_entity_info() {
+  $entity_info = array();
+
+  $entity_info['tax_rate'] = array(
+    'label' => t('Tax rate'),
+    'plural label' => t('Tax rates'),
+    'entity class' => 'TaxRate',
+    'controller class' => 'TaxRateAPIController',
+    'base table' => 'tax_rate',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+      'id' => 'tid',
+    ),
+    'label callback' => 'tax_rate_label',
+    'uri callback' => 'tax_rate_uri',
+    'access callback' => 'tax_rate_access',
+    'module' => 'tax_rate',
+    'inline entity form' => array(
+      'controller' => 'TaxRateInlineEntityFormController',
+    ),
+  );
+
+  return $entity_info;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function tax_rate_entity_property_info_alter(&$info) {
+  // Augment the default information that is provided by entityPropertyInfo().
+  // @see EntityDefaultMetadataController::entityPropertyInfo()
+  $properties = &$info['tax_rate']['properties'];
+
+  $properties['created']['label'] = t('Date created');
+  $properties['created']['description'] = t('The date the tax rate was created.');
+  $properties['created']['type'] = 'date';
+  $properties['created']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['created']['setter permission'] = 'administer tax rates';
+
+  $properties['changed']['label'] = t('Date changed');
+  $properties['changed']['description'] = t('The date the tax rate was most recently updated.');
+  $properties['changed']['type'] = 'date';
+
+  $properties['is_new']['label'] = t('Is new');
+  $properties['is_new']['description'] = t('Whether the tax rate is new and not saved to the database yet.');
+  $properties['is_new']['type'] = 'boolean';
+  $properties['is_new']['getter callback'] = 'tax_rate_entity_metadata_get_properties';
+
+  $properties['bid']['label'] = t('Business');
+  $properties['bid']['description'] = t('The business for which this tax rate was created.');
+  $properties['bid']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['bid']['setter permission'] = 'administer tax rates';
+  $properties['bid']['type'] = 'business';
+}
+
+/**
+ * Implements hook_permission().
+ */
+function tax_rate_permission() {
+  $permissions = array(
+    'administer tax rates' => array(
+      'title' => t('Administer tax rates'),
+      'description' => t('Create new tax rates, and edit and delete all tax rates.'),
+    ),
+    'create new tax rates' => array(
+      'title' => t('Create new tax rates'),
+    ),
+    'view own tax rates' => array(
+      'title' => t('View own tax rates'),
+    ),
+    'administer own tax rates' => array(
+      'title' => t('Administer own tax rates'),
+      'description' => t('Edit and delete your own tax rates.'),
+    ),
+  );
+
+  return $permissions;
+}
+
+/**
+ * Returns whether a given tax rate is owned by a given user.
+ *
+ * @param TaxRate $tax_rate
+ *   The tax rate to check.
+ * @param object $account
+ *   Optional user account to check. Defaults to the currently logged in user.
+ *
+ * @return bool
+ *   TRUE if the tax rate is owned by the user, FALSE otherwise.
+ */
+function tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $account = NULL) {
+  // Default to the logged in user.
+  global $user;
+  $account = $account ?: $user;
+
+  $tax_rate = entity_metadata_wrapper('tax_rate', $tax_rate);
+  return in_array($tax_rate->bid->value(), array_keys(business_get_businesses_from_user($account)));
+}
+
+/**
+ * Implements hook_menu().
+ */
+function tax_rate_menu() {
+  $items = array();
+
+  $items['business-preferences/tax-rates/add'] = array(
+    'title' => 'Add tax rate',
+    'page callback' => 'tax_rate_add_page',
+    'access callback' => 'tax_rate_access',
+    'access arguments' => array('create'),
+    'file' => 'tax_rate.pages.inc',
+  );
+
+  $items['business-preferences/tax-rates/%tax_rate/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tax_rate_delete_confirm_form', 2),
+    'access callback' => 'tax_rate_access',
+    'access arguments' => array('delete', 2),
+    'file' => 'tax_rate.pages.inc',
+  );
+
+  $items['business-preferences/tax-rates/%tax_rate/edit'] = array(
+  'title' => 'Edit tax rate',
+  'page callback' => 'tax_rate_edit_page',
+  'page arguments' => array(2),
+  'access callback' => 'tax_rate_access',
+  'access arguments' => array('update', 2),
+  'file' => 'tax_rate.pages.inc',
+);
+
+  return $items;
+}
+
+/**
+ * Composes the label of a tax rate.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function tax_rate_label($entity, $entity_type) {
+  return $entity->tid;
+}
+
+/**
+ * Implements callback_entity_info_uri().
+ */
+function tax_rate_uri(TaxRate $tax_rate) {
+  return array(
+    'path' => 'business-preferences/tax-rates/' . $tax_rate->tid,
+  );
+}
+
+/**
+ * Determines whether the given user has access to a tax rate.
+ *
+ * @param string $op
+ *   The operation being performed. One of 'view', 'update', 'create', 'delete'
+ *   or just 'edit' (being the same as 'create' or 'update').
+ * @param object $tax_rate
+ *   Optionally a tax rate to check access for. If nothing is given, access for
+ *   all tax rates is determined.
+ * @param object $account
+ *   Optional, a user object representing the user for whom the operation is to
+ *   be performed. Determines access for a user other than the current user.
+ *
+ * @return boolean
+ *   TRUE if the operation may be performed, FALSE otherwise.
+ */
+function tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
+  if (user_access('administer tax rates', $account)) {
+    return TRUE;
+  }
+
+  if ($op == 'create') {
+    $access = user_access('create new tax rates', $account);
+    $access |= user_access('administer own tax rates', $account);
+    return $access;
+  }
+
+  if (!empty($tax_rate)) {
+    switch ($op) {
+      case 'delete':
+      case 'update':
+        $access = user_access('administer own tax rates', $account) && tax_rate_is_owned_by_user($tax_rate, $account);
+        return $access;
+
+      case 'view':
+        $access = user_access('view own tax rates', $account) && tax_rate_is_owned_by_user($tax_rate, $account);
+        return $access;
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Saves a tax rate to the database.
+ *
+ * @param TaxRate $tax_rate
+ *   The tax rate entity.
+ *
+ * @return mixed
+ *   Returns FALSE if the transaction failed. If it succeeded, returns SAVED_NEW
+ *   or SAVED_UPDATED, depending on the operation performed.
+ */
+function tax_rate_save(TaxRate $tax_rate) {
+  return $tax_rate->save();
+}
+
+/**
+ * Loads a tax rate object from the database.
+ *
+ * @param int $tid
+ *   The tax rate ID.
+ * @param bool $reset
+ *   Whether to reset the cache.
+ *
+ * @return
+ *   A fully-populated tax rate object, or FALSE if the tax rate is not found.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the passed ID is not valid.
+ */
+function tax_rate_load($tid, $reset = FALSE) {
+  $tid = (int) $tid;
+  if (empty($tid)) {
+    throw new InvalidArgumentException('Invalid tax rate id.');
+  }
+  $tax_rates = tax_rate_load_multiple((array) $tid, $reset);
+
+  return $tax_rates ? reset($tax_rates) : FALSE;
+}
+
+/**
+ * Loads tax rates from the database.
+ *
+ * This function should be used whenever you need to load more than one tax rate
+ * from the database. Tax rates are loaded into memory and will not require
+ * database access if loaded again during the same page request.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
+ *
+ * @param $tids
+ *   An array of tax rate IDs.
+ * @param $reset
+ *   Whether to reset the internal cache.
+ *
+ * @return
+ *   An array of tax rate objects indexed by tid.
+ */
+function tax_rate_load_multiple($tids = array(), $reset = FALSE) {
+  return entity_load('tax_rate', $tids, array(), $reset);
+}
+
+/**
+ * Creates a new tax rate entity.
+ *
+ * @param array $values
+ *   An associative array of values to apply to the entity, keyed by property
+ *   name.
+ *
+ * @return TaxRate
+ *   The new tax rate entity.
+ */
+function tax_rate_create($values = array()) {
+  return entity_get_controller('tax_rate')->create($values);
+}
+
+/**
+ * Deletes a tax rate.
+ *
+ * @param TaxRate $tax_rate
+ *   The tax rate to delete.
+ */
+function tax_rate_delete(TaxRate $tax_rate) {
+  $tax_rate->delete();
+}
+
+/**
+ * Deletes multiple tax rates.
+ *
+ * @param array $tids
+ *   An array of tax rate IDs.
+ */
+function tax_rate_delete_multiple(array $tids) {
+  entity_get_controller('tax_rate')->delete($tids);
+}
+
+/**
+ * Callback for getting tax rate properties.
+ *
+ * @see tax_rate_entity_property_info()
+ */
+function tax_rate_entity_metadata_get_properties(TaxRate $tax_rate, array $options, $name, $entity_type, $info) {
+  switch ($name) {
+    case 'is_new':
+      return empty($tax_rate->tid) || !empty($tax_rate->is_new);
+  }
+}
+
+/**
+ * The class used for tax rate entities.
+ */
+class TaxRate extends Entity {
+
+  /**
+   * The primary identifier for a tax rate.
+   */
+  public $tid;
+
+  /**
+   * The identifier of the business.
+   */
+  public $bid;
+
+  /**
+   * The Unix timestamp when the tax rate was created.
+   */
+  public $created;
+
+  /**
+   * The Unix timestamp when the tax rat was most recently saved.
+   */
+  public $changed;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save() {
+    // Set created and changed values. Only set the created value if it is new.
+    if (empty($this->created) && (!empty($this->is_new) || !$this->tid)) {
+      $this->created = REQUEST_TIME;
+    }
+    $this->changed = REQUEST_TIME;
+
+    return parent::save();
+  }
+
+}
+
+/**
+ * The Tax Rate Entity API controller class.
+ */
+class TaxRateAPIController extends EntityAPIController {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function create(array $values = array()) {
+    // Set the business id to the active business of the logged in user.
+    $business = business_get_active_business();
+    if ($business instanceof Business) {
+      $values += array('bid' => $business->bid);
+    }
+    return parent::create($values);
+  }
+
+}
+
+/**
+ * The Tax Rate Inline Entity Form controller class.
+ */
+class TaxRateInlineEntityFormController extends EntityInlineEntityFormController {
+}

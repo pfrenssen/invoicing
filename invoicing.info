@@ -20,6 +20,7 @@ dependencies[] = line_item
 dependencies[] = link
 dependencies[] = panels
 dependencies[] = phone
+dependencies[] = tax_rate
 dependencies[] = user_registrationpassword
 dependencies[] = views
 

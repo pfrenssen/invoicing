@@ -70,6 +70,9 @@ function tax_rate_entity_property_info_alter(&$info) {
  */
 function tax_rate_permission() {
   $permissions = array(
+    'access tax rate overview' => array(
+      'title' => t('Access tax rate overview'),
+    ),
     'administer tax rates' => array(
       'title' => t('Administer tax rates'),
       'description' => t('Create new tax rates, and edit and delete all tax rates.'),

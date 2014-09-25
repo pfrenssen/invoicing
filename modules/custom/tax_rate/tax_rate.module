@@ -22,6 +22,10 @@ function tax_rate_entity_info() {
     'fieldable' => TRUE,
     'entity keys' => array(
       'id' => 'tid',
+      'bundle' => 'type',
+    ),
+    'bundle keys' => array(
+      'bundle' => 'type',
     ),
     'label callback' => 'tax_rate_label',
     'uri callback' => 'tax_rate_uri',
@@ -29,6 +33,48 @@ function tax_rate_entity_info() {
     'module' => 'tax_rate',
     'inline entity form' => array(
       'controller' => 'TaxRateInlineEntityFormController',
+    ),
+  );
+
+  // Add bundle info but bypass entity_load() as we cannot use it here.
+  $types = db_select('tax_rate_type', 'trt')
+    ->fields('trt', array('type', 'name'))
+    ->execute()
+    ->fetchAllKeyed();
+
+  foreach ($types as $type => $name) {
+    $entity_info['tax_rate']['bundles'][$type] = array(
+      'label' => $name,
+      'admin' => array(
+        'path' => 'admin/structure/tax_rates/manage/%tax_rate',
+        'real path' => 'admin/structure/tax_rates/manage/' . $type,
+        'bundle argument' => 4,
+        'access arguments' => array('administer tax rates'),
+      ),
+    );
+  }
+
+  $entity_info['tax_rate_type'] = array(
+    'label' => t('Tax rate type'),
+    'plural label' => t('Tax rate types'),
+    'entity class' => 'Entity',
+    'controller class' => 'EntityAPIControllerExportable',
+    'base table' => 'tax_rate_type',
+    'fieldable' => FALSE,
+    'bundle of' => 'tax_rate',
+    'exportable' => TRUE,
+    'entity keys' => array(
+      'id' => 'type',
+      'name' => 'type',
+      'label' => 'name',
+    ),
+    'access callback' => 'tax_rate_type_access',
+    'label callback' => 'tax_rate_type_label',
+    'module' => 'tax_rate',
+    'admin ui' => array(
+      'path' => 'admin/structure/tax_rates',
+      'file' => 'tax_rate.admin.inc',
+      'controller class' => 'EntityDefaultUIController',
     ),
   );
 
@@ -87,7 +133,23 @@ function tax_rate_permission() {
       'title' => t('Administer own tax rates'),
       'description' => t('Edit and delete your own tax rates.'),
     ),
+    'administer tax rate types' => array(
+      'title' => t('Administer tax rate types'),
+      'description' => t('Create and delete fields for tax rate types, and set their permissions.'),
+    ),
   );
+
+  // Generate permissions per tax rate type.
+  foreach (tax_rate_get_types() as $type) {
+    $permissions += array(
+      "edit any $type->type tax rate" => array(
+        'title' => t('%type_name: Edit any tax rate', array('%type_name' => $type->name)),
+      ),
+      "view any $type->type tax rate" => array(
+        'title' => t('%type_name: View any tax rate', array('%type_name' => $type->name)),
+      ),
+    );
+  }
 
   return $permissions;
 }
@@ -118,11 +180,15 @@ function tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $account = NULL) 
 function tax_rate_menu() {
   $items = array();
 
+  // We only support one basic tax rate type for the moment. This may be extended
+  // in the future.
+  $tax_rate_type = tax_rate_type_load('tax_rate');
   $items['business-preferences/tax-rates/add'] = array(
     'title' => 'Add tax rate',
     'page callback' => 'tax_rate_add_page',
+    'page arguments' => array($tax_rate_type),
     'access callback' => 'tax_rate_access',
-    'access arguments' => array('create'),
+    'access arguments' => array('create', $tax_rate_type),
     'file' => 'tax_rate.pages.inc',
   );
 
@@ -320,6 +386,95 @@ function tax_rate_entity_metadata_get_properties(TaxRate $tax_rate, array $optio
     case 'is_new':
       return empty($tax_rate->tid) || !empty($tax_rate->is_new);
   }
+}
+
+/**
+ * Access callback for Entity API exportables for tax rate types.
+ */
+function tax_rate_type_access($op, $type = NULL, $account = NULL) {
+  return user_access('administer tax rate types', $account);
+}
+
+/**
+ * Returns an array of tax rate types, keyed by the type name.
+ *
+ * @return array
+ *   An associative array of tax rate types, keyed by tax rate type.
+ */
+function tax_rate_get_types() {
+  $types = &drupal_static(__FUNCTION__);
+
+  if (!$types) {
+    $types = db_select('tax_rate_type', 'trt')
+      ->fields('trt')
+      ->execute()
+      ->fetchAllAssoc('type');
+  }
+
+  return $types;
+}
+
+/**
+ * Returns a tax rate type by type name.
+ *
+ * @param string $type
+ *   The machine readable name of the tax rate type.
+ *
+ * @return Entity
+ *   A tax rate type entity, or FALSE if the tax rate type does not exist.
+ */
+function tax_rate_type_load($type) {
+  $types = tax_rate_get_types();
+
+  return !empty($types[$type]) ? $types[$type] : FALSE;
+}
+
+/**
+ * Returns a list of tax rate type machine names.
+ *
+ * @return array
+ *   An indexed array of tax rate type machine names.
+ */
+function tax_rate_type_get_names() {
+  return array_keys(tax_rate_get_types());
+}
+
+/**
+ * Composes the label of an tax rate type.
+ *
+ * @see entity_label()
+ *
+ * @param object $entity
+ *   The entity for which to generate the label.
+ * @param string $entity_type
+ *   The entity type; e.g., 'node' or 'user'.
+ *
+ * @return string|bool
+ *   The entity label or FALSE if not found.
+ */
+function tax_rate_type_label($entity, $entity_type) {
+  // If the entity type is being created it does not have a name yet.
+  if (empty($entity->is_new)) {
+    return $entity->name;
+  }
+  return FALSE;
+}
+
+/**
+ * Creates a tax rate type.
+ *
+ * @param string $type
+ *   The machine readable name of the tax rate type.
+ * @param string $name
+ *   The human readable name of the tax rate type.
+ */
+function tax_rate_type_create($type, $name) {
+  db_insert('tax_rate_type')
+    ->fields(array(
+      'type' => $type,
+      'name' => $name,
+    ))
+    ->execute();
 }
 
 /**

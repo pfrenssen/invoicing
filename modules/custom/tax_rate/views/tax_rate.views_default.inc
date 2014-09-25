@@ -25,7 +25,7 @@ function tax_rate_views_default_views() {
   $handler->display->display_options['title'] = 'Tax rates';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
-  $handler->display->display_options['access']['perm'] = 'view own tax rates';
+  $handler->display->display_options['access']['perm'] = 'access tax rate overview';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -90,12 +90,12 @@ function tax_rate_views_default_views() {
   $handler->display->display_options['fields']['rate']['id'] = 'rate';
   $handler->display->display_options['fields']['rate']['table'] = 'tax_rate';
   $handler->display->display_options['fields']['rate']['field'] = 'rate';
-  /* Field: Tax rate: Bid */
+  /* Field: Tax rate: Business */
   $handler->display->display_options['fields']['bid']['id'] = 'bid';
   $handler->display->display_options['fields']['bid']['table'] = 'tax_rate';
   $handler->display->display_options['fields']['bid']['field'] = 'bid';
   $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
-  /* Contextual filter: Tax rate: Bid */
+  /* Contextual filter: Tax rate: Business */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'tax_rate';
   $handler->display->display_options['arguments']['bid']['field'] = 'bid';

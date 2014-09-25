@@ -10,3 +10,12 @@
 function tax_rate_views_api($module = NULL, $api = NULL) {
   return array("api" => "3.0");
 }
+
+/**
+ * Implements hook_default_invoice_type().
+ */
+function tax_rate_default_invoice_type() {
+  $items = array();
+  $items['tax_rate'] = entity_import('tax_rate_type', '{ "type" : "tax_rate", "name" : "Tax rate" }');
+  return $items;
+}

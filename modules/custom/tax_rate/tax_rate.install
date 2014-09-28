@@ -20,6 +20,13 @@ function tax_rate_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
+      'type' => array(
+        'description' => 'The {tax_rate_type}.type of this tax rate.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
       'bid' => array(
         'description' => 'The business that uses the tax rate.',
         'type' => 'int',
@@ -48,6 +55,9 @@ function tax_rate_schema() {
         'table' => 'business',
         'columns' => array('bid' => 'bid'),
       ),
+    ),
+    'indexes' => array(
+      'type' => array('type'),
     ),
   );
 

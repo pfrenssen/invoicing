@@ -89,6 +89,12 @@ function tax_rate_entity_property_info_alter(&$info) {
   // @see EntityDefaultMetadataController::entityPropertyInfo()
   $properties = &$info['tax_rate']['properties'];
 
+  $properties['type']['description'] = t('The tax rate type');
+  $properties['type']['options list'] = 'tax_rate_type_get_names';
+  $properties['type']['required'] = TRUE;
+  $properties['type']['setter callback'] = 'entity_property_verbatim_set';
+  $properties['type']['setter permission'] = 'administer tax rates';
+
   $properties['created']['label'] = t('Date created');
   $properties['created']['description'] = t('The date the tax rate was created.');
   $properties['created']['type'] = 'date';

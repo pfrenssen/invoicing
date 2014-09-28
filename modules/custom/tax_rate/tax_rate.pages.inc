@@ -138,3 +138,22 @@ function tax_rate_delete_confirm_form_submit($form, &$form_state) {
   drupal_set_message(t('The tax rate has been deleted.'));
   $form_state['redirect'] = '<front>';
 }
+
+/**
+ * Page callback: Returns the tax rate add/edit form to edit an existing tax
+ * rate.
+ *
+ * @see tax_rate_edit_form()
+ *
+ * @param TaxRate $tax_rate
+ *   The tax rate to edit.
+ *
+ * @return array
+ *   The tax_rate add/edit form render array.
+ */
+function tax_rate_edit_page(TaxRate $tax_rate) {
+  $name = field_get_items('tax_rate', $tax_rate, 'field_tax_rate_name');
+  drupal_set_title(t('Edit tax rate %tax_rate', array('%tax_rate' => check_plain($name[0]['value']))), PASS_THROUGH);
+
+  return drupal_get_form('tax_rate_edit_form', $tax_rate);
+}

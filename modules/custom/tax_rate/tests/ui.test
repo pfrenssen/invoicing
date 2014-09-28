@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * @file
+ * UI tests for the Tax rate module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'client');
+module_load_include('inc', 'test_traits', 'tax_rate');
+
+class TaxRateUITestCase extends InvoicingIntegrationTestCase {
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
+  use ClientTestHelper;
+  use TaxRateTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
+
+  /**
+   * A test tax rate.
+   *
+   * @var TaxRate
+   */
+  protected $tax_rate;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UI test',
+      'description' => 'Tests the managing of tax rates through the user interface.',
+      'group' => 'Invoicing - InvoicTax ratee',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup();
+
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a client.
+    $this->client = $this->createUiClient();
+  }
+
+  /**
+   * Tests the tax rate form.
+   */
+  public function testTaxRateForm() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('tax_rate'), 'The tax rate database table exists.');
+    $this->assertTaxRateTableEmpty('The tax rate database is initially empty.');
+
+    // Check that error messages are displayed about required fields when
+    // creating a new tax rate.
+    $this->drupalPost(NULL, array(), t('Save'));
+    $required_fields = array(
+      'field_tax_rate_name[und][0][value]' => t('Name'),
+    );
+    $messages = array(
+      'error' => array(
+        t('!name field is required.', array('!name' => t('Name'))),
+      ),
+    );
+    $this->assertRequiredFieldMessages($required_fields, $messages);
+
+    // Fill in all the fields and check if they are saved correctly.
+    $values = $this->randomTaxRateValues();
+    $tax_rate = $this->createUiTaxRate($values);
+    $messages = array('status' => array(t('New tax rate has been added.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the tax rate has been added.');
+    $this->assertTaxRateTableNotEmpty('The tax rate database table is no longer empty after creating a tax rate.');
+    $this->assertTaxRateProperties($tax_rate, $values, 'The tax rate has been correctly saved to the database.');
+    $this->assertUrl('business-preferences/tax-rates', array(), 'The user is redirected to the tax rate overview after creating a new tax rate.');
+
+    // Check that the form fields have correct values when the tax rate is
+    // edited.
+    $this->drupalGet('business-preferences/tax-rates/' . $tax_rate->tid . '/edit');
+    $form_values = $this->convertTaxRateValuesToFormPostValues($values);
+
+    // Test the remaining values.
+    foreach ($form_values as $name => $value) {
+      $this->assertFieldByName($name, $value, format_string('When editing an existing tax rate the %name field has the right value.', array('%name' => $name)));
+    }
+
+    // Change the values and check that the entity is correctly updated.
+    $new_values = $this->randomTaxRateValues();
+
+    $new_values['field_tax_rate_rate'] = $values['field_tax_rate_rate'];
+    $new_values['field_tax_rate_name'] = $values['field_tax_rate_name'];
+    $edit = $this->convertTaxRateValuesToFormPostValues($new_values);
+
+    $this->drupalPost('business-preferences/tax-rates/' . $tax_rate->tid . '/edit', $edit, t('Save'));
+    $tax_rate = tax_rate_load($tax_rate->tid, TRUE);
+    $messages = array('status' => array(t('The changes have been saved.', array('%name' => $values['field_tax_rate_name']))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the tax rate has been edited.');
+    $this->assertTaxRateProperties($tax_rate, $new_values, 'The updated tax rate has been correctly saved to the database.');
+    $this->assertUrl('business-preferences/tax-rates', array(), 'The user is redirected to the tax rate overview after editing a tax rate.');
+
+    // Check that the user is redirected to the confirmation page when clicking
+    // the 'Delete' button on the tax rate edit page.
+    $this->drupalPost('business-preferences/tax-rates/' . $tax_rate->tid . '/delete', array(), t('Delete'));
+    $this->assertUrl('business-preferences/tax-rates/' . $tax_rate->tid . '/delete', array(), 'The user is redirected to the confirmation form when clicking the "Delete" button in the tax rate overview form.');
+    $this->assertRaw(t('Are you sure you want to delete the tax rate?'));
+    $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting a tax rate.');
+
+    // Check that the tax rate can be deleted.
+    $this->drupalPost('business-preferences/tax-rates/' . $tax_rate->tid . '/delete', array(), t('Delete'));
+    $messages = array('status' => array(t('The tax rate has been deleted.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the tax rate has been deleted.');
+    $this->assertTaxRateTableEmpty('The tax rate database is empty after the tax rate has been deleted.');
+    $this->assertUrl('business-preferences/tax-rates', array(), 'The user is redirected to the tax rate overview after deleting a tax rate.');
+  }
+
+}

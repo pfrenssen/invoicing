@@ -1,0 +1,228 @@
+<?php
+
+/**
+ * @file
+ * Tests the invoice overview.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'tax_rate');
+
+class TaxRateOverviewTestCase extends InvoicingIntegrationTestCase {
+
+  use BaseTestHelper;
+  use TaxRateTestHelper;
+
+  /**
+   * Test businesses.
+   *
+   * @var Business[]
+   */
+  protected $businesses;
+
+  /**
+   * Test clients
+   *
+   * @var Client[]
+   */
+  protected $clients;
+
+  /**
+   * An array of test tax rates.
+   *
+   * @var array
+   */
+  protected $tax_rates;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array(
+    'administrator',
+    'business owner',
+  );
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Overview test',
+      'description' => 'Tests the tax rates overview.',
+      'group' => 'Invoicing - Tax rate',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+  }
+
+  /**
+   * Tests the tax rate overview.
+   */
+  public function testOverview() {
+    // Log in as business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create some test clients.
+    for ($i = 0; $i < 5; $i++) {
+      $this->createUIClient();
+    }
+
+    // Create a number of test tax rates.
+    for ($i = 0; $i < 20; $i++) {
+      $tax_rate = $this->createUiTaxRate();
+      $this->tax_rates[$tax_rate->tid] = $tax_rate;
+    }
+
+    // Go to the tax rate overview.
+    $this->drupalGet('business-preferences/tax-rates');
+
+    // Check that the "Add tax rate" link is present.
+    $xpath = '//a[@href="/business-preferences/tax-rates/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add tax rate')), 'The "Add tax rate" link is present.');
+
+    // Check that the pager is not present. We added 20 tax rates which is the
+    // maximum number that fits on one page.
+    $this->assertNoPager();
+
+    // Loop over the displayed table rows and compare them with each tax rate in
+    // order.
+    $tablerows = $this->xpath('//div[contains(@class, "view-tax-rates")]//table//tbody/tr');
+    foreach ($tablerows as $tablerow) {
+      /* @var $tablerow SimpleXMLElement */
+      /* @var $tax_rate EntityDrupalWrapper */
+      $tax_rate = entity_metadata_wrapper('tax_rate', array_shift($this->tax_rates));
+      $testcases = array(
+        array(
+          'message' => 'The first column contains the tax rate name.',
+          'expected' => $tax_rate->field_tax_rate_name->value(),
+          'actual' => (string) $tablerow->td[0],
+        ),
+        array(
+          'message' => 'The second column contains the tax rate rate.',
+          'expected' => $tax_rate->name,
+          'actual' => (string) $tablerow->td[1],
+        ),
+        array(
+          'message' => 'The third column contains the edit link.',
+          'expected' => '/business-preferences/tax-rates/' . $tax_rate->getIdentifier() . '/edit',
+          'actual' => (string) $tablerow->td[2]->a['href'],
+        ),
+        array(
+          'message' => 'The fourth column contains the delete link.',
+          'expected' => '/business-preferences/tax-rates/' . $tax_rate->getIdentifier() . '/delete',
+          'actual' => (string) $tablerow->td[3]->a['href'],
+        ),
+      );
+
+      foreach ($testcases as $testcase) {
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
+      }
+    }
+
+    // Check that all tax rates were displayed.
+    $this->assertFalse($this->tax_rates, 'All tax rates are shown in the table.');
+
+    // Add one more tax rate and assert that a pager now appears.
+    $this->createUITaxRate();
+    $this->drupalGet('business-preferences/tax-rates');
+    $this->assertPager();
+
+    // Create a different user with the role business owner and verify it does
+    // not see the tax rates created by another business owner.
+    $business_owner = $this->drupalCreateUserWithRole('business owner');
+    $business = $this->createBusiness();
+    $business->save();
+    $this->addBusinessToUser($business, $business_owner);
+    $this->drupalLogin($business_owner);
+
+    $this->drupalGet('business-preferences/tax-rates');
+    // Check that the "Add tax rate" link is present.
+    $xpath = '//a[@href="/business-preferences/tax-rates/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add tax rate')), 'The "Add tax rate" link is present.');
+    $this->assertTrue($this->xpath('//div[contains(@class, "view-tax-rates")]//div[contains(@class, "view-empty")]'), 'The no results message is shown.');
+  }
+
+  /**
+   * Tests the tax rates overview for administrators.
+   */
+  public function testAdministratorOverview() {
+    // Log in as administrator.
+    $this->drupalLogin($this->users['administrator']);
+
+    // Create 2 business owners, each owning a business with 2 clients, with 2
+    // tax rates each.
+    for ($i = 0; $i < 2; $i++) {
+      $user = $this->drupalCreateUserWithRole('business owner');
+      $business = $this->createBusiness();
+      $business->save();
+      $this->addBusinessToUser($business, $user);
+      $this->users[] = $user;
+      $this->businesses[] = $business;
+      for ($j = 0; $j < 2; $j++) {
+        $client = $this->createClient(array('bid' => $business->identifier()));
+        $client->save();
+        $this->clients[] = $client;
+        for ($k = 0; $k < 2; $k++) {
+          $tax_rate = $this->createTaxRate(array(
+            'bid' => $business->identifier(),
+          ));
+          $tax_rate->save();
+          $this->tax_rates[] = $tax_rate;
+        }
+      }
+    }
+
+    // Go to the tax rate overview.
+    $this->drupalGet('business-preferences/tax-rates');
+
+    // Check that the "Add tax rate" link is present.
+    $xpath = '//a[@href="/business-preferences/tax-rates/add" and contains(text(), :text)]';
+    $this->assertXPathElements($xpath, 1, array(':text' => t('Add tax rate')), 'The "Add tax rate" link is present.');
+
+    // Loop over the displayed table rows and compare them with each tax rate in
+    // order.
+    $tablerows = $this->xpath('//div[contains(@class, "view-tax-rates")]//table//tbody/tr');
+    foreach ($tablerows as $tablerow) {
+      /* @var $tablerow SimpleXMLElement */
+      /* @var $invoice EntityDrupalWrapper */
+      /* @var $business Business */
+      $tax_rate = entity_metadata_wrapper('tax_rate', array_shift($this->tax_rates));
+      $business = $tax_rate->tid->value();
+      $testcases = array(
+        array(
+          'message' => 'The first column contains the tax rate name.',
+          'expected' => $tax_rate->field_tax_rate_name->value(),
+          'actual' => (string) $tablerow->td[0],
+        ),
+        array(
+          'message' => 'The second column contains the tax rate rate.',
+          'expected' => $tax_rate->name,
+          'actual' => (string) $tablerow->td[1],
+        ),
+        array(
+          'message' => 'The third column contains the edit link.',
+          'expected' => '/business-preferences/tax-rates/' . $tax_rate->getIdentifier() . '/edit',
+          'actual' => (string) $tablerow->td[2]->a['href'],
+        ),
+        array(
+          'message' => 'The fourth column contains the delete link.',
+          'expected' => '/business-preferences/tax-rates/' . $tax_rate->getIdentifier() . '/delete',
+          'actual' => (string) $tablerow->td[3]->a['href'],
+        ),
+      );
+
+      foreach ($testcases as $testcase) {
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
+      }
+    }
+
+    // Check that all invoices were displayed.
+    $this->assertFalse($this->tax_rate, 'All tax rates are shown in the table.');
+  }
+
+}

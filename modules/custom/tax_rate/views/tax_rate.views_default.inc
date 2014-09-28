@@ -82,19 +82,27 @@ function tax_rate_views_default_views() {
   $handler->display->display_options['fields']['tid']['table'] = 'tax_rate';
   $handler->display->display_options['fields']['tid']['field'] = 'tid';
   $handler->display->display_options['fields']['tid']['exclude'] = TRUE;
-  /* Field: Tax rate: Name */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'tax_rate';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  /* Field: Tax rate: Rate */
-  $handler->display->display_options['fields']['rate']['id'] = 'rate';
-  $handler->display->display_options['fields']['rate']['table'] = 'tax_rate';
-  $handler->display->display_options['fields']['rate']['field'] = 'rate';
   /* Field: Tax rate: Business */
   $handler->display->display_options['fields']['bid']['id'] = 'bid';
   $handler->display->display_options['fields']['bid']['table'] = 'tax_rate';
   $handler->display->display_options['fields']['bid']['field'] = 'bid';
   $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
+  /* Field: Tax rate: Name */
+  $handler->display->display_options['fields']['field_tax_rate_name']['id'] = 'field_tax_rate_name';
+  $handler->display->display_options['fields']['field_tax_rate_name']['table'] = 'field_data_field_tax_rate_name';
+  $handler->display->display_options['fields']['field_tax_rate_name']['field'] = 'field_tax_rate_name';
+  /* Field: Tax rate: Rate */
+  $handler->display->display_options['fields']['field_tax_rate_rate']['id'] = 'field_tax_rate_rate';
+  $handler->display->display_options['fields']['field_tax_rate_rate']['table'] = 'field_data_field_tax_rate_rate';
+  $handler->display->display_options['fields']['field_tax_rate_rate']['field'] = 'field_tax_rate_rate';
+  $handler->display->display_options['fields']['field_tax_rate_rate']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_tax_rate_rate']['alter']['text'] = '[field_tax_rate_rate]%';
+  $handler->display->display_options['fields']['field_tax_rate_rate']['settings'] = array(
+    'thousand_separator' => ' ',
+    'decimal_separator' => '.',
+    'scale' => '2',
+    'prefix_suffix' => 1,
+  );
   /* Contextual filter: Tax rate: Business */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'tax_rate';

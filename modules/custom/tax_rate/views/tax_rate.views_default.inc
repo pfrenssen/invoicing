@@ -103,6 +103,16 @@ function tax_rate_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
+  /* Field: Tax rate: Edit link */
+  $handler->display->display_options['fields']['edit_tax_rate']['id'] = 'edit_tax_rate';
+  $handler->display->display_options['fields']['edit_tax_rate']['table'] = 'tax_rate';
+  $handler->display->display_options['fields']['edit_tax_rate']['field'] = 'edit_tax_rate';
+  $handler->display->display_options['fields']['edit_tax_rate']['label'] = 'Edit';
+  /* Field: Tax rate: Delete link */
+  $handler->display->display_options['fields']['delete_tax_rate']['id'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['table'] = 'tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['field'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['label'] = 'Delete';
   /* Contextual filter: Tax rate: Business */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'tax_rate';

@@ -34,20 +34,6 @@ function tax_rate_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
-      'name' => array(
-        'description' => 'The name of the tax rate.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => '',
-      ),
-      'rate' => array(
-        'description' => 'The rate of the tax rate, eg 21%.',
-        'type' => 'varchar',
-        'length' => 20,
-        'not null' => TRUE,
-        'default' => '',
-      ),
     ),
     'primary key' => array('tid'),
     'foreign keys' => array(

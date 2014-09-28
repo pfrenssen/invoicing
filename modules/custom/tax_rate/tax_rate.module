@@ -46,7 +46,7 @@ function tax_rate_entity_info() {
     $entity_info['tax_rate']['bundles'][$type] = array(
       'label' => $name,
       'admin' => array(
-        'path' => 'admin/structure/tax_rates/manage/%tax_rate',
+        'path' => 'admin/structure/tax_rates/manage/%tax_rate_type',
         'real path' => 'admin/structure/tax_rates/manage/' . $type,
         'bundle argument' => 4,
         'access arguments' => array('administer tax rates'),

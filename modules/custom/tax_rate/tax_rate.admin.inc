@@ -31,7 +31,7 @@ function tax_rate_type_form($form, &$form_state, $tax_rate_type, $op = 'edit') {
     '#default_value' => isset($tax_rate_type->type) ? $tax_rate_type->type : '',
     '#maxlength' => 32,
     '#machine_name' => array(
-      'exists' => 'tax_rate_load',
+      'exists' => 'tax_rate_type_load',
       'source' => array('name'),
     ),
     '#description' => t('A unique machine-readable name for this tax rate type. It must only contain lowercase letters, numbers, and underscores.'),

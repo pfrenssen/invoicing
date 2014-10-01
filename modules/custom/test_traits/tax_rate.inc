@@ -186,4 +186,38 @@ trait TaxRateTestHelper {
     return tax_rate_load($tid);
   }
 
+  /**
+   * Returns random data for the basic tax rate properties.
+   *
+   * These are values for the properties that are present on every tax rate
+   * entity regardless of the bundle type.
+   *
+   * This excludes the tax rate ID ('tid') which is immutable.
+   *
+   * @return array
+   *   An associative array of property values, keyed by property name.
+   */
+  protected function randomTaxRatePropertyValues() {
+    return array(
+      'type' => $this->randomName(),
+      'bid' => $this->randomBusiness()->identifier(),
+      'created' => rand(0, 2000000000),
+      'changed' => rand(0, 2000000000),
+    );
+  }
+
+   /**
+   * Returns random field data for the fields in the tax rate entity.
+   *
+   * @returns array
+   *   An associative array of field data, keyed by field name.
+   */
+  public function randomTaxRateFieldValues() {
+    $values = array();
+
+    $values['field_tax_rate_name'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+    $values['field_tax_rate_rate'][LANGUAGE_NONE][0]['value'] = $this->randomString();
+
+    return $values;
+  }
 }

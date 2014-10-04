@@ -190,12 +190,14 @@ function line_item_detail_page($line_item) {
 /**
  * Form constructor for the tax rate add/edit form.
  *
- * @param TaxRate $tax_rate
+ * @param array $tax_rate
  *   The tax rate that is being added/edited.
  *
  * @ingroup forms
  */
 function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
+  $form_state['tax_rate'] = $tax_rate;
+
   $form['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Name'),
@@ -225,7 +227,7 @@ function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
     '#submit' => array('line_item_edit_tax_rate_form_submit'),
   );
 
-  if (!empty($tax_rate->tid) && tax_rate_access('delete', $tax_rate)) {
+  if (!empty($tax_rate->tid) && line_item_tax_rate_access('delete', $tax_rate)) {
     $form['actions']['delete'] = array(
       '#type' => 'submit',
       '#value' => t('Delete'),
@@ -243,9 +245,25 @@ function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
  * Saves a tax rate and outputs a status message to the user.
  */
 function line_item_edit_tax_rate_form_submit($form, &$form_state) {
-  dsm($form_state);
+  $values['name'] = $form_state['values']['name'];
+  $values['rate'] = $form_state['values']['rate'];
+
+  $business = business_get_active_business();
+  if ($business instanceof Business) {
+    $values += array('bid' => $business->bid);
+  }
+  else {
+    $values += array('bid' => 0);
+  }
+
+  $add = TRUE;
+  if (!empty($form_state['tax_rate']->tid)) {
+    $add = FALSE;
+    $values['tid'] = $form_state['tax_rate']->tid;
+  }
+
   if (line_item_tax_rate_save($values)) {
-    $message = $operation == 'add' ? 'New tax rate has been added.' : 'The changes have been saved.';
+    $message = $add ? 'New tax rate has been added.' : 'The changes have been saved.';
     // @codingStandardsIgnoreStart
     drupal_set_message(t($message));
     // @codingStandardsIgnoreEnd
@@ -279,7 +297,7 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
  *
  * @see tax_rate_delete_confirm_form_submit()
  */
-function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $tax_rate) {
+function line_item_delete_tax_rate_confirm_form($form, &$form_state, $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
   return confirm_form($form,
     t('Are you sure you want to delete the tax rate?'),
@@ -299,26 +317,7 @@ function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $ta
  */
 function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   $tax_rate = $form_state['tax_rate'];
-  tax_rate_delete($tax_rate);
+  line_item_tax_rate_delete($tax_rate);
   drupal_set_message(t('The tax rate has been deleted.'));
   $form_state['redirect'] = '<front>';
-}
-
-/**
- * Page callback: Returns the tax rate add/edit form to edit an existing tax
- * rate.
- *
- * @see tax_rate_edit_form()
- *
- * @param TaxRate $tax_rate
- *   The tax rate to edit.
- *
- * @return array
- *   The tax_rate add/edit form render array.
- */
-function line_item_edit_tax_rate_page(TaxRate $tax_rate) {
-  $name = field_get_items('tax_rate', $tax_rate, 'field_tax_rate_name');
-  drupal_set_title(t('Edit tax rate %tax_rate', array('%tax_rate' => check_plain($name[0]['value']))), PASS_THROUGH);
-
-  return drupal_get_form('tax_rate_edit_form', $tax_rate);
 }

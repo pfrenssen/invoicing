@@ -312,7 +312,6 @@ trait LineItemTestHelper {
     $values += $this->randomTaxRateValues();
 
     // Convert the property values to form values and submit the form.
-    //$edit = $this->convertTaxRateValuesToFormPostValues($values);
     $this->drupalPost('business-preferences/tax-rates/add', $values, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.

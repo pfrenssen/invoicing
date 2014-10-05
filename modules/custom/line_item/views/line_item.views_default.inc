@@ -77,6 +77,12 @@ function line_item_views_default_views() {
     ),
   );
   $handler->display->display_options['style_options']['empty_table'] = TRUE;
+  /* No results behavior: Global: Unfiltered text */
+  $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
+  $handler->display->display_options['empty']['area_text_custom']['content'] = 'No tax rates found. Please add a tax rate <a href="/business-preferences/tax-rates/add">here</a>.';
   /* Relationship: Tax rates: Business */
   $handler->display->display_options['relationships']['tid']['id'] = 'tid';
   $handler->display->display_options['relationships']['tid']['table'] = 'tax_rates';

@@ -17,7 +17,7 @@ function line_item_views_data() {
     'help' => t('Contains tax rate records we want to be exposed to Views.'),
   );
 
-  // The ID field
+  // The ID field.
   $data['tax_rates']['tid'] = array(
     'title' => t('Tax rate ID'),
     'help' => t('The tax rate ID.'),
@@ -40,7 +40,7 @@ function line_item_views_data() {
     ),
   );
 
-  // The Name field
+  // The Name field.
   $data['tax_rates']['name'] = array(
     'title' => t('Name'),
     'help' => t('The tax rate name.'),
@@ -55,7 +55,7 @@ function line_item_views_data() {
     ),
   );
 
-  // The rate field
+  // The rate field.
   $data['tax_rates']['rate'] = array(
     'title' => t('Rate'),
     'help' => t('The tax rate rate.'),
@@ -70,7 +70,7 @@ function line_item_views_data() {
     ),
   );
 
-  // The BID field
+  // The BID field.
   $data['tax_rates']['Bid'] = array(
     'title' => t('Business ID'),
     'help' => t('The tax rate business ID.'),
@@ -116,4 +116,3 @@ function line_item_views_data_alter(&$data) {
     ),
   );
 }
-

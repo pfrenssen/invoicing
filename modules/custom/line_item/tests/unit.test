@@ -1,0 +1,117 @@
+<?php
+
+/**
+ * @file
+ * Unit tests for the Invoice module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+module_load_include('inc', 'test_traits', 'business');
+module_load_include('inc', 'test_traits', 'line_item');
+
+class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
+  use LineItemTestHelper;
+
+  /**
+   * Test business entities.
+   *
+   * @var Business[]
+   *   An array of Business entities.
+   */
+  protected $businesses;
+
+  /**
+   * Test tax rate objects.
+   *
+   * @var object[]
+   *   An array of Tax rate objects.
+   */
+  protected $tax_rate;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Unit test',
+      'description' => 'Unit tests for the line item module.',
+      'group' => 'Invoicing - Line item',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup();
+
+    // Create two test users, each owning one business.
+    $this->businesses = array();
+
+    for ($i = 0; $i < 2; $i++) {
+      // Create a business.
+      $this->businesses[$i] = $this->createBusiness();
+      $this->businesses[$i]->save();
+
+      // Create a user and link the business to it.
+      $this->users[$i] = $this->drupalCreateUser();
+      $user = entity_metadata_wrapper('user', $this->users[$i]);
+      $user->field_user_businesses->set(array($this->businesses[$i]->identifier()));
+      $user->save();
+
+      // Create two tax rates for the business.
+      for ($j = 0; $j < 2; $j++) {
+        $values = $this->randomTaxRateValues();
+        $values['bid'] = $this->businesses[$i]->identifier();
+        line_item_tax_rate_save($values);
+
+        // Check that the tax rate data can be read from the database.
+        $retrieved_tax_rates = db_select('tax_rates', 'tr')
+          ->fields('tr')
+          ->condition('name', $values['name'], '=')
+          ->condition('rate', $values['rate'], '=')
+          ->execute()
+          ->fetchAll();
+
+        $retrieved_tax_rate = reset($retrieved_tax_rates);
+
+        // Create an invoice for each client.
+        $this->tax_rates[] = $retrieved_tax_rate;
+      }
+    }
+  }
+
+  /**
+   * Tests line_item_tax_rate_is_owned_by_user().
+   */
+  public function testTaxRateIsOwnedByUser() {
+    // Define a list of which invoices are owned by which users. The first two
+    // invoices belong to clients of the first user, the last two to clients of
+    // the second user.
+    $ownership = array(
+      0 => array(0, 1),
+      1 => array(2, 3),
+    );
+
+    // Test if line_item_tax_rate_is_owned_by_user() matches the expected ownership.
+    foreach ($ownership as $user_key => $tax_rate_keys) {
+      for ($i = 0; $i < 4; $i++) {
+        $owned = in_array($i, $tax_rate_keys);
+        $this->assertEqual($owned, line_item_tax_rate_is_owned_by_user($this->tax_rates[$i], $this->users[$user_key]), format_string('Tax rate :tax_rate :owned by user :user.', array(
+          ':tax_rate' => $i,
+          ':owned' => $owned ? 'is owned' : 'is not owned',
+          ':user' => $user_key,
+        )));
+      }
+    }
+  }
+
+}

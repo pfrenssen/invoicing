@@ -577,9 +577,8 @@ function line_item_tax_rate_is_owned_by_user($tax_rate, stdClass $account = NULL
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
-dsm($tax_rate);
-  return TRUE;
-//in_array($tax_rate->bid, array_keys(business_get_businesses_from_user($account)));
+
+  return in_array($tax_rate->bid, array_keys(business_get_businesses_from_user($account)));
 }
 
 /**

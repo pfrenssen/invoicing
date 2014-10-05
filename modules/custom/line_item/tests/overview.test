@@ -75,10 +75,9 @@ class LineItemOverviewTestCase extends InvoicingIntegrationTestCase {
     // Loop over the displayed table rows and compare them with each invoice in
     // order.
     $tablerows = $this->xpath('//div[contains(@class, "view-tax-rate")]//table//tbody/tr');
-    $tablerows = array();
     foreach ($tablerows as $tablerow) {
       /* @var $tablerow SimpleXMLElement */
-      $tax_rate = array_shift($this->$tax_rates);
+      $tax_rate = array_shift($this->tax_rates);
       $testcases = array(
         array(
           'message' => 'The first column contains the tax rate name.',
@@ -102,7 +101,7 @@ class LineItemOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fourth column contains the delete link.',
-          'expected' => 'edit',
+          'expected' => 'delete',
           'actual' => (string) $tablerow->td[3]->a,
         ),
         array(
@@ -136,8 +135,8 @@ class LineItemOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->drupalGet('business-preferences/tax-rates');
     // Check that the "Add tax rate" link is present.
     $add_url = url('business-preferences/tax-rates/add');
-    $xpath = '//div[contains(@class, "view-tax-rate")]//div[@class="view-empty"]//a[@href=":url"]';
-    $this->assertXPathElements($xpath, 1, array(':url' => $add_url), 'The no results message is shown.');
+    $xpath = '//div[contains(@class, "view-tax-rate")]//div[@class="view-empty"]//a[@href="' . $add_url . '"]';
+    $this->assertXPathElements($xpath, 1, array(), 'The no results message is shown.');
     $this->assertFalse($this->xpath('//div[contains(@class, "view-tax-rate")]//table'), 'The table containing tax rates is not shown when no tax rate is linked to the user.');
   }
 

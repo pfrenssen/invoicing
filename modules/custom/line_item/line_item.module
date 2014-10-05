@@ -502,6 +502,9 @@ function line_item_menu() {
  *
  * @param int $tid
  *   The ID of the tax rate.
+ *
+ * @return object
+ *   The tax rate object retrieved from the database.
  */
 function line_item_tax_rate_load($tid) {
   if (empty($tid)) {
@@ -529,6 +532,13 @@ function line_item_tax_rate_load($tid) {
  *   An associative array containg the values of the tax rate.
  */
 function line_item_tax_rate_save($values) {
+  // Set a default business ID.
+  if (!isset($values['bid'])) {
+    $business = business_get_active_business();
+    $values['bid'] = !empty($business) ? $business->bid : 0;
+  }
+
+  // If no TID, create a new tax rate. Otherwise update the tax rate.
   if (empty($values['tid'])) {
     db_insert('tax_rates')
       ->fields(array(

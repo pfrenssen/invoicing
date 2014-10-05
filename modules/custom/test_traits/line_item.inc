@@ -204,4 +204,95 @@ trait LineItemTestHelper {
     return line_item_load($lid);
   }
 
+  /**
+   * Check if the tax rates database table is empty.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertTaxRatesTableEmpty($message = '', $group = 'Other') {
+    $result = (bool) db_select('tax_rates', 'tr')->fields('tr')->execute()->fetchAll();
+    return $this->assertFalse($result, $message ?: 'The tax rates database table is empty.', $group);
+  }
+
+  /**
+   * Check if the tax rates database table is not empty.
+   *
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertTaxRatesTableNotEmpty($message = '', $group = 'Other') {
+    $result = (bool) db_select('tax_rates', 'tr')->fields('tr')->execute()->fetchAll();
+    return $this->assertTrue($result, $message ?: 'The tax rates database table is not empty.', $group);
+  }
+
+  /**
+   * Returns random values for all properties on the tax rate entity.
+   *
+   * @returns array
+   *   An associative array of random values, keyed by property name.
+   */
+  function randomTaxRateValues() {
+    $values = array(
+      'name' => $this->randomString(),
+      'rate' => $this->randomDecimal(),
+    );
+
+    return $values;
+  }
+
+  /**
+   * Returns a newly created tax rate without saving it.
+   *
+   * This is intended for unit tests. It will not set a business ID. If you are
+   * doing a functionality test use $this->createUiTaxRate() instead.
+   *
+   * @param array $values
+   *   An optional associative array of values, keyed by property name. Random
+   *   values will be applied to all omitted properties.
+   *
+   * @return object
+   *   A new tax rate object.
+   */
+  function createTaxRate(array $values = array()) {
+    // Provide some default values.
+    $values += $this->randomTaxRateValues();
+
+    $tax_rate = new stdClass();
+    $tax_rate->name = $values['name'];
+    $tax_rate->rate = $values['rate'];
+
+    return $tax_rate;
+  }
+
+  /**
+   * Check if the properties of the given tax rate match the given values.
+   *
+   * @param object $tax_rate
+   *   The tax rate to check.
+   * @param array $values
+   *   An associative array of values to check, keyed by property name.
+   * @param string $message
+   *   The message to display along with the assertion.
+   * @param string $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return bool
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  function assertTaxRateProperties($tax_rate, array $values, $message = '', $group = 'Other') {
+    $this->assertEqual($values['name'], $tax_rate->name);
+    $this->assertEqual($values['rate'], $tax_rate->rate);
+  }
+
 }

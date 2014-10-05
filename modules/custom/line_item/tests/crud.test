@@ -60,4 +60,48 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
     $this->assertLineItemTableEmpty('The line item can be deleted from the database.');
   }
 
+  /**
+   * Tests creating, reading, updating and deleting of tax rates.
+   */
+  public function testTaxRateCRUD() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('tax_rates'), 'The tax_rates database table exists.');
+    $this->assertTaxRatesTableEmpty('The tax rates database is initially empty.');
+
+    // Check if a new tax rate can be saved to the database.
+    $values = $this->randomTaxRateValues();
+    line_item_tax_rate_save($values);
+    $this->assertTaxRatesTableNotEmpty('The tax rate database table is no longer empty after creating a tax rate.');
+
+    // Check that the tax rate data can be read from the database.
+    $retrieved_tax_rates = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('name', $values['name'], '=')
+      ->condition('rate', $values['rate'], '=')
+      ->execute()
+      ->fetchAll();
+
+    $retrieved_tax_rate = reset($retrieved_tax_rates);
+    $this->assertTaxRateProperties($retrieved_tax_rate, $values, 'The tax rate that was saved to the database can be read correctly.');
+
+    // Update the tax rate and check that the new values were written to the
+    // database.
+    $new_values = $this->randomTaxRateValues();
+    $new_values['tid'] = $retrieved_tax_rate->tid;
+    line_item_tax_rate_save($new_values);
+
+    $retrieved_tax_rates = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('tid', $retrieved_tax_rate->tid, '=')
+      ->execute()
+      ->fetchAll();
+
+    $retrieved_tax_rate = reset($retrieved_tax_rates);
+    $this->assertTaxRateProperties($retrieved_tax_rate, $new_values, 'The tax rate has been updated correctly.');
+
+    // Delete the tax rate. The database should be empty again.
+    line_item_tax_rate_delete($retrieved_tax_rate);
+    $this->assertTaxRatesTableEmpty('The tax rate can be deleted from the database.');
+  }
+
 }

@@ -1,0 +1,109 @@
+<?php
+/**
+ * @file
+ * line_item.views_default.inc
+ */
+
+/**
+ * Implements hook_views_default_views().
+ */
+function line_item_views_default_views() {
+  $export = array();
+
+  $view = new view();
+  $view->name = 'tax_rate';
+  $view->description = '';
+  $view->tag = 'default';
+  $view->base_table = 'tax_rates';
+  $view->human_name = 'Tax rate';
+  $view->core = 7;
+  $view->api_version = '3.0';
+  $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+  /* Display: Master */
+  $handler = $view->new_display('default', 'Master', 'default');
+  $handler->display->display_options['title'] = 'Tax rates';
+  $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['perm'] = 'view own tax rates';
+  $handler->display->display_options['cache']['type'] = 'none';
+  $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
+  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '20';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['columns'] = array(
+    'tid' => 'tid',
+  );
+  $handler->display->display_options['style_options']['default'] = '-1';
+  $handler->display->display_options['style_options']['info'] = array(
+    'tid' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+  );
+  /* Relationship: Tax rates: Business */
+  $handler->display->display_options['relationships']['tid']['id'] = 'tid';
+  $handler->display->display_options['relationships']['tid']['table'] = 'tax_rates';
+  $handler->display->display_options['relationships']['tid']['field'] = 'tid';
+  $handler->display->display_options['relationships']['tid']['required'] = TRUE;
+  /* Field: Tax rates: Tax rate ID */
+  $handler->display->display_options['fields']['tid']['id'] = 'tid';
+  $handler->display->display_options['fields']['tid']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['tid']['field'] = 'tid';
+  $handler->display->display_options['fields']['tid']['exclude'] = TRUE;
+  /* Field: Tax rates: Business ID */
+  $handler->display->display_options['fields']['Bid']['id'] = 'Bid';
+  $handler->display->display_options['fields']['Bid']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['Bid']['field'] = 'Bid';
+  $handler->display->display_options['fields']['Bid']['label'] = '';
+  $handler->display->display_options['fields']['Bid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['Bid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['Bid']['separator'] = '';
+  /* Field: Tax rates: Name */
+  $handler->display->display_options['fields']['name']['id'] = 'name';
+  $handler->display->display_options['fields']['name']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['name']['field'] = 'name';
+  /* Field: Tax rates: Rate */
+  $handler->display->display_options['fields']['rate']['id'] = 'rate';
+  $handler->display->display_options['fields']['rate']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['rate']['field'] = 'rate';
+  /* Field: Tax rates: Edit link */
+  $handler->display->display_options['fields']['edit_tax_rate']['id'] = 'edit_tax_rate';
+  $handler->display->display_options['fields']['edit_tax_rate']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['edit_tax_rate']['field'] = 'edit_tax_rate';
+  /* Field: Tax rates: Delete link */
+  $handler->display->display_options['fields']['delete_tax_rate']['id'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['delete_tax_rate']['field'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['element_label_colon'] = FALSE;
+  /* Contextual filter: Business: Business ID */
+  $handler->display->display_options['arguments']['bid']['id'] = 'bid';
+  $handler->display->display_options['arguments']['bid']['table'] = 'business';
+  $handler->display->display_options['arguments']['bid']['field'] = 'bid';
+  $handler->display->display_options['arguments']['bid']['relationship'] = 'tid';
+  $handler->display->display_options['arguments']['bid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['bid']['default_argument_type'] = 'business_active';
+  $handler->display->display_options['arguments']['bid']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['bid']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['bid']['summary_options']['items_per_page'] = '25';
+
+  /* Display: Tax rates */
+  $handler = $view->new_display('page', 'Tax rates', 'page_tax_rates');
+  $handler->display->display_options['path'] = 'business-preferences/tax-rates';
+  $handler->display->display_options['menu']['type'] = 'default tab';
+  $handler->display->display_options['menu']['title'] = 'Tax rates';
+  $handler->display->display_options['menu']['weight'] = '0';
+  $handler->display->display_options['menu']['context'] = 0;
+  $handler->display->display_options['menu']['context_only_inline'] = 0;
+  $handler->display->display_options['tab_options']['type'] = 'normal';
+  $handler->display->display_options['tab_options']['title'] = 'Business preferences';
+  $handler->display->display_options['tab_options']['weight'] = '0';
+  $export['tax_rate'] = $view;
+
+  return $export;
+}

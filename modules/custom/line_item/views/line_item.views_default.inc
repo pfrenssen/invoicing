@@ -37,6 +37,11 @@ function line_item_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'tid' => 'tid',
+    'Bid' => 'Bid',
+    'name' => 'name',
+    'rate' => 'rate',
+    'edit_tax_rate' => 'edit_tax_rate',
+    'delete_tax_rate' => 'delete_tax_rate',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -45,7 +50,33 @@ function line_item_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
+    'Bid' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'name' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'rate' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'edit_tax_rate' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'delete_tax_rate' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
   );
+  $handler->display->display_options['style_options']['empty_table'] = TRUE;
   /* Relationship: Tax rates: Business */
   $handler->display->display_options['relationships']['tid']['id'] = 'tid';
   $handler->display->display_options['relationships']['tid']['table'] = 'tax_rates';

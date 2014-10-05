@@ -295,4 +295,38 @@ trait LineItemTestHelper {
     $this->assertEqual($values['rate'], $tax_rate->rate);
   }
 
+  /**
+   * Creates a new tax rate through the user interface.
+   *
+   * The saved tax rate is retrieved by the tax rate id.
+   *
+   * @param array $values
+   *   An optional associative array of values, keyed by property name. Random
+   *   values will be applied to all omitted properties.
+   *
+   * @return object
+   *   A new tax rate object.
+   */
+  function createUiTaxRate(array $values = array()) {
+    // Provide some default values.
+    $values += $this->randomTaxRateValues();
+
+    // Convert the property values to form values and submit the form.
+    //$edit = $this->convertTaxRateValuesToFormPostValues($values);
+    $this->drupalPost('business-preferences/tax-rates/add', $values, t('Save'));
+
+    // Retrieve the saved invoice by invoice number and return it.
+    $result = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('name', $values['name'], '=')
+      ->condition('rate', $values['rate'], '=')
+      ->execute()
+      ->fetchAllAssoc('tid');
+
+    $tids = array_keys($result);
+    $this->assertTrue($tids, 'Tax rate was successfully created through the UI.');
+
+    return line_item_tax_rate_load($tids[0]);
+  }
+
 }

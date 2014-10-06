@@ -58,8 +58,8 @@ class tax_rate_handler_edit_link_field extends views_handler_field {
   }
 
   /**
-  * {@inheritdoc}
-  */
+   * {@inheritdoc}
+   */
   public function render($values) {
     // Default to 'view' if no link text is specified.
     $text = !empty($this->options['text']) ? $this->options['text'] : t('view');

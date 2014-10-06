@@ -47,6 +47,7 @@ features[views_view][] = invoices
 files[] = tests/client_reference.test
 files[] = tests/crud.test
 files[] = tests/entity.test
+files[] = tests/export.test
 files[] = tests/overview.test
 files[] = tests/ui.test
 files[] = tests/unit.test

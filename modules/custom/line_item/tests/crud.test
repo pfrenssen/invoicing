@@ -30,6 +30,17 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    // Create a business to reference.
+    $this->business = $this->createBusiness();
+    $this->business->save();
+  }
+
+  /**
    * Tests creating, reading, updating and deleting of line items.
    */
   public function testLineItemCRUD() {
@@ -70,25 +81,18 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
 
     // Check if a new tax rate can be saved to the database.
     $values = $this->randomTaxRateValues();
-    line_item_tax_rate_save($values);
+    $tid = line_item_tax_rate_save($values);
     $this->assertTaxRatesTableNotEmpty('The tax rate database table is no longer empty after creating a tax rate.');
 
     // Check that the tax rate data can be read from the database.
-    $retrieved_tax_rates = db_select('tax_rates', 'tr')
-      ->fields('tr')
-      ->condition('name', $values['name'], '=')
-      ->condition('rate', $values['rate'], '=')
-      ->execute()
-      ->fetchAll();
-
-    $retrieved_tax_rate = reset($retrieved_tax_rates);
+    $retrieved_tax_rate = line_item_tax_rate_load($tid);
     $this->assertTaxRateProperties($retrieved_tax_rate, $values, 'The tax rate that was saved to the database can be read correctly.');
 
     // Update the tax rate and check that the new values were written to the
     // database.
     $new_values = $this->randomTaxRateValues();
     $new_values['tid'] = $retrieved_tax_rate->tid;
-    line_item_tax_rate_save($new_values);
+    $tid = line_item_tax_rate_save($new_values);
 
     $retrieved_tax_rates = db_select('tax_rates', 'tr')
       ->fields('tr')
@@ -96,7 +100,7 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
       ->execute()
       ->fetchAll();
 
-    $retrieved_tax_rate = reset($retrieved_tax_rates);
+    $retrieved_tax_rate = line_item_tax_rate_load($tid);
     $this->assertTaxRateProperties($retrieved_tax_rate, $new_values, 'The tax rate has been updated correctly.');
 
     // Delete the tax rate. The database should be empty again.

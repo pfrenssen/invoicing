@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Tests the invoice overview.
+ * Tests the tax rate overview.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class LineItemOverviewTestCase extends InvoicingIntegrationTestCase {
+class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use LineItemTestHelper;
@@ -53,7 +53,7 @@ class LineItemOverviewTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
-   * Tests the invoice overview.
+   * Tests the tax rate overview.
    */
   public function testOverview() {
     // Log in as business owner.
@@ -68,11 +68,11 @@ class LineItemOverviewTestCase extends InvoicingIntegrationTestCase {
     // Go to the tax rates overview.
     $this->drupalGet('business-preferences/tax-rates');
 
-    // Check that the pager is not present. We added 20 invoices which is the
+    // Check that the pager is not present. We added 20 tax rates which is the
     // maximum number that fits on one page.
     $this->assertNoPager();
 
-    // Loop over the displayed table rows and compare them with each invoice in
+    // Loop over the displayed table rows and compare them with each tax rate in
     // order.
     $tablerows = $this->xpath('//div[contains(@class, "view-tax-rate")]//table//tbody/tr');
     foreach ($tablerows as $tablerow) {

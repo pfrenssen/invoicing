@@ -85,21 +85,6 @@ function line_item_views_data() {
     ),
   );
 
-  return $data;
-}
-
-/**
- * Implements hook_views_data_alter().
- */
-function line_item_views_data_alter(&$data) {
-  $data['tax_rates']['link_tax_rate'] = array(
-    'field' => array(
-      'title' => t('Link'),
-      'help' => t('Provide a simple link to the tax rate.'),
-      'handler' => 'tax_rate_handler_link_field',
-    ),
-  );
-
   $data['tax_rates']['edit_tax_rate'] = array(
     'field' => array(
       'title' => t('Edit link'),
@@ -115,4 +100,6 @@ function line_item_views_data_alter(&$data) {
       'handler' => 'tax_rate_handler_delete_link_field',
     ),
   );
+
+  return $data;
 }

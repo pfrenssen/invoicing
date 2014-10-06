@@ -244,6 +244,7 @@ trait LineItemTestHelper {
    */
   function randomTaxRateValues() {
     $values = array(
+      'bid' => $this->randomBusiness()->identifier(),
       'name' => $this->randomString(),
       'rate' => $this->randomDecimal(),
     );

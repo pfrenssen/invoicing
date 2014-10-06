@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Unit tests for the Invoice module.
+ * Unit tests for the Line item module.
  */
 
 module_load_include('inc', 'test_traits', 'base');
@@ -71,20 +71,10 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
       for ($j = 0; $j < 2; $j++) {
         $values = $this->randomTaxRateValues();
         $values['bid'] = $this->businesses[$i]->identifier();
-        line_item_tax_rate_save($values);
+        $tid = line_item_tax_rate_save($values);
 
-        // Check that the tax rate data can be read from the database.
-        $retrieved_tax_rates = db_select('tax_rates', 'tr')
-          ->fields('tr')
-          ->condition('name', $values['name'], '=')
-          ->condition('rate', $values['rate'], '=')
-          ->execute()
-          ->fetchAll();
-
-        $retrieved_tax_rate = reset($retrieved_tax_rates);
-
-        // Create an invoice for each client.
-        $this->tax_rates[] = $retrieved_tax_rate;
+        // Create a tax rate for each user.
+        $this->tax_rates[] = line_item_tax_rate_load($tid);
       }
     }
   }
@@ -93,9 +83,8 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
    * Tests line_item_tax_rate_is_owned_by_user().
    */
   public function testTaxRateIsOwnedByUser() {
-    // Define a list of which invoices are owned by which users. The first two
-    // invoices belong to clients of the first user, the last two to clients of
-    // the second user.
+    // Define a list of which tax rates are owned by which users. The first two
+    // tax rates belong to the first user, the last two to the second user.
     $ownership = array(
       0 => array(0, 1),
       1 => array(2, 3),

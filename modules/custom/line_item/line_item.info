@@ -38,7 +38,6 @@ files[] = line_item.admin.inc
 files[] = views/line_item.views.inc
 files[] = views/tax_rate_handler_delete_link_field.inc
 files[] = views/tax_rate_handler_edit_link_field.inc
-files[] = views/tax_rate_handler_link_field.inc
 files[] = tests/crud.test
 files[] = tests/overview.test
 files[] = tests/unit.test

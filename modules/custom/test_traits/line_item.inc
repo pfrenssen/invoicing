@@ -312,21 +312,23 @@ trait LineItemTestHelper {
     // Provide some default values.
     $values += $this->randomTaxRateValues();
 
+    if (isset($values['bid'])) {
+      unset($values['bid']);
+    }
+
     // Convert the property values to form values and submit the form.
     $this->drupalPost('business-preferences/tax-rates/add', $values, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')
-      ->condition('name', $values['name'], '=')
-      ->condition('rate', $values['rate'], '=')
       ->execute()
       ->fetchAllAssoc('tid');
 
     $tids = array_keys($result);
     $this->assertTrue($tids, 'Tax rate was successfully created through the UI.');
 
-    return line_item_tax_rate_load($tids[0]);
+    return end($result);
   }
 
 }

@@ -48,8 +48,12 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  protected function setUp() {
     parent::setUp();
+
+    // Create a business to reference.
+    $this->business = $this->createBusiness();
+    $this->business->save();
   }
 
   /**

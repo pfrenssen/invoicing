@@ -11,6 +11,53 @@
 class tax_rate_handler_edit_link_field extends views_handler_field {
 
   /**
+   * Constructs a client_handler_link_field object.
+   */
+  public function construct() {
+    parent::construct();
+
+    // Make sure the tax rate id is available in the query.
+    $this->additional_fields['tid'] = 'tid';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function option_definition() {
+    // Provide an option to override the link text.
+    $options = parent::option_definition();
+    $options['text'] = array('default' => '', 'translatable' => TRUE);
+
+    return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function options_form(&$form, &$form_state) {
+    // The form field to set the link text.
+    $form['text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text to display'),
+      '#default_value' => $this->options['text'],
+    );
+    parent::options_form($form, $form_state);
+
+    // The path is set by render_link function so don't allow to set it.
+    $form['alter']['path'] = array('#access' => FALSE);
+    $form['alter']['external'] = array('#access' => FALSE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function query() {
+    // Make sure the table and additional fields are added to the query.
+    $this->ensure_my_table();
+    $this->add_additional_fields();
+  }
+
+  /**
   * {@inheritdoc}
   */
   public function render($values) {

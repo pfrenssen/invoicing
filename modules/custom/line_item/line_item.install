@@ -144,7 +144,7 @@ function line_item_schema() {
         'not null' => TRUE,
       ),
       'bid' => array(
-        'description' => 'The business that owns the line item.',
+        'description' => 'The business that owns the tax rate.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
@@ -158,7 +158,7 @@ function line_item_schema() {
       ),
       'rate' => array(
         'description' => 'The actual tax rate of the tax rate',
-        'type' => 'varchar',
+        'type' => 'decimal',
         'length' => 32,
         'not null' => TRUE,
       ),

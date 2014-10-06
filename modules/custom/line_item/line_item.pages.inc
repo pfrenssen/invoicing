@@ -190,7 +190,7 @@ function line_item_detail_page($line_item) {
 /**
  * Form constructor for the tax rate add/edit form.
  *
- * @param array $tax_rate
+ * @param object $tax_rate
  *   The tax rate that is being added/edited.
  *
  * @ingroup forms
@@ -319,5 +319,5 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   $tax_rate = $form_state['tax_rate'];
   line_item_tax_rate_delete($tax_rate);
   drupal_set_message(t('The tax rate has been deleted.'));
-  $form_state['redirect'] = '<front>';
+  $form_state['redirect'] = 'business-preferences/tax-rates';
 }

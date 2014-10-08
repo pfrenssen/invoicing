@@ -37,7 +37,7 @@ function line_item_views_default_views() {
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'tid' => 'tid',
-    'Bid' => 'Bid',
+    'bid' => 'bid',
     'name' => 'name',
     'rate' => 'rate',
     'edit_tax_rate' => 'edit_tax_rate',
@@ -50,7 +50,7 @@ function line_item_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'Bid' => array(
+    'bid' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -94,13 +94,13 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['tid']['field'] = 'tid';
   $handler->display->display_options['fields']['tid']['exclude'] = TRUE;
   /* Field: Tax rates: Business ID */
-  $handler->display->display_options['fields']['Bid']['id'] = 'Bid';
-  $handler->display->display_options['fields']['Bid']['table'] = 'tax_rates';
-  $handler->display->display_options['fields']['Bid']['field'] = 'Bid';
-  $handler->display->display_options['fields']['Bid']['label'] = '';
-  $handler->display->display_options['fields']['Bid']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['Bid']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['Bid']['separator'] = '';
+  $handler->display->display_options['fields']['bid']['id'] = 'bid';
+  $handler->display->display_options['fields']['bid']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['bid']['field'] = 'bid';
+  $handler->display->display_options['fields']['bid']['label'] = '';
+  $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['bid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['bid']['separator'] = '';
   /* Field: Tax rates: Name */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'tax_rates';

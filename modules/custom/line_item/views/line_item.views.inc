@@ -71,7 +71,7 @@ function line_item_views_data() {
   );
 
   // The BID field.
-  $data['tax_rates']['Bid'] = array(
+  $data['tax_rates']['bid'] = array(
     'title' => t('Business ID'),
     'help' => t('The tax rate business ID.'),
     'field' => array(

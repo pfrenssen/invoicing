@@ -243,6 +243,10 @@ function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
  * Form submission handler for line_item_edit_tax_rate_form().
  *
  * Saves a tax rate and outputs a status message to the user.
+ *
+ * @throws Exception
+ *   Thrown when the tax rate is submitted by a user that doesn't have a
+ *   business.
  */
 function line_item_edit_tax_rate_form_submit($form, &$form_state) {
   $values['name'] = $form_state['values']['name'];
@@ -296,8 +300,11 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
  * Form constructor for the tax rate deletion confirmation form.
  *
  * @see tax_rate_delete_confirm_form_submit()
+ *
+ * @param object $tax_rate
+ *   The tax rate that needs to be deleted.
  */
-function line_item_delete_tax_rate_confirm_form($form, &$form_state, $tax_rate) {
+function line_item_delete_tax_rate_confirm_form($form, &$form_state, stdClass $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
   return confirm_form($form,
     t('Are you sure you want to delete the tax rate?'),

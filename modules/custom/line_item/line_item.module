@@ -529,7 +529,7 @@ function line_item_tax_rate_load($tid) {
  * Saves the tax rate to the database.
  *
  * @param object $tax_rate
- *   An associative array containing the values of the tax rate.
+ *   The tax rate object to save.
  *
  * @return int
  *   The tax rate ID of the saved tax rate.

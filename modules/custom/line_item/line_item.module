@@ -353,7 +353,7 @@ function line_item_save(LineItem $line_item) {
 function line_item_load($lid, $reset = FALSE) {
   $lid = (int) $lid;
   if (empty($lid)) {
-    throw new InvalidArgumentException('Invalid line item id.');
+    throw new InvalidArgumentException('Invalid line item ID.');
   }
   $line_items = line_item_load_multiple((array) $lid, $reset);
 
@@ -508,7 +508,7 @@ function line_item_menu() {
  */
 function line_item_tax_rate_load($tid) {
   if (empty($tid)) {
-    throw new InvalidArgumentException('Invalid tax rate id.');
+    throw new InvalidArgumentException('Invalid tax rate ID.');
   }
 
   $result = db_select('tax_rates', 'tr')
@@ -521,7 +521,7 @@ function line_item_tax_rate_load($tid) {
     return reset($result);
   }
   else {
-    throw new InvalidArgumentException('Invalid tax rate id.');
+    throw new InvalidArgumentException('Invalid tax rate ID.');
   }
 }
 
@@ -696,7 +696,7 @@ class LineItemAPIController extends EntityAPIController {
    * {@inheritdoc}
    */
   public function create(array $values = array()) {
-    // Set the business id to the active business of the logged in user.
+    // Set the business ID to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
       $values += array('bid' => $business->bid);

@@ -528,39 +528,42 @@ function line_item_tax_rate_load($tid) {
 /**
  * Saves the tax rate to the database.
  *
- * @param array $values
+ * @param object $tax_rate
  *   An associative array containing the values of the tax rate.
  *
  * @return int
  *   The tax rate ID of the saved tax rate.
+ *
+ * @throws Exception
+ *   Thrown when the required business ID property is missing.
  */
-function line_item_tax_rate_save($values) {
+function line_item_tax_rate_save(stdClass $tax_rate) {
   // Set a default business ID.
-  if (!isset($values['bid'])) {
+  if (!isset($tax_rate->bid)) {
     throw new Exception('No business given to link the tax rate to.');
   }
 
   // If no TID, create a new tax rate. Otherwise update the tax rate.
-  if (empty($values['tid'])) {
+  if (empty($tax_rate->tid)) {
     $tid = db_insert('tax_rates')
       ->fields(array(
-        'name' => $values['name'],
-        'rate' => $values['rate'],
-        'bid' => $values['bid'],
+        'name' => $tax_rate->name,
+        'rate' => $tax_rate->rate,
+        'bid' => $tax_rate->bid,
       ))
       ->execute();
   }
   else {
     db_update('tax_rates')
       ->fields(array(
-        'name' => $values['name'],
-        'rate' => $values['rate'],
-        'bid' => $values['bid'],
+        'name' => $tax_rate->name,
+        'rate' => $tax_rate->rate,
+        'bid' => $tax_rate->bid,
       ))
-      ->condition('tid', $values['tid'], '=')
+      ->condition('tid', $tax_rate->tid, '=')
       ->execute();
 
-    $tid = $values['tid'];
+    $tid = $tax_rate->tid;
   }
 
   return $tid;

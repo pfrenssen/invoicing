@@ -71,7 +71,7 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
       for ($j = 0; $j < 2; $j++) {
         $values = $this->randomTaxRateValues();
         $values['bid'] = $this->businesses[$i]->identifier();
-        $tid = line_item_tax_rate_save($values);
+        $tid = line_item_tax_rate_save((object) $values);
 
         // Create a tax rate for each user.
         $this->tax_rates[] = line_item_tax_rate_load($tid);

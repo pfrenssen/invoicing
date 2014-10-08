@@ -467,7 +467,7 @@ function line_item_entity_metadata_get_properties(LineItem $line_item, array $op
 function line_item_menu() {
   $items = array();
 
-  $items['business-preferences/tax-rates/add'] = array(
+  $items['settings/tax-rates/add'] = array(
     'title' => 'Add tax rate',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('line_item_edit_tax_rate_form'),
@@ -476,7 +476,7 @@ function line_item_menu() {
     'file' => 'line_item.pages.inc',
   );
 
-  $items['business-preferences/tax-rates/%line_item_tax_rate/delete'] = array(
+  $items['settings/tax-rates/%line_item_tax_rate/delete'] = array(
     'title' => 'Delete',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('line_item_delete_tax_rate_confirm_form', 2),
@@ -485,7 +485,7 @@ function line_item_menu() {
     'file' => 'line_item.pages.inc',
   );
 
-  $items['business-preferences/tax-rates/%line_item_tax_rate/edit'] = array(
+  $items['settings/tax-rates/%line_item_tax_rate/edit'] = array(
     'title' => 'Edit tax rate',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('line_item_edit_tax_rate_form', 2),

@@ -317,7 +317,7 @@ trait LineItemTestHelper {
     }
 
     // Convert the property values to form values and submit the form.
-    $this->drupalPost('business-preferences/tax-rates/add', $values, t('Save'));
+    $this->drupalPost('settings/tax-rates/add', $values, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.
     $result = db_select('tax_rates', 'tr')

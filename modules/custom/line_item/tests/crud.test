@@ -94,12 +94,6 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
     $new_values['tid'] = $retrieved_tax_rate->tid;
     $tid = line_item_tax_rate_save((object) $new_values);
 
-    $retrieved_tax_rates = db_select('tax_rates', 'tr')
-      ->fields('tr')
-      ->condition('tid', $retrieved_tax_rate->tid, '=')
-      ->execute()
-      ->fetchAll();
-
     $retrieved_tax_rate = line_item_tax_rate_load($tid);
     $this->assertTaxRateProperties($retrieved_tax_rate, $new_values, 'The tax rate has been updated correctly.');
 

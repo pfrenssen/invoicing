@@ -61,9 +61,6 @@ class tax_rate_handler_edit_link_field extends views_handler_field {
    * {@inheritdoc}
    */
   public function render($values) {
-    // Default to 'view' if no link text is specified.
-    $text = !empty($this->options['text']) ? $this->options['text'] : t('view');
-
     // Return a link to the client.
     $tax_rate = line_item_tax_rate_load($values->{$this->aliases['tid']});
 

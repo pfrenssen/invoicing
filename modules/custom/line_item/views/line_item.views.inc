@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * line_item.views.inc
+ * Views integration for the Line Item module.
  */
 
 /**

@@ -151,13 +151,13 @@ function line_item_schema() {
         'default' => 0,
       ),
       'name' => array(
-        'description' => 'The name of the tax rate',
+        'description' => 'The name of the tax rate.',
         'type' => 'varchar',
         'length' => 32,
         'not null' => TRUE,
       ),
       'rate' => array(
-        'description' => 'The actual tax rate of the tax rate',
+        'description' => 'The actual tax rate.',
         'type' => 'float',
         'length' => 32,
         'not null' => TRUE,

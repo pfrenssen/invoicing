@@ -11,7 +11,7 @@ function line_item_views_default_views() {
   $export = array();
 
   $view = new view();
-  $view->name = 'tax_rate';
+  $view->name = 'tax_rates';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'tax_rates';
@@ -140,7 +140,7 @@ function line_item_views_default_views() {
   $handler->display->display_options['tab_options']['type'] = 'normal';
   $handler->display->display_options['tab_options']['title'] = 'Business preferences';
   $handler->display->display_options['tab_options']['weight'] = '0';
-  $export['tax_rate'] = $view;
+  $export['tax_rates'] = $view;
 
   return $export;
 }

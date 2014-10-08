@@ -266,7 +266,7 @@ function line_item_edit_tax_rate_form_submit($form, &$form_state) {
     $values['tid'] = $form_state['tax_rate']->tid;
   }
 
-  if (line_item_tax_rate_save($values)) {
+  if (line_item_tax_rate_save((object) $values)) {
     $message = $add ? 'New tax rate has been added.' : 'The changes have been saved.';
     // @codingStandardsIgnoreStart
     drupal_set_message(t($message));

@@ -158,8 +158,9 @@ function line_item_schema() {
       ),
       'rate' => array(
         'description' => 'The actual tax rate.',
-        'type' => 'float',
-        'length' => 32,
+        'type' => 'numeric',
+        'precision' => 5,
+        'scale' => 2,
         'not null' => TRUE,
       ),
     ),

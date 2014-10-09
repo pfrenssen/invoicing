@@ -240,9 +240,23 @@ function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
 }
 
 /**
+ * Validate handler for the tax rate add/edit form.
+ *
+ * @see line_item_edit_tax_rate_form()
+ */
+function line_item_edit_tax_rate_form_validate($form, &$form_state) {
+  // The tax rate should be between 0.00 and 100.00.
+  if ($form_state['values']['rate'] < 0 || $form_state['values']['rate'] > 100) {
+    form_set_error('rate', t('The rate should be between 0.00 and 100.00'));
+  }
+}
+
+/**
  * Form submission handler for line_item_edit_tax_rate_form().
  *
  * Saves a tax rate and outputs a status message to the user.
+ *
+ * @see line_item_edit_tax_rate_form()
  *
  * @throws Exception
  *   Thrown when the tax rate is submitted by a user that doesn't have a

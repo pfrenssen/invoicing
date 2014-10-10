@@ -498,6 +498,23 @@ function line_item_menu() {
 }
 
 /**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  // Add action link to 'settings/tax-rates/add' on the tax rates overview.
+  dsm(func_get_args());
+  if ($root_path == 'settings') {
+    $item = menu_get_item('settings/tax-rates/add');
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
  * Loads the tax rate from the tax_rates table.
  *
  * @param int $tid

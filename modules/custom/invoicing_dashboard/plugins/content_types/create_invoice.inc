@@ -2,7 +2,7 @@
 
 /**
  * @file
- * CTools content type plugin to display an add invoice pane.
+ * CTools content type plugin to display a create invoice pane.
  */
 
 $plugin = array(
@@ -16,7 +16,7 @@ $plugin = array(
 /**
  * Renders the pane.
  */
-function invoicing_dashboard_add_invoice_content_type_render($subtype, $conf, $args, $context) {
+function invoicing_dashboard_create_invoice_content_type_render($subtype, $conf, $args, $context) {
   $block = new stdClass();
   $block->title = '';
   $block->content= '';
@@ -31,6 +31,6 @@ function invoicing_dashboard_add_invoice_content_type_render($subtype, $conf, $a
 /**
  * Configuration form for the pane.
  */
-function invoicing_dashboard_add_invoice_content_type_edit_form($form, &$form_state) {
+function invoicing_dashboard_create_invoice_content_type_edit_form($form, &$form_state) {
   return $form;
 }

@@ -43,7 +43,7 @@ class InvoicingDashboardUITestCase extends InvoicingIntegrationTestCase {
   public function testDashboardAddInvoiceLink() {
     $this->drupalGet('dashboard');
     $url = url('invoice/add');
-    $this->assertXPathElements('//div[contains(@class, "pane-add-invoice")]//a[@href=:url and text() = :text]', 1, array(':url' => $url, ':text' => t('Create invoice')), 'The "Create invoice" link is shown on the dashboard.');
+    $this->assertXPathElements('//div[contains(@class, "pane-create-invoice")]//a[@href=:url and text() = :text]', 1, array(':url' => $url, ':text' => t('Create invoice')), 'The "Create invoice" link is shown on the dashboard.');
   }
 
 }

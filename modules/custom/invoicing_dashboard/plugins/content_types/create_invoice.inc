@@ -19,7 +19,7 @@ $plugin = array(
 function invoicing_dashboard_create_invoice_content_type_render($subtype, $conf, $args, $context) {
   $block = new stdClass();
   $block->title = '';
-  $block->content= '';
+  $block->content = '';
 
   if (user_access('administer invoices') || user_access('create new invoices')) {
     $block->content = l(t('Create invoice'), 'invoice/add');

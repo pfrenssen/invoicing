@@ -271,7 +271,7 @@ function line_item_edit_tax_rate_form_submit($form, &$form_state) {
     $values += array('bid' => $business->bid);
   }
   else {
-    throw new Exception('Tax rate can not be submitted without a business.');
+    throw new Exception('Tax rate cannot be submitted without a business.');
   }
 
   $add = TRUE;

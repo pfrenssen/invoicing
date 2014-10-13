@@ -19,3 +19,16 @@ function invoicing_dashboard_permission() {
 
   return $permissions;
 }
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function invoicing_dashboard_ctools_plugin_directory($module, $plugin) {
+  $types = array(
+    'ctools:content_types',
+  );
+
+  if (in_array("$module:$plugin", $types)) {
+    return "plugins/$plugin";
+  }
+}

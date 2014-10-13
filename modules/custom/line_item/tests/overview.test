@@ -39,7 +39,7 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'Overview test',
+      'name' => 'Tax rates overview test',
       'description' => 'Tests the tax rates overview.',
       'group' => 'Invoicing - Line item',
     );

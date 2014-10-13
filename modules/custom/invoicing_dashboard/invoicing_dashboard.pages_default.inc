@@ -82,8 +82,8 @@ function invoicing_dashboard_default_page_manager_pages() {
     $pane = new stdClass();
     $pane->pid = 'new-549d16fd-21b5-45eb-9ebd-7117ed6a70a8';
     $pane->panel = 'middle';
-    $pane->type = 'add_invoice';
-    $pane->subtype = 'add_invoice';
+    $pane->type = 'create_invoice';
+    $pane->subtype = 'create_invoice';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array();

@@ -322,13 +322,17 @@ trait LineItemTestHelper {
     // Retrieve the saved invoice by invoice number and return it.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')
+      ->condition('tr.name', $values['name'])
+      ->condition('tr.rate', $values['rate'])
+      ->orderBy('tr.tid', 'DESC')
+      ->range(0, 1)
       ->execute()
       ->fetchAllAssoc('tid');
 
     $tids = array_keys($result);
     $this->assertTrue($tids, 'Tax rate was successfully created through the UI.');
 
-    return end($result);
+    return reset($result);
   }
 
 }

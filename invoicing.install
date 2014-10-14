@@ -86,6 +86,7 @@ function invoicing_install() {
     'administer businesses',
     'administer invoices',
     'administer line items',
+    'administer tax rates',
   );
   user_role_grant_permissions($role->rid, $permissions);
 
@@ -102,14 +103,17 @@ function invoicing_install() {
     'administer own clients',
     'administer own invoices',
     'administer own line items',
+    'administer own tax rates',
     'create new clients',
     'create new invoices',
     'create new line items',
+    'create new tax rates',
     'edit own businesses',
     'view own businesses',
     'view own clients',
     'view own invoices',
     'view own line items',
+    'view own tax rates',
   );
   user_role_grant_permissions($role->rid, $permissions);
 

@@ -11,8 +11,12 @@ dependencies[] = list
 dependencies[] = number
 dependencies[] = options
 dependencies[] = text
+dependencies[] = views
+
+features[ctools][] = views:views_default:3.0
 
 features[features_api][] = api:2
+
 features[field_base][] = field_line_item_description
 features[field_base][] = field_line_item_discount
 features[field_base][] = field_line_item_quantity
@@ -35,5 +39,12 @@ features[field_instance][] = line_item-service-field_line_item_unit_cost
 features[line_item_type][] = product
 features[line_item_type][] = service
 
+features[views_view][] = tax_rates
+
 files[] = line_item.admin.inc
 files[] = tests/crud.test
+files[] = tests/overview.test
+files[] = tests/unit.test
+files[] = views/line_item.views.inc
+files[] = views/tax_rate_handler_delete_link_field.inc
+files[] = views/tax_rate_handler_edit_link_field.inc

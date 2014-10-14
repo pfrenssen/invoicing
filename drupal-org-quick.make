@@ -57,7 +57,7 @@ projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-2-e
 ; @see https://drupal.org/node/1837650
 projects[entityreference][patch][] = https://drupal.org/files/issues/entityreference-n1837650-47.patch
 
-projects[entityreference_unique] = 7.x-1.0-alpha1
+projects[entityreference_unique] = 7.x-1.0-beta2
 projects[entityreference_unique][subdir] = contrib
 
 ; Issue #2206905: Notice when entity does not have bundle.

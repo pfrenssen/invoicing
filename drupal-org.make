@@ -73,7 +73,7 @@ projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-2-e
 projects[entityreference][patch][] = https://drupal.org/files/issues/entityreference-n1837650-47.patch
 
 projects[entityreference_unique][download][type] = git
-projects[entityreference_unique][download][revision] = 7.x-1.0-alpha1
+projects[entityreference_unique][download][revision] = 7.x-1.0-beta2
 projects[entityreference_unique][download][branch] = 7.x-1.x
 projects[entityreference_unique][subdir] = contrib
 

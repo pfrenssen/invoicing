@@ -186,6 +186,20 @@ function line_item_permission() {
       'title' => t('Administer own line items'),
       'description' => t('Edit and delete your own line items.'),
     ),
+    'administer tax rates' => array(
+      'title' => t('Administer tax rates'),
+      'description' => t('Create new tax rates, and edit and delete all tax rates.'),
+    ),
+    'create new tax rates' => array(
+      'title' => t('Create new tax rates'),
+    ),
+    'view own tax rates' => array(
+      'title' => t('View own tax rates'),
+    ),
+    'administer own tax rates' => array(
+      'title' => t('Administer own tax rates'),
+      'description' => t('Edit and delete your own tax rates.'),
+    ),
   );
 
   // Generate permissions per line item type.
@@ -339,7 +353,7 @@ function line_item_save(LineItem $line_item) {
 function line_item_load($lid, $reset = FALSE) {
   $lid = (int) $lid;
   if (empty($lid)) {
-    throw new InvalidArgumentException('Invalid line item id.');
+    throw new InvalidArgumentException('Invalid line item ID.');
   }
   $line_items = line_item_load_multiple((array) $lid, $reset);
 
@@ -448,6 +462,201 @@ function line_item_entity_metadata_get_properties(LineItem $line_item, array $op
 }
 
 /**
+ * Implements hook_menu().
+ */
+function line_item_menu() {
+  $items = array();
+
+  $items['settings/tax-rates/add'] = array(
+    'title' => 'Add tax rate',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('line_item_edit_tax_rate_form'),
+    'access callback' => 'line_item_tax_rate_access',
+    'access arguments' => array('create'),
+    'file' => 'line_item.pages.inc',
+  );
+
+  $items['settings/tax-rates/%line_item_tax_rate/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('line_item_delete_tax_rate_confirm_form', 2),
+    'access callback' => 'line_item_tax_rate_access',
+    'access arguments' => array('delete', 2),
+    'file' => 'line_item.pages.inc',
+  );
+
+  $items['settings/tax-rates/%line_item_tax_rate/edit'] = array(
+    'title' => 'Edit tax rate',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('line_item_edit_tax_rate_form', 2),
+    'access callback' => 'line_item_tax_rate_access',
+    'access arguments' => array('update', 2),
+    'file' => 'line_item.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  // Add action link to 'settings/tax-rates/add' on the tax rates overview.
+  if ($root_path == 'settings') {
+    $item = menu_get_item('settings/tax-rates/add');
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
+ * Loads the tax rate from the tax_rates table.
+ *
+ * @param int $tid
+ *   The ID of the tax rate.
+ *
+ * @return object
+ *   The tax rate object retrieved from the database.
+ */
+function line_item_tax_rate_load($tid) {
+  if (empty($tid)) {
+    throw new InvalidArgumentException('Invalid tax rate ID.');
+  }
+
+  $result = db_select('tax_rates', 'tr')
+    ->fields('tr')
+    ->condition('tid', $tid, '=')
+    ->execute()
+    ->fetchAll();
+
+  if (!empty($result)) {
+    return reset($result);
+  }
+  else {
+    throw new InvalidArgumentException('Invalid tax rate ID.');
+  }
+}
+
+/**
+ * Saves the tax rate to the database.
+ *
+ * @param object $tax_rate
+ *   The tax rate object to save.
+ *
+ * @return int
+ *   The tax rate ID of the saved tax rate.
+ *
+ * @throws Exception
+ *   Thrown when the required business ID property is missing.
+ */
+function line_item_tax_rate_save(stdClass $tax_rate) {
+  // Set a default business ID.
+  if (!isset($tax_rate->bid)) {
+    throw new Exception('No business given to link the tax rate to.');
+  }
+
+  // If no TID, create a new tax rate. Otherwise update the tax rate.
+  if (empty($tax_rate->tid)) {
+    $tid = db_insert('tax_rates')
+      ->fields(array(
+        'name' => $tax_rate->name,
+        'rate' => $tax_rate->rate,
+        'bid' => $tax_rate->bid,
+      ))
+      ->execute();
+  }
+  else {
+    db_update('tax_rates')
+      ->fields(array(
+        'name' => $tax_rate->name,
+        'rate' => $tax_rate->rate,
+        'bid' => $tax_rate->bid,
+      ))
+      ->condition('tid', $tax_rate->tid, '=')
+      ->execute();
+
+    $tid = $tax_rate->tid;
+  }
+
+  return $tid;
+}
+
+/**
+ * Returns whether a given tax rate is owned by a given user.
+ *
+ * @param object $tax_rate
+ *   The tax rate to check.
+ * @param object $account
+ *   Optional user account to check. Defaults to the currently logged in user.
+ *
+ * @return bool
+ *   TRUE if the tax rate is owned by the user, FALSE otherwise.
+ */
+function line_item_tax_rate_is_owned_by_user($tax_rate, stdClass $account = NULL) {
+  // Default to the logged in user.
+  global $user;
+  $account = $account ?: $user;
+
+  return in_array($tax_rate->bid, array_keys(business_get_businesses_from_user($account)));
+}
+
+/**
+ * Determines whether the given user has access to a tax rate.
+ *
+ * @param string $op
+ *   The operation being performed. One of 'view', 'update', 'create', 'delete'.
+ * @param object $tax_rate
+ *   Optionally a tax rate to check access for. If nothing is given, access for
+ *   all tax rates is determined.
+ * @param object $account
+ *   Optional, a user object representing the user for whom the operation is to
+ *   be performed. Determines access for a user other than the current user.
+ *
+ * @return boolean
+ *   TRUE if the operation may be performed, FALSE otherwise.
+ */
+function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
+  if (user_access('administer tax rates', $account)) {
+    return TRUE;
+  }
+
+  if ($op == 'create') {
+    $access = user_access('create new tax rates', $account);
+    $access |= user_access('administer own tax rates', $account);
+    return $access;
+  }
+
+  if (!empty($tax_rate) && line_item_tax_rate_is_owned_by_user($tax_rate, $account)) {
+    switch ($op) {
+      case 'delete':
+      case 'update':
+        return user_access('administer own tax rates', $account);
+
+      case 'view':
+        return user_access('view own tax rates', $account);
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Deletes the tax rate.
+ *
+ * @param object $tax_rate
+ *   The tax rate that needs to be deleted.
+ */
+function line_item_tax_rate_delete($tax_rate) {
+  db_delete('tax_rates')
+    ->condition('tid', $tax_rate->tid, '=')
+    ->execute();
+}
+
+/**
  * The class used for line item entities.
  */
 class LineItem extends Entity {
@@ -501,7 +710,7 @@ class LineItemAPIController extends EntityAPIController {
    * {@inheritdoc}
    */
   public function create(array $values = array()) {
-    // Set the business id to the active business of the logged in user.
+    // Set the business ID to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
       $values += array('bid' => $business->bid);

@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * UI tests for the Invoicing dashboard module.
+ */
+
+module_load_include('inc', 'test_traits', 'base');
+
+class InvoicingDashboardUITestCase extends InvoicingIntegrationTestCase {
+
+  use BaseTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UI test',
+      'description' => 'Tests the dashboard through the user interface.',
+      'group' => 'Invoicing - Dashboard',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup();
+
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
+  }
+
+  /**
+   * Tests the "Add invoice" link on the dashboard page.
+   */
+  public function testDashboardAddInvoiceLink() {
+    $this->drupalGet('dashboard');
+    $url = url('invoice/add');
+    $this->assertXPathElements('//div[contains(@class, "pane-create-invoice")]//a[@href=:url and text() = :text]', 1, array(':url' => $url, ':text' => t('Create invoice')), 'The "Create invoice" link is shown on the dashboard.');
+  }
+
+}

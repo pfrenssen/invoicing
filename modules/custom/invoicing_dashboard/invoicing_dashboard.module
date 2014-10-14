@@ -8,23 +8,6 @@
 include_once 'invoicing_dashboard.features.inc';
 
 /**
- * Implements hook_menu().
- */
-function invoicing_dashboard_menu() {
-  $items = array();
-
-  $items['dashboard'] = array(
-    'title' => 'Dashboard',
-    'page callback' => 'invoicing_dashboard_overview',
-    'access arguments' => array('access invoicing dashboard'),
-    'type' => MENU_CALLBACK,
-    'file' => 'invoicing_dashboard.pages.inc',
-  );
-
-  return $items;
-}
-
-/**
  * Implements hook_permission().
  */
 function invoicing_dashboard_permission() {
@@ -35,4 +18,17 @@ function invoicing_dashboard_permission() {
   );
 
   return $permissions;
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function invoicing_dashboard_ctools_plugin_directory($module, $plugin) {
+  $types = array(
+    'ctools:content_types',
+  );
+
+  if (in_array("$module:$plugin", $types)) {
+    return "plugins/$plugin";
+  }
 }

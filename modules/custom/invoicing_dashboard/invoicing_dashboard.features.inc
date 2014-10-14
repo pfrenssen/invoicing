@@ -8,11 +8,12 @@
  * Implements hook_ctools_plugin_api().
  */
 function invoicing_dashboard_ctools_plugin_api($module = NULL, $api = NULL) {
-  if ($module == "page_manager" && $api == "pages_default") {
-    return array("version" => "1");
-  }
+  $plugins = array(
+    'page_manager:pages_default',
+    'strongarm:strongarm',
+  );
 
-  if ($module == "strongarm" && $api == "strongarm") {
+  if (in_array("$module:$api", $plugins)) {
     return array("version" => "1");
   }
 }

@@ -19,6 +19,22 @@
 function invoice_add_page($invoice_type) {
   $invoice = entity_create('invoice', array('type' => $invoice_type->type));
 
+  // If a client ID is given in the query parameters, prepopulate the client
+  // field when adding an invoice.
+  $parameters = drupal_get_query_parameters();
+  if (!empty($parameters['cid'])) {
+    // This only works if there actually is a client with the given ID.
+    if ($client = client_load($parameters['cid'])) {
+      // Check if the client is actually owned by the business owner.
+      if (client_is_owned_by_user($client)) {
+        $invoice->field_invoice_client[LANGUAGE_NONE][] = array(
+          'target_id' => $client->cid,
+          'revision_id' => $client->vid,
+        );
+      }
+    }
+  }
+
   return drupal_get_form('invoice_edit_form', $invoice);
 }
 

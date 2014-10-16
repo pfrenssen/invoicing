@@ -209,6 +209,12 @@ function invoice_views_default_views() {
   /* Display: Client invoices */
   $handler = $view->new_display('panel_pane', 'Client invoices', 'client');
   $handler->display->display_options['display_description'] = 'Pane listing the invoices for the given client.';
+  $handler->display->display_options['defaults']['footer'] = FALSE;
+  /* Footer: Global: Unfiltered text */
+  $handler->display->display_options['footer']['area_text_custom']['id'] = 'area_text_custom';
+  $handler->display->display_options['footer']['area_text_custom']['table'] = 'views';
+  $handler->display->display_options['footer']['area_text_custom']['field'] = 'area_text_custom';
+  $handler->display->display_options['footer']['area_text_custom']['empty'] = TRUE;
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Invoice: Invoice ID */
   $handler->display->display_options['fields']['iid']['id'] = 'iid';

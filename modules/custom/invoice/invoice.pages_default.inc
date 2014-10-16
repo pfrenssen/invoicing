@@ -114,7 +114,7 @@ function invoice_default_page_manager_pages() {
     $pane->pid = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
     $pane->panel = 'middle';
     $pane->type = 'views_panes';
-    $pane->subtype = 'invoices-panel_pane_1';
+    $pane->subtype = 'invoices-client';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(

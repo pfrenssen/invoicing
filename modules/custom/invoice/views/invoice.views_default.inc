@@ -207,7 +207,7 @@ function invoice_views_default_views() {
   $handler->display->display_options['path'] = 'admin/invoices';
 
   /* Display: Client invoices */
-  $handler = $view->new_display('panel_pane', 'Client invoices', 'panel_pane_1');
+  $handler = $view->new_display('panel_pane', 'Client invoices', 'client');
   $handler->display->display_options['display_description'] = 'Pane listing the invoices for the given client.';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Invoice: Invoice ID */

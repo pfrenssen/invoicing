@@ -110,3 +110,45 @@ function invoicing_core_autoload() {
 function invoicing_core_get_wkhtmltopdf_path() {
   return DRUPAL_ROOT . '/profiles/invoicing/vendor/bin/wkhtmltopdf-amd64';
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function invoicing_core_form_user_login_block_alter(&$form, &$form_state) {
+  // Replace the standard validation with our own.
+  $key = array_search('user_login_name_validate', $form['#validate']);
+  $form['#validate'][$key] = 'invoicing_core_login_name_validate';
+}
+
+/**
+ * Sets an error if supplied username has been blocked.
+ */
+function invoicing_core_login_name_validate($form, &$form_state) {
+  if (!empty($form_state['values']['name']) && user_is_blocked($form_state['values']['name'])) {
+    $form = drupal_get_form('invoicing_core_resend_activation_mail_form', $form_state['values']['name']);
+    form_set_error('name', t('Your account is not yet activated. Please click the link in your activation e-mail.') . ' ' . drupal_render($form));
+  }
+}
+
+/**
+ * Form containing a submit button to resend the activation mail to the user.
+ */
+function invoicing_core_resend_activation_mail_form($form, &$form_state, $user_name) {
+  $form['#user'] = user_load_by_name($user_name);
+
+  $form['send_mail'] = array(
+    '#type' => 'submit',
+    '#value' => t('Didn\'t get mail?'),
+  );
+
+  return $form;
+}
+
+/**
+ * Submit handler for invoicing_core_resend_activation_mail_form().
+ */
+//function invoicing_core_resend_activation_mail_form_submit($form, &$form_state) {
+//  $user = $form['#user'];
+//  $language = $language ? $language : user_preferred_language($user);
+//  $mail = drupal_mail('user', 'register_no_approval_required', $user->mail, $language, array('account' => $user));
+//}

@@ -521,15 +521,6 @@ function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
- * Impelemnts hook_views_pre_render().
- */
-function invoice_views_pre_render(&$view) {
-  if ($view->name == 'invoices' && $view->current_display == 'client') {
-    $view->footer['area_text_custom']->options['content'] = l(t('Create invoice'), 'invoice/add', array('query' => array('cid' => $view->args[0])));
-  }
-}
-
-/**
  * The class used for invoice entities.
  *
  * @param array $field_invoice_client

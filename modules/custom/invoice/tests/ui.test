@@ -173,20 +173,4 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
   }
 
-  /**
-   * Tests if the create invoice link is set on the client detail page.
-   */
-  public function testAddInvoiceLinkOnClientDetailPage() {
-    // Verify the create invoice link is present on the client detail page.
-    $this->drupalGet('client/' . $this->client->cid);
-    $url = url('invoice/add', array('query' => array('cid' => $this->client->cid)));
-    $this->assertTrue($this->xpath('//div[contains(@class, "pane-invoices-client")]//div[@class="view-footer"]//a[@href="' . $url . '"]'), 'The create invoice link is found with the query parameter.');
-
-    // Click the link and verify that you land on the correct page.
-    $this->clickLink(t('Create invoice'));
-    $this->assertUrl('invoice/add', array('query' => array('cid' => $this->client->cid)), 'We land on the correct url with the correct query parameters after clicking the Create invoice link.');
-
-    // Check that the client is prefilled with the correct value.
-    $this->assertTrue($this->xpath('//table[@id="ief-entity-table-edit-field-invoice-client-und-entities"]//td[@class="inline-entity-form-client-name"]'), 'The client field is prefilled correctly.');
-  }
 }

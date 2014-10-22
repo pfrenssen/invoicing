@@ -185,6 +185,27 @@ class ClientUITestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
+   * Tests the "Add invoice" link on the client detail page.
+   */
+  public function testAddInvoiceLinkOnClientDetailPage() {
+    // Create a client.
+    $client = $this->createUiClient();
+
+    // Verify that the "Add invoice" link is present on the client detail page.
+    $this->drupalGet('client/' . $client->cid);
+    $url = url('invoice/add', array('query' => array('cid' => $client->cid)));
+    $this->assertTrue($this->xpath('//a[@href="' . $url . '"]'), 'The create invoice link is found with the query parameter.');
+
+    // Click the link and verify that you land on the correct page. This is the
+    // second link with this label, there is also one in the navigation menu.
+    $this->clickLink(t('Add invoice'), 1);
+    $this->assertUrl('invoice/add', array('query' => array('cid' => $client->cid)), 'We land on the correct url with the correct query parameters after clicking the Create invoice link.');
+
+    // Check that the client is prefilled with the correct value.
+    $this->assertTrue($this->xpath('//table[@id="ief-entity-table-edit-field-invoice-client-und-entities"]//td[@class="inline-entity-form-client-name"]'), 'The client field is prefilled correctly.');
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function randomClientValues() {

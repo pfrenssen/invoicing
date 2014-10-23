@@ -85,7 +85,7 @@ projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/inli
 projects[libraries] = 2.2
 projects[libraries][subdir] = contrib
 
-projects[link] = 1.2
+projects[link] = 1.3
 projects[link][subdir] = contrib
 
 projects[panels] = 3.4

@@ -107,7 +107,7 @@ projects[libraries][download][branch] = 7.x-2.x
 projects[libraries][subdir] = contrib
 
 projects[link][download][type] = git
-projects[link][download][revision] = 7.x-1.2
+projects[link][download][revision] = 7.x-1.3
 projects[link][download][branch] = 7.x-1.x
 projects[link][subdir] = contrib
 

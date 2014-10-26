@@ -110,34 +110,3 @@ function invoicing_core_autoload() {
 function invoicing_core_get_wkhtmltopdf_path() {
   return DRUPAL_ROOT . '/profiles/invoicing/vendor/bin/wkhtmltopdf-amd64';
 }
-
-/**
- * Implements hook_theme().
- */
-function invoicing_core_theme() {
-  return array(
-    'field_invoice_client' => array(
-      'render element' => 'form',
-    ),
-  );
-}
-
-/**
- * Implements hook_field_widget_form_alter().
- */
-function invoicing_core_field_widget_form_alter(&$element, &$form_state, $context) {
-  if (!empty($context['field']) && !empty($context['field']['field_name']) && $context['field']['field_name'] == 'field_invoice_client') {
-    $element['entities']['#theme'] = 'field_invoice_client';
-  }
-}
-
-/**
- * Themes the client in the invoice edit.
- */
-function theme_field_invoice_client($variables) {
-  if (!empty($variables['form'][0]) && !empty($variables['form'][0]['#entity'])) {
-    $summary = entity_view('client', array($variables['form'][0]['#entity']), 'summary');
-    $output = array_merge($summary, $variables['form'][0]['actions']);
-    return drupal_render($output);
-  }
-}

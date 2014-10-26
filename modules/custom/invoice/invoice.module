@@ -873,6 +873,37 @@ function invoice_increment_number($invoice_number) {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function invoice_theme() {
+  return array(
+    'field_invoice_client' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function invoice_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (!empty($context['field']) && !empty($context['field']['field_name']) && $context['field']['field_name'] == 'field_invoice_client') {
+    $element['entities']['#theme'] = 'field_invoice_client';
+  }
+}
+
+/**
+ * Themes the client in the invoice edit.
+ */
+function theme_field_invoice_client($variables) {
+  if (!empty($variables['form'][0]) && !empty($variables['form'][0]['#entity'])) {
+    $summary = entity_view('client', array($variables['form'][0]['#entity']), 'summary');
+    $output = array_merge($summary, $variables['form'][0]['actions']);
+    return drupal_render($output);
+  }
+}
+
+/**
  * The class used for invoice entities.
  *
  * @property array $field_invoice_client

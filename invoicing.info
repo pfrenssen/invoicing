@@ -13,6 +13,7 @@ dependencies[] = entity_token
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = inline_entity_form
+dependencies[] = inline_entity_form_autocomplete
 dependencies[] = invoice
 dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard

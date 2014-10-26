@@ -101,6 +101,11 @@ projects[inline_entity_form][subdir] = contrib
 ; @see https://drupal.org/node/2134035
 projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/inline_entity_form-allow-to-add-existing-2134035-36.patch
 
+projects[ief_autocomplete][type] = module
+projects[ief_autocomplete][download][type] = git
+projects[ief_autocomplete][download][branch] = 7.x-1.x
+projects[ief_autocomplete][download][url] = http://git.drupal.org:sandbox/iSoLate/2363793.git
+
 projects[libraries][download][type] = git
 projects[libraries][download][revision] = 7.x-2.2
 projects[libraries][download][branch] = 7.x-2.x

@@ -724,6 +724,16 @@ function client_get_clients_from_user(\stdClass $account = NULL, $reset = FALSE)
 }
 
 /**
+* Implements hook_entity_info_alter().
+*/
+function client_entity_info_alter(&$entity_info) {
+  $entity_info['client']['view modes']['summary'] = array(
+    'label' => t('Summary'),
+    'custom settings' => TRUE,
+  );
+}
+
+/**
  * The class used for client entities.
  *
  * @param array field_client_address

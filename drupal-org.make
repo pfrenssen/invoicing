@@ -105,6 +105,7 @@ projects[ief_autocomplete][type] = module
 projects[ief_autocomplete][download][type] = git
 projects[ief_autocomplete][download][branch] = 7.x-1.x
 projects[ief_autocomplete][download][url] = http://git.drupal.org:sandbox/iSoLate/2363793.git
+projects[ief_autocomplete][subdir] = contrib
 
 projects[libraries][download][type] = git
 projects[libraries][download][revision] = 7.x-2.2

@@ -37,7 +37,7 @@ before_script:
   # Install dependencies.
   - composer install
   # Build the project.
-  - ./build.sh --quick --debug
+  - ./build.sh --quick --verbose
   - cd build/
   # Run the installer.
   - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y

@@ -301,6 +301,9 @@ function invoice_theme($existing, $type, $theme, $path) {
       'template' => 'invoice_export',
       'path' => drupal_get_path('module', 'invoice') . '/theme',
     ),
+    'invoice_inline_client_entity' => array(
+      'render element' => 'form',
+    ),
   );
 }
 
@@ -870,17 +873,6 @@ function invoice_increment_number($invoice_number) {
   }
 
   return $invoice_number;
-}
-
-/**
- * Implements hook_theme().
- */
-function invoice_theme() {
-  return array(
-    'field_invoice_client' => array(
-      'render element' => 'form',
-    ),
-  );
 }
 
 /**

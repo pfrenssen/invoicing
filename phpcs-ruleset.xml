@@ -22,4 +22,10 @@
     <rule ref="Drupal.WhiteSpace.ScopeIndent.IncorrectExact">
         <exclude-pattern>*/modules/custom/*/*.pages_default.inc</exclude-pattern>
     </rule>
+
+    <!-- Exclude info files that declare traits. They give a false positive on the rule that detects class declarations in the 'files[]' array. -->
+    <rule ref="Drupal.InfoFiles.ClassFiles.UnecessaryFileDeclaration">
+        <exclude-pattern>*/modules/custom/test_traits/test_traits.info</exclude-pattern>
+    </rule>
+
 </ruleset>

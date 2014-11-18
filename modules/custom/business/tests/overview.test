@@ -73,7 +73,7 @@ class BusinessOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Check that the pager is not present. We added 20 businesses which is the
     // maximum number that fits on one page.
-    $this->assertNoPager().
+    $this->assertNoPager();
 
     // Check that the businesses are present in the overview in alphabetical
     // order.

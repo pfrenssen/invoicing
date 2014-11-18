@@ -232,6 +232,7 @@ trait InvoiceTestHelper {
     return array_rand(array(
       'draft' => 'draft',
       'sent' => 'sent',
+      'paid' => 'paid',
     ));
   }
 

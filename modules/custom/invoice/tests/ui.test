@@ -174,4 +174,28 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
   }
 
+  /**
+   * Tests the invoice status.
+   */
+  public function testInvoicePaid(){
+    // Create an invoice using random values.
+    $invoice = $this->createUiInvoice();
+
+    // Edit the invoice and set the 'status' field to 'paid'. Save the changes.
+    $edit = array('field_invoice_status[und]' => 'paid');
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $edit, t('Save'));
+
+    // Check status message after saving.
+    $messages = array('status' => array(t('The changes have been saved.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');
+
+    // Open the invoice again and check that the status is saved correctly.
+    $invoice = invoice_load($invoice->iid, TRUE);
+    $values = array('field_invoice_status' => 'paid');
+    $this->assertInvoiceProperties($invoice, $values, 'The updated invoice has been correctly saved to the database.');
+
+    // Check target Url after redirection.
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after editing an invoice.');
+  }
+
 }

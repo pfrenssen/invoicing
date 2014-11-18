@@ -99,8 +99,8 @@ class ClientUnitTestCase extends InvoicingIntegrationTestCase {
     // any invoices.
     for ($i = 0; $i < 6; $i++) {
       $invoice = $this->createInvoice(array(
-        'bid' => $this->clients[$i%4%3]->bid,
-        'field_invoice_client' => $this->clients[$i%4%3],
+        'bid' => $this->clients[$i % 4 % 3]->bid,
+        'field_invoice_client' => $this->clients[$i % 4 % 3],
       ));
       $invoice->save();
       $this->invoices[] = $invoice;

@@ -107,14 +107,14 @@ class ClientUITestCase extends InvoicingIntegrationTestCase {
     $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting a user.');
 
     // Check that the client can be deleted.
-    $this->drupalPost('client/' .$client->cid . '/delete', array(), t('Delete'));
+    $this->drupalPost('client/' . $client->cid . '/delete', array(), t('Delete'));
     $messages = array('status' => array(t('Client %name has been deleted.', array('%name' => $client->name))));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the client has been deleted.');
     $this->assertClientTableEmpty('The client database is empty after the client has been deleted.');
     $this->assertUrl('clients', array(), 'The user is redirected to the client overview after deleting a client.');
   }
 
-  /*
+  /**
    * Tests the rendering of the client entity.
    */
   public function testClientViewEntity() {
@@ -221,7 +221,7 @@ class ClientUITestCase extends InvoicingIntegrationTestCase {
   /**
    * Constructs an XPath query to find an element on the client entity page.
    *
-   * @param string $pxath
+   * @param string $xpath
    *   The path selector to search for.
    */
   protected function getClientEntityXPath($xpath = '') {

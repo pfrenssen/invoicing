@@ -96,7 +96,7 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Check that the pager is not present. We added 20 clients which is the
     // maximum number that fits on one page.
-    $this->assertNoPager().
+    $this->assertNoPager();
 
     // Check that the clients are present in the overview in alphabetical order.
     uasort($this->clients, function ($a, $b) {
@@ -292,7 +292,7 @@ class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
       );
 
       foreach ($testcases as $testcase) {
-        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']));//, $testcase['message']);
+        $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
       }
     }
 

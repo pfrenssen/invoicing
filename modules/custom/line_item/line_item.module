@@ -125,8 +125,8 @@ function line_item_entity_property_info_alter(&$info) {
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
  * @param object $line_item
- *   Optionally an line item to check access for. If nothing is given, access
- *   for all line items is determined.
+ *   Optionally a line item to check access for. If nothing is given, access for
+ *   all line items is determined.
  * @param object $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.

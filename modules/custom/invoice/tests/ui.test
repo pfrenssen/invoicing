@@ -117,7 +117,8 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertInvoiceProperties($invoice, $values, 'The invoice has been correctly saved to the database.');
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after creating a new invoice.');
 
-    // Check that the form fields have correct values when the invoice is edited.
+    // Check that the form fields have correct values when the invoice is
+    // edited.
     $this->drupalGet('invoice/' . $invoice->iid . '/edit');
     $form_values = $this->convertInvoiceValuesToFormPostValues($values);
 
@@ -166,7 +167,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting an invoice.');
 
     // Check that the invoice can be deleted.
-    $this->drupalPost('invoice/' .$invoice->iid . '/delete', array(), t('Delete'));
+    $this->drupalPost('invoice/' . $invoice->iid . '/delete', array(), t('Delete'));
     $messages = array('status' => array(t('The invoice has been deleted.')));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
     $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');

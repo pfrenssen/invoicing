@@ -58,8 +58,8 @@ class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
     'admin/reports',
     'admin/structure',
 
-    // @todo These will become accessible once we have 'edit/create own business'
-    //  permissions.
+    // @todo These will become accessible once we have 'edit/create own
+    //   business' permissions.
     // @see http://atrium.pocomas.be/invoicing/node/1167
     'businesses',
     'business/add',

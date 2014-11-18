@@ -196,6 +196,9 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
    *
    * @param string $pxath
    *   The path selector to search for.
+   *
+   * @return string
+   *   The XPath query.
    */
   protected function getBusinessEntityXPath($xpath = '') {
     return '//div[contains(@class, "entity-business")]' . $xpath;

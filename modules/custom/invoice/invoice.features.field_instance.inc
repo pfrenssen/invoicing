@@ -36,7 +36,7 @@ function invoice_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'inline_entity_form',
+      'module' => 'ief_autocomplete',
       'settings' => array(
         'fields' => array(),
         'type_settings' => array(
@@ -48,7 +48,7 @@ function invoice_field_default_field_instances() {
           'override_labels' => 1,
         ),
       ),
-      'type' => 'inline_entity_form_single',
+      'type' => 'ief_autocomplete',
       'weight' => 1,
     ),
   );

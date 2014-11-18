@@ -2,12 +2,12 @@ name = Invoice
 description = Invoice related functionality.
 core = 7.x
 package = Invoicing
-
 dependencies[] = client
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = entityreference
 dependencies[] = features
+dependencies[] = ief_autocomplete
 dependencies[] = inline_entity_form
 dependencies[] = line_item
 dependencies[] = list

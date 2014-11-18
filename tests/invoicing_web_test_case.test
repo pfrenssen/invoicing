@@ -43,7 +43,7 @@ class InvoicingWebTestCase extends DrupalWebTestCase {
       }
 
       // Errors that occur inside PHP internal functions do not generate
-      // information about file and line. Ignore black listed functions.
+      // information about file and line. Ignore blacklisted functions.
       $blacklist = array(
         'debug',
         '_drupal_error_handler',

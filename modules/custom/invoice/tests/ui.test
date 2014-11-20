@@ -177,7 +177,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests the invoice status.
    */
-  public function testInvoicePaid(){
+  public function testInvoicePaid() {
     // Create an invoice using random values.
     $invoice = $this->createUiInvoice();
 

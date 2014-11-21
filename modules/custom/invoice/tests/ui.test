@@ -175,7 +175,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
-   * Tests the invoice status.
+   * Tests setting the 'paid' option on the invoice status.
    */
   public function testInvoicePaid() {
     // Create an invoice using random values.
@@ -189,7 +189,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $messages = array('status' => array(t('The changes have been saved.')));
     $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');
 
-    // Open the invoice again and check that the status is saved correctly.
+    // Check that the status is saved correctly.
     $invoice = invoice_load($invoice->iid, TRUE);
     $values = array('field_invoice_status' => 'paid');
     $this->assertInvoiceProperties($invoice, $values, 'The updated invoice has been correctly saved to the database.');

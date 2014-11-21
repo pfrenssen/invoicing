@@ -125,13 +125,13 @@ function line_item_entity_property_info_alter(&$info) {
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
  * @param object $line_item
- *   Optionally an line item to check access for. If nothing is given, access for
+ *   Optionally a line item to check access for. If nothing is given, access for
  *   all line items is determined.
  * @param object $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
- * @return boolean
+ * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
 function line_item_access($op, $line_item = NULL, $account = NULL) {
@@ -344,7 +344,7 @@ function line_item_save(LineItem $line_item) {
  * @param bool $reset
  *   Whether to reset the cache.
  *
- * @return
+ * @return LineItem|FALSE
  *   A fully-populated line item object, or FALSE if the line item is not found.
  *
  * @throws InvalidArgumentException
@@ -370,12 +370,12 @@ function line_item_load($lid, $reset = FALSE) {
  * @see entity_load()
  * @see EntityFieldQuery
  *
- * @param $lids
+ * @param array $lids
  *   An array of line item IDs.
- * @param $reset
+ * @param bool $reset
  *   Whether to reset the internal cache.
  *
- * @return
+ * @return array
  *   An array of line item objects indexed by lid.
  */
 function line_item_load_multiple($lids = array(), $reset = FALSE) {
@@ -616,7 +616,7 @@ function line_item_tax_rate_is_owned_by_user($tax_rate, stdClass $account = NULL
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
- * @return boolean
+ * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
 function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {

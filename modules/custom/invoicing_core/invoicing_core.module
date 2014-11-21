@@ -75,13 +75,6 @@ function invoicing_core_form_user_register_form_submit($form, &$form_state) {
  *   providing an argument like "/all".
  * - Change the display of the invoice and client overviews to the 'Admin
  *   overview' if the user is an administrator.
- *
- * @param View $view
- *   The view object about to be processed.
- * @param string $display_id
- *   The machine name of the active display.
- * @param array $args
- *   An array of arguments passed into the view.
  */
 function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
   $contextual_arguments = $view->display_handler->get_option('arguments');

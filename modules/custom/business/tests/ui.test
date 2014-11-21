@@ -75,7 +75,8 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     $this->assertBusinessTableNotEmpty('The business database table is no longer empty after creating a business.');
     $this->assertBusinessProperties($business, $values, 'The business has been correctly saved to the database.');
 
-    // Check that the form fields have correct values when the business is edited.
+    // Check that the form fields have correct values when the business is
+    // edited.
     $this->drupalGet('business/' . $business->bid . '/edit');
     $form_values = $this->convertBusinessValuesToFormPostValues($values);
     foreach ($form_values as $name => $value) {
@@ -97,7 +98,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting a user.');
 
     // Check that the business can be deleted.
-    $this->drupalPost('business/' .$business->bid . '/delete', array(), t('Delete'));
+    $this->drupalPost('business/' . $business->bid . '/delete', array(), t('Delete'));
     $this->assertRaw(t('Business %name has been deleted.', array('%name' => $business->name)), 'A message is shown informing the user that the business has been deleted.');
     $this->assertBusinessTableEmpty('The business database is empty after the business has been deleted.');
   }
@@ -194,8 +195,11 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
   /**
    * Constructs an XPath query to find an element on the business entity page.
    *
-   * @param string $pxath
+   * @param string $xpath
    *   The path selector to search for.
+   *
+   * @return string
+   *   The XPath query.
    */
   protected function getBusinessEntityXPath($xpath = '') {
     return '//div[contains(@class, "entity-business")]' . $xpath;

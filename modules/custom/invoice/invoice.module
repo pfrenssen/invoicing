@@ -189,7 +189,7 @@ function invoice_menu() {
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
- * @return boolean
+ * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
 function invoice_access($op, $invoice = NULL, $account = NULL) {
@@ -409,7 +409,7 @@ function invoice_save(Invoice $invoice) {
  * @param bool $reset
  *   Whether to reset the cache.
  *
- * @return
+ * @return Invoice|FALSE
  *   A fully-populated invoice object, or FALSE if the invoice is not found.
  *
  * @throws InvalidArgumentException
@@ -435,12 +435,12 @@ function invoice_load($iid, $reset = FALSE) {
  * @see entity_load()
  * @see EntityFieldQuery
  *
- * @param $iids
+ * @param array $iids
  *   An array of invoice IDs.
- * @param $reset
+ * @param bool $reset
  *   Whether to reset the internal cache.
  *
- * @return
+ * @return array
  *   An array of invoice objects indexed by iid.
  */
 function invoice_load_multiple($iids = array(), $reset = FALSE) {

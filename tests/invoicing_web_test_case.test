@@ -16,6 +16,8 @@ class InvoicingWebTestCase extends DrupalWebTestCase {
    * {@inheritdoc}
    *
    * Outputs a backtrace in addition to the regular error message.
+   *
+   * @see _drupal_get_last_caller()
    */
   public function errorHandler($severity, $message, $file = NULL, $line = NULL) {
     if ($severity & error_reporting()) {
@@ -41,18 +43,22 @@ class InvoicingWebTestCase extends DrupalWebTestCase {
       }
 
       // Errors that occur inside PHP internal functions do not generate
-      // information about file and line. Ignore black listed functions.
-      $blacklist = array('debug', '_drupal_error_handler', '_drupal_exception_handler');
+      // information about file and line. Ignore blacklisted functions.
+      $blacklist = array(
+        'debug',
+        '_drupal_error_handler',
+        '_drupal_exception_handler',
+      );
       $backtrace = debug_backtrace(NULL);
       while (($backtrace && !isset($backtrace[0]['line'])) || (isset($backtrace[1]['function']) && in_array($backtrace[1]['function'], $blacklist))) {
         array_shift($backtrace);
       }
-      $message .= "<br>\nBacktrace:<br>\n";
+      $message .= "<br />\nBacktrace:<br />\n";
       foreach (array_reverse($backtrace) as $key => $trace) {
         $message .= $key . ': ';
         $message .= isset($trace['class']) ? $trace['class'] . $trace['type'] . $trace['function'] : $trace['function'];
         $message .= !empty($trace['file']) ? ' in ' . $trace['file'] . ' at line ' . $trace['line'] : '';
-        $message .= "<br>\n";
+        $message .= "<br />\n";
       }
       $this->error($message, $error_map[$severity], _drupal_get_last_caller($backtrace));
     }

@@ -52,7 +52,7 @@ script:
   - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080 ; SIMPLETEST_RESULT=$?
   # Run PHP CodeSniffer tests.
   - cd ..
-  - ./vendor/bin/phpcs --standard=./phpcs-ruleset.xml --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* --ignore=*/drush-master/* ./build/profiles/invoicing ; CODESNIFFER_RESULT=$?
+  - ./vendor/bin/phpcs --standard=./phpcs-ruleset.xml --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* --ignore=*/drush-master/* ./build/profiles/invoicing ; CODESNIFFER_RESULT=$?
   - if [ $SIMPLETEST_RESULT -eq 0 ] && [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
 
 notifications:

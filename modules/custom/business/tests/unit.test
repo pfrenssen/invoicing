@@ -105,7 +105,11 @@ class BusinessUnitTestCase extends InvoicingIntegrationTestCase {
     foreach ($this->users as $user_key => $user) {
       foreach ($this->businesses as $business_key => $business) {
         $is_owned = in_array($business_key, $ownership[$user_key]);
-        $message = format_string('Business :business :is_owned by user :user.', array(':business' => $business_key, ':is_owned' => $is_owned ? 'is owned' : 'is not owned', ':user' => $user_key));
+        $message = format_string('Business :business :is_owned by user :user.', array(
+          ':business' => $business_key,
+          ':is_owned' => $is_owned ? 'is owned' : 'is not owned',
+          ':user' => $user_key,
+        ));
         $this->assertEqual(business_is_owned_by_user($business, $user), in_array($business_key, $ownership[$user_key]), $message);
       }
     }

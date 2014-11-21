@@ -29,7 +29,7 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
    * @var object[]
    *   An array of Tax rate objects.
    */
-  protected $tax_rate;
+  protected $taxRates;
 
   /**
    * {@inheritdoc}
@@ -74,7 +74,7 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
         $tid = line_item_tax_rate_save((object) $values);
 
         // Create a tax rate for each user.
-        $this->tax_rates[] = line_item_tax_rate_load($tid);
+        $this->taxRates[] = line_item_tax_rate_load($tid);
       }
     }
   }
@@ -90,11 +90,12 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
       1 => array(2, 3),
     );
 
-    // Test if line_item_tax_rate_is_owned_by_user() matches the expected ownership.
+    // Test if line_item_tax_rate_is_owned_by_user() matches the expected
+    // ownership.
     foreach ($ownership as $user_key => $tax_rate_keys) {
       for ($i = 0; $i < 4; $i++) {
         $owned = in_array($i, $tax_rate_keys);
-        $this->assertEqual($owned, line_item_tax_rate_is_owned_by_user($this->tax_rates[$i], $this->users[$user_key]), format_string('Tax rate :tax_rate :owned by user :user.', array(
+        $this->assertEqual($owned, line_item_tax_rate_is_owned_by_user($this->taxRates[$i], $this->users[$user_key]), format_string('Tax rate :tax_rate :owned by user :user.', array(
           ':tax_rate' => $i,
           ':owned' => $owned ? 'is owned' : 'is not owned',
           ':user' => $user_key,

@@ -34,7 +34,6 @@ features[field_instance][] = business-business-field_business_vat
 features[field_instance][] = user-user-field_user_businesses
 features[views_view][] = businesses
 
-files[] = business.admin.inc
 files[] = tests/crud.test
 files[] = tests/entity.test
 files[] = tests/overview.test

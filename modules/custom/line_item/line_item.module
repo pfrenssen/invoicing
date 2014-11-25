@@ -533,10 +533,11 @@ function line_item_tax_rate_load($tid) {
     ->fields('tr')
     ->condition('tid', $tid, '=')
     ->execute()
-    ->fetchAll();
+    ->fetchAllAssoc('tid');
 
-  if (!empty($result)) {
-    return reset($result);
+  if (!empty($result[$tid])) {
+    $tax_rate = $result[$tid];
+    return new TaxRate($tax_rate->bid, $tax_rate->name, $tax_rate->rate, $tid);
   }
   else {
     throw new InvalidArgumentException('Invalid tax rate ID.');

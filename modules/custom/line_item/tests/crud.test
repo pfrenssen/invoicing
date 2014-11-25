@@ -81,7 +81,8 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
 
     // Check if a new tax rate can be saved to the database.
     $values = $this->randomTaxRateValues();
-    $tid = line_item_tax_rate_save((object) $values);
+    $tax_rate = new TaxRate($values['bid'], $values['name'], $values['rate']);
+    $tid = line_item_tax_rate_save($tax_rate);
     $this->assertTaxRatesTableNotEmpty('The tax rate database table is no longer empty after creating a tax rate.');
 
     // Check that the tax rate data can be read from the database.
@@ -92,7 +93,8 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
     // database.
     $new_values = $this->randomTaxRateValues();
     $new_values['tid'] = $retrieved_tax_rate->tid;
-    $tid = line_item_tax_rate_save((object) $new_values);
+    $new_tax_rate = new TaxRate($new_values['bid'], $new_values['name'], $new_values['rate'], $new_values['tid']);
+    $tid = line_item_tax_rate_save($new_tax_rate);
 
     $retrieved_tax_rate = line_item_tax_rate_load($tid);
     $this->assertTaxRateProperties($retrieved_tax_rate, $new_values, 'The tax rate has been updated correctly.');

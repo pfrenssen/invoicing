@@ -725,3 +725,79 @@ class LineItemAPIController extends EntityAPIController {
  */
 class LineItemInlineEntityFormController extends EntityInlineEntityFormController {
 }
+
+/**
+ * The class used to encapsulate tax rate field.
+ */
+class TaxRate {
+
+  /**
+   * The tax rate identifier.
+   */
+  protected $tid;
+
+  /**
+   * The business identifier.
+   */
+  protected $bid;
+
+  /**
+   * The human readable name associated with the tax rate.
+   */
+  protected $name;
+
+  /**
+   * The tax rate, which is a decimal number representing a percentage.
+   */
+  protected $rate;
+
+  /**
+   * The TaxRate class constructor.
+   *
+   * @param int $bid
+   *   The business identifier.
+   * @param string $name
+   *   The human readable name associated with the tax rate.
+   * @param Float $rate
+   *   The tax rate, which is a decimal number representing a percentage.
+   * @param int $tid
+   *   The tax rate identifier.
+   */
+  public function __construct($bid, $name, $rate, $tid = NULL) {
+    $this->tid = $tid;
+    $this->bid = $bid;
+    $this->name = $name;
+    $this->rate = $rate;
+  }
+
+  /**
+   * Returns the needed property of TaxRate object.
+   *
+   * @param string $property
+   *   The property needed. One of 'tid', 'bid', 'name', 'rate'.
+   *
+   * @throws InvalidArgumentException
+   *   Thrown when a non-existing property is accessed.
+   */
+  public function __get($property) {
+    if (property_exists($this, $property)) {
+      return $this->$property;
+    }
+    else {
+      throw new InvalidArgumentException('Non-existing property ' . $property . ' is accessed.');
+    }
+  }
+
+  /**
+   * Returns TRUE if the property is set, FALSE otherwise.
+   *
+   * @param string $property
+   *   The property that is checked. One of 'tid', 'bid', 'name', 'rate'.
+   *
+   * @return bool
+   *   TRUE if the property is set, FALSE otherwise.
+   */
+  public function __isset($property) {
+    return $this->{$property} !== NULL;
+  }
+}

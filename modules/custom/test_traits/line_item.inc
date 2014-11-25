@@ -292,6 +292,7 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertTaxRateProperties($tax_rate, array $values, $message = '', $group = 'Other') {
+    $this->assertEqual($values['bid'], $tax_rate->bid);
     $this->assertEqual($values['name'], $tax_rate->name);
     $this->assertEqual($values['rate'], $tax_rate->rate);
   }

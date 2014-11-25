@@ -279,7 +279,7 @@ trait LineItemTestHelper {
   /**
    * Check if the properties of the given tax rate match the given values.
    *
-   * @param object $tax_rate
+   * @param TaxRate $tax_rate
    *   The tax rate to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.

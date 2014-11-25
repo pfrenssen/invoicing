@@ -24,10 +24,10 @@ class TaxRateUnitTestCase extends InvoicingIntegrationTestCase {
   protected $businesses;
 
   /**
-   * Test tax rate objects.
+   * Test TaxRate objects.
    *
-   * @var object[]
-   *   An array of Tax rate objects.
+   * @var TaxRate[]
+   *   An array of TaxRate objects.
    */
   protected $taxRates;
 

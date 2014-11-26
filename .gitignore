@@ -1,3 +1,4 @@
 build
 modules/contrib
 libraries
+vendor

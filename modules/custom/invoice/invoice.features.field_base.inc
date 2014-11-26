@@ -306,6 +306,7 @@ function invoice_field_default_field_bases() {
       'allowed_values' => array(
         'draft' => 'draft',
         'sent' => 'sent',
+        'paid' => 'paid',
       ),
       'allowed_values_function' => '',
     ),

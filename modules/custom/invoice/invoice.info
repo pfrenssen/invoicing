@@ -44,7 +44,6 @@ features[invoice_type][] = invoice
 features[page_manager_pages][] = client_detail
 features[views_view][] = invoices
 
-files[] = invoice.admin.inc
 files[] = tests/client_reference.test
 files[] = tests/crud.test
 files[] = tests/entity.test

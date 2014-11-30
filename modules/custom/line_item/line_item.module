@@ -529,7 +529,7 @@ function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  */
 function line_item_tax_rate_load($tid) {
   if (empty($tid)) {
-    throw new InvalidArgumentException('Invalid tax rate ID.');
+    throw new InvalidArgumentException('Missing tax rate ID.');
   }
 
   $result = db_select('tax_rates', 'tr')

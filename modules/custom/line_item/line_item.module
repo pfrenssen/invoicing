@@ -449,7 +449,7 @@ function line_item_is_owned_by_user(LineItem $line_item, \stdClass $account = NU
   $account = $account ?: $user;
 
   $line_item = entity_metadata_wrapper('line_item', $line_item);
-  return in_array($line_item->bid->value(), array_keys(business_get_businesses_from_user($account)));
+  return in_array($line_item->bid->value()->bid, array_keys(business_get_businesses_from_user($account)));
 }
 
 /**

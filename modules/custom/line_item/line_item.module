@@ -625,7 +625,7 @@ function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $accoun
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
+function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, stdClass $account = NULL) {
   if (user_access('administer tax rates', $account)) {
     return TRUE;
   }
@@ -656,7 +656,7 @@ function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
  * @param TaxRate $tax_rate
  *   The tax rate that needs to be deleted.
  */
-function line_item_tax_rate_delete($tax_rate) {
+function line_item_tax_rate_delete(TaxRate $tax_rate) {
   db_delete('tax_rates')
     ->condition('tid', $tax_rate->tid, '=')
     ->execute();

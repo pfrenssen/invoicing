@@ -516,13 +516,16 @@ function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
- * Loads the tax rate from the tax_rates table.
+ * Loads the tax rate from the {tax_rates} table.
  *
  * @param int $tid
  *   The ID of the tax rate.
  *
  * @return TaxRate
  *   The tax rate object retrieved from the database.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the tax rate ID is invalid or empty.
  */
 function line_item_tax_rate_load($tid) {
   if (empty($tid)) {
@@ -730,7 +733,7 @@ class LineItemInlineEntityFormController extends EntityInlineEntityFormControlle
 }
 
 /**
- * The class used to encapsulate tax rate field.
+ * A tax rate field on a line item.
  */
 class TaxRate {
 
@@ -761,7 +764,7 @@ class TaxRate {
    *   The business identifier.
    * @param string $name
    *   The human readable name associated with the tax rate.
-   * @param Float $rate
+   * @param float $rate
    *   The tax rate, which is a decimal number representing a percentage.
    * @param int $tid
    *   The tax rate identifier.
@@ -774,10 +777,10 @@ class TaxRate {
   }
 
   /**
-   * Returns the needed property of TaxRate object.
+   * Magic getter. Returns the requested property.
    *
    * @param string $property
-   *   The property needed. One of 'tid', 'bid', 'name', 'rate'.
+   *   The requested property. One of 'tid', 'bid', 'name', 'rate'.
    *
    * @throws InvalidArgumentException
    *   Thrown when a non-existing property is accessed.

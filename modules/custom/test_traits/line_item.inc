@@ -320,6 +320,9 @@ trait LineItemTestHelper {
     // Convert the property values to form values and submit the form.
     $this->drupalPost('settings/tax-rates/add', $values, t('Save'));
 
+    // Check that a success message is displayed.
+    $this->assertRaw(t('New tax rate has been added.'));
+
     // Retrieve the saved invoice by invoice number and return it.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')

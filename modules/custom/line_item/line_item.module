@@ -517,17 +517,20 @@ function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
- * Loads the tax rate from the tax_rates table.
+ * Loads the tax rate from the {tax_rates} table.
  *
  * @param int $tid
  *   The ID of the tax rate.
  *
  * @return TaxRate
  *   The tax rate object retrieved from the database.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the tax rate ID is invalid or empty.
  */
 function line_item_tax_rate_load($tid) {
   if (empty($tid)) {
-    throw new InvalidArgumentException('Invalid tax rate ID.');
+    throw new InvalidArgumentException('Missing tax rate ID.');
   }
 
   $result = db_select('tax_rates', 'tr')
@@ -623,7 +626,7 @@ function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $accoun
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
+function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, stdClass $account = NULL) {
   if (user_access('administer tax rates', $account)) {
     return TRUE;
   }
@@ -654,7 +657,7 @@ function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
  * @param TaxRate $tax_rate
  *   The tax rate that needs to be deleted.
  */
-function line_item_tax_rate_delete($tax_rate) {
+function line_item_tax_rate_delete(TaxRate $tax_rate) {
   db_delete('tax_rates')
     ->condition('tid', $tax_rate->tid, '=')
     ->execute();
@@ -731,7 +734,7 @@ class LineItemInlineEntityFormController extends EntityInlineEntityFormControlle
 }
 
 /**
- * The class used to encapsulate tax rate field.
+ * A tax rate field on a line item.
  */
 class TaxRate {
 
@@ -762,7 +765,7 @@ class TaxRate {
    *   The business identifier.
    * @param string $name
    *   The human readable name associated with the tax rate.
-   * @param Float $rate
+   * @param float $rate
    *   The tax rate, which is a decimal number representing a percentage.
    * @param int $tid
    *   The tax rate identifier.
@@ -775,10 +778,10 @@ class TaxRate {
   }
 
   /**
-   * Returns the needed property of TaxRate object.
+   * Magic getter. Returns the requested property.
    *
    * @param string $property
-   *   The property needed. One of 'tid', 'bid', 'name', 'rate'.
+   *   The requested property. One of 'tid', 'bid', 'name', 'rate'.
    *
    * @throws InvalidArgumentException
    *   Thrown when a non-existing property is accessed.

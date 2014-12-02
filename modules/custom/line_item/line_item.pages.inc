@@ -274,14 +274,17 @@ function line_item_edit_tax_rate_form_submit($form, &$form_state) {
     throw new Exception('Tax rate cannot be submitted without a business.');
   }
 
-  $add = TRUE;
   if (!empty($form_state['tax_rate']->tid)) {
-    $add = FALSE;
     $values['tid'] = $form_state['tax_rate']->tid;
+    $tax_rate = new TaxRate($values['bid'], $values['name'], $values['rate'], $values['tid']);
+    $message = 'The changes have been saved.';
+  }
+  else {
+    $tax_rate = new TaxRate($values['bid'], $values['name'], $values['rate']);
+    $message = 'New tax rate has been added.';
   }
 
-  if (line_item_tax_rate_save((object) $values)) {
-    $message = $add ? 'New tax rate has been added.' : 'The changes have been saved.';
+  if (line_item_tax_rate_save($tax_rate)) {
     // @codingStandardsIgnoreStart
     drupal_set_message(t($message));
     // @codingStandardsIgnoreEnd

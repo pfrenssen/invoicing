@@ -279,7 +279,7 @@ trait LineItemTestHelper {
   /**
    * Check if the properties of the given tax rate match the given values.
    *
-   * @param object $tax_rate
+   * @param TaxRate $tax_rate
    *   The tax rate to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -292,6 +292,7 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertTaxRateProperties($tax_rate, array $values, $message = '', $group = 'Other') {
+    $this->assertEqual($values['bid'], $tax_rate->bid);
     $this->assertEqual($values['name'], $tax_rate->name);
     $this->assertEqual($values['rate'], $tax_rate->rate);
   }
@@ -318,6 +319,9 @@ trait LineItemTestHelper {
 
     // Convert the property values to form values and submit the form.
     $this->drupalPost('settings/tax-rates/add', $values, t('Save'));
+
+    // Check that a success message is displayed.
+    $this->assertRaw(t('New tax rate has been added.'));
 
     // Retrieve the saved invoice by invoice number and return it.
     $result = db_select('tax_rates', 'tr')

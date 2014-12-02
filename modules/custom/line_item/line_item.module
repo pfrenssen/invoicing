@@ -277,6 +277,9 @@ function line_item_type_get_names() {
  *
  * @return LineItem
  *   The new line item entity.
+ *
+ * @throws Exception
+ *   Thrown when it is given a missing or invalid item bundle.
  */
 function line_item_create($values = array()) {
   if (empty($values['type'])) {
@@ -514,27 +517,31 @@ function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
- * Loads the tax rate from the tax_rates table.
+ * Loads the tax rate from the {tax_rates} table.
  *
  * @param int $tid
  *   The ID of the tax rate.
  *
- * @return object
+ * @return TaxRate
  *   The tax rate object retrieved from the database.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the tax rate ID is invalid or empty.
  */
 function line_item_tax_rate_load($tid) {
   if (empty($tid)) {
-    throw new InvalidArgumentException('Invalid tax rate ID.');
+    throw new InvalidArgumentException('Missing tax rate ID.');
   }
 
   $result = db_select('tax_rates', 'tr')
     ->fields('tr')
     ->condition('tid', $tid, '=')
     ->execute()
-    ->fetchAll();
+    ->fetchAllAssoc('tid');
 
-  if (!empty($result)) {
-    return reset($result);
+  if (!empty($result[$tid])) {
+    $tax_rate = $result[$tid];
+    return new TaxRate($tax_rate->bid, $tax_rate->name, $tax_rate->rate, $tid);
   }
   else {
     throw new InvalidArgumentException('Invalid tax rate ID.');
@@ -544,7 +551,7 @@ function line_item_tax_rate_load($tid) {
 /**
  * Saves the tax rate to the database.
  *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate object to save.
  *
  * @return int
@@ -553,7 +560,7 @@ function line_item_tax_rate_load($tid) {
  * @throws Exception
  *   Thrown when the required business ID property is missing.
  */
-function line_item_tax_rate_save(stdClass $tax_rate) {
+function line_item_tax_rate_save(TaxRate $tax_rate) {
   // Set a default business ID.
   if (!isset($tax_rate->bid)) {
     throw new Exception('No business given to link the tax rate to.');
@@ -588,7 +595,7 @@ function line_item_tax_rate_save(stdClass $tax_rate) {
 /**
  * Returns whether a given tax rate is owned by a given user.
  *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate to check.
  * @param object $account
  *   Optional user account to check. Defaults to the currently logged in user.
@@ -596,7 +603,7 @@ function line_item_tax_rate_save(stdClass $tax_rate) {
  * @return bool
  *   TRUE if the tax rate is owned by the user, FALSE otherwise.
  */
-function line_item_tax_rate_is_owned_by_user($tax_rate, stdClass $account = NULL) {
+function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -609,7 +616,7 @@ function line_item_tax_rate_is_owned_by_user($tax_rate, stdClass $account = NULL
  *
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'.
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   Optionally a tax rate to check access for. If nothing is given, access for
  *   all tax rates is determined.
  * @param object $account
@@ -619,7 +626,7 @@ function line_item_tax_rate_is_owned_by_user($tax_rate, stdClass $account = NULL
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
+function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, stdClass $account = NULL) {
   if (user_access('administer tax rates', $account)) {
     return TRUE;
   }
@@ -647,10 +654,10 @@ function line_item_tax_rate_access($op, $tax_rate = NULL, $account = NULL) {
 /**
  * Deletes the tax rate.
  *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate that needs to be deleted.
  */
-function line_item_tax_rate_delete($tax_rate) {
+function line_item_tax_rate_delete(TaxRate $tax_rate) {
   db_delete('tax_rates')
     ->condition('tid', $tax_rate->tid, '=')
     ->execute();
@@ -724,4 +731,80 @@ class LineItemAPIController extends EntityAPIController {
  * The Line Item Inline Entity Form controller class.
  */
 class LineItemInlineEntityFormController extends EntityInlineEntityFormController {
+}
+
+/**
+ * A tax rate field on a line item.
+ */
+class TaxRate {
+
+  /**
+   * The tax rate identifier.
+   */
+  protected $tid;
+
+  /**
+   * The business identifier.
+   */
+  protected $bid;
+
+  /**
+   * The human readable name associated with the tax rate.
+   */
+  protected $name;
+
+  /**
+   * The tax rate, which is a decimal number representing a percentage.
+   */
+  protected $rate;
+
+  /**
+   * The TaxRate class constructor.
+   *
+   * @param int $bid
+   *   The business identifier.
+   * @param string $name
+   *   The human readable name associated with the tax rate.
+   * @param float $rate
+   *   The tax rate, which is a decimal number representing a percentage.
+   * @param int $tid
+   *   The tax rate identifier.
+   */
+  public function __construct($bid, $name, $rate, $tid = NULL) {
+    $this->tid = $tid;
+    $this->bid = $bid;
+    $this->name = $name;
+    $this->rate = $rate;
+  }
+
+  /**
+   * Magic getter. Returns the requested property.
+   *
+   * @param string $property
+   *   The requested property. One of 'tid', 'bid', 'name', 'rate'.
+   *
+   * @throws InvalidArgumentException
+   *   Thrown when a non-existing property is accessed.
+   */
+  public function __get($property) {
+    if (property_exists($this, $property)) {
+      return $this->$property;
+    }
+    else {
+      throw new InvalidArgumentException('Non-existing property ' . $property . ' is accessed.');
+    }
+  }
+
+  /**
+   * Returns TRUE if the property is set, FALSE otherwise.
+   *
+   * @param string $property
+   *   The property that is checked. One of 'tid', 'bid', 'name', 'rate'.
+   *
+   * @return bool
+   *   TRUE if the property is set, FALSE otherwise.
+   */
+  public function __isset($property) {
+    return $this->{$property} !== NULL;
+  }
 }

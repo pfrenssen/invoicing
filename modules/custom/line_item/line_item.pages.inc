@@ -296,9 +296,9 @@ function line_item_edit_tax_rate_form_submit($form, &$form_state) {
 }
 
 /**
- * Form submission handler for tax_rate_edit_form().
+ * Form submission handler for edit_tax_rate_form().
  *
- * Handles the 'Delete' button on the node form.
+ * Handles the 'Delete' button on the tax rate form.
  *
  * @see tax_rate_edit_form()
  * @see tax_rate_delete_confirm_form()

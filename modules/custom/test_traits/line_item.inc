@@ -306,8 +306,8 @@ trait LineItemTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return object
-   *   A new tax rate object.
+   * @return TaxRate
+   *   A new TaxRate object.
    */
   function createUiTaxRate(array $values = array()) {
     // Provide some default values.

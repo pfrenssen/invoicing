@@ -84,9 +84,14 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
       $tax_rate = array_shift($this->taxRates);
       $testcases = array(
         array(
-          'message' => 'The first column contains the tax rate name.',
+          'message' => 'The first column contains the tax rate linked name.',
           'expected' => $tax_rate->name,
-          'actual' => (string) $tablerow->td[0],
+          'actual' => (string) $tablerow->td[0]->a,
+        ),
+        array(
+          'message' => 'The first column links to the tax rate view link.',
+          'expected' => url('tax-rates/' . $tax_rate->tid),
+          'actual' => (string) $tablerow->td[0]->a['href'],
         ),
         array(
           'message' => 'The second column contains the rate.',
@@ -102,16 +107,6 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
           'message' => 'The third column links to the edit link.',
           'expected' => url('tax-rates/' . $tax_rate->tid . '/edit'),
           'actual' => (string) $tablerow->td[2]->a['href'],
-        ),
-        array(
-          'message' => 'The fourth column contains the delete link.',
-          'expected' => 'delete',
-          'actual' => (string) $tablerow->td[3]->a,
-        ),
-        array(
-          'message' => 'The fourth column links to the delete link.',
-          'expected' => url('settings/tax-rates/' . $tax_rate->tid . '/delete'),
-          'actual' => (string) $tablerow->td[3]->a['href'],
         ),
       );
 

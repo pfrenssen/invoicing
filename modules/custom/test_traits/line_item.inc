@@ -318,7 +318,7 @@ trait LineItemTestHelper {
     }
 
     // Convert the property values to form values and submit the form.
-    $this->drupalPost('settings/tax-rates/add', $values, t('Save'));
+    $this->drupalPost('tax-rates/add', $values, t('Save'));
 
     // Check that a success message is displayed.
     $this->assertRaw(t('New tax rate has been added.'));

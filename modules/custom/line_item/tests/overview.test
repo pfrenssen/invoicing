@@ -70,7 +70,7 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
     }
 
     // Go to the tax rates overview.
-    $this->drupalGet('settings/tax-rates');
+    $this->drupalGet('tax-rates');
 
     // Check that the pager is not present. We added 20 tax rates which is the
     // maximum number that fits on one page.
@@ -100,7 +100,7 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The third column links to the edit link.',
-          'expected' => url('settings/tax-rates/' . $tax_rate->tid . '/edit'),
+          'expected' => url('tax-rates/' . $tax_rate->tid . '/edit'),
           'actual' => (string) $tablerow->td[2]->a['href'],
         ),
         array(
@@ -125,7 +125,7 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
 
     // Add one more tax rate and assert that a pager now appears.
     $this->createUITaxRate();
-    $this->drupalGet('settings/tax-rates');
+    $this->drupalGet('tax-rates');
     $this->assertPager();
 
     // Create a different user with the role business owner and verify it does
@@ -136,9 +136,9 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->addBusinessToUser($business, $business_owner);
     $this->drupalLogin($business_owner);
 
-    $this->drupalGet('settings/tax-rates');
+    $this->drupalGet('tax-rates');
     // Check that the "Add tax rate" link is present.
-    $add_url = url('settings/tax-rates/add');
+    $add_url = url('tax-rates/add');
     $xpath = '//div[contains(@class, "view-tax-rate")]//div[@class="view-empty"]//a[@href="' . $add_url . '"]';
     $this->assertXPathElements($xpath, 1, array(), 'The no results message is shown.');
     $this->assertFalse($this->xpath('//div[contains(@class, "view-tax-rate")]//table'), 'The table containing tax rates is not shown when no tax rate is linked to the user.');

@@ -188,6 +188,30 @@ function line_item_detail_page($line_item) {
 }
 
 /**
+ * Callback function for tax rate details page.
+ *
+ * @param TaxRate $tax_rate
+ *   The TaxRate object whose details will be showed.
+ *
+ * @return string
+ *   The tax rate rendered code.
+ */
+function line_item_tax_rate_view(TaxRate $tax_rate) {
+  drupal_set_title(format_string('%name', array('%name' => $tax_rate->name)), PASS_THROUGH);
+  $variables = array(
+    'title' => 'Tax rate details',
+    'type' => 'ul',
+    'items' => array(
+      'id' => t('Id: @id', array('@id' => $tax_rate->tid)),
+      'name' => t('Name: @name', array('@name' => $tax_rate->name)),
+      'rate' => t('Rate: @rate', array('@rate' => $tax_rate->rate)),
+    ),
+  );
+
+  return theme('item_list', $variables);
+}
+
+/**
  * Form constructor for the tax rate add/edit form.
  *
  * @param object $tax_rate
@@ -197,7 +221,12 @@ function line_item_detail_page($line_item) {
  */
 function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
   $form_state['tax_rate'] = $tax_rate;
-
+  if (!empty($tax_rate)) {
+    drupal_set_title(t('Edit %name', array('%name' => $tax_rate->name)), PASS_THROUGH);
+  }
+  else {
+    drupal_set_title(t('Add new tax rate'));
+  }
   $form['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Name'),
@@ -310,7 +339,7 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
     unset($_GET['destination']);
   }
   $tax_rate = $form_state['tax_rate'];
-  $form_state['redirect'] = array('settings/tax-rates/' . $tax_rate->tid . '/delete', array('query' => $destination));
+  $form_state['redirect'] = array('tax-rates/' . $tax_rate->tid . '/delete', array('query' => $destination));
 }
 
 /**
@@ -342,6 +371,6 @@ function line_item_delete_tax_rate_confirm_form($form, &$form_state, stdClass $t
 function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   $tax_rate = $form_state['tax_rate'];
   line_item_tax_rate_delete($tax_rate);
-  drupal_set_message(t('The tax rate has been deleted.'));
-  $form_state['redirect'] = 'settings/tax-rates';
+  drupal_set_message(t('The tax rate %name has been deleted.', array('%name' => $tax_rate->name)));
+  $form_state['redirect'] = 'tax-rates/';
 }

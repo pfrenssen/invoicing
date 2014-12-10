@@ -214,12 +214,12 @@ function line_item_tax_rate_view(TaxRate $tax_rate) {
 /**
  * Form constructor for the tax rate add/edit form.
  *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate that is being added/edited.
  *
  * @ingroup forms
  */
-function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
+function line_item_edit_tax_rate_form($form, &$form_state, TaxRate $tax_rate = NULL) {
   $form_state['tax_rate'] = $tax_rate;
   if (!empty($tax_rate)) {
     drupal_set_title(t('Edit %name', array('%name' => $tax_rate->name)), PASS_THROUGH);
@@ -347,14 +347,14 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
  *
  * @see tax_rate_delete_confirm_form_submit()
  *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate that needs to be deleted.
  */
-function line_item_delete_tax_rate_confirm_form($form, &$form_state, stdClass $tax_rate) {
+function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
   return confirm_form($form,
-    t('Are you sure you want to delete the tax rate?'),
-    'settings/tax-rates',
+    t('Are you sure you want to delete %name?', array('%name' => $tax_rate->name)),
+    'tax-rates',
     t('This action cannot be undone.'),
     t('Delete'),
     t('Cancel')

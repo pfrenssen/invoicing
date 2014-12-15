@@ -17,14 +17,14 @@ Building
 
 * Clone the repository from GitHub.
 
-    $ git clone https://github.com/pfrenssen/invoicing.git
+      $ git clone https://github.com/pfrenssen/invoicing.git
 
 * Build the project by running the `build.sh` script. You can list the
   available options by passing the `--help` option. The build will be created in
   a subfolder named "build". For example to do a quick build with error logging:
 
-    $ cd invoicing/
-    $ ./build.sh --quick --verbose
+      $ cd invoicing/
+      $ ./build.sh --quick --verbose
 
 
 Installing

@@ -217,5 +217,5 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Click on services 'Add new entity' button.
     $service_button_element = $this->xpath('//input[@id = "edit-field-invoice-services-und-actions-ief-add"]');
     $this->drupalPostAJAX(NULL, array(), (string) $service_button_element[0]['name']);
- }
+  }
 }

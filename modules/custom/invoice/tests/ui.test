@@ -198,4 +198,24 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after editing an invoice.');
   }
 
+  /**
+   * Tests line item tax rate forms on the invoice.
+   */
+  public function testInvoiceLineItemTaxRate() {
+    // Already logged in as business owner, so go to the tax rate overview page.
+    $this->drupalGet('settings/tax-rates');
+
+    // Add a couple of tax rates.
+    $tax_rate_values1 = array('name' => 'test rate 1', 'rate' => 12.00);
+    $tax_rate_values2 = array('name' => 'test rate 2', 'rate' => 13.00);
+    $tax_rate1 = $this->createUiTaxRate($tax_rate_values1);
+    $tax_rate2 = $this->createUiTaxRate($tax_rate_values2);
+
+    // Go to add invoice page.
+    $this->drupalGet('invoice/add');
+
+    // Click on services 'Add new entity' button.
+    $service_button_element = $this->xpath('//input[@id = "edit-field-invoice-services-und-actions-ief-add"]');
+    $this->drupalPostAJAX(NULL, array(), (string) $service_button_element[0]['name']);
+ }
 }

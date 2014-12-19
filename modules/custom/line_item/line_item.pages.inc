@@ -352,3 +352,24 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   drupal_set_message(t('The tax rate %name has been deleted.', array('%name' => $tax_rate->name)));
   $form_state['redirect'] = 'settings/tax-rates';
 }
+
+/**
+ * Menu callback for TaxRate autocomplete.
+ *
+ * Retrieves a JSON object containing autocomplete values for existing TaxRate.
+ */
+function line_item_tax_rate_autocomplete($string = '') {
+  $matches = array();
+  if ($string) {
+    $result = db_select('tax_rates')
+      ->fields('tax_rates', array('rate'))
+      ->condition('rate', db_like($string) . '%', 'LIKE')
+      ->range(0, 10)
+      ->execute();
+    foreach ($result as $tax_rate) {
+      $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
+    }
+  }
+
+  drupal_json_output($matches);
+}

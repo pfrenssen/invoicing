@@ -500,6 +500,15 @@ function line_item_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['settings/tax-rates/autocomplete/%'] = array(
+    'page callback' => 'line_item_tax_rate_autocomplete',
+    'page arguments' => array(3),
+    'access callback' => 'line_item_tax_rate_access',
+    'access arguments' => array('view own tax rates'),
+    'type' => MENU_CALLBACK,
+    'file' => 'line_item.pages.inc',
+  );
+
   return $items;
 }
 
@@ -517,6 +526,99 @@ function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
       );
     }
   }
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function line_item_field_widget_info() {
+  return array(
+    'line_item_tax_rate' => array(
+      'label' => t('Tax rate'),
+      'description' => t('Tax rate decimal field type widget'),
+      'field types' => array('number_decimal'),
+      'settings' => array('size' => 7),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements function hook_field_widget_form().
+ */
+function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  if ($instance['widget']['type'] == 'line_item_tax_rate') {
+    $element += array(
+      '#entity_type' => 'line_item',
+      '#bundle' => 'product',
+      '#field_name' => 'field_tax_rate',
+      '#title' => t('Tax rate'),
+      '#type' => 'textfield',
+      '#maxlength' => 7,
+      '#autocomplete_path' => 'settings/tax-rates/autocomplete',
+      '#default_value' => '',
+      '#description' => t('Tax rate percentage'),
+      '#required' => FALSE,
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Returns an array of TaxRate related to a business identifier.
+ *
+ * @param int $bid
+ *   The business ID used to get related TaxRate.
+ *
+ * @return array
+ *   An array of TaxRate related to the business identifier.
+ *
+ * @throws InvalidArgumentException
+ *   Thrown when the business ID is invalid or empty.
+ */
+function line_item_get_tax_rate_by_business($bid) {
+  if (empty($bid)) {
+    throw new InvalidArgumentException('Missing business identifier.');
+  }
+
+  $result = db_select('tax_rates', 'tr')
+    ->fields('tr')
+    ->condition('bid', $bid, '=')
+    ->execute()
+    ->fetchAllAssoc('tid');
+
+  $tax_rates = array();
+  if (!empty($result)) {
+    foreach ($result as $tid => $value) {
+      $tax_rate = line_item_tax_rate_load($tid);
+      $tax_rates[$tid] = $tax_rate->rate;
+    }
+  }
+
+  return $tax_rates;
+}
+
+/**
+ * Returns an associative array containing the tax rate list.
+ *
+ * The output list is related to the business of logged user.
+ *
+ * @return array
+ *   An associative array containing 'tid' as key and 'rate' as value.
+ *
+ * @throws Exception
+ *    Thrown when it fails to get business identifier from logged user.
+ */
+function line_item_fetch_tax_rate_list() {
+  $business = business_get_active_business();
+  if (!$business) {
+    throw new Exception('Cannot save tax rate without business.');
+  }
+
+  return line_item_get_tax_rate_by_business($business->bid);
 }
 
 /**

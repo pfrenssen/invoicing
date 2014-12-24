@@ -202,20 +202,63 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
    * Tests line item tax rate forms on the invoice.
    */
   public function testInvoiceLineItemTaxRate() {
-    // Already logged in as business owner, so go to the tax rate overview page.
-    $this->drupalGet('settings/tax-rates');
-
-    // Add a couple of tax rates.
-    $tax_rate_values1 = array('name' => 'test rate 1', 'rate' => 12.00);
-    $tax_rate_values2 = array('name' => 'test rate 2', 'rate' => 13.00);
-    $tax_rate1 = $this->createUiTaxRate($tax_rate_values1);
-    $tax_rate2 = $this->createUiTaxRate($tax_rate_values2);
+    // Add some tax rates.
+    $tax_rates_added = array();
+    $first_digit = rand(1, 9);
+    for ($i = 0; $i < 4; $i++) {
+      $tax_rates_added[$i] = $this->createUiTaxRate(array(
+        'name' => "test rate {$i}",
+        'rate' => floatval("{$first_digit}{$i}.00"),
+      ));
+    }
 
     // Go to add invoice page.
     $this->drupalGet('invoice/add');
 
-    // Click on services 'Add new entity' button.
-    $service_button_element = $this->xpath('//input[@id = "edit-field-invoice-services-und-actions-ief-add"]');
-    $this->drupalPostAJAX(NULL, array(), (string) $service_button_element[0]['name']);
+    // Verify that the tax field is an autocomplete field.
+    $dropdown_results = $this->drupalGet('settings/tax-rates/autocomplete/' . $first_digit);
+
+    // Verify that the autocomplete field shows the tax rates created.
+    $dropdown_tax_rates = json_decode($dropdown_results, TRUE);
+    $n_results  = count($dropdown_tax_rates);
+    $actual_tax_rate_values = array();
+    $expected_tax_rate_values = array();
+    $dropdown_tax_rates_copy = $dropdown_tax_rates;
+    for ($i = 0; $i < $n_results; $i++) {
+      array_push($actual_tax_rate_values, array_pop($dropdown_tax_rates_copy));
+      array_push($expected_tax_rate_values, $tax_rates_added[$i]->rate);
+    }
+    $diff = array_diff($actual_tax_rate_values, $expected_tax_rate_values);
+    $this->assertFalse($diff, 'Autocomplete field shows correctly the tax rates created.');
+
+    // Create a new service and product choosing a dropdown tax rate value.
+    $random_selected_tax_value = array_rand($dropdown_tax_rates);
+    $line_item_values = array('field_line_item_tax' => $random_selected_tax_value);
+    $service = $this->createLineItem('service', $line_item_values);
+    $product = $this->createLineItem('product', $line_item_values);
+    $service->save();
+    $product->save();
+
+    // Load saved service and product and verify that all tax rates were saved
+    // correctly.
+    $service = line_item_load($service->lid);
+    $product = line_item_load($product->lid);
+    $this->assertEntityProperties('line_item', $service, $line_item_values, 'Service has been correctly saved.');
+    $this->assertEntityProperties('line_item', $product, $line_item_values, 'Product has been correctly saved.');
+
+    // Generate random invoice values.
+    $new_values = $this->randomInvoiceValues();
+
+    // Add the new service and product to the invoice values.
+    $new_values['field_invoice_services'][0] = $service;
+    $new_values['field_invoice_products'][0] = $product;
+
+    // Create and save the new invoice.
+    $invoice = $this->createUiInvoice($new_values);
+    $invoice->save();
+
+    // Load the invoice and verify that all tax rates were saved correctly.
+    $invoice = invoice_load($invoice->iid, TRUE);
+    $this->assertInvoiceProperties($invoice, $new_values, 'The invoice tax rates have been correctly saved to the database.');
   }
 }

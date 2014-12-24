@@ -359,15 +359,39 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
  * Retrieves a JSON object containing autocomplete values for existing TaxRate.
  */
 function line_item_tax_rate_autocomplete($string = '') {
+  global $user;
+  $current_user = user_load($user->uid);
   $matches = array();
-  if ($string) {
-    $result = db_select('tax_rates')
+  $result = array();
+  if (!empty($string)) {
+    $query = db_select('tax_rates')
       ->fields('tax_rates', array('rate'))
       ->condition('rate', db_like($string) . '%', 'LIKE')
-      ->range(0, 10)
-      ->execute();
-    foreach ($result as $tax_rate) {
-      $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
+      ->range(0, 10);
+
+    // Fetch businesses from current user.
+    if (!empty($current_user->field_user_businesses)) {
+      $bids = array();
+      foreach ($current_user->field_user_businesses[LANGUAGE_NONE] as $business) {
+        $bids[] = $business['target_id'];
+      }
+      $query->condition('bid', $bids, 'IN');
+      $result = $query
+        ->execute()
+        ->fetchAll();
+    }
+
+    // User one case: get the full list.
+    elseif ($current_user->uid == 1) {
+      $result = $query
+        ->execute()
+        ->fetchAll();
+    }
+
+    if (!empty($result)) {
+      foreach ($result as $tax_rate) {
+        $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
+      }
     }
   }
 

@@ -578,7 +578,7 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
  * @throws InvalidArgumentException
  *   Thrown when the business ID is invalid or empty.
  */
-function line_item_get_tax_rate_by_business($bid) {
+function line_item_get_tax_rates_by_business($bid) {
   if (empty($bid)) {
     throw new InvalidArgumentException('Missing business identifier.');
   }

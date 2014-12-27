@@ -811,7 +811,7 @@ class LineItemAPIController extends EntityAPIController {
    * {@inheritdoc}
    */
   public function create(array $values = array()) {
-    // Set the business ID to the active business of the logged in user.
+    // Default to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
       $values += array('bid' => $business->bid);

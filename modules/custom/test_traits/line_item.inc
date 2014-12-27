@@ -100,6 +100,7 @@ trait LineItemTestHelper {
     }
 
     $values = array(
+      'bid' => $this->randomBusiness()->identifier(),
       'field_line_item_description' => $this->randomString(),
       'field_line_item_discount' => $this->randomDecimal(),
       'field_line_item_quantity' => $this->randomDecimal(),

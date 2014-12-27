@@ -791,6 +791,13 @@ class LineItem extends Entity {
    * {@inheritdoc}
    */
   public function save() {
+    // The 'type' and 'bid' properties are mandatory.
+    foreach (array('bid', 'type') as $property) {
+      if (empty($this->$property)) {
+        throw new InvalidArgumentException("Line item has missing '$property' property.");
+      }
+    }
+
     // Set created and changed values. Only set the created value if it is new.
     if (empty($this->created) && (!empty($this->is_new) || !$this->lid)) {
       $this->created = REQUEST_TIME;

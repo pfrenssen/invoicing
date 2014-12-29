@@ -188,30 +188,6 @@ function line_item_detail_page($line_item) {
 }
 
 /**
- * Callback function for tax rate details page.
- *
- * @param TaxRate $tax_rate
- *   The TaxRate object whose details will be showed.
- *
- * @return string
- *   The tax rate rendered code.
- */
-function line_item_tax_rate_view(TaxRate $tax_rate) {
-  drupal_set_title(format_string('%name', array('%name' => $tax_rate->name)), PASS_THROUGH);
-  $variables = array(
-    'title' => 'Tax rate details',
-    'type' => 'ul',
-    'items' => array(
-      'id' => t('Id: @id', array('@id' => $tax_rate->tid)),
-      'name' => t('Name: @name', array('@name' => $tax_rate->name)),
-      'rate' => t('Rate: @rate', array('@rate' => $tax_rate->rate)),
-    ),
-  );
-
-  return theme('item_list', $variables);
-}
-
-/**
  * Form constructor for the tax rate add/edit form.
  *
  * @param TaxRate $tax_rate

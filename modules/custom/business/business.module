@@ -236,6 +236,23 @@ function business_field_extra_fields() {
 }
 
 /**
+ * Implements hook_field_widget_form_alter().
+ */
+function business_field_widget_form_alter(&$element, &$form_state, $context) {
+  // The Addressfield module automatically makes all fields required that are
+  // necessary for a valid postal address for a given country. We would like to
+  // keep these fields optional.
+  // @see https://www.drupal.org/node/2282817
+  if ($form_state['build_info']['form_id'] == 'business_edit_form' && $context['field']['type'] == 'addressfield') {
+    $element['street_block']['thoroughfare']['#required'] = FALSE;
+    $element['locality_block']['dependent_locality']['#required'] = FALSE;
+    $element['locality_block']['locality']['#required'] = FALSE;
+    $element['locality_block']['administrative_area']['#required'] = FALSE;
+    $element['locality_block']['postal_code']['#required'] = FALSE;
+  }
+}
+
+/**
  * Implements hook_ctools_plugin_directory().
  */
 function business_ctools_plugin_directory($module, $plugin) {

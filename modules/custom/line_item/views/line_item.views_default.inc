@@ -81,7 +81,7 @@ function line_item_views_default_views() {
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['empty']['area_text_custom']['field'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area_text_custom']['content'] = 'No tax rates found. Please <a href="/tax-rates/add">add a tax rate</a>.';
+  $handler->display->display_options['empty']['area_text_custom']['content'] = 'No tax rates found. Please <a href="settings/tax-rates/add">add a tax rate</a>.';
   /* Relationship: Tax rates: Business */
   $handler->display->display_options['relationships']['tid']['id'] = 'tid';
   $handler->display->display_options['relationships']['tid']['table'] = 'tax_rates';
@@ -127,7 +127,7 @@ function line_item_views_default_views() {
   $handler->display->display_options['arguments']['bid']['summary_options']['items_per_page'] = '25';
   /* Display: Tax rates */
   $handler = $view->new_display('page', 'Tax rates', 'page_tax_rates');
-  $handler->display->display_options['path'] = 'tax-rates/';
+  $handler->display->display_options['path'] = 'settings/tax-rates';
   $handler->display->display_options['menu']['type'] = 'default tab';
   $handler->display->display_options['menu']['title'] = 'Tax rates';
   $handler->display->display_options['menu']['weight'] = '0';

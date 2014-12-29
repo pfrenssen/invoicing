@@ -339,7 +339,7 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
     unset($_GET['destination']);
   }
   $tax_rate = $form_state['tax_rate'];
-  $form_state['redirect'] = array('tax-rates/' . $tax_rate->tid . '/delete', array('query' => $destination));
+  $form_state['redirect'] = array('settings/tax-rates/' . $tax_rate->tid . '/delete', array('query' => $destination));
 }
 
 /**
@@ -353,8 +353,7 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
 function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
   return confirm_form($form,
-    t('Are you sure you want to delete %name?', array('%name' => $tax_rate->name)),
-    'tax-rates',
+    t('Are you sure you want to delete %name?', array('%name' => $tax_rate->name)), 'settings/tax-rates',
     t('This action cannot be undone.'),
     t('Delete'),
     t('Cancel')
@@ -372,5 +371,5 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   $tax_rate = $form_state['tax_rate'];
   line_item_tax_rate_delete($tax_rate);
   drupal_set_message(t('The tax rate %name has been deleted.', array('%name' => $tax_rate->name)));
-  $form_state['redirect'] = 'tax-rates/';
+  $form_state['redirect'] = 'settings/tax-rates';
 }

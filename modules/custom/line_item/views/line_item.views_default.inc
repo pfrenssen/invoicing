@@ -41,7 +41,7 @@ function line_item_views_default_views() {
     'name' => 'name',
     'rate' => 'rate',
     'edit_tax_rate' => 'edit_tax_rate',
-    'delete_tax_rate' => 'delete_tax_rate',
+    'delete_tax_rate' => 'edit_tax_rate',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -67,7 +67,7 @@ function line_item_views_default_views() {
     ),
     'edit_tax_rate' => array(
       'align' => '',
-      'separator' => '',
+      'separator' => ' | ',
       'empty_column' => 0,
     ),
     'delete_tax_rate' => array(
@@ -104,8 +104,6 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'tax_rates';
   $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['name']['alter']['path'] = 'tax-rates/[tid]';
   /* Field: Tax rates: Rate */
   $handler->display->display_options['fields']['rate']['id'] = 'rate';
   $handler->display->display_options['fields']['rate']['table'] = 'tax_rates';
@@ -115,6 +113,11 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['edit_tax_rate']['table'] = 'tax_rates';
   $handler->display->display_options['fields']['edit_tax_rate']['field'] = 'edit_tax_rate';
   $handler->display->display_options['fields']['edit_tax_rate']['label'] = 'Actions';
+  /* Field: Tax rates: Delete link */
+  $handler->display->display_options['fields']['delete_tax_rate']['id'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['table'] = 'tax_rates';
+  $handler->display->display_options['fields']['delete_tax_rate']['field'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['label'] = 'Actions';
   /* Contextual filter: Business: Business ID */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'business';

@@ -333,10 +333,8 @@ trait LineItemTestHelper {
       ->execute()
       ->fetchAllAssoc('tid');
 
-    $tid_array = array_keys($result);
-    $tax_rate_is_unique = count($tid_array) == 1;
-    $message = 'Tax rate was successfully created through the UI.';
-    $this->assertTrue($tax_rate_is_unique, $message);
+    $this->assertEqual(count($result), 1, 'Tax rate was successfully created through the UI.');
+
     $result = reset($result);
 
     return new TaxRate($result->bid, $result->name, $result->rate, $result->tid);

@@ -329,7 +329,8 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
 function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
   return confirm_form($form,
-    t('Are you sure you want to delete %name?', array('%name' => $tax_rate->name)), 'settings/tax-rates',
+    t('Are you sure you want to delete %name?', array('%name' => $tax_rate->name)),
+    'settings/tax-rates',
     t('This action cannot be undone.'),
     t('Delete'),
     t('Cancel')

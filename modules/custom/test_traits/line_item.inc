@@ -337,9 +337,9 @@ trait LineItemTestHelper {
     $tax_rate_is_unique = count($tid_array) == 1;
     $message = 'Tax rate was successfully created through the UI.';
     $this->assertTrue($tax_rate_is_unique, $message);
-    $res = reset($result);
+    $result = reset($result);
 
-    return new TaxRate($res->bid, $res->name, $res->rate, $res->tid);
+    return new TaxRate($result->bid, $result->name, $result->rate, $result->tid);
   }
 
 }

@@ -115,9 +115,6 @@ class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
       );
 
-      //** DEBUG **/
-      debug($tablerow, 'Riga: ');
-
       foreach ($testcases as $testcase) {
         $this->assertEqual(trim($testcase['expected']), trim($testcase['actual']), $testcase['message']);
       }

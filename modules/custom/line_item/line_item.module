@@ -497,8 +497,6 @@ function line_item_menu() {
     'access callback' => 'line_item_tax_rate_access',
     'access arguments' => array('update', 2),
     'file' => 'line_item.pages.inc',
-    'type' => MENU_CALLBACK,
-    'weight' => 1,
   );
 
   return $items;

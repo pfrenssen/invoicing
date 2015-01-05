@@ -204,47 +204,6 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-product-field_tax_rate'
-  $field_instances['line_item-product-field_tax_rate'] = array(
-    'bundle' => 'product',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 2,
-          'thousand_separator' => ' ',
-        ),
-        'type' => 'number_decimal',
-        'weight' => 5,
-      ),
-    ),
-    'entity_type' => 'line_item',
-    'field_name' => 'field_tax_rate',
-    'label' => 'Tax rate',
-    'required' => FALSE,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'module' => 'number',
-      'settings' => array(
-        'size' => 7,
-      ),
-      'type' => 'number',
-      'weight' => 6,
-    ),
-  );
-
   // Exported field_instance: 'line_item-service-field_line_item_description'
   $field_instances['line_item-service-field_line_item_description'] = array(
     'bundle' => 'service',

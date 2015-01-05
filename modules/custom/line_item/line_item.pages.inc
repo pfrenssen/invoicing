@@ -197,12 +197,14 @@ function line_item_detail_page($line_item) {
  */
 function line_item_edit_tax_rate_form($form, &$form_state, TaxRate $tax_rate = NULL) {
   $form_state['tax_rate'] = $tax_rate;
+
   if (!empty($tax_rate)) {
     drupal_set_title(t('Edit %name', array('%name' => $tax_rate->name)), PASS_THROUGH);
   }
   else {
     drupal_set_title(t('Add new tax rate'));
   }
+
   $form['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Name'),

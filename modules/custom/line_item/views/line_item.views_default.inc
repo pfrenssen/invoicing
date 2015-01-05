@@ -41,7 +41,7 @@ function line_item_views_default_views() {
     'name' => 'name',
     'rate' => 'rate',
     'edit_tax_rate' => 'edit_tax_rate',
-    'delete_tax_rate' => 'edit_tax_rate',
+    'delete_tax_rate' => 'delete_tax_rate',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -67,8 +67,8 @@ function line_item_views_default_views() {
     ),
     'edit_tax_rate' => array(
       'align' => '',
-      'separator' => ' | ',
-      'empty_column' => 0,
+      'separator' => '',
+      'empty_column' => 1,
     ),
     'delete_tax_rate' => array(
       'align' => '',
@@ -112,12 +112,22 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['edit_tax_rate']['id'] = 'edit_tax_rate';
   $handler->display->display_options['fields']['edit_tax_rate']['table'] = 'tax_rates';
   $handler->display->display_options['fields']['edit_tax_rate']['field'] = 'edit_tax_rate';
-  $handler->display->display_options['fields']['edit_tax_rate']['label'] = 'Actions';
+  $handler->display->display_options['fields']['edit_tax_rate']['label'] = '';
+  $handler->display->display_options['fields']['edit_tax_rate']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['edit_tax_rate']['element_label_colon'] = FALSE;
   /* Field: Tax rates: Delete link */
   $handler->display->display_options['fields']['delete_tax_rate']['id'] = 'delete_tax_rate';
   $handler->display->display_options['fields']['delete_tax_rate']['table'] = 'tax_rates';
   $handler->display->display_options['fields']['delete_tax_rate']['field'] = 'delete_tax_rate';
-  $handler->display->display_options['fields']['delete_tax_rate']['label'] = 'Actions';
+  $handler->display->display_options['fields']['delete_tax_rate']['label'] = '';
+  $handler->display->display_options['fields']['delete_tax_rate']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['delete_tax_rate']['element_label_colon'] = FALSE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<ul class="links inline"><li class="edit first">[edit_tax_rate]</li><li class="delete last">[delete_tax_rate]</li></ul>';
   /* Contextual filter: Business: Business ID */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'business';

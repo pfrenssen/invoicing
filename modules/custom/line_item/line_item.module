@@ -487,7 +487,6 @@ function line_item_menu() {
     'access arguments' => array('delete', 2),
     'file' => 'line_item.pages.inc',
     'type' => MENU_CALLBACK,
-    'weight' => 2,
   );
 
   $items['settings/tax-rates/%line_item_tax_rate/edit'] = array(

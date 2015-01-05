@@ -440,7 +440,6 @@ function line_item_field_default_field_instances() {
   t('Quantity');
   t('Short description of the line item.');
   t('Tax');
-  t('Tax rate');
   t('The discount to apply on the line item, as a percentage.');
   t('The number of units sold.');
   t('The price per unit for the line item.');

@@ -208,7 +208,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     for ($i = 0; $i < 4; $i++) {
       $tax_rates_added[$i] = $this->createUiTaxRate(array(
         'name' => "test rate {$i}",
-        'rate' => floatval("{$first_digit}{$i}.00"),
+        'rate' => "{$first_digit}{$i}.00",
       ));
     }
 

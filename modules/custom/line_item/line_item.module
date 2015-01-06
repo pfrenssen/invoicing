@@ -549,15 +549,12 @@ function line_item_field_widget_info() {
  */
 function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
   if ($instance['widget']['type'] == 'line_item_tax_rate') {
-    $element += array(
-      '#entity_type' => 'line_item',
-      '#bundle' => 'product',
-      '#field_name' => 'field_tax_rate',
+    $element['value'] = array(
       '#title' => t('Tax rate'),
       '#type' => 'textfield',
       '#maxlength' => 7,
       '#autocomplete_path' => 'settings/tax-rates/autocomplete',
-      '#default_value' => '',
+      '#default_value' => !empty($items[$delta]['value']) ? $items[$delta]['value'] : '',
       '#description' => t('Tax rate percentage'),
       '#required' => FALSE,
     );

@@ -340,4 +340,80 @@ trait LineItemTestHelper {
     return new TaxRate($result->bid, $result->name, $result->rate, $result->tid);
   }
 
+  /**
+   * Updates an existing tax rate through the user interface.
+   *
+   * The target tax rate is retrieved by the tax rate id.
+   *
+   * @param TaxRate $tax_rate
+   *   The TaxRate object that has to be updated.
+   * @param array $values
+   *   An optional associative array of values, keyed by property name.
+   *
+   * @return TaxRate
+   *   The updated TaxRate object.
+   */
+  function updateUiTaxRate(TaxRate $tax_rate, array $values = array()) {
+
+    // Prevent unwanted tax rate id alteration.
+    if (isset($values['tid'])) {
+      unset($values['tid']);
+    }
+    // Prevent business id modification attempt.
+    if (isset($values['bid'])) {
+      unset($values['bid']);
+    }
+
+    // Get the specific tax rate edit form.
+    $this->drupalGet('settings/tax-rates/' . $tax_rate->tid . '/edit');
+    // Convert the new values to form values and submit the form.
+    $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/edit', $values, t('Save'));
+
+    // Check that a success message is displayed.
+    $this->assertRaw(t('The changes have been saved.'));
+
+    // Retrieve the updated tax rate by id number and return it.
+    $result = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('tr.name', $values['name'])
+      ->condition('tr.rate', $values['rate'])
+      ->orderBy('tr.tid', 'DESC')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAllAssoc('tid');
+
+    // Verify that the values are updated correctly.
+    $this->assertEqual(count($result), 1, 'Tax rate was successfully updated through the UI.');
+
+    $result = reset($result);
+
+    return new TaxRate($result->bid, $result->name, $result->rate, $result->tid);
+  }
+
+  /**
+   * Deletes an existing tax rate through the user interface.
+   *
+   * The target tax rate is selected by the tax rate id.
+   *
+   * @param TaxRate $tax_rate
+   *   The TaxRate object that has to be deleted.
+   */
+  function deleteUiTaxRate(TaxRate $tax_rate) {
+
+    // Get the specific tax rate delete form and delete the tax rate instance.
+    $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/delete', array(), t('Delete'));
+
+    // Attempt to retrieve the deleted tax rate by id number.
+    $result = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('tr.name', $tax_rate->name)
+      ->condition('tr.rate', $tax_rate->rate)
+      ->orderBy('tr.tid', 'DESC')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAllAssoc('tid');
+
+    // Verify that the tax rate has been deleted from the database.
+    $this->assertEqual(count($result), 0, 'Tax rate was successfully deleted from the database through the UI.');
+  }
 }

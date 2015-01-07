@@ -41,7 +41,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertLineItemTableEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('line_item', 'li')->fields('li')->execute()->fetchAll();
+    $result = (bool) db_select('line_item', 'li')
+      ->fields('li')
+      ->execute()
+      ->fetchAll();
     return $this->assertFalse($result, $message ?: 'The line item database table is empty.', $group);
   }
 
@@ -57,7 +60,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertLineItemTableNotEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('line_item', 'li')->fields('li')->execute()->fetchAll();
+    $result = (bool) db_select('line_item', 'li')
+      ->fields('li')
+      ->execute()
+      ->fetchAll();
     return $this->assertTrue($result, $message ?: 'The line item database table is not empty.', $group);
   }
 
@@ -216,7 +222,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertTaxRatesTableEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('tax_rates', 'tr')->fields('tr')->execute()->fetchAll();
+    $result = (bool) db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->execute()
+      ->fetchAll();
     return $this->assertFalse($result, $message ?: 'The tax rates database table is empty.', $group);
   }
 
@@ -232,7 +241,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertTaxRatesTableNotEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('tax_rates', 'tr')->fields('tr')->execute()->fetchAll();
+    $result = (bool) db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->execute()
+      ->fetchAll();
     return $this->assertTrue($result, $message ?: 'The tax rates database table is not empty.', $group);
   }
 

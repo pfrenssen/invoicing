@@ -24,6 +24,10 @@ projects[drupal][patch][] = http://drupal.org/files/1988780-6-simpletest-backref
 ; https://drupal.org/node/2061333
 projects[drupal][patch][] = http://drupal.org/files/updater-installation_directory_not_created-2061333-1.patch
 
+; Warning: DOMDocument::importNode() ID already defined.
+; https://www.drupal.org/node/2386903
+projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simpletest-domdocument_warning-7.x-do-not-test.patch
+
 projects[addressfield][download][type] = git
 projects[addressfield][download][revision] = 7.x-1.0-beta5
 projects[addressfield][download][branch] = 7.x-1.x

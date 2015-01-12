@@ -365,7 +365,7 @@ function line_item_tax_rate_autocomplete($string = '') {
   $result = array();
   if (!empty($string)) {
     $query = db_select('tax_rates')
-      ->fields('tax_rates', array('rate'))
+      ->fields('tax_rates', array('tid', 'rate'))
       ->condition('rate', db_like($string) . '%', 'LIKE')
       ->range(0, 10);
 
@@ -387,7 +387,7 @@ function line_item_tax_rate_autocomplete($string = '') {
 
     if (!empty($result)) {
       foreach ($result as $tax_rate) {
-        $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
+        $matches[$tax_rate->tid] = check_plain($tax_rate->rate);
       }
     }
   }

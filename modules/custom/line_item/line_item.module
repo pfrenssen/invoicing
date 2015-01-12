@@ -584,7 +584,7 @@ function line_item_get_tax_rates_by_active_business() {
     ->execute()
     ->fetchAllAssoc('tid');
 
-  $tax_rates = array();
+  $tax_rates = &drupal_static(__FUNCTION__, array());
   if (!empty($result)) {
     foreach ($result as $tid => $value) {
       $tax_rate = line_item_tax_rate_load($tid);

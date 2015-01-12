@@ -564,25 +564,23 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
 }
 
 /**
- * Returns an array of TaxRate related to a business identifier.
- *
- * @param int $bid
- *   The business ID used to get related TaxRate.
+ * Returns an array of TaxRate related to the active business.
  *
  * @return array
- *   An array of TaxRate related to the business identifier.
+ *   An array of TaxRate keyed by 'tid' and related to the active business.
  *
- * @throws InvalidArgumentException
- *   Thrown when the business ID is invalid or empty.
+ * @throws Exception
+ *   Thrown when the active business ID is empty.
  */
-function line_item_get_tax_rates_by_business($bid) {
-  if (empty($bid)) {
-    throw new InvalidArgumentException('Missing business identifier.');
-  }
+function line_item_get_tax_rates_by_active_business() {
+    $business = business_get_active_business();
+    if (!$business) {
+      throw new Exception('Missing business identifier.');
+    }
 
   $result = db_select('tax_rates', 'tr')
     ->fields('tr')
-    ->condition('bid', $bid, '=')
+    ->condition('bid', $business->bid, '=')
     ->execute()
     ->fetchAllAssoc('tid');
 
@@ -595,26 +593,6 @@ function line_item_get_tax_rates_by_business($bid) {
   }
 
   return $tax_rates;
-}
-
-/**
- * Returns an associative array containing the tax rate list.
- *
- * The output list is related to the business of logged user.
- *
- * @return array
- *   An associative array containing 'tid' as key and 'rate' as value.
- *
- * @throws Exception
- *    Thrown when it fails to get business identifier from logged user.
- */
-function line_item_fetch_tax_rate_list() {
-  $business = business_get_active_business();
-  if (!$business) {
-    throw new Exception('Cannot save tax rate without business.');
-  }
-
-  return line_item_get_tax_rate_by_business($business->bid);
 }
 
 /**

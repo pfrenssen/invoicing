@@ -573,10 +573,10 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
  *   Thrown when the active business ID is empty.
  */
 function line_item_get_tax_rates_by_active_business() {
-    $business = business_get_active_business();
-    if (!$business) {
-      throw new Exception('Missing business identifier.');
-    }
+  $business = business_get_active_business();
+  if (!$business) {
+    throw new Exception('Missing business identifier.');
+  }
 
   $result = db_select('tax_rates', 'tr')
     ->fields('tr')

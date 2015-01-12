@@ -370,11 +370,8 @@ function line_item_tax_rate_autocomplete($string = '') {
       ->range(0, 10);
 
     // Fetch businesses from current user.
-    if (!empty($current_user->field_user_businesses)) {
-      $bids = array();
-      foreach ($current_user->field_user_businesses[LANGUAGE_NONE] as $business) {
-        $bids[] = $business['target_id'];
-      }
+    $bids = array_keys(business_get_businesses_from_user());
+    if (!empty($bids)) {
       $query->condition('bid', $bids, 'IN');
       $result = $query
         ->execute()

@@ -255,7 +255,6 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Create and save the new invoice.
     $invoice = $this->createUiInvoice($new_values);
-    $invoice->save();
 
     // Load the invoice and verify that all tax rates were saved correctly.
     $invoice = invoice_load($invoice->iid, TRUE);

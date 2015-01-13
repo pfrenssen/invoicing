@@ -3,7 +3,7 @@ core = 7.x
 
 projects[drupal][type] = core
 projects[drupal][download][type] = git
-projects[drupal][download][revision] = 7.32
+projects[drupal][download][revision] = 7.34
 projects[drupal][download][branch] = 7.x
 
 ; Recursive module dependencies of installation profile are not enabled in

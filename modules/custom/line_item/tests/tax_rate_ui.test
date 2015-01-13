@@ -8,7 +8,7 @@
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
-class TaxRatesUiTestCase extends InvoicingIntegrationTestCase {
+class TaxRateUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
   use LineItemTestHelper;
@@ -25,8 +25,8 @@ class TaxRatesUiTestCase extends InvoicingIntegrationTestCase {
    */
   public static function getInfo() {
     return array(
-      'name' => 'Tax rates UI test',
-      'description' => 'Tests the tax rates user interface.',
+      'name' => 'Tax rate UI test',
+      'description' => 'Tests the tax rate user interface.',
       'group' => 'Invoicing - Line item',
     );
   }

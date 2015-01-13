@@ -356,7 +356,11 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
 /**
  * Menu callback for TaxRate autocomplete.
  *
- * Retrieves a JSON object containing autocomplete values for existing TaxRate.
+ * @param string $string
+ *   The string containing the initial value to match with.
+ *
+ * @return object
+ *   The JSON object containing autocomplete values for existing TaxRate.
  */
 function line_item_tax_rate_autocomplete($string = '') {
   global $user;

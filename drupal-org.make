@@ -44,7 +44,7 @@ projects[date][download][branch] = 7.x-2.x
 projects[date][subdir] = contrib
 
 projects[email][download][type] = git
-projects[email][download][revision] = 7.x-1.2
+projects[email][download][revision] = 7.x-1.3
 projects[email][download][branch] = 7.x-1.x
 projects[email][subdir] = contrib
 

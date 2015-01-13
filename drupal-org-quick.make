@@ -34,7 +34,7 @@ projects[ctools][subdir] = contrib
 projects[date][version] = 2.8
 projects[date][subdir] = contrib
 
-projects[email][version] = 1.2
+projects[email][version] = 1.3
 projects[email][subdir] = contrib
 
 projects[email_registration][version] = 1.2

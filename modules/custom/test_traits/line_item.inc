@@ -312,7 +312,7 @@ trait LineItemTestHelper {
   /**
    * Creates a new tax rate through the user interface.
    *
-   * The saved tax rate is retrieved by the tax rate id.
+   * The saved tax rate is retrieved by the tax rate ID.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random
@@ -335,7 +335,7 @@ trait LineItemTestHelper {
     // Check that a success message is displayed.
     $this->assertRaw(t('New tax rate has been added.'));
 
-    // Retrieve the saved tax rate by id number and return it.
+    // Retrieve the saved tax rate by ID number and return it.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')
       ->condition('tr.name', $values['name'])
@@ -405,17 +405,16 @@ trait LineItemTestHelper {
   /**
    * Deletes an existing tax rate through the user interface.
    *
-   * The target tax rate is selected by the tax rate id.
+   * The target tax rate is selected by the tax rate ID.
    *
    * @param TaxRate $tax_rate
    *   The TaxRate object that has to be deleted.
    */
   function deleteUiTaxRate(TaxRate $tax_rate) {
-
     // Get the specific tax rate delete form and delete the tax rate instance.
     $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/delete', array(), t('Delete'));
 
-    // Attempt to retrieve the deleted tax rate by id number.
+    // Attempt to retrieve the deleted tax rate by ID number.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')
       ->condition('tr.name', $tax_rate->name)

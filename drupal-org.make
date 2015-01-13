@@ -34,7 +34,7 @@ projects[addressfield][download][branch] = 7.x-1.x
 projects[addressfield][subdir] = contrib
 
 projects[ctools][download][type] = git
-projects[ctools][download][revision] = 7.x-1.4
+projects[ctools][download][revision] = 7.x-1.5
 projects[ctools][download][branch] = 7.x-1.x
 projects[ctools][subdir] = contrib
 

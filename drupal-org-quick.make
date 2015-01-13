@@ -28,7 +28,7 @@ projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simplet
 projects[addressfield][version] = 1.0-rc1
 projects[addressfield][subdir] = contrib
 
-projects[ctools][version] = 1.4
+projects[ctools][version] = 1.5
 projects[ctools][subdir] = contrib
 
 projects[date][version] = 2.8

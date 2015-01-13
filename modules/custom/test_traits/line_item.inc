@@ -370,8 +370,6 @@ trait LineItemTestHelper {
     unset($values['bid']);
     unset($values['tid']);
 
-    // Get the specific tax rate edit form.
-    $this->drupalGet('settings/tax-rates/' . $tax_rate->tid . '/edit');
     // Convert the new values to form values and submit the form.
     $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/edit', $values, t('Save'));
 

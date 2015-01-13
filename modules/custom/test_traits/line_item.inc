@@ -414,6 +414,6 @@ trait LineItemTestHelper {
       ->fetchAllAssoc('tid');
 
     // Verify that the tax rate has been deleted from the database.
-    $this->assertEqual(count($result), 0, 'Tax rate was successfully deleted from the database through the UI.');
+    $this->assertFalse(count($result), 'Tax rate was successfully deleted from the database through the UI.');
   }
 }

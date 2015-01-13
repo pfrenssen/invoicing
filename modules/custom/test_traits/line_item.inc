@@ -366,15 +366,9 @@ trait LineItemTestHelper {
    *   The updated TaxRate object.
    */
   function updateUiTaxRate(TaxRate $tax_rate, array $values = array()) {
-
-    // Prevent unwanted tax rate id alteration.
-    if (isset($values['tid'])) {
-      unset($values['tid']);
-    }
-    // Prevent business id modification attempt.
-    if (isset($values['bid'])) {
-      unset($values['bid']);
-    }
+    // Unset the values that cannot be changed through the UI.
+    unset($values['bid']);
+    unset($values['tid']);
 
     // Get the specific tax rate edit form.
     $this->drupalGet('settings/tax-rates/' . $tax_rate->tid . '/edit');

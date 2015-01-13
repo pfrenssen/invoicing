@@ -408,10 +408,7 @@ trait LineItemTestHelper {
 
     // Attempt to retrieve the deleted tax rate by ID number.
     $result = db_select('tax_rates', 'tr')
-      ->fields('tr')
-      ->condition('tr.name', $tax_rate->name)
-      ->condition('tr.rate', $tax_rate->rate)
-      ->orderBy('tr.tid', 'DESC')
+      ->fields('tr', array('tid'))
       ->range(0, 1)
       ->execute()
       ->fetchAllAssoc('tid');

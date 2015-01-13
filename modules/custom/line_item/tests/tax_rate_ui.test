@@ -32,17 +32,9 @@ class TaxRateUITestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-  }
-
-  /**
    * Tests the tax rate user interface.
    */
   public function testUi() {
-
     // Log in as business owner.
     $this->drupalLogin($this->users['business owner']);
 

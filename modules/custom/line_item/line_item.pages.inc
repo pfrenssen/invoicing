@@ -361,32 +361,27 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
  *
  * @return object
  *   The JSON object containing autocomplete values for existing TaxRate.
+ *
+ * @throws Exception
+ *   Thrown when the current user does not own any business.
  */
 function line_item_tax_rate_autocomplete($string = '') {
-  global $user;
-  $current_user = user_load($user->uid);
   $matches = array();
-  $result = array();
-  if (!empty($string)) {
-    $query = db_select('tax_rates')
-      ->fields('tax_rates', array('tid', 'rate'))
-      ->condition('rate', db_like($string) . '%', 'LIKE')
-      ->range(0, 10);
 
-    // Fetch businesses from current user.
-    $bids = array_keys(business_get_businesses_from_user());
-    if (!empty($bids)) {
-      $query->condition('bid', $bids, 'IN');
-      $result = $query
+  // Fetch businesses from current user.
+  $bids = array_keys(business_get_businesses_from_user());
+  if (!empty($bids)) {
+    if (!empty($string)) {
+      $result = db_select('tax_rates')
+        ->fields('tax_rates', array('tid', 'rate'))
+        ->condition('rate', db_like($string) . '%', 'LIKE')
+        ->range(0, 10)
+        ->condition('bid', $bids, 'IN')
         ->execute()
         ->fetchAll();
     }
-
-    // User one case: get the full list.
-    elseif ($current_user->uid == 1) {
-      $result = $query
-        ->execute()
-        ->fetchAll();
+    else {
+      throw new Exception('Current user does not own any business.');
     }
 
     if (!empty($result)) {

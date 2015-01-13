@@ -220,16 +220,14 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Verify that the autocomplete field shows the tax rates created.
     $dropdown_tax_rates = json_decode($dropdown_results, TRUE);
-    $n_results  = count($dropdown_tax_rates);
-    $actual_tax_rate_values = array();
-    $expected_tax_rate_values = array();
-    $dropdown_tax_rates_copy = $dropdown_tax_rates;
-    for ($i = 0; $i < $n_results; $i++) {
-      array_push($actual_tax_rate_values, array_pop($dropdown_tax_rates_copy));
-      array_push($expected_tax_rate_values, $tax_rates_added[$i]->rate);
+    $result = TRUE;
+    foreach ($tax_rates_added as $tax_rate) {
+      if (!array_key_exists($tax_rate->tid, $dropdown_tax_rates) || $dropdown_tax_rates[$tax_rate->tid] !== $tax_rate->rate) {
+        $result = FALSE;
+        break;
+      }
     }
-    $diff = array_diff($actual_tax_rate_values, $expected_tax_rate_values);
-    $this->assertFalse($diff, 'Autocomplete field shows correctly the tax rates created.');
+    $this->assertTrue($result, 'Autocomplete field contains the correct list of tax rates.');
 
     // Create a new service and product choosing a dropdown tax rate value.
     $random_selected_tax_value = array_rand($dropdown_tax_rates);

@@ -146,7 +146,7 @@ projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
 
 projects[views][download][type] = git
-projects[views][download][revision] = 7.x-3.7
+projects[views][download][revision] = 7.x-3.8
 projects[views][download][branch] = 7.x-3.x
 projects[views][subdir] = contrib
 

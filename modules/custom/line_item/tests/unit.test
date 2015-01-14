@@ -111,4 +111,28 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
     }
   }
 
+  /**
+   * Tests line_item_tax_rate_autocomplete().
+   */
+  public function testLineItemTaxRateAutocomplete() {
+    global $user;
+    module_load_include('inc', 'line_item', 'line_item.pages');
+
+    // Create a new user that does not have a business.
+    $this->users[2] = $this->drupalCreateUser();
+
+    // Check that an exception is thrown when the logged in user does not have a
+    // business. This can be done by overwriting the global $user.
+    $user = $this->users[2];
+    $string = $this->randomString();
+    $message = 'An exception is thrown when tax rate autocomplete results are requested for a user that doesn\'t have a business.';
+    try {
+      line_item_tax_rate_autocomplete($string);
+      $this->fail($message);
+    }
+    catch (Exception $e) {
+      $this->pass($message);
+    }
+  }
+
 }

@@ -67,15 +67,21 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
       $user->field_user_businesses->set(array($this->businesses[$i]->identifier()));
       $user->save();
 
-      // Create two tax rates for the business.
+      // Create two tax rates for the business, making sure the values are
+      // unique.
+      $names = $rates = array();
       for ($j = 0; $j < 2; $j++) {
-        $values = $this->randomTaxRateValues();
-        $values['bid'] = $this->businesses[$i]->identifier();
-        $tax_rate = new TaxRate($values['bid'], $values['name'], $values['rate']);
-        $tid = line_item_tax_rate_save($tax_rate);
+        do {
+          $values = array(
+            'bid' => $this->businesses[$i]->identifier(),
+            'name' => $this->randomString(),
+            'rate' => $this->randomDecimal(),
+          );
+        } while (in_array($values['name'], $names) || in_array($values['rate'], $rates));
 
-        // Create a tax rate for each user.
-        $this->taxRates[] = line_item_tax_rate_load($tid);
+        $tax_rate = new TaxRate($values['bid'], $values['name'], $values['rate']);
+        line_item_tax_rate_save($tax_rate);
+        $this->taxRates[] = $tax_rate;
       }
     }
   }

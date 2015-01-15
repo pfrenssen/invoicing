@@ -564,37 +564,40 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
 }
 
 /**
- * Returns an array of TaxRate related to the active business.
+ * Returns the tax rates that belong to the given business.
  *
- * @return array
- *   An array of TaxRate keyed by 'tid' and related to the active business.
+ * @param Business $business
+ *   Optional business for which to return the tax rates. Defaults to the
+ *   active business.
+ *
+ * @return TaxRate[]
+ *   An array of tax rates keyed by 'tid'.
  *
  * @throws Exception
- *   Thrown when the active business ID is empty.
+ *   Thrown when there no business was passed and there is no active business.
  */
-function line_item_get_tax_rates_by_active_business() {
-  $business = business_get_active_business();
+function line_item_get_tax_rates_by_business(Business $business) {
+  $business = $business ?: business_get_active_business();
+
   if (!$business) {
-    throw new Exception('Missing business identifier.');
+    throw new Exception('Cannot retrieve tax rates without a business.');
   }
 
   $tax_rates = &drupal_static(__FUNCTION__, array());
-  if (empty($tax_rates)) {
+  if (empty($tax_rates[$business->identifier()])) {
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')
       ->condition('bid', $business->bid, '=')
       ->execute()
       ->fetchAllAssoc('tid');
 
-    if (!empty($result)) {
-      foreach ($result as $tid => $value) {
-        $tax_rate = line_item_tax_rate_load($tid);
-        $tax_rates[$tid] = $tax_rate->rate;
-      }
+    foreach ($result as $tid => $value) {
+      $tax_rate = line_item_tax_rate_load($tid);
+      $tax_rates[$business->identifier()][$tid] = $tax_rate->rate;
     }
   }
 
-  return $tax_rates;
+  return $tax_rates[$business->identifier()];
 }
 
 /**

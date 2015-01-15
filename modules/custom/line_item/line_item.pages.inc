@@ -369,25 +369,21 @@ function line_item_tax_rate_autocomplete($string = '') {
   $matches = array();
 
   // Fetch businesses from current user.
-  $bids = array_keys(business_get_businesses_from_user());
-  if (!empty($bids)) {
-    if (!empty($string)) {
-      $result = db_select('tax_rates')
-        ->fields('tax_rates', array('tid', 'rate'))
-        ->condition('rate', db_like($string) . '%', 'LIKE')
-        ->range(0, 10)
-        ->condition('bid', $bids, 'IN')
-        ->execute()
-        ->fetchAll();
-    }
-    else {
-      throw new Exception('Current user does not own any business.');
-    }
+  if (!$bids = array_keys(business_get_businesses_from_user())) {
+    throw new Exception('Current user does not own any business.');
+  }
 
-    if (!empty($result)) {
-      foreach ($result as $tax_rate) {
-        $matches[$tax_rate->tid] = check_plain($tax_rate->rate);
-      }
+  if (!empty($string)) {
+    $result = db_select('tax_rates')
+      ->fields('tax_rates', array('tid', 'rate'))
+      ->condition('rate', db_like($string) . '%', 'LIKE')
+      ->range(0, 10)
+      ->condition('bid', $bids, 'IN')
+      ->execute()
+      ->fetchAll();
+
+    foreach ($result as $tax_rate) {
+      $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
     }
   }
 

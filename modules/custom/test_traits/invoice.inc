@@ -22,7 +22,7 @@ trait InvoiceTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertInvoiceProperties(Invoice $invoice, array $values, $message = '', $group = 'Other') {
+  public function assertInvoiceProperties(Invoice $invoice, array $values, $message = '', $group = 'Other') {
     return $this->assertEntityProperties('invoice', $invoice, $values, $message, $group);
   }
 
@@ -37,7 +37,7 @@ trait InvoiceTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertInvoiceTableEmpty($message = '', $group = 'Other') {
+  public function assertInvoiceTableEmpty($message = '', $group = 'Other') {
     $result = (bool) db_select('invoice', 'i')->fields('i')->execute()->fetchAll();
     return $this->assertFalse($result, $message ?: 'The invoice database table is empty.', $group);
   }
@@ -53,7 +53,7 @@ trait InvoiceTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertInvoiceTableNotEmpty($message = '', $group = 'Other') {
+  public function assertInvoiceTableNotEmpty($message = '', $group = 'Other') {
     $result = (bool) db_select('invoice', 'i')->fields('i')->execute()->fetchAll();
     return $this->assertTrue($result, $message ?: 'The invoice database table is not empty.', $group);
   }
@@ -71,7 +71,7 @@ trait InvoiceTestHelper {
    * @return Invoice
    *   A new invoice entity.
    */
-  function createInvoice(array $values = array()) {
+  public function createInvoice(array $values = array()) {
     // Provide some default values.
     $values += $this->randomInvoiceValues();
     $invoice = invoice_create();
@@ -92,7 +92,7 @@ trait InvoiceTestHelper {
    * @return Invoice
    *   A new invoice entity.
    */
-  function createUiInvoice(array $values = array()) {
+  public function createUiInvoice(array $values = array()) {
     // Provide some default values.
     $values += $this->randomInvoiceValues();
 
@@ -126,7 +126,7 @@ trait InvoiceTestHelper {
    * @return array
    *   An associative array of random values, keyed by property name.
    */
-  function randomInvoiceValues() {
+  public function randomInvoiceValues() {
     $date_polarity = rand(0, 1) ? '-' : '+';
     $date_offset = rand(0, 7);
 
@@ -155,7 +155,7 @@ trait InvoiceTestHelper {
    * @return array
    *   An associative array of property values, keyed by property name.
    */
-  protected function randomInvoicePropertyValues() {
+  public function randomInvoicePropertyValues() {
     return array(
       'type' => $this->randomName(),
       'bid' => $this->randomBusiness()->identifier(),
@@ -250,7 +250,7 @@ trait InvoiceTestHelper {
    *   Thrown one of the referenced line items does not have a supported bundle
    *   type.
    */
-  public function convertInvoiceValuesToFormPostValues($values) {
+  public function convertInvoiceValuesToFormPostValues(array $values) {
     // Prepare the input for the client entity reference field.
     // @todo Support creating a new client as well as referencing an existing
     //   one.
@@ -329,7 +329,7 @@ trait InvoiceTestHelper {
    *   An associative array of values to apply to the entity, keyed by property
    *   name.
    */
-  function updateInvoice(Invoice $invoice, array $values) {
+  public function updateInvoice(Invoice $invoice, array $values) {
     $wrapper = entity_metadata_wrapper('invoice', $invoice);
     foreach ($values as $property => $value) {
       $wrapper->$property->set($value);

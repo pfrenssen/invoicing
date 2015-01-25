@@ -307,6 +307,30 @@ trait InvoiceTestHelper {
   }
 
   /**
+   * Returns the invoice that corresponds with the given invoice number.
+   *
+   * @param string $invoice_number
+   *   The invoice number.
+   * @param bool $reset
+   *   Whether to reset the static cache.
+   *
+   * @return Invoice
+   *   The desired invoice.
+   */
+  public function loadInvoiceByNumber($invoice_number, $reset = FALSE) {
+    $query = new EntityFieldQuery();
+    $query
+      ->entityCondition('entity_type', 'invoice')
+      ->entityCondition('bundle', 'invoice')
+      ->fieldCondition('field_invoice_number', 'value', $invoice_number)
+      ->range(0, 1);
+    $result = $query->execute();
+    $iids = array_keys($result['invoice']);
+
+    return invoice_load($iids[0], $reset);
+  }
+
+  /**
    * Updates the given invoice with the given properties.
    *
    * @param Invoice $invoice

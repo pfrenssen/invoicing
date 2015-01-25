@@ -105,29 +105,19 @@ trait InvoiceTestHelper {
     // @todo If no client is passed, open the 'Add new entity' form instead and
     //   create a new client with random values on the fly.
     $this->drupalGet('invoice/add');
-    $button_element = $this->xpath('//input[@id = "edit-field-invoice-client-und-actions-ief-add-existing"]');
-    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+    $this->clickAddExistingClientButton();
 
     // Also click on 'Add existing entity' for products and services.
-    $button_element = $this->xpath('//input[@id = "edit-field-invoice-services-und-actions-ief-add-existing"]');
-    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
-    $button_element = $this->xpath('//input[@id = "edit-field-invoice-products-und-actions-ief-add-existing"]');
-    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+    $this->clickAddExistingProductButton();
+    $this->clickAddExistingServiceButton();
 
     $this->drupalPost(NULL, $edit, t('Save'));
 
     // Retrieve the saved invoice by invoice number and return it.
-    $query = new EntityFieldQuery();
-    $query
-      ->entityCondition('entity_type', 'invoice')
-      ->entityCondition('bundle', 'invoice')
-      ->fieldCondition('field_invoice_number', 'value', $values['field_invoice_number'])
-      ->range(0, 1);
-    $result = $query->execute();
-    $iids = array_keys($result['invoice']);
-    $this->assertTrue($iids, 'Invoice was successfully created through the UI.');
+    $invoice = $this->loadInvoiceByNumber($values['field_invoice_number']);
+    $this->assertTrue($invoice, 'Invoice was successfully created through the UI.');
 
-    return invoice_load($iids[0]);
+    return $invoice;
   }
 
   /**

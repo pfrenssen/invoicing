@@ -249,6 +249,16 @@ trait InvoiceTestHelper {
    * @returns array
    *   An associative array of values, keyed by form field name, as used by
    *   parent::drupalPost().
+   *
+   * @throws Exception
+   *   Thrown if a value is given for field_invoice_client but this is not a
+   *   Client object.
+   * @throws Exception
+   *   Thrown when the value of a referenced service or product is not a
+   *   LineItem object.
+   * @throws Exception
+   *   Thrown one of the referenced line items does not have a supported bundle
+   *   type.
    */
   public function convertInvoiceValuesToFormPostValues($values) {
     // Prepare the input for the client entity reference field.

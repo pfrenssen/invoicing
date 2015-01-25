@@ -447,6 +447,9 @@ trait BaseTestHelper {
    *   The name of the entity that is referenced.
    * @param string $id
    *   The id of the entity that is referenced.
+   *
+   * @return string
+   *   The input for the entity reference autocomplete field.
    */
   public function entityReferenceFieldValue($name, $id) {
     // Prepare the field input the way entityreference expects it.

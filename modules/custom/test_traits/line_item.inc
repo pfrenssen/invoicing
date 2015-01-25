@@ -267,25 +267,21 @@ trait LineItemTestHelper {
   /**
    * Returns a newly created tax rate without saving it.
    *
-   * This is intended for unit tests. It will not set a business ID. If you are
-   * doing a functionality test use $this->createUiTaxRate() instead.
+   * This is intended for unit tests. If you are doing a functionality test use
+   * $this->createUiTaxRate() instead.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return object
+   * @return TaxRate
    *   A new tax rate object.
    */
   function createTaxRate(array $values = array()) {
-    // Provide some default values.
+    // Provide default values.
     $values += $this->randomTaxRateValues();
 
-    $tax_rate = new stdClass();
-    $tax_rate->name = $values['name'];
-    $tax_rate->rate = $values['rate'];
-
-    return $tax_rate;
+    return new TaxRate($values['bid'], $values['name'], $values['rate']);
   }
 
   /**

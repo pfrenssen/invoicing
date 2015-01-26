@@ -352,3 +352,40 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   drupal_set_message(t('The tax rate %name has been deleted.', array('%name' => $tax_rate->name)));
   $form_state['redirect'] = 'settings/tax-rates';
 }
+
+/**
+ * Menu callback for TaxRate autocomplete.
+ *
+ * @param string $string
+ *   The string containing the initial value to match with.
+ *
+ * @return object
+ *   The JSON object containing autocomplete values for existing TaxRate.
+ *
+ * @throws Exception
+ *   Thrown when the current user does not own any business.
+ */
+function line_item_tax_rate_autocomplete($string = '') {
+  $matches = array();
+
+  // Fetch businesses from current user.
+  if (!$bids = array_keys(business_get_businesses_from_user())) {
+    throw new Exception('Current user does not own any business.');
+  }
+
+  if (!empty($string)) {
+    $result = db_select('tax_rates')
+      ->fields('tax_rates', array('tid', 'rate'))
+      ->condition('rate', db_like($string) . '%', 'LIKE')
+      ->range(0, 10)
+      ->condition('bid', $bids, 'IN')
+      ->execute()
+      ->fetchAll();
+
+    foreach ($result as $tax_rate) {
+      $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
+    }
+  }
+
+  drupal_json_output($matches);
+}

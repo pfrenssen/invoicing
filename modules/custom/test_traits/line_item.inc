@@ -325,6 +325,9 @@ trait LineItemTestHelper {
     // Check that a success message is displayed.
     $this->assertRaw(t('New tax rate has been added.'));
 
+    // Check target Url after redirection.
+    $this->assertUrl('settings/tax-rates', array(), 'The user is redirected to the tax rates overview after adding a new tax rate.');
+
     // Retrieve the saved tax rate by ID number and return it.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')

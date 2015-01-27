@@ -220,6 +220,16 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     // Go to add invoice page.
     $this->drupalGet('invoice/add');
 
+    // Build an array of wrong tax rates.
+    $invalid_rates = array(
+      100.01,
+      -1,
+      -0.01,
+      'squirrel',
+      '75.00a',
+      "<script>alert('xss');</script>",
+    );
+
     // Test the tax rate field for both services and products.
     $expected_tax_rates = array();
     foreach (array('product', 'service') as $key => $line_item_type) {
@@ -232,6 +242,22 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
       // @todo Test the actual functionality once we have browser based testing.
       $query = '//input[@type="hidden" and @id="edit-field-invoice-' . $line_item_type . 's-und-form-field-line-item-tax-und-0-value-autocomplete" and contains(@class, "autocomplete")]';
       $this->assertXPathElements($query, 1, array(), 'The tax rates field is an autocomplete field.');
+
+      // Enter a woeful tax rates.
+      foreach ($invalid_rates as $invalid_rate) {
+        $edit = array(
+          'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $invalid_rate,
+        );
+        $submit_method = 'submitInline' . ucfirst($line_item_type) . 'Form';
+        $this->$submit_method($edit);
+
+        if (in_array($invalid_rate, array('squirrel', "<script>alert('xss');</script>"))) {
+          $this->assertText('Tax rate cannot be longer than 7 characters but is currently ' . strlen($invalid_rate) . ' characters long.', 'The tax rate was not correct.');
+        }
+        else {
+          $this->assertText('Tax rate should be between 0.00 and 100.00.', 'The tax rate was not correct.');
+        }
+      }
 
       // Enter one of our tax rates in the field.
       $tax_rate = $tax_rates[$key]->rate;

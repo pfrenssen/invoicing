@@ -557,7 +557,7 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
       '#default_value' => isset($items[$delta]) && is_numeric($items[$delta]['value']) ? $items[$delta]['value'] : '',
       '#description' => t('Tax rate percentage'),
       '#required' => FALSE,
-      '#element_validate' => array('line_item_add_tax_rate_validate'),
+      '#element_validate' => array('line_item_tax_rate_element_validate'),
     );
   }
 
@@ -751,7 +751,7 @@ function line_item_tax_rate_delete(TaxRate $tax_rate) {
 /**
  * Validate handler for the tax rate textfield in the line item form.
  */
-function line_item_add_tax_rate_validate($element, &$form_state, $form) {
+function line_item_tax_rate_element_validate($element, &$form_state, $form) {
   if (!empty($element['#value']) && (!is_numeric($element['#value']) || $element['#value'] < 0 || $element['#value'] > 100)) {
     form_error($element, t('Tax rate should be between 0.00 and 100.00.'));
   }

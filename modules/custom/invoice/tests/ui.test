@@ -243,7 +243,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
       $query = '//input[@type="hidden" and @id="edit-field-invoice-' . $line_item_type . 's-und-form-field-line-item-tax-und-0-value-autocomplete" and contains(@class, "autocomplete")]';
       $this->assertXPathElements($query, 1, array(), 'The tax rates field is an autocomplete field.');
 
-      // Enter a woeful tax rates.
+      // Enter woeful tax rates.
       foreach ($invalid_rates as $invalid_rate) {
         $edit = array(
           'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $invalid_rate,

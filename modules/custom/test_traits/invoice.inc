@@ -453,7 +453,7 @@ trait InvoiceTestHelper {
    */
   protected function clickButtonWithId($id, array $edit = array()) {
     // The button name contains an unpredictable hash. Retrieve it by ID.
-    $button_element = $this->xpath('//input[@id = "' . $id . '"]');
+    $button_element = $this->xpath('//input[contains(@id, "' . $id . '")]');
     $this->drupalPostAJAX(NULL, $edit, (string) $button_element[0]['name']);
   }
 

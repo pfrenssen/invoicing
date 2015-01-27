@@ -300,6 +300,7 @@ function line_item_edit_tax_rate_form_submit($form, &$form_state) {
     drupal_set_message(t('The tax rate could not be saved.'), 'error');
     watchdog('tax_rate', 'Tax rate could not be saved.', WATCHDOG_ERROR);
   }
+  $form_state['redirect'] = 'settings/tax-rates';
 }
 
 /**

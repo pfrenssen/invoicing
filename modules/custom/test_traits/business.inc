@@ -10,7 +10,7 @@ trait BusinessTestHelper {
   /**
    * Check if the properties of the given business match the given values.
    *
-   * @param business $business
+   * @param Business $business
    *   The Business entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -179,8 +179,6 @@ trait BusinessTestHelper {
   /**
    * Returns form post values from the given entity values.
    *
-   * @see self::randomBusinessValues()
-   *
    * @param array $values
    *   An associative array of business values, keyed by property name, as
    *   returned by self::randomBusinessValues().
@@ -188,8 +186,10 @@ trait BusinessTestHelper {
    * @returns array
    *   An associative array of values, keyed by form field name, as used by
    *   parent::drupalPost().
+   *
+   * @see self::randomBusinessValues()
    */
-  public function convertBusinessValuesToFormPostValues($values) {
+  public function convertBusinessValuesToFormPostValues(array $values) {
     return array(
       'name' => $values['name'],
       'field_business_email[und][0][email]' => $values['field_business_email'],
@@ -227,10 +227,10 @@ trait BusinessTestHelper {
    *
    * @param Business $business
    *   The business to add to the user.
-   * @param object $user
+   * @param \stdClass $user
    *   The user the business should be added to.
    */
-  function addBusinessToUser(Business $business, stdClass $user) {
+  function addBusinessToUser(Business $business, \stdClass $user) {
     business_add_to_user($business, $user);
   }
 
@@ -250,4 +250,5 @@ trait BusinessTestHelper {
 
     return business_load($bid);
   }
+
 }

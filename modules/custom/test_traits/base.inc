@@ -118,7 +118,7 @@ trait BaseTestHelper {
   function assertNoPager($message = '', $group = 'Other') {
     $message = $message ?: 'No pager is present on the page.';
     $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXPathElements($xpath, 0, array(), $message, $group);
+    return $this->assertXpathElements($xpath, 0, array(), $message, $group);
   }
 
   /**
@@ -135,7 +135,7 @@ trait BaseTestHelper {
   function assertPager($message = '', $group = 'Other') {
     $message = $message ?: 'A pager is present on the page.';
     $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXPathElements($xpath, 1, array(), $message, $group);
+    return $this->assertXpathElements($xpath, 1, array(), $message, $group);
   }
 
   /**
@@ -157,7 +157,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertStatusMessages($messages, $message = '', $group = 'Other') {
+  function assertStatusMessages(array $messages, $message = '', $group = 'Other') {
     // Messages can contain a mix of HTML and sanitized HTML, for example:
     // '<em class="placeholder">&lt;script&gt;alert();&lt;&#039;script&gt;</em>'
     // Unfortunately, check_plain() and SimpleXML::asXml() encode quotes and
@@ -212,13 +212,18 @@ trait BaseTestHelper {
    *
    * This will fail if any other messages are shown.
    *
-   * @param array $required_fields
-   *   An associative array of required fields, keyed on field name, with the
-   *   human readable name as value. For example:
-   *   array(
+   * Example:
+   * @code
+   *   $required_fields = array(
    *     'name' => t('Client name'),
    *     'field_client_email[und][0][email]' => t('Email address'),
    *   );
+   *   $this->assertRequiredFieldMessages($required_fields);
+   * @endcode
+   *
+   * @param array $required_fields
+   *   An associative array of required fields, keyed on field name, with the
+   *   human readable name as value.
    * @param array $messages
    *   An associative array of status messages that should be displayed, keyed
    *   by message type (either 'status', 'warning' or 'error'). Every type
@@ -232,7 +237,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertRequiredFieldMessages($required_fields, $messages = array(), $message = '', $group = 'Other') {
+  function assertRequiredFieldMessages(array $required_fields, $messages = array(), $message = '', $group = 'Other') {
     $success = TRUE;
 
     // Use the standard message of the Field module by default.
@@ -262,7 +267,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertXPathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
+  function assertXpathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
     // Provide a default message.
     $message = $message ?: format_plural($count, 'The element matching the XPath expression is present in the page.', 'The @count elements matching the XPath expression are present in the page.');
 
@@ -281,7 +286,7 @@ trait BaseTestHelper {
    * @return array
    *   The decoded array of status messages.
    */
-  function decodeStatusMessages($messages) {
+  function decodeStatusMessages(array $messages) {
     foreach (array_keys($messages) as $type) {
       foreach ($messages[$type] as $key => $encoded_message) {
         $messages[$type][$key] = html_entity_decode($encoded_message, ENT_QUOTES, 'UTF-8');

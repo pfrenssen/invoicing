@@ -2,12 +2,15 @@
 
 /**
  * @file
- * Tests the client overview.
+ * Contains \ClientOverviewTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'client');
 
+/**
+ * Tests the client overview.
+ */
 class ClientOverviewTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

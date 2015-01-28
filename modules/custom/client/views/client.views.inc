@@ -2,9 +2,7 @@
 
 /**
  * @file
- * This file handles views api definitions.
- * We describe the table to Views module
- * as well as other necessary stuff to integrate
+ * Views integration for the Client module.
  */
 
 /**

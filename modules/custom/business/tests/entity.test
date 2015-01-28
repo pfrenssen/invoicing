@@ -2,12 +2,15 @@
 
 /**
  * @file
- * Tests for the Business entity.
+ * Contains \BusinessEntityTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
+/**
+ * Tests for the Business entity.
+ */
 class BusinessEntityTestCase extends EntityTestCase {
 
   use BaseTestHelper;
@@ -90,7 +93,7 @@ class BusinessEntityTestCase extends EntityTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
     return $properties;
   }
 

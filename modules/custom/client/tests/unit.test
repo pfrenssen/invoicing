@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Unit tests for the Client module.
+ * Contains \ClientUnitTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
@@ -11,6 +11,9 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Unit tests for the Client module.
+ */
 class ClientUnitTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

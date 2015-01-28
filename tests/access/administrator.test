@@ -2,9 +2,13 @@
 
 /**
  * @file
- * Access and permission tests for the 'administrator' role.
+ * Contains \AdministratorPathAccessTestCase.
  */
 
+/**
+ * @file
+ * Access and permission tests for the 'administrator' role.
+ */
 class AdministratorPathAccessTestCase extends AccessWebTestCase {
 
   /**

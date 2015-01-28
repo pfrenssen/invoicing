@@ -2,13 +2,16 @@
 
 /**
  * @file
- * Unit tests for the Line item module.
+ * Contains \LineItemUnitTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Unit tests for the Line item module.
+ */
 class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

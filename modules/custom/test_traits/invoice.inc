@@ -229,8 +229,6 @@ trait InvoiceTestHelper {
   /**
    * Returns form post values from the given entity values.
    *
-   * @see self::randomInvoiceValues()
-   *
    * @param array $values
    *   An associative array of invoice values, keyed by property name, as
    *   returned by self::randomInvoiceValues(). For the entity references
@@ -241,14 +239,14 @@ trait InvoiceTestHelper {
    *   parent::drupalPost().
    *
    * @throws Exception
-   *   Thrown if a value is given for field_invoice_client but this is not a
-   *   Client object.
-   * @throws Exception
-   *   Thrown when the value of a referenced service or product is not a
-   *   LineItem object.
-   * @throws Exception
-   *   Thrown one of the referenced line items does not have a supported bundle
-   *   type.
+   *   - Thrown if a value is given for field_invoice_client but this is not a
+   *     Client object.
+   *   - Thrown when the value of a referenced service or product is not a
+   *     LineItem object.
+   *   - Thrown one of the referenced line items does not have a supported
+   *     bundle type.
+   *
+   * @see self::randomInvoiceValues()
    */
   public function convertInvoiceValuesToFormPostValues(array $values) {
     // Prepare the input for the client entity reference field.

@@ -225,8 +225,6 @@ trait ClientTestHelper {
   /**
    * Returns form post values from the given entity values.
    *
-   * @see self::randomClientValues()
-   *
    * @param array $values
    *   An associative array of client values, keyed by property name, as
    *   returned by self::randomClientValues().
@@ -234,8 +232,10 @@ trait ClientTestHelper {
    * @returns array
    *   An associative array of values, keyed by form field name, as used by
    *   parent::drupalPost().
+   *
+   * @see self::randomClientValues()
    */
-  public function convertClientValuesToFormPostValues($values) {
+  public function convertClientValuesToFormPostValues(array $values) {
     return array(
       'name' => $values['name'],
       'field_client_email[und][0][email]' => $values['field_client_email'],
@@ -288,4 +288,5 @@ trait ClientTestHelper {
 
     return client_load($cid);
   }
+
 }

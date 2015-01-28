@@ -2,9 +2,12 @@
 
 /**
  * @file
- * Access and permission tests for the 'client' role.
+ * Contains \ClientPathAccessTestCase.
  */
 
+/**
+ * Access and permission tests for the 'client' role.
+ */
 class ClientPathAccessTestCase extends AccessWebTestCase {
 
   /**

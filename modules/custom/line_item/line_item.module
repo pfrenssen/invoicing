@@ -124,17 +124,17 @@ function line_item_entity_property_info_alter(&$info) {
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
- * @param object $line_item
+ * @param LineItem $line_item
  *   Optionally a line item to check access for. If nothing is given, access for
  *   all line items is determined.
- * @param object $account
+ * @param \stdClass $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_access($op, $line_item = NULL, $account = NULL) {
+function line_item_access($op, LineItem $line_item = NULL, \stdClass $account = NULL) {
   if (user_access('administer line items', $account)) {
     return TRUE;
   }
@@ -311,17 +311,17 @@ function line_item_delete_multiple(array $lids) {
 /**
  * Composes the label of a line item.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param \stdClass $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function line_item_label($entity, $entity_type) {
+function line_item_label(\stdClass $entity, $entity_type) {
   return $entity->lid;
 }
 
@@ -370,9 +370,6 @@ function line_item_load($lid, $reset = FALSE) {
  * item from the database. Line items are loaded into memory and will not
  * require database access if loaded again during the same page request.
  *
- * @see entity_load()
- * @see EntityFieldQuery
- *
  * @param array $lids
  *   An array of line item IDs.
  * @param bool $reset
@@ -380,6 +377,9 @@ function line_item_load($lid, $reset = FALSE) {
  *
  * @return array
  *   An array of line item objects indexed by lid.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
  */
 function line_item_load_multiple($lids = array(), $reset = FALSE) {
   return entity_load('line_item', $lids, array(), $reset);
@@ -414,17 +414,17 @@ function line_item_type_create($type, $name) {
 /**
  * Composes the label of a line item type.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param \stdClass $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function line_item_type_label($entity, $entity_type) {
+function line_item_type_label(\stdClass $entity, $entity_type) {
   // If the entity type is being created it does not have a name yet.
   if (empty($entity->is_new)) {
     return $entity->name;
@@ -437,13 +437,13 @@ function line_item_type_label($entity, $entity_type) {
  *
  * @param LineItem $line_item
  *   The line item to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the line item is owned by the user, FALSE otherwise.
  */
-function line_item_is_owned_by_user(LineItem $line_item, stdClass $account = NULL) {
+function line_item_is_owned_by_user(LineItem $line_item, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -682,13 +682,13 @@ function line_item_tax_rate_save(TaxRate $tax_rate) {
  *
  * @param TaxRate $tax_rate
  *   The tax rate to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the tax rate is owned by the user, FALSE otherwise.
  */
-function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $account = NULL) {
+function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -704,14 +704,14 @@ function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $accoun
  * @param TaxRate $tax_rate
  *   Optionally a tax rate to check access for. If nothing is given, access for
  *   all tax rates is determined.
- * @param object $account
+ * @param \stdClass $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, stdClass $account = NULL) {
+function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, \stdClass $account = NULL) {
   if (user_access('administer tax rates', $account)) {
     return TRUE;
   }
@@ -901,4 +901,5 @@ class TaxRate {
   public function __isset($property) {
     return $this->{$property} !== NULL;
   }
+
 }

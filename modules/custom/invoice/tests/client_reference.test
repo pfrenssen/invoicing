@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Tests the referencing of clients in invoices.
+ * Contains \InvoiceClientReferenceTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
@@ -11,6 +11,9 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Tests the referencing of clients in invoices.
+ */
 class InvoiceClientReferenceTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

@@ -2,12 +2,15 @@
 
 /**
  * @file
- * CRUD tests for the Line item module.
+ * Contains \LineItemCRUDTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * CRUD tests for the Line item module.
+ */
 class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
@@ -43,7 +46,7 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests creating, reading, updating and deleting of line items.
    */
-  public function testLineItemCRUD() {
+  public function testLineItemCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('line_item'), 'The line_item database table exists.');
     $this->assertLineItemTableEmpty('The line item database is initially empty.');
@@ -74,7 +77,7 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests creating, reading, updating and deleting of tax rates.
    */
-  public function testTaxRateCRUD() {
+  public function testTaxRateCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('tax_rates'), 'The tax_rates database table exists.');
     $this->assertTaxRatesTableEmpty('The tax rates database is initially empty.');

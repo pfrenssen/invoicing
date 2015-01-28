@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Access and permission tests for the 'authenticated user' role.
+ * Contains \AuthenticatedUserPathAccessTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
@@ -11,6 +11,9 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Access and permission tests for the 'authenticated user' role.
+ */
 class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
 
   use BaseTestHelper;
@@ -150,4 +153,5 @@ class AuthenticatedUserPathAccessTestCase extends AccessWebTestCase {
     $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier() . '/edit';
     $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier() . '/delete';
   }
+
 }

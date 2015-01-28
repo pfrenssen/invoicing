@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Access and permission tests for the 'business owner' role.
+ * Contains \BusinessOwnerPathAccessTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
@@ -11,6 +11,9 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Access and permission tests for the 'business owner' role.
+ */
 class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
   use BaseTestHelper;

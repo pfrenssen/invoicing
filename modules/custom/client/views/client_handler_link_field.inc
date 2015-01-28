@@ -78,13 +78,13 @@ class client_handler_link_field extends views_handler_field {
    *
    * @param Client $client
    *   The client for which to render the link.
-   * @param array $values
+   * @param \stdClass $values
    *   The values retrieved from the database.
    *
    * @return string
    *   The rendered link.
    */
-  public function render_link($client, $values) {
+  public function render_link(Client $client, \stdClass $values) {
     if (client_access('view', $client)) {
       $this->options['alter']['make_link'] = TRUE;
       $this->options['alter']['path'] = "client/$client->cid";

@@ -316,8 +316,6 @@ function invoice_type_get_names() {
 /**
  * Composes the label of an invoice type.
  *
- * @see entity_label()
- *
  * @param object $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
@@ -325,6 +323,8 @@ function invoice_type_get_names() {
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
 function invoice_type_label($entity, $entity_type) {
   // If the entity type is being created it does not have a name yet.
@@ -373,8 +373,6 @@ function invoice_delete_multiple(array $iids) {
 /**
  * Composes the label of an Invoice.
  *
- * @see entity_label()
- *
  * @param object $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
@@ -382,6 +380,8 @@ function invoice_delete_multiple(array $iids) {
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
 function invoice_label($entity, $entity_type) {
   return $entity->iid;
@@ -432,9 +432,6 @@ function invoice_load($iid, $reset = FALSE) {
  * from the database. Invoices are loaded into memory and will not require
  * database access if loaded again during the same page request.
  *
- * @see entity_load()
- * @see EntityFieldQuery
- *
  * @param array $iids
  *   An array of invoice IDs.
  * @param bool $reset
@@ -442,6 +439,9 @@ function invoice_load($iid, $reset = FALSE) {
  *
  * @return array
  *   An array of invoice objects indexed by iid.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
  */
 function invoice_load_multiple($iids = array(), $reset = FALSE) {
   return entity_load('invoice', $iids, array(), $reset);
@@ -490,13 +490,13 @@ function invoice_entity_metadata_get_properties(Invoice $invoice, array $options
  *
  * @param Invoice $invoice
  *   The invoice to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the invoice is owned by the user, FALSE otherwise.
  */
-function invoice_is_owned_by_user(Invoice $invoice, stdClass $account = NULL) {
+function invoice_is_owned_by_user(Invoice $invoice, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;

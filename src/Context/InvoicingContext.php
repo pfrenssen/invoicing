@@ -9,16 +9,16 @@ namespace Drupal\invoicing\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterUserCreateScope;
-
-require_once('modules/custom/test_traits/base.inc');
-require_once('modules/custom/test_traits/business.inc');
+use Drupal\invoicing\Traits\BaseTestHelper;
+use Drupal\invoicing\Traits\BusinessTestHelper;
 
 /**
  * Generic methods and step definitions for the Invoicing platform.
  */
 class InvoicingContext extends RawDrupalContext {
-  use \BaseTestHelper;
-  use \BusinessTestHelper;
+
+  use BaseTestHelper;
+  use BusinessTestHelper;
 
   /**
    * When a business owner is created, create a business for it.

@@ -1,19 +1,12 @@
 {
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "drupal/coder",
-                "version": "2",
-                "dist": {
-                    "url": "http://ftp.drupal.org/files/projects/coder-7.x-2.x-dev.zip",
-                    "type": "zip"
-                }
-            }
-        }
-    ],
     "require": {
-        "squizlabs/php_codesniffer": ">=1.5.3",
-        "drupal/coder": "~2"
+        "behat/behat": "3.0.*@stable",
+        "drupal/coder": "~8.2.0",
+        "drupal/drupal-extension": "~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Drupal\\invoicing\\": "src"
+        }
     }
 }

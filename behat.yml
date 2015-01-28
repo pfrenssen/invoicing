@@ -4,6 +4,7 @@ default:
       contexts:
         - FeatureContext
         - Drupal\invoicing\Context\DrupalContext
+        - Drupal\invoicing\Context\InvoicingContext
         - Drupal\DrupalExtension\Context\DrushContext
         - Drupal\DrupalExtension\Context\MessageContext
         - Drupal\DrupalExtension\Context\MinkContext

@@ -473,4 +473,36 @@ trait BaseTestHelper {
     return $value;
   }
 
+  /**
+   * Generates a random string containing letters and numbers.
+   *
+   * This is a duplicate of DrupalWebTestCase::randomName(). It is provided here
+   * so it can be used in Behat tests.
+   *
+   * The string will always start with a letter. The letters may be upper or
+   * lower case. This method is better for restricted inputs that do not
+   * accept certain characters. For example, when testing input fields that
+   * require machine readable values (i.e. without spaces and non-standard
+   * characters) this method is best.
+   *
+   * Do not use this method when testing unvalidated user input. Instead, use
+   * DrupalWebTestCase::randomString().
+   *
+   * @param int $length
+   *   Length of random string to generate.
+   *
+   * @return string
+   *   Randomly generated string.
+   *
+   * @see DrupalWebTestCase::randomString()
+   */
+  public static function randomName($length = 8) {
+    $values = array_merge(range(65, 90), range(97, 122), range(48, 57));
+    $max = count($values) - 1;
+    $str = chr(mt_rand(97, 122));
+    for ($i = 1; $i < $length; $i++) {
+      $str .= chr($values[mt_rand(0, $max)]);
+    }
+    return $str;
+  }
 }

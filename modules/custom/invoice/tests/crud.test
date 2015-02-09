@@ -2,7 +2,7 @@
 
 /**
  * @file
- * CRUD tests for the Invoice module.
+ * Contains \InvoiceCRUDTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
@@ -11,6 +11,9 @@ module_load_include('inc', 'test_traits', 'client');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * CRUD tests for the Invoice module.
+ */
 class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
@@ -71,7 +74,7 @@ class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests creating, reading, updating and deleting of invoices.
    */
-  public function testInvoiceCRUD() {
+  public function testInvoiceCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('invoice'), 'The invoice database table exists.');
     $this->assertInvoiceTableEmpty('The invoice database is initially empty.');

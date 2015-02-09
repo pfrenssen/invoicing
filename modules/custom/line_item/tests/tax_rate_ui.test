@@ -2,12 +2,15 @@
 
 /**
  * @file
- * Tests the tax rate user interface.
+ * Contains \TaxRateUITestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Tests the tax rate user interface.
+ */
 class TaxRateUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

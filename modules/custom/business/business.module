@@ -267,17 +267,17 @@ function business_ctools_plugin_directory($module, $plugin) {
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
- * @param object $business
+ * @param Business|\stdClass $business
  *   Optionally a business or a business type to check access for. If nothing is
  *   given, access for all businesses is determined.
- * @param object $account
+ * @param \stdClass $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function business_access($op, $business = NULL, $account = NULL) {
+function business_access($op, $business = NULL, \stdClass $account = NULL) {
   global $user;
 
   // Users with the 'administer businesses' permission always have access.
@@ -364,17 +364,17 @@ function business_type_get_names() {
 /**
  * Composes the label of a business type.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param \stdClass $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function business_type_label($entity, $entity_type) {
+function business_type_label(\stdClass $entity, $entity_type) {
   // If the entity type is being created it does not have a name yet.
   if (empty($entity->is_new)) {
     return $entity->name;
@@ -389,9 +389,6 @@ function business_type_label($entity, $entity_type) {
  * from the database. businesses are loaded into memory and will not require
  * database access if loaded again during the same page request.
  *
- * @see entity_load()
- * @see EntityFieldQuery
- *
  * @param array $bids
  *   An array of business IDs.
  * @param bool $reset
@@ -399,8 +396,11 @@ function business_type_label($entity, $entity_type) {
  *
  * @return array
  *   An array of business objects indexed by bid.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
  */
-function business_load_multiple($bids = array(), $reset = FALSE) {
+function business_load_multiple(array $bids = array(), $reset = FALSE) {
   return entity_load('business', $bids, array(), $reset);
 }
 
@@ -498,7 +498,7 @@ function business_uri(Business $business) {
  *
  * @see business_menu()
  */
-function business_page_title($business) {
+function business_page_title(Business $business) {
   return $business->name;
 }
 
@@ -559,7 +559,7 @@ function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 /**
  * Get the businesses from a specific user, defaults to the logged in user.
  *
- * @param object $account
+ * @param \stdClass $account
  *   The account of the user to get the businesses for. If omitted, the logged
  *   in user will be used.
  * @param bool $reset
@@ -569,7 +569,7 @@ function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  *   An array with all the business id's linked to this user, FALSE if none
  *   found.
  */
-function business_get_businesses_from_user(stdClass $account = NULL, $reset = FALSE) {
+function business_get_businesses_from_user(\stdClass $account = NULL, $reset = FALSE) {
   global $user;
 
   // Default to the logged in user.
@@ -610,13 +610,13 @@ function business_get_active_business() {
  *
  * @param Business $business
  *   The business to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the business is owned by the user, FALSE otherwise.
  */
-function business_is_owned_by_user(Business $business, stdClass $account = NULL) {
+function business_is_owned_by_user(Business $business, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -629,10 +629,10 @@ function business_is_owned_by_user(Business $business, stdClass $account = NULL)
  *
  * @param Business $business
  *   The business to add to the user.
- * @param object $account
+ * @param \stdClass $account
  *   The user account the business should be added to.
  */
-function business_add_to_user(Business $business, stdClass $account) {
+function business_add_to_user(Business $business, \stdClass $account) {
   $account->field_user_businesses[LANGUAGE_NONE][]['target_id'] = $business->identifier();
   user_save($account);
 }
@@ -640,17 +640,17 @@ function business_add_to_user(Business $business, stdClass $account) {
 /**
  * Composes the label of a business.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param Business $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function business_label($entity, $entity_type) {
+function business_label(Business $entity, $entity_type) {
   return $entity->name;
 }
 

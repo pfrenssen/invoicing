@@ -2,13 +2,16 @@
 
 /**
  * @file
- * Tests for the Client entity.
+ * Contains \ClientEntityTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 module_load_include('inc', 'test_traits', 'client');
 
+/**
+ * Tests for the Client entity.
+ */
 class ClientEntityTestCase extends EntityTestCase {
 
   use BaseTestHelper;
@@ -92,7 +95,7 @@ class ClientEntityTestCase extends EntityTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
     // Convert the bid into a full Business object.
     $properties['bid'] = business_load($properties['bid']);
 

@@ -2,11 +2,14 @@
 
 /**
  * @file
- * Tests the user registration form.
+ * Contains \InvoicingRegistrationFormTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 
+/**
+ * Tests the user registration form.
+ */
 class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

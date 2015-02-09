@@ -2,13 +2,16 @@
 
 /**
  * @file
- * Tests the invoice overview.
+ * Contains \InvoiceOverviewTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Tests the invoice overview.
+ */
 class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;
@@ -23,7 +26,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
   protected $businesses;
 
   /**
-   * Test clients
+   * Test clients.
    *
    * @var Client[]
    */

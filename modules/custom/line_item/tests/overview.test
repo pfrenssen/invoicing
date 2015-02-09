@@ -2,12 +2,15 @@
 
 /**
  * @file
- * Tests the tax rate overview.
+ * Contains \TaxRatesOverviewTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Tests the tax rate overview.
+ */
 class TaxRatesOverviewTestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

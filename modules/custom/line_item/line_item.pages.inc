@@ -22,13 +22,13 @@ function line_item_type_add_page() {
 /**
  * Page callback: Returns the line item add/edit form to add a new line item.
  *
- * @see line_item_edit_form()
- *
  * @param object $line_item_type
  *   The type of line_item to create.
  *
  * @return array
  *   The line item add/edit form render array.
+ *
+ * @see line_item_edit_form()
  */
 function line_item_add_page($line_item_type) {
   $line_item = entity_create('line_item', array('type' => $line_item_type->type));
@@ -39,13 +39,13 @@ function line_item_add_page($line_item_type) {
 /**
  * Page callback: Returns the add/edit form to edit an existing line item.
  *
- * @see line_item_edit_form()
- *
  * @param LineItem $line_item
  *   The line item to edit.
  *
  * @return array
  *   The line item add/edit form render array.
+ *
+ * @see line_item_edit_form()
  */
 function line_item_edit_page(LineItem $line_item) {
   drupal_set_title(t('Edit line item'));
@@ -324,10 +324,10 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
 /**
  * Form constructor for the tax rate deletion confirmation form.
  *
- * @see tax_rate_delete_confirm_form_submit()
- *
  * @param TaxRate $tax_rate
  *   The tax rate that needs to be deleted.
+ *
+ * @see tax_rate_delete_confirm_form_submit()
  */
 function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
@@ -359,9 +359,6 @@ function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
  *
  * @param string $string
  *   The string containing the initial value to match with.
- *
- * @return object
- *   The JSON object containing autocomplete values for existing TaxRate.
  *
  * @throws Exception
  *   Thrown when the current user does not own any business.

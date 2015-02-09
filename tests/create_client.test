@@ -2,9 +2,12 @@
 
 /**
  * @file
- * Tests the creation of clients through the UI.
+ * Contains \InvoicingCreateClientTestCase.
  */
 
+/**
+ * Tests the creation of clients through the UI.
+ */
 class InvoicingCreateClientTestCase extends InvoicingIntegrationTestCase {
 
   /**

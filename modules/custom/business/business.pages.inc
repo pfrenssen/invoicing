@@ -8,13 +8,13 @@
 /**
  * Page callback: Returns the business add/edit form to add a new business.
  *
- * @see business_edit_form()
- *
  * @param object $business_type
  *   The type of business to create.
  *
  * @return array
  *   The business add/edit form render array.
+ *
+ * @see business_edit_form()
  */
 function business_add_page($business_type) {
   $business = entity_create('business', array('type' => $business_type->type));
@@ -25,13 +25,13 @@ function business_add_page($business_type) {
 /**
  * Page callback: Returns the add/edit form to edit an existing business.
  *
- * @see business_edit_form()
- *
- * @param object $business
+ * @param Business $business
  *   The business to edit.
  *
  * @return array
  *   The business add/edit form render array.
+ *
+ * @see business_edit_form()
  */
 function business_edit_page(Business $business) {
   drupal_set_title(t('Edit business %business', array('%business' => $business->name)), PASS_THROUGH);

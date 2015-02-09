@@ -2,12 +2,15 @@
 
 /**
  * @file
- * CRUD tests for the Business module.
+ * Contains \BusinessCRUDTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'business');
 
+/**
+ * CRUD tests for the Business module.
+ */
 class BusinessCRUDTestCase extends InvoicingIntegrationTestCase {
   use BaseTestHelper;
   use BusinessTestHelper;
@@ -31,7 +34,7 @@ class BusinessCRUDTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests creating, reading, updating and deleting of businesses.
    */
-  public function testBusinessCRUD() {
+  public function testBusinessCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('business'), 'The business database table exists.');
     $this->assertBusinessTableEmpty('The business database is initially empty.');

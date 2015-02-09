@@ -2,13 +2,16 @@
 
 /**
  * @file
- * Tests for the Invoice entity.
+ * Contains \InvoiceEntityTestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 module_load_include('inc', 'test_traits', 'invoice');
 module_load_include('inc', 'test_traits', 'line_item');
 
+/**
+ * Tests for the Invoice entity.
+ */
 class InvoiceEntityTestCase extends EntityTestCase {
 
   use BaseTestHelper;
@@ -107,7 +110,7 @@ class InvoiceEntityTestCase extends EntityTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
     // Convert the bid into a full Business object.
     $properties['bid'] = business_load($properties['bid']);
 

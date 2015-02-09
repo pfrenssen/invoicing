@@ -293,10 +293,11 @@ trait LineItemTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertTaxRateProperties($tax_rate, array $values, $message = '', $group = 'Other') {
-    $this->assertEqual($values['bid'], $tax_rate->bid);
-    $this->assertEqual($values['name'], $tax_rate->name);
-    $this->assertEqual($values['rate'], $tax_rate->rate);
+  function assertTaxRateProperties(TaxRate $tax_rate, array $values, $message = '', $group = 'Other') {
+    $result = TRUE;
+    $result &= $this->assertEqual($values['bid'], $tax_rate->bid);
+    $result &= $this->assertEqual($values['name'], $tax_rate->name);
+    return $result &= $this->assertEqual($values['rate'], $tax_rate->rate);
   }
 
   /**
@@ -409,4 +410,5 @@ trait LineItemTestHelper {
     // Verify that the tax rate has been deleted from the database.
     $this->assertFalse(count($result), 'Tax rate was successfully deleted from the database through the UI.');
   }
+
 }

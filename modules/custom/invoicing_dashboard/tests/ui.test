@@ -2,11 +2,14 @@
 
 /**
  * @file
- * UI tests for the Invoicing dashboard module.
+ * Contains \InvoicingDashboardUITestCase.
  */
 
 module_load_include('inc', 'test_traits', 'base');
 
+/**
+ * UI tests for the Invoicing dashboard module.
+ */
 class InvoicingDashboardUITestCase extends InvoicingIntegrationTestCase {
 
   use BaseTestHelper;

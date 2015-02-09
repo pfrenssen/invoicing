@@ -5,11 +5,13 @@
  * Contains \ClientUnitTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'client');
-module_load_include('inc', 'test_traits', 'invoice');
-module_load_include('inc', 'test_traits', 'line_item');
+use Drupal\invoicing\Traits\BaseTestHelper;
+use Drupal\invoicing\Traits\BusinessTestHelper;
+use Drupal\invoicing\Traits\ClientTestHelper;
+use Drupal\invoicing\Traits\InvoiceTestHelper;
+use Drupal\invoicing\Traits\LineItemTestHelper;
+
+invoicing_core_autoload();
 
 /**
  * Unit tests for the Client module.

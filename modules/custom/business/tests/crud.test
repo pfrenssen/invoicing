@@ -5,15 +5,15 @@
  * Contains \BusinessCRUDTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
+invoicing_core_autoload();
 
 /**
  * CRUD tests for the Business module.
  */
 class BusinessCRUDTestCase extends InvoicingIntegrationTestCase {
-  use BaseTestHelper;
-  use BusinessTestHelper;
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
 
   /**
    * {@inheritdoc}

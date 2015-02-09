@@ -5,10 +5,7 @@
  * Contains \InvoicingIntegrationTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'client');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
 /**
  * @file
@@ -16,10 +13,10 @@ module_load_include('inc', 'test_traits', 'line_item');
  */
 class InvoicingIntegrationTestCase extends InvoicingWebTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
-  use ClientTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * {@inheritdoc}

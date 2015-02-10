@@ -5,16 +5,15 @@
  * Contains \TaxRateUITestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
 /**
  * Tests the tax rate user interface.
  */
 class TaxRateUITestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * {@inheritdoc}

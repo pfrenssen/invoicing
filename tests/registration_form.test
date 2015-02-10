@@ -5,14 +5,14 @@
  * Contains \InvoicingRegistrationFormTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
+invoicing_core_autoload();
 
 /**
  * Tests the user registration form.
  */
 class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
 
   /**
    * Returns test case metadata.

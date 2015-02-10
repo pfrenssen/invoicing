@@ -5,12 +5,14 @@
  * Asserts and helper methods concerning the invoice module.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait InvoiceTestHelper {
 
   /**
    * Check if the properties of the given invoice match the given values.
    *
-   * @param Invoice $invoice
+   * @param \Invoice $invoice
    *   The Invoice entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -22,7 +24,7 @@ trait InvoiceTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  public function assertInvoiceProperties(Invoice $invoice, array $values, $message = '', $group = 'Other') {
+  public function assertInvoiceProperties(\Invoice $invoice, array $values, $message = '', $group = 'Other') {
     return $this->assertEntityProperties('invoice', $invoice, $values, $message, $group);
   }
 
@@ -68,7 +70,7 @@ trait InvoiceTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return Invoice
+   * @return \Invoice
    *   A new invoice entity.
    */
   public function createInvoice(array $values = array()) {
@@ -89,7 +91,7 @@ trait InvoiceTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return Invoice
+   * @return \Invoice
    *   A new invoice entity.
    */
   public function createUiInvoice(array $values = array()) {
@@ -234,11 +236,11 @@ trait InvoiceTestHelper {
    *   returned by self::randomInvoiceValues(). For the entity references
    *   (the client, products and services), pass full Entity objects.
    *
-   * @returns array
+   * @return array
    *   An associative array of values, keyed by form field name, as used by
    *   parent::drupalPost().
    *
-   * @throws Exception
+   * @throws \Exception
    *   - Thrown if a value is given for field_invoice_client but this is not a
    *     Client object.
    *   - Thrown when the value of a referenced service or product is not a
@@ -253,8 +255,8 @@ trait InvoiceTestHelper {
     // @todo Support creating a new client as well as referencing an existing
     //   one.
     if (!empty($values['field_invoice_client'])) {
-      if (!$values['field_invoice_client'] instanceof Client) {
-        throw new Exception('The value for field_invoice_client should be an instance of Client.');
+      if (!$values['field_invoice_client'] instanceof \Client) {
+        throw new \Exception('The value for field_invoice_client should be an instance of Client.');
       }
       $values['field_invoice_client'] = $this->entityReferenceFieldValue($values['field_invoice_client']->name, $values['field_invoice_client']->identifier());
     }
@@ -266,13 +268,13 @@ trait InvoiceTestHelper {
     $line_items = array();
     foreach (array_keys($this->getLineItemTypes()) as $type) {
       if (!empty($values["field_invoice_${type}s"])) {
-        /* @var $line_item LineItem */
+        /* @var $line_item \LineItem */
         $line_item = reset($values["field_invoice_${type}s"]);
-        if (!$line_item instanceof LineItem) {
-          throw new Exception("The values for field_invoice_${type}s should be instances of LineItem.");
+        if (!$line_item instanceof \LineItem) {
+          throw new \Exception("The values for field_invoice_${type}s should be instances of LineItem.");
         }
         if ($line_item->bundle() != $type) {
-          throw new Exception("The values for field_invoice_${type}s should have the '$type' bundle.");
+          throw new \Exception("The values for field_invoice_${type}s should have the '$type' bundle.");
         }
         $line_items[$type] = $this->entityReferenceFieldValue($line_item->identifier(), $line_item->identifier());
       }
@@ -302,11 +304,11 @@ trait InvoiceTestHelper {
    * @param bool $reset
    *   Whether to reset the static cache.
    *
-   * @return Invoice
+   * @return \Invoice
    *   The desired invoice.
    */
   public function loadInvoiceByNumber($invoice_number, $reset = FALSE) {
-    $query = new EntityFieldQuery();
+    $query = new \EntityFieldQuery();
     $query
       ->entityCondition('entity_type', 'invoice')
       ->entityCondition('bundle', 'invoice')
@@ -321,13 +323,13 @@ trait InvoiceTestHelper {
   /**
    * Updates the given invoice with the given properties.
    *
-   * @param Invoice $invoice
+   * @param \Invoice $invoice
    *   The invoice entity to update.
    * @param array $values
    *   An associative array of values to apply to the entity, keyed by property
    *   name.
    */
-  public function updateInvoice(Invoice $invoice, array $values) {
+  public function updateInvoice(\Invoice $invoice, array $values) {
     $wrapper = entity_metadata_wrapper('invoice', $invoice);
     foreach ($values as $property => $value) {
       $wrapper->$property->set($value);
@@ -344,7 +346,7 @@ trait InvoiceTestHelper {
    *   The client to add to the invoice. If omitted a random client will be
    *   used.
    */
-  public function addExistingClientToUiInvoice(Client $client = NULL) {
+  public function addExistingClientToUiInvoice(\Client $client = NULL) {
     // Default to a random client.
     $client = $client ?: $this->randomClient();
 

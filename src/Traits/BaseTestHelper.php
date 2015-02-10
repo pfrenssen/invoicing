@@ -5,6 +5,8 @@
  * Asserts and helper methods to use in testing.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait BaseTestHelper {
 
   /**
@@ -51,7 +53,7 @@ trait BaseTestHelper {
    *
    * @param string $entity_type
    *   The type of the entity.
-   * @param Entity $entity
+   * @param \Entity $entity
    *   The entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -63,7 +65,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertEntityProperties($entity_type, Entity $entity, array $values, $message = '', $group = 'Other') {
+  function assertEntityProperties($entity_type, \Entity $entity, array $values, $message = '', $group = 'Other') {
     $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
     $result = TRUE;
@@ -327,7 +329,7 @@ trait BaseTestHelper {
         // While this is valid HTML, it is invalid XML, so this can't be parsed
         // with XPath. We can turn it into valid XML again by removing the
         // accessibility element using DOMDocument.
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
 
         // Load the messges HTML using UTF-8 encoding.
         @$dom->loadHTML('<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>' . $messages[0]->asXml() . '</body></html>');
@@ -338,7 +340,7 @@ trait BaseTestHelper {
         // We have valid XML now, so we can use XPath to find the messages. If
         // there are multiple messages, they are output in an unordered list. A
         // single message is output directly in the <div> container.
-        $xpath = new DOMXPath($dom);
+        $xpath = new \DOMXPath($dom);
         $elements = $xpath->query('//body/div/ul/li');
         if (!$elements->length) {
           $elements = $xpath->query('//body/div');

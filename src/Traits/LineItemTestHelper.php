@@ -5,12 +5,14 @@
  * Asserts and helper methods concerning the line item module.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait LineItemTestHelper {
 
   /**
    * Check if the properties of the given line item match the given values.
    *
-   * @param LineItem $line_item
+   * @param \LineItem $line_item
    *   The line item entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -22,7 +24,7 @@ trait LineItemTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertLineItemProperties(LineItem $line_item, array $values, $message = '', $group = 'Other') {
+  function assertLineItemProperties(\LineItem $line_item, array $values, $message = '', $group = 'Other') {
     if (isset($values['type'])) {
       unset($values['type']);
     }
@@ -79,7 +81,7 @@ trait LineItemTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return LineItem
+   * @return \LineItem
    *   A new line item entity.
    */
   function createLineItem($type = NULL, array $values = array()) {
@@ -155,7 +157,7 @@ trait LineItemTestHelper {
   /**
    * Generate a random decimal number.
    *
-   * @return decimal
+   * @return string
    *   A random generated decimal number.
    */
   function randomDecimal() {
@@ -165,13 +167,13 @@ trait LineItemTestHelper {
   /**
    * Updates the given line item with the given properties.
    *
-   * @param LineItem $line_item
+   * @param \LineItem $line_item
    *   The line item entity to update.
    * @param array $values
    *   An associative array of values to apply to the entity, keyed by property
    *   name.
    */
-  function updateLineItem(LineItem $line_item, array $values) {
+  function updateLineItem(\LineItem $line_item, array $values) {
     unset($values['type']);
     $wrapper = entity_metadata_wrapper('line_item', $line_item);
     foreach ($values as $property => $value) {
@@ -185,7 +187,7 @@ trait LineItemTestHelper {
    * @param string $type
    *   Optional line item type. Either 'product' or 'service'.
    *
-   * @return LineItem
+   * @return \LineItem
    *   A random line item.
    */
   function randomLineItem($type = NULL) {
@@ -268,20 +270,20 @@ trait LineItemTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return TaxRate
+   * @return \TaxRate
    *   A new tax rate object.
    */
   function createTaxRate(array $values = array()) {
     // Provide default values.
     $values += $this->randomTaxRateValues();
 
-    return new TaxRate($values['bid'], $values['name'], $values['rate']);
+    return new \TaxRate($values['bid'], $values['name'], $values['rate']);
   }
 
   /**
    * Check if the properties of the given tax rate match the given values.
    *
-   * @param TaxRate $tax_rate
+   * @param \TaxRate $tax_rate
    *   The tax rate to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -293,7 +295,7 @@ trait LineItemTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertTaxRateProperties(TaxRate $tax_rate, array $values, $message = '', $group = 'Other') {
+  function assertTaxRateProperties(\TaxRate $tax_rate, array $values, $message = '', $group = 'Other') {
     $result = TRUE;
     $result &= $this->assertEqual($values['bid'], $tax_rate->bid);
     $result &= $this->assertEqual($values['name'], $tax_rate->name);
@@ -309,7 +311,7 @@ trait LineItemTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return TaxRate
+   * @return \TaxRate
    *   A new TaxRate object.
    */
   function createUiTaxRate(array $values = array()) {
@@ -343,7 +345,7 @@ trait LineItemTestHelper {
 
     $result = reset($result);
 
-    return new TaxRate($result->bid, $result->name, $result->rate, $result->tid);
+    return new \TaxRate($result->bid, $result->name, $result->rate, $result->tid);
   }
 
   /**
@@ -351,15 +353,15 @@ trait LineItemTestHelper {
    *
    * The target tax rate is retrieved by the tax rate id.
    *
-   * @param TaxRate $tax_rate
+   * @param \TaxRate $tax_rate
    *   The TaxRate object that has to be updated.
    * @param array $values
    *   An optional associative array of values, keyed by property name.
    *
-   * @return TaxRate
+   * @return \TaxRate
    *   The updated TaxRate object.
    */
-  function updateUiTaxRate(TaxRate $tax_rate, array $values = array()) {
+  function updateUiTaxRate(\TaxRate $tax_rate, array $values = array()) {
     // Unset the values that cannot be changed through the UI.
     unset($values['bid']);
     unset($values['tid']);
@@ -385,7 +387,7 @@ trait LineItemTestHelper {
 
     $result = reset($result);
 
-    return new TaxRate($result->bid, $result->name, $result->rate, $result->tid);
+    return new \TaxRate($result->bid, $result->name, $result->rate, $result->tid);
   }
 
   /**
@@ -393,10 +395,10 @@ trait LineItemTestHelper {
    *
    * The target tax rate is selected by the tax rate ID.
    *
-   * @param TaxRate $tax_rate
+   * @param \TaxRate $tax_rate
    *   The TaxRate object that has to be deleted.
    */
-  function deleteUiTaxRate(TaxRate $tax_rate) {
+  function deleteUiTaxRate(\TaxRate $tax_rate) {
     // Get the specific tax rate delete form and delete the tax rate instance.
     $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/delete', array(), t('Delete'));
 

@@ -5,12 +5,14 @@
  * Asserts and helper methods concerning the client module.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait ClientTestHelper {
 
   /**
    * Check if the properties of the given client match the given values.
    *
-   * @param Client $client
+   * @param \Client $client
    *   The Client entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -22,7 +24,7 @@ trait ClientTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertClientProperties(Client $client, array $values, $message = '', $group = 'Other') {
+  function assertClientProperties(\Client $client, array $values, $message = '', $group = 'Other') {
     return $this->assertEntityProperties('client', $client, $values, $message, $group);
   }
 
@@ -100,16 +102,16 @@ trait ClientTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return Client
+   * @return \Client
    *   A new client entity.
    *
-   * @throws Exception
+   * @throws \Exception
    *   Thrown if the required business ID parameter is not set.
    */
   function createClient(array $values = array()) {
     // Check if the business ID is set, this is a required parameter.
     if (!isset($values['bid'])) {
-      throw new Exception('The "bid" property is required.');
+      throw new \Exception('The "bid" property is required.');
     }
 
     // Provide some default values.
@@ -133,7 +135,7 @@ trait ClientTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return Client
+   * @return \Client
    *   A new client entity.
    */
   function createUiClient(array $values = array()) {
@@ -145,7 +147,7 @@ trait ClientTestHelper {
     $this->drupalPost('client/add', $edit, t('Save'));
 
     // Retrieve the saved client by name and email address and return it.
-    $query = new EntityFieldQuery();
+    $query = new \EntityFieldQuery();
     $query
       ->entityCondition('entity_type', 'client')
       ->entityCondition('bundle', 'client')
@@ -259,13 +261,13 @@ trait ClientTestHelper {
   /**
    * Updates the given client with the given properties.
    *
-   * @param Client $client
+   * @param \Client $client
    *   The client entity to update.
    * @param array $values
    *   An associative array of values to apply to the entity, keyed by property
    *   name.
    */
-  function updateClient(Client $client, array $values) {
+  function updateClient(\Client $client, array $values) {
     $wrapper = entity_metadata_wrapper('client', $client);
     foreach ($values as $property => $value) {
       $wrapper->$property->set($value);
@@ -275,7 +277,7 @@ trait ClientTestHelper {
   /**
    * Returns a random client from the database.
    *
-   * @return Client
+   * @return \Client
    *   A random client.
    */
   function randomClient() {

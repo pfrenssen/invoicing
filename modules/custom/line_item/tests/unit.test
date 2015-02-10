@@ -5,18 +5,16 @@
  * Contains \LineItemUnitTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
 /**
  * Unit tests for the Line item module.
  */
 class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * Test business entities.

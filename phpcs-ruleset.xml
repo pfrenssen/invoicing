@@ -30,12 +30,6 @@
     <!-- Exclude required but empty files from having a blank line after the file docblock. -->
     <rule ref="Drupal.Commenting.FileComment.SpacingAfterComment">
         <exclude-pattern>invoicing.profile</exclude-pattern>
-        <exclude-pattern>modules/custom/test_traits/test_traits.module</exclude-pattern>
-    </rule>
-
-    <!-- Exclude info files that declare traits. They give a false positive on the rule that detects class declarations in the 'files[]' array. -->
-    <rule ref="Drupal.InfoFiles.ClassFiles.UnecessaryFileDeclaration">
-        <exclude-pattern>*/modules/custom/test_traits/test_traits.info</exclude-pattern>
     </rule>
 
     <!-- Exclude files (such as Views handlers) that do not follow Drupal class name conventions. -->
@@ -60,4 +54,5 @@
         <exclude-pattern>modules/custom/business/tests/ui.test</exclude-pattern>
         <exclude-pattern>modules/custom/client/tests/ui.test</exclude-pattern>
     </rule>
+
 </ruleset>

@@ -5,18 +5,16 @@
  * Contains \InvoiceOverviewTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'invoice');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
 /**
  * Tests the invoice overview.
  */
 class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use InvoiceTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * Test businesses.

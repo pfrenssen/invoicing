@@ -5,16 +5,15 @@
  * Contains \ClientCRUDTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'client');
+invoicing_core_autoload();
 
 /**
  * CRUD tests for the Client module.
  */
 class ClientCRUDTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use ClientTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
 
   /**
    * {@inheritdoc}

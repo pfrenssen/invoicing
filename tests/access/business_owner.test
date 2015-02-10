@@ -5,22 +5,18 @@
  * Contains \BusinessOwnerPathAccessTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'client');
-module_load_include('inc', 'test_traits', 'invoice');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
 /**
  * Access and permission tests for the 'business owner' role.
  */
 class BusinessOwnerPathAccessTestCase extends AccessWebTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
-  use ClientTestHelper;
-  use InvoiceTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * {@inheritdoc}

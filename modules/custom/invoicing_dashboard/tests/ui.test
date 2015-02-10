@@ -5,14 +5,14 @@
  * Contains \InvoicingDashboardUITestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
+invoicing_core_autoload();
 
 /**
  * UI tests for the Invoicing dashboard module.
  */
 class InvoicingDashboardUITestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
 
   /**
    * {@inheritdoc}

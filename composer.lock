@@ -542,16 +542,16 @@
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v3.0.5",
+            "version": "v3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "ae5b4a0b11e8b3f39c632d4c60e648b2c25e410c"
+                "reference": "bdddcbb5e18d3f0b950fd1dd19cd688961f21bf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/ae5b4a0b11e8b3f39c632d4c60e648b2c25e410c",
-                "reference": "ae5b4a0b11e8b3f39c632d4c60e648b2c25e410c",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/bdddcbb5e18d3f0b950fd1dd19cd688961f21bf6",
+                "reference": "bdddcbb5e18d3f0b950fd1dd19cd688961f21bf6",
                 "shasum": ""
             },
             "require": {
@@ -596,7 +596,7 @@
                 "test",
                 "web"
             ],
-            "time": "2014-12-30 19:34:50"
+            "time": "2015-02-02 23:10:47"
         },
         {
             "name": "fabpot/goutte",

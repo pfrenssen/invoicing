@@ -71,6 +71,24 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
     // Delete the line item. The database should be empty again.
     $line_item->delete();
     $this->assertLineItemTableEmpty('The line item can be deleted from the database.');
+
+    // Test that an exception is thrown when trying to save a line item without
+    // the required properties 'bid' and 'type'.
+    foreach (array('bid', 'type') as $property) {
+      $arguments = array('%property' => $property);
+      $message = format_string('An exception is thrown when trying to save a line item without the required property %property.', $arguments);
+
+      $line_item = $this->createLineItem($values['type'], $values);
+      unset($line_item->$property);
+
+      try {
+        $line_item->save();
+        $this->fail($message);
+      }
+      catch (InvalidArgumentException $e) {
+        $this->pass($message);
+      }
+    }
   }
 
   /**

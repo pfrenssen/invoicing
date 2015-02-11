@@ -311,7 +311,7 @@ function line_item_delete_multiple(array $lids) {
 /**
  * Composes the label of a line item.
  *
- * @param \stdClass $entity
+ * @param LineItem $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
@@ -321,7 +321,7 @@ function line_item_delete_multiple(array $lids) {
  *
  * @see entity_label()
  */
-function line_item_label(\stdClass $entity, $entity_type) {
+function line_item_label(LineItem $entity, $entity_type) {
   return $entity->lid;
 }
 

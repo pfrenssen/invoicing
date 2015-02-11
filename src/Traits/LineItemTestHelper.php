@@ -86,7 +86,6 @@ trait LineItemTestHelper {
    */
   function createLineItem($type = NULL, array $values = array()) {
     // Provide some default values.
-    $type = $type ?: $this->randomLineItemType();
     $values += $this->randomLineItemValues($type);
     $line_item = line_item_create(array('type' => $values['type']));
     $this->updateLineItem($line_item, $values);
@@ -98,15 +97,13 @@ trait LineItemTestHelper {
    * Returns random values for all properties on the line item entity.
    *
    * @param string $type
-   *   The type of the line item.
+   *   Optional line item type. If omitted a random line item type will be used.
    *
    * @returns array
    *   An associative array of random values, keyed by property name.
    */
   function randomLineItemValues($type = NULL) {
-    if (empty($type)) {
-      $type = $this->randomLineItemType();
-    }
+    $type = $type ?: $this->randomLineItemType();
 
     $values = array(
       'field_line_item_description' => $this->randomString(),

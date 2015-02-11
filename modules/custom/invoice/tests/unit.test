@@ -64,10 +64,6 @@ class InvoiceUnitTestCase extends InvoicingIntegrationTestCase {
   protected function setUp() {
     parent::setup();
 
-    // Create a line item of each type so they can be referenced in invoices.
-    $this->createLineItem('product')->save();
-    $this->createLineItem('service')->save();
-
     // Create two test users, each owning one business that has two clients, and
     // file an invoice for each client.
     $this->businesses = array();
@@ -79,6 +75,13 @@ class InvoiceUnitTestCase extends InvoicingIntegrationTestCase {
       // Create a business.
       $this->businesses[$i] = $this->createBusiness();
       $this->businesses[$i]->save();
+
+      // Create a line item of each type so they can be referenced in invoices.
+      // We only need to do this once, these can be reused for both businesses.
+      if ($i == 0) {
+        $this->createLineItem('product')->save();
+        $this->createLineItem('service')->save();
+      }
 
       // Create a user and link the business to it.
       $this->users[$i] = $this->drupalCreateUser();

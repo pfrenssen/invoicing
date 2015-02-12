@@ -25,6 +25,14 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
   protected $businesses;
 
   /**
+   * Test LineItem objects.
+   *
+   * @var LineItem[]
+   *   An array of LineItem objects.
+   */
+  protected $lineItems;
+
+  /**
    * Test TaxRate objects.
    *
    * @var TaxRate[]
@@ -68,6 +76,14 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
       $user->field_user_businesses->set(array($this->businesses[$i]->identifier()));
       $user->save();
 
+      // Create two line items for the business.
+      for ($j = 0; $j < 2; $j++) {
+        $values = array('bid' => $this->businesses[$i]);
+        $line_item = $this->createLineItem(NULL, $values);
+        $line_item->save();
+        $this->lineItems[] = $line_item;
+      }
+
       // Create two tax rates for the business, making sure the values are
       // unique.
       $names = $rates = array();
@@ -83,6 +99,30 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
         $tax_rate = new TaxRate($values['bid'], $values['name'], $values['rate']);
         line_item_tax_rate_save($tax_rate);
         $this->taxRates[] = $tax_rate;
+      }
+    }
+  }
+
+  /**
+   * Tests line_item_is_owned_by_user().
+   */
+  public function testLineItemIsOwnedByUser() {
+    // Define a list of which line items are owned by which users. The first two
+    // belong to the first user, the last two to the second.
+    $ownership = array(
+      0 => array(0, 1),
+      1 => array(2, 3),
+    );
+
+    // Test if line_item_is_owned_by_user() matches the expected ownership.
+    foreach ($ownership as $user_key => $line_item_keys) {
+      for ($i = 0; $i < 4; $i++) {
+        $owned = in_array($i, $line_item_keys);
+        $this->assertEqual($owned, line_item_is_owned_by_user($this->lineItems[$i], $this->users[$user_key]), format_string('Line item :item :owned by user :user.', array(
+          ':item' => $i,
+          ':owned' => $owned ? 'is owned' : 'is not owned',
+          ':user' => $user_key,
+        )));
       }
     }
   }

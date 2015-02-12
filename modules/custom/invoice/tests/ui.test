@@ -338,6 +338,8 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
   /**
    * Tests the detail page of an invoice.
+   *
+   * @todo Remove this once IN-40 is in.
    */
   public function testDetailPage() {
     // Create an invoice using random values.

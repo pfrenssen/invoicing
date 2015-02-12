@@ -104,9 +104,20 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
+   * Executes the unit tests.
+   *
+   * It is faster to run all unit tests in a single test run.
+   */
+  public function testRunner() {
+    $this->doTestLineItemIsOwnedByUser();
+    $this->doTestTaxRateIsOwnedByUser();
+    $this->doTestLineItemTaxRateAutocomplete();
+  }
+
+  /**
    * Tests line_item_is_owned_by_user().
    */
-  public function testLineItemIsOwnedByUser() {
+  public function doTestLineItemIsOwnedByUser() {
     // Define a list of which line items are owned by which users. The first two
     // belong to the first user, the last two to the second.
     $ownership = array(
@@ -130,7 +141,7 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests line_item_tax_rate_is_owned_by_user().
    */
-  public function testTaxRateIsOwnedByUser() {
+  public function doTestTaxRateIsOwnedByUser() {
     // Define a list of which tax rates are owned by which users. The first two
     // tax rates belong to the first user, the last two to the second user.
     $ownership = array(
@@ -155,7 +166,7 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests line_item_tax_rate_autocomplete().
    */
-  public function testLineItemTaxRateAutocomplete() {
+  public function doTestLineItemTaxRateAutocomplete() {
     global $user;
     module_load_include('inc', 'line_item', 'line_item.pages');
 

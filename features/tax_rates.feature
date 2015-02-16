@@ -10,4 +10,4 @@ Scenario: A created tax rate appears in the overview
   | name | rate  |
   | VAT  | 21.00 |
   When I visit the tax rate overview
-  Then I should see 1 tax rates in the overview
+  Then I should see 1 tax rate in the overview

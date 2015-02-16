@@ -22,13 +22,13 @@ function line_item_type_add_page() {
 /**
  * Page callback: Returns the line item add/edit form to add a new line item.
  *
- * @see line_item_edit_form()
- *
  * @param object $line_item_type
  *   The type of line_item to create.
  *
  * @return array
  *   The line item add/edit form render array.
+ *
+ * @see line_item_edit_form()
  */
 function line_item_add_page($line_item_type) {
   $line_item = entity_create('line_item', array('type' => $line_item_type->type));
@@ -39,13 +39,13 @@ function line_item_add_page($line_item_type) {
 /**
  * Page callback: Returns the add/edit form to edit an existing line item.
  *
- * @see line_item_edit_form()
- *
  * @param LineItem $line_item
  *   The line item to edit.
  *
  * @return array
  *   The line item add/edit form render array.
+ *
+ * @see line_item_edit_form()
  */
 function line_item_edit_page(LineItem $line_item) {
   drupal_set_title(t('Edit line item'));
@@ -190,13 +190,20 @@ function line_item_detail_page($line_item) {
 /**
  * Form constructor for the tax rate add/edit form.
  *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate that is being added/edited.
  *
  * @ingroup forms
  */
-function line_item_edit_tax_rate_form($form, &$form_state, $tax_rate = NULL) {
+function line_item_edit_tax_rate_form($form, &$form_state, TaxRate $tax_rate = NULL) {
   $form_state['tax_rate'] = $tax_rate;
+
+  if (!empty($tax_rate)) {
+    drupal_set_title(t('Edit %name', array('%name' => $tax_rate->name)), PASS_THROUGH);
+  }
+  else {
+    drupal_set_title(t('Add new tax rate'));
+  }
 
   $form['name'] = array(
     '#type' => 'textfield',
@@ -293,12 +300,13 @@ function line_item_edit_tax_rate_form_submit($form, &$form_state) {
     drupal_set_message(t('The tax rate could not be saved.'), 'error');
     watchdog('tax_rate', 'Tax rate could not be saved.', WATCHDOG_ERROR);
   }
+  $form_state['redirect'] = 'settings/tax-rates';
 }
 
 /**
- * Form submission handler for tax_rate_edit_form().
+ * Form submission handler for edit_tax_rate_form().
  *
- * Handles the 'Delete' button on the node form.
+ * Handles the 'Delete' button on the tax rate form.
  *
  * @see tax_rate_edit_form()
  * @see tax_rate_delete_confirm_form()
@@ -316,15 +324,15 @@ function line_item_edit_tax_rate_form_delete_submit($form, &$form_state) {
 /**
  * Form constructor for the tax rate deletion confirmation form.
  *
- * @see tax_rate_delete_confirm_form_submit()
- *
- * @param object $tax_rate
+ * @param TaxRate $tax_rate
  *   The tax rate that needs to be deleted.
+ *
+ * @see tax_rate_delete_confirm_form_submit()
  */
-function line_item_delete_tax_rate_confirm_form($form, &$form_state, stdClass $tax_rate) {
+function line_item_delete_tax_rate_confirm_form($form, &$form_state, TaxRate $tax_rate) {
   $form_state['tax_rate'] = $tax_rate;
   return confirm_form($form,
-    t('Are you sure you want to delete the tax rate?'),
+    t('Are you sure you want to delete %name?', array('%name' => $tax_rate->name)),
     'settings/tax-rates',
     t('This action cannot be undone.'),
     t('Delete'),
@@ -342,6 +350,40 @@ function line_item_delete_tax_rate_confirm_form($form, &$form_state, stdClass $t
 function line_item_delete_tax_rate_confirm_form_submit($form, &$form_state) {
   $tax_rate = $form_state['tax_rate'];
   line_item_tax_rate_delete($tax_rate);
-  drupal_set_message(t('The tax rate has been deleted.'));
+  drupal_set_message(t('The tax rate %name has been deleted.', array('%name' => $tax_rate->name)));
   $form_state['redirect'] = 'settings/tax-rates';
+}
+
+/**
+ * Menu callback for TaxRate autocomplete.
+ *
+ * @param string $string
+ *   The string containing the initial value to match with.
+ *
+ * @throws Exception
+ *   Thrown when the current user does not own any business.
+ */
+function line_item_tax_rate_autocomplete($string = '') {
+  $matches = array();
+
+  // Fetch businesses from current user.
+  if (!$bids = array_keys(business_get_businesses_from_user())) {
+    throw new Exception('Current user does not own any business.');
+  }
+
+  if (!empty($string)) {
+    $result = db_select('tax_rates')
+      ->fields('tax_rates', array('tid', 'rate'))
+      ->condition('rate', db_like($string) . '%', 'LIKE')
+      ->range(0, 10)
+      ->condition('bid', $bids, 'IN')
+      ->execute()
+      ->fetchAll();
+
+    foreach ($result as $tax_rate) {
+      $matches[$tax_rate->rate] = check_plain($tax_rate->rate);
+    }
+  }
+
+  drupal_json_output($matches);
 }

@@ -5,12 +5,14 @@
  * Asserts and helper methods concerning the line item module.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait LineItemTestHelper {
 
   /**
    * Check if the properties of the given line item match the given values.
    *
-   * @param LineItem $line_item
+   * @param \LineItem $line_item
    *   The line item entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -22,7 +24,7 @@ trait LineItemTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertLineItemProperties(LineItem $line_item, array $values, $message = '', $group = 'Other') {
+  function assertLineItemProperties(\LineItem $line_item, array $values, $message = '', $group = 'Other') {
     if (isset($values['type'])) {
       unset($values['type']);
     }
@@ -41,7 +43,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertLineItemTableEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('line_item', 'li')->fields('li')->execute()->fetchAll();
+    $result = (bool) db_select('line_item', 'li')
+      ->fields('li')
+      ->execute()
+      ->fetchAll();
     return $this->assertFalse($result, $message ?: 'The line item database table is empty.', $group);
   }
 
@@ -57,7 +62,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertLineItemTableNotEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('line_item', 'li')->fields('li')->execute()->fetchAll();
+    $result = (bool) db_select('line_item', 'li')
+      ->fields('li')
+      ->execute()
+      ->fetchAll();
     return $this->assertTrue($result, $message ?: 'The line item database table is not empty.', $group);
   }
 
@@ -73,7 +81,7 @@ trait LineItemTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return LineItem
+   * @return \LineItem
    *   A new line item entity.
    */
   function createLineItem($type = NULL, array $values = array()) {
@@ -89,18 +97,16 @@ trait LineItemTestHelper {
    * Returns random values for all properties on the line item entity.
    *
    * @param string $type
-   *   The type of the line item.
+   *   Optional line item type. If omitted a random line item type will be used.
    *
    * @returns array
    *   An associative array of random values, keyed by property name.
    */
   function randomLineItemValues($type = NULL) {
-    if (empty($type)) {
-      $type = $this->randomLineItemType();
-    }
+    $type = $type ?: $this->randomLineItemType();
 
     $values = array(
-      'bid' => $this->randomBusiness()->identifier(),
+      'bid' => $this->randomBusiness(),
       'field_line_item_description' => $this->randomString(),
       'field_line_item_discount' => $this->randomDecimal(),
       'field_line_item_quantity' => $this->randomDecimal(),
@@ -149,7 +155,7 @@ trait LineItemTestHelper {
   /**
    * Generate a random decimal number.
    *
-   * @return decimal
+   * @return string
    *   A random generated decimal number.
    */
   function randomDecimal() {
@@ -159,20 +165,14 @@ trait LineItemTestHelper {
   /**
    * Updates the given line item with the given properties.
    *
-   * @param LineItem $line_item
+   * @param \LineItem $line_item
    *   The line item entity to update.
    * @param array $values
    *   An associative array of values to apply to the entity, keyed by property
    *   name.
    */
-  function updateLineItem(LineItem $line_item, array $values) {
-    if (isset($values['type'])) {
-      if ($values['type'] == 'product' && isset($values['field_line_item_time_unit'])) {
-        unset($values['field_line_item_time_unit']);
-      }
-      unset($values['type']);
-    }
-
+  function updateLineItem(\LineItem $line_item, array $values) {
+    unset($values['type']);
     $wrapper = entity_metadata_wrapper('line_item', $line_item);
     foreach ($values as $property => $value) {
       $wrapper->$property->set($value);
@@ -185,7 +185,7 @@ trait LineItemTestHelper {
    * @param string $type
    *   Optional line item type. Either 'product' or 'service'.
    *
-   * @return LineItem
+   * @return \LineItem
    *   A random line item.
    */
   function randomLineItem($type = NULL) {
@@ -216,7 +216,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertTaxRatesTableEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('tax_rates', 'tr')->fields('tr')->execute()->fetchAll();
+    $result = (bool) db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->execute()
+      ->fetchAll();
     return $this->assertFalse($result, $message ?: 'The tax rates database table is empty.', $group);
   }
 
@@ -232,7 +235,10 @@ trait LineItemTestHelper {
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
   function assertTaxRatesTableNotEmpty($message = '', $group = 'Other') {
-    $result = (bool) db_select('tax_rates', 'tr')->fields('tr')->execute()->fetchAll();
+    $result = (bool) db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->execute()
+      ->fetchAll();
     return $this->assertTrue($result, $message ?: 'The tax rates database table is not empty.', $group);
   }
 
@@ -255,31 +261,27 @@ trait LineItemTestHelper {
   /**
    * Returns a newly created tax rate without saving it.
    *
-   * This is intended for unit tests. It will not set a business ID. If you are
-   * doing a functionality test use $this->createUiTaxRate() instead.
+   * This is intended for unit tests. If you are doing a functionality test use
+   * $this->createUiTaxRate() instead.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return object
+   * @return \TaxRate
    *   A new tax rate object.
    */
   function createTaxRate(array $values = array()) {
-    // Provide some default values.
+    // Provide default values.
     $values += $this->randomTaxRateValues();
 
-    $tax_rate = new stdClass();
-    $tax_rate->name = $values['name'];
-    $tax_rate->rate = $values['rate'];
-
-    return $tax_rate;
+    return new \TaxRate($values['bid'], $values['name'], $values['rate']);
   }
 
   /**
    * Check if the properties of the given tax rate match the given values.
    *
-   * @param TaxRate $tax_rate
+   * @param \TaxRate $tax_rate
    *   The tax rate to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -291,23 +293,24 @@ trait LineItemTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertTaxRateProperties($tax_rate, array $values, $message = '', $group = 'Other') {
-    $this->assertEqual($values['bid'], $tax_rate->bid);
-    $this->assertEqual($values['name'], $tax_rate->name);
-    $this->assertEqual($values['rate'], $tax_rate->rate);
+  function assertTaxRateProperties(\TaxRate $tax_rate, array $values, $message = '', $group = 'Other') {
+    $result = TRUE;
+    $result &= $this->assertEqual($values['bid'], $tax_rate->bid);
+    $result &= $this->assertEqual($values['name'], $tax_rate->name);
+    return $result &= $this->assertEqual($values['rate'], $tax_rate->rate);
   }
 
   /**
    * Creates a new tax rate through the user interface.
    *
-   * The saved tax rate is retrieved by the tax rate id.
+   * The saved tax rate is retrieved by the tax rate ID.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return object
-   *   A new tax rate object.
+   * @return \TaxRate
+   *   A new TaxRate object.
    */
   function createUiTaxRate(array $values = array()) {
     // Provide some default values.
@@ -323,7 +326,10 @@ trait LineItemTestHelper {
     // Check that a success message is displayed.
     $this->assertRaw(t('New tax rate has been added.'));
 
-    // Retrieve the saved invoice by invoice number and return it.
+    // Check target Url after redirection.
+    $this->assertUrl('settings/tax-rates', array(), 'The user is redirected to the tax rates overview after adding a new tax rate.');
+
+    // Retrieve the saved tax rate by ID number and return it.
     $result = db_select('tax_rates', 'tr')
       ->fields('tr')
       ->condition('tr.name', $values['name'])
@@ -333,10 +339,76 @@ trait LineItemTestHelper {
       ->execute()
       ->fetchAllAssoc('tid');
 
-    $tids = array_keys($result);
-    $this->assertTrue($tids, 'Tax rate was successfully created through the UI.');
+    $this->assertEqual(count($result), 1, 'Tax rate was successfully created through the UI.');
 
-    return reset($result);
+    $result = reset($result);
+
+    return new \TaxRate($result->bid, $result->name, $result->rate, $result->tid);
+  }
+
+  /**
+   * Updates an existing tax rate through the user interface.
+   *
+   * The target tax rate is retrieved by the tax rate id.
+   *
+   * @param \TaxRate $tax_rate
+   *   The TaxRate object that has to be updated.
+   * @param array $values
+   *   An optional associative array of values, keyed by property name.
+   *
+   * @return \TaxRate
+   *   The updated TaxRate object.
+   */
+  function updateUiTaxRate(\TaxRate $tax_rate, array $values = array()) {
+    // Unset the values that cannot be changed through the UI.
+    unset($values['bid']);
+    unset($values['tid']);
+
+    // Convert the new values to form values and submit the form.
+    $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/edit', $values, t('Save'));
+
+    // Check that a success message is displayed.
+    $this->assertRaw(t('The changes have been saved.'));
+
+    // Retrieve the updated tax rate by id number and return it.
+    $result = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('tr.name', $values['name'])
+      ->condition('tr.rate', $values['rate'])
+      ->orderBy('tr.tid', 'DESC')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAllAssoc('tid');
+
+    // Verify that the values are updated correctly.
+    $this->assertEqual(count($result), 1, 'Tax rate was successfully updated through the UI.');
+
+    $result = reset($result);
+
+    return new \TaxRate($result->bid, $result->name, $result->rate, $result->tid);
+  }
+
+  /**
+   * Deletes an existing tax rate through the user interface.
+   *
+   * The target tax rate is selected by the tax rate ID.
+   *
+   * @param \TaxRate $tax_rate
+   *   The TaxRate object that has to be deleted.
+   */
+  function deleteUiTaxRate(\TaxRate $tax_rate) {
+    // Get the specific tax rate delete form and delete the tax rate instance.
+    $this->drupalPost('settings/tax-rates/' . $tax_rate->tid . '/delete', array(), t('Delete'));
+
+    // Attempt to retrieve the deleted tax rate by ID number.
+    $result = db_select('tax_rates', 'tr')
+      ->fields('tr', array('tid'))
+      ->range(0, 1)
+      ->execute()
+      ->fetchAllAssoc('tid');
+
+    // Verify that the tax rate has been deleted from the database.
+    $this->assertFalse(count($result), 'Tax rate was successfully deleted from the database through the UI.');
   }
 
 }

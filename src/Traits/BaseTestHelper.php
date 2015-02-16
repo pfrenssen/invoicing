@@ -5,6 +5,8 @@
  * Asserts and helper methods to use in testing.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait BaseTestHelper {
 
   /**
@@ -51,7 +53,7 @@ trait BaseTestHelper {
    *
    * @param string $entity_type
    *   The type of the entity.
-   * @param Entity $entity
+   * @param \Entity $entity
    *   The entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -63,7 +65,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertEntityProperties($entity_type, Entity $entity, array $values, $message = '', $group = 'Other') {
+  function assertEntityProperties($entity_type, \Entity $entity, array $values, $message = '', $group = 'Other') {
     $wrapper = entity_metadata_wrapper($entity_type, $entity);
 
     $result = TRUE;
@@ -118,7 +120,7 @@ trait BaseTestHelper {
   function assertNoPager($message = '', $group = 'Other') {
     $message = $message ?: 'No pager is present on the page.';
     $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXPathElements($xpath, 0, array(), $message, $group);
+    return $this->assertXpathElements($xpath, 0, array(), $message, $group);
   }
 
   /**
@@ -135,7 +137,7 @@ trait BaseTestHelper {
   function assertPager($message = '', $group = 'Other') {
     $message = $message ?: 'A pager is present on the page.';
     $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXPathElements($xpath, 1, array(), $message, $group);
+    return $this->assertXpathElements($xpath, 1, array(), $message, $group);
   }
 
   /**
@@ -157,7 +159,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertStatusMessages($messages, $message = '', $group = 'Other') {
+  function assertStatusMessages(array $messages, $message = '', $group = 'Other') {
     // Messages can contain a mix of HTML and sanitized HTML, for example:
     // '<em class="placeholder">&lt;script&gt;alert();&lt;&#039;script&gt;</em>'
     // Unfortunately, check_plain() and SimpleXML::asXml() encode quotes and
@@ -212,13 +214,18 @@ trait BaseTestHelper {
    *
    * This will fail if any other messages are shown.
    *
-   * @param array $required_fields
-   *   An associative array of required fields, keyed on field name, with the
-   *   human readable name as value. For example:
-   *   array(
+   * Example:
+   * @code
+   *   $required_fields = array(
    *     'name' => t('Client name'),
    *     'field_client_email[und][0][email]' => t('Email address'),
    *   );
+   *   $this->assertRequiredFieldMessages($required_fields);
+   * @endcode
+   *
+   * @param array $required_fields
+   *   An associative array of required fields, keyed on field name, with the
+   *   human readable name as value.
    * @param array $messages
    *   An associative array of status messages that should be displayed, keyed
    *   by message type (either 'status', 'warning' or 'error'). Every type
@@ -232,7 +239,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertRequiredFieldMessages($required_fields, $messages = array(), $message = '', $group = 'Other') {
+  function assertRequiredFieldMessages(array $required_fields, $messages = array(), $message = '', $group = 'Other') {
     $success = TRUE;
 
     // Use the standard message of the Field module by default.
@@ -262,7 +269,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertXPathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
+  function assertXpathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
     // Provide a default message.
     $message = $message ?: format_plural($count, 'The element matching the XPath expression is present in the page.', 'The @count elements matching the XPath expression are present in the page.');
 
@@ -281,7 +288,7 @@ trait BaseTestHelper {
    * @return array
    *   The decoded array of status messages.
    */
-  function decodeStatusMessages($messages) {
+  function decodeStatusMessages(array $messages) {
     foreach (array_keys($messages) as $type) {
       foreach ($messages[$type] as $key => $encoded_message) {
         $messages[$type][$key] = html_entity_decode($encoded_message, ENT_QUOTES, 'UTF-8');
@@ -322,7 +329,7 @@ trait BaseTestHelper {
         // While this is valid HTML, it is invalid XML, so this can't be parsed
         // with XPath. We can turn it into valid XML again by removing the
         // accessibility element using DOMDocument.
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
 
         // Load the messges HTML using UTF-8 encoding.
         @$dom->loadHTML('<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body>' . $messages[0]->asXml() . '</body></html>');
@@ -333,7 +340,7 @@ trait BaseTestHelper {
         // We have valid XML now, so we can use XPath to find the messages. If
         // there are multiple messages, they are output in an unordered list. A
         // single message is output directly in the <div> container.
-        $xpath = new DOMXPath($dom);
+        $xpath = new \DOMXPath($dom);
         $elements = $xpath->query('//body/div/ul/li');
         if (!$elements->length) {
           $elements = $xpath->query('//body/div');
@@ -447,6 +454,9 @@ trait BaseTestHelper {
    *   The name of the entity that is referenced.
    * @param string $id
    *   The id of the entity that is referenced.
+   *
+   * @return string
+   *   The input for the entity reference autocomplete field.
    */
   public function entityReferenceFieldValue($name, $id) {
     // Prepare the field input the way entityreference expects it.

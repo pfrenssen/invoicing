@@ -1,7 +1,7 @@
 api = 2
 core = 7.x
 
-projects[drupal][version] = 7.32
+projects[drupal][version] = 7.34
 
 ; Recursive module dependencies of installation profile are not enabled in
 ; DrupalWebTestCase::setUp.
@@ -21,22 +21,26 @@ projects[drupal][patch][] = http://drupal.org/files/1988780-6-simpletest-backref
 ; https://drupal.org/node/2061333
 projects[drupal][patch][] = http://drupal.org/files/updater-installation_directory_not_created-2061333-1.patch
 
-projects[addressfield] = 1.0-beta5
+; Warning: DOMDocument::importNode() ID already defined.
+; https://www.drupal.org/node/2386903
+projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simpletest-domdocument_warning-7.x-do-not-test.patch
+
+projects[addressfield][version] = 1.0-rc1
 projects[addressfield][subdir] = contrib
 
-projects[ctools] = 1.4
+projects[ctools][version] = 1.5
 projects[ctools][subdir] = contrib
 
-projects[date] = 2.8
+projects[date][version] = 2.8
 projects[date][subdir] = contrib
 
-projects[email] = 1.2
+projects[email][version] = 1.3
 projects[email][subdir] = contrib
 
-projects[email_registration] = 1.2
+projects[email_registration][version] = 1.2
 projects[email_registration][subdir] = contrib
 
-projects[entity] = 1.5
+projects[entity][version] = 1.5
 projects[entity][subdir] = contrib
 
 ; entity_metadata_wrapper() does not load correct revisions.
@@ -57,7 +61,7 @@ projects[entityreference][patch][] = https://drupal.org/files/issues/2266735-2-e
 ; @see https://drupal.org/node/1837650
 projects[entityreference][patch][] = https://drupal.org/files/issues/entityreference-n1837650-47.patch
 
-projects[entityreference_unique] = 7.x-1.0-beta2
+projects[entityreference_unique][version] = 1.0-beta2
 projects[entityreference_unique][subdir] = contrib
 
 ; Issue #2206905: Notice when entity does not have bundle.
@@ -68,7 +72,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 ; @see https://drupal.org/node/2209127
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
-projects[features] = 2.1
+projects[features][version] = 2.3
 projects[features][subdir] = contrib
 
 ; The dev branch has been pinned at the time the below patch was created.
@@ -88,13 +92,13 @@ projects[ief_autocomplete][download][branch] = 7.x-1.x
 projects[ief_autocomplete][download][url] = http://git.drupal.org/sandbox/iSoLate/2363793.git
 projects[ief_autocomplete][subdir] = contrib
 
-projects[libraries] = 2.2
+projects[libraries][version] = 2.2
 projects[libraries][subdir] = contrib
 
-projects[link] = 1.3
+projects[link][version] = 1.3
 projects[link][subdir] = contrib
 
-projects[panels] = 3.4
+projects[panels][version] = 3.4
 projects[panels][subdir] = contrib
 
 projects[phone][type] = module
@@ -104,7 +108,7 @@ projects[phone][download][revision] = 0c123166f22
 projects[phone][download][url] = http://git.drupal.org/sandbox/cdale/1925578.git
 projects[phone][subdir] = contrib
 
-projects[strongarm] = 2.0
+projects[strongarm][version] = 2.0
 projects[strongarm][subdir] = contrib
 
 ; The current release of the module is old so we use the newest release
@@ -114,7 +118,7 @@ projects[user_registrationpassword][download][revision] = 235d87e90077d53a8c6cdf
 projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
 
-projects[views] = 3.7
+projects[views][version] = 3.8
 projects[views][subdir] = contrib
 
 ; Libraries

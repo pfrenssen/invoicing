@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * invoice.views_default.inc
+ * Exported views for the Invoice module.
  */
 
 /**

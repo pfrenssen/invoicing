@@ -2,16 +2,18 @@
 
 /**
  * @file
- * Unit tests for the Business module.
+ * Contains \BusinessUnitTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
+invoicing_core_autoload();
 
+/**
+ * Unit tests for the Business module.
+ */
 class BusinessUnitTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
 
   /**
    * Test user accounts.
@@ -118,13 +120,13 @@ class BusinessUnitTestCase extends InvoicingIntegrationTestCase {
   /**
    * Checks the output of business_get_businesses_from_user().
    *
-   * @param object $account
+   * @param \stdClass $account
    *   The user account to pass to the function.
    * @param array $bids
    *   An array of business ids which represent the businesses that are expected
    *   to be returned.
    */
-  protected function assertBusinessGetBusinessFromUser(stdClass $account = NULL, $bids = array()) {
+  protected function assertBusinessGetBusinessFromUser(\stdClass $account = NULL, $bids = array()) {
     $businesses = business_get_businesses_from_user($account);
     $this->assertEqual(count($businesses), count($bids), 'The user has been linked to correct number of businesses.');
     $keys = array_keys($businesses);

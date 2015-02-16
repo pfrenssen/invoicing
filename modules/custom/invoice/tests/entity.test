@@ -2,18 +2,19 @@
 
 /**
  * @file
- * Tests for the Invoice entity.
+ * Contains \InvoiceEntityTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'invoice');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
+/**
+ * Tests for the Invoice entity.
+ */
 class InvoiceEntityTestCase extends EntityTestCase {
 
-  use BaseTestHelper;
-  use InvoiceTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * Returns test case metadata.
@@ -107,7 +108,7 @@ class InvoiceEntityTestCase extends EntityTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
     // Convert the bid into a full Business object.
     $properties['bid'] = business_load($properties['bid']);
 

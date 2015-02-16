@@ -75,6 +75,7 @@ class tax_rate_handler_edit_link_field extends views_handler_field {
       $this->options['alter']['make_link'] = TRUE;
       $this->options['alter']['path'] = "settings/tax-rates/$tax_rate->tid/edit";
       $text = !empty($this->options['text']) ? $this->options['text'] : t('edit');
+
       return $text;
     }
   }

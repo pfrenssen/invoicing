@@ -2,9 +2,12 @@
 
 /**
  * @file
- * Base class for unit tests for the invoicing platform.
+ * Contains \InvoicingWebTestCase.
  */
 
+/**
+ * Base class for unit tests for the invoicing platform.
+ */
 class InvoicingWebTestCase extends DrupalWebTestCase {
 
   /**

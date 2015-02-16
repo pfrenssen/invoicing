@@ -2,9 +2,12 @@
 
 /**
  * @file
- * Base class for entity tests.
+ * Contains \EntityTestCase.
  */
 
+/**
+ * Base class for entity tests.
+ */
 abstract class EntityTestCase extends InvoicingIntegrationTestCase {
 
   /**
@@ -118,7 +121,7 @@ abstract class EntityTestCase extends InvoicingIntegrationTestCase {
    * @return array
    *   The converted properties.
    */
-  abstract protected function convertPropertiesToEntityMetadataWrapperValues($properties);
+  abstract protected function convertPropertiesToEntityMetadataWrapperValues(array $properties);
 
   /**
    * Tests if a new entity type can be created.

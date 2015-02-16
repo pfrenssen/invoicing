@@ -68,7 +68,7 @@ function line_item_views_default_views() {
     'edit_tax_rate' => array(
       'align' => '',
       'separator' => '',
-      'empty_column' => 0,
+      'empty_column' => 1,
     ),
     'delete_tax_rate' => array(
       'align' => '',
@@ -76,7 +76,6 @@ function line_item_views_default_views() {
       'empty_column' => 0,
     ),
   );
-  $handler->display->display_options['style_options']['empty_table'] = FALSE;
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
@@ -113,11 +112,22 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['edit_tax_rate']['id'] = 'edit_tax_rate';
   $handler->display->display_options['fields']['edit_tax_rate']['table'] = 'tax_rates';
   $handler->display->display_options['fields']['edit_tax_rate']['field'] = 'edit_tax_rate';
+  $handler->display->display_options['fields']['edit_tax_rate']['label'] = '';
+  $handler->display->display_options['fields']['edit_tax_rate']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['edit_tax_rate']['element_label_colon'] = FALSE;
   /* Field: Tax rates: Delete link */
   $handler->display->display_options['fields']['delete_tax_rate']['id'] = 'delete_tax_rate';
   $handler->display->display_options['fields']['delete_tax_rate']['table'] = 'tax_rates';
   $handler->display->display_options['fields']['delete_tax_rate']['field'] = 'delete_tax_rate';
+  $handler->display->display_options['fields']['delete_tax_rate']['label'] = '';
+  $handler->display->display_options['fields']['delete_tax_rate']['exclude'] = TRUE;
   $handler->display->display_options['fields']['delete_tax_rate']['element_label_colon'] = FALSE;
+  /* Field: Global: Custom text */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = '<ul class="links inline"><li class="edit first">[edit_tax_rate]</li><li class="delete last">[delete_tax_rate]</li></ul>';
   /* Contextual filter: Business: Business ID */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'business';
@@ -128,11 +138,10 @@ function line_item_views_default_views() {
   $handler->display->display_options['arguments']['bid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['bid']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['bid']['summary_options']['items_per_page'] = '25';
-
   /* Display: Tax rates */
   $handler = $view->new_display('page', 'Tax rates', 'page_tax_rates');
   $handler->display->display_options['path'] = 'settings/tax-rates';
-  $handler->display->display_options['menu']['type'] = 'default tab';
+  $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Tax rates';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['context'] = 0;

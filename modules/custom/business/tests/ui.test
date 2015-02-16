@@ -2,16 +2,18 @@
 
 /**
  * @file
- * UI tests for the Business module.
+ * Contains \BusinessUITestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
+invoicing_core_autoload();
 
+/**
+ * UI tests for the Business module.
+ */
 class BusinessUITestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper {
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper {
     randomBusinessValues as traitRandomBusinessValues;
   }
 
@@ -146,7 +148,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     $this->drupalGet('business/' . $business->bid);
 
     // Check that the entity is rendered.
-    $this->assertXPathElements($this->getBusinessEntityXPath(), 1, array(), 'The business entity is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath(), 1, array(), 'The business entity is rendered.');
 
     // Check that the page title is set to the business name.
     // @todo: Change "Drupal" to the project name.
@@ -158,19 +160,19 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
 
     // Check that all fields are rendered.
     $xpath = '//div[contains(@class, "field-name-field-business-address")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The address field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The address field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-business-email")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The email field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The email field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-business-phone")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The phone field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The phone field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-business-vat")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The vat field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The vat field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-business-iban")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The iban field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The iban field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-business-bic")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The bic field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The bic field is rendered.');
     $xpath = '//div[contains(@class, "field-name-field-business-mobile")]';
-    $this->assertXPathElements($this->getBusinessEntityXPath($xpath), 1, array(), 'The mobile number field is rendered.');
+    $this->assertXPathElements($this->getBusinessEntityXpath($xpath), 1, array(), 'The mobile number field is rendered.');
 
     // Check if the tabs are rendered.
     $xpath = '//ul[contains(@class, "tabs")]//a[@href=:href]';
@@ -201,7 +203,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
    * @return string
    *   The XPath query.
    */
-  protected function getBusinessEntityXPath($xpath = '') {
+  protected function getBusinessEntityXpath($xpath = '') {
     return '//div[contains(@class, "entity-business")]' . $xpath;
   }
 

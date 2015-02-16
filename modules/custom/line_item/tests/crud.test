@@ -2,16 +2,18 @@
 
 /**
  * @file
- * CRUD tests for the Line item module.
+ * Contains \LineItemCRUDTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
+/**
+ * CRUD tests for the Line item module.
+ */
 class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * {@inheritdoc}
@@ -43,7 +45,7 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests creating, reading, updating and deleting of line items.
    */
-  public function testLineItemCRUD() {
+  public function testLineItemCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('line_item'), 'The line_item database table exists.');
     $this->assertLineItemTableEmpty('The line item database is initially empty.');
@@ -69,12 +71,30 @@ class LineItemCRUDTestCase extends InvoicingIntegrationTestCase {
     // Delete the line item. The database should be empty again.
     $line_item->delete();
     $this->assertLineItemTableEmpty('The line item can be deleted from the database.');
+
+    // Test that an exception is thrown when trying to save a line item without
+    // the required properties 'bid' and 'type'.
+    foreach (array('bid', 'type') as $property) {
+      $arguments = array('%property' => $property);
+      $message = format_string('An exception is thrown when trying to save a line item without the required property %property.', $arguments);
+
+      $line_item = $this->createLineItem($values['type'], $values);
+      unset($line_item->$property);
+
+      try {
+        $line_item->save();
+        $this->fail($message);
+      }
+      catch (InvalidArgumentException $e) {
+        $this->pass($message);
+      }
+    }
   }
 
   /**
    * Tests creating, reading, updating and deleting of tax rates.
    */
-  public function testTaxRateCRUD() {
+  public function testTaxRateCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('tax_rates'), 'The tax_rates database table exists.');
     $this->assertTaxRatesTableEmpty('The tax rates database is initially empty.');

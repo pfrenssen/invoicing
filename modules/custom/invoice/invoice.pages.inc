@@ -8,13 +8,13 @@
 /**
  * Page callback: Returns the invoice add/edit form to add a new invoice.
  *
- * @see invoice_edit_form()
- *
  * @param object $invoice_type
  *   The type of invoice to create.
  *
  * @return array
  *   The invoice add/edit form render array.
+ *
+ * @see invoice_edit_form()
  */
 function invoice_add_page($invoice_type) {
   $invoice = entity_create('invoice', array('type' => $invoice_type->type));
@@ -41,13 +41,13 @@ function invoice_add_page($invoice_type) {
 /**
  * Page callback: Returns the invoice add/edit form to edit an existing invoice.
  *
- * @see invoice_edit_form()
- *
  * @param Invoice $invoice
  *   The invoice to edit.
  *
  * @return array
  *   The invoice add/edit form render array.
+ *
+ * @see invoice_edit_form()
  */
 function invoice_edit_page(Invoice $invoice) {
   drupal_set_title(t('Edit invoice'));

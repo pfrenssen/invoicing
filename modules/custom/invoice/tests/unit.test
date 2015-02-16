@@ -2,22 +2,21 @@
 
 /**
  * @file
- * Unit tests for the Invoice module.
+ * Contains \InvoiceUnitTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'client');
-module_load_include('inc', 'test_traits', 'invoice');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
+/**
+ * Unit tests for the Invoice module.
+ */
 class InvoiceUnitTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
-  use ClientTestHelper;
-  use InvoiceTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * Test business entities.
@@ -65,10 +64,6 @@ class InvoiceUnitTestCase extends InvoicingIntegrationTestCase {
   protected function setUp() {
     parent::setup();
 
-    // Create a line item of each type so they can be referenced in invoices.
-    $this->createLineItem('product')->save();
-    $this->createLineItem('service')->save();
-
     // Create two test users, each owning one business that has two clients, and
     // file an invoice for each client.
     $this->businesses = array();
@@ -80,6 +75,13 @@ class InvoiceUnitTestCase extends InvoicingIntegrationTestCase {
       // Create a business.
       $this->businesses[$i] = $this->createBusiness();
       $this->businesses[$i]->save();
+
+      // Create a line item of each type so they can be referenced in invoices.
+      // We only need to do this once, these can be reused for both businesses.
+      if ($i == 0) {
+        $this->createLineItem('product')->save();
+        $this->createLineItem('service')->save();
+      }
 
       // Create a user and link the business to it.
       $this->users[$i] = $this->drupalCreateUser();

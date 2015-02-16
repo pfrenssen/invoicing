@@ -91,3 +91,10 @@ function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
     $args = NULL;
   }
 }
+
+/**
+ * Initializes the Composer autoloader.
+ */
+function invoicing_core_autoload() {
+  require_once 'profiles/invoicing/vendor/autoload.php';
+}

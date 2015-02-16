@@ -2,16 +2,18 @@
 
 /**
  * @file
- * Tests the business overview.
+ * Contains \BusinessOverviewTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
+invoicing_core_autoload();
 
+/**
+ * Tests the business overview.
+ */
 class BusinessOverviewTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
 
   /**
    * An array of test businesses.

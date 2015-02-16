@@ -2,16 +2,18 @@
 
 /**
  * @file
- * CRUD tests for the Client module.
+ * Contains \ClientCRUDTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'client');
+invoicing_core_autoload();
 
+/**
+ * CRUD tests for the Client module.
+ */
 class ClientCRUDTestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use ClientTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
 
   /**
    * {@inheritdoc}
@@ -43,7 +45,7 @@ class ClientCRUDTestCase extends InvoicingIntegrationTestCase {
   /**
    * Tests creating, reading, updating and deleting of clients.
    */
-  public function testClientCRUD() {
+  public function testClientCrud() {
     // Check that the database table exists and is empty.
     $this->assertTrue(db_table_exists('client'), 'The client database table exists.');
     $this->assertClientTableEmpty('The client database is initially empty.');

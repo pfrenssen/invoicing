@@ -157,9 +157,11 @@ function line_item_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
+      'module' => 'line_item',
+      'settings' => array(
+        'size' => 7,
+      ),
+      'type' => 'line_item_tax_rate',
       'weight' => 4,
     ),
   );
@@ -351,9 +353,11 @@ function line_item_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
+      'module' => 'line_item',
+      'settings' => array(
+        'size' => 7,
+      ),
+      'type' => 'line_item_tax_rate',
       'weight' => 9,
     ),
   );

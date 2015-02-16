@@ -5,12 +5,14 @@
  * Asserts and helper methods for testing Business functionality.
  */
 
+namespace Drupal\invoicing\Traits;
+
 trait BusinessTestHelper {
 
   /**
    * Check if the properties of the given business match the given values.
    *
-   * @param business $business
+   * @param \Business $business
    *   The Business entity to check.
    * @param array $values
    *   An associative array of values to check, keyed by property name.
@@ -22,7 +24,7 @@ trait BusinessTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertBusinessProperties(Business $business, array $values, $message = '', $group = 'Other') {
+  function assertBusinessProperties(\Business $business, array $values, $message = '', $group = 'Other') {
     return $this->assertEntityProperties('business', $business, $values, $message, $group);
   }
 
@@ -67,7 +69,7 @@ trait BusinessTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return Business
+   * @return \Business
    *   A new business entity.
    */
   function createBusiness(array $values = array()) {
@@ -89,7 +91,7 @@ trait BusinessTestHelper {
    *   An optional associative array of values, keyed by property name. Random
    *   values will be applied to all omitted properties.
    *
-   * @return Business
+   * @return \Business
    *   A new business entity.
    */
   function createUiBusiness(array $values = array()) {
@@ -101,7 +103,7 @@ trait BusinessTestHelper {
     $this->drupalPost('business/add', $edit, t('Save'));
 
     // Retrieve the saved business by name and email address and return it.
-    $query = new EntityFieldQuery();
+    $query = new \EntityFieldQuery();
     $query
       ->entityCondition('entity_type', 'business')
       ->entityCondition('bundle', 'business')
@@ -179,8 +181,6 @@ trait BusinessTestHelper {
   /**
    * Returns form post values from the given entity values.
    *
-   * @see self::randomBusinessValues()
-   *
    * @param array $values
    *   An associative array of business values, keyed by property name, as
    *   returned by self::randomBusinessValues().
@@ -188,8 +188,10 @@ trait BusinessTestHelper {
    * @returns array
    *   An associative array of values, keyed by form field name, as used by
    *   parent::drupalPost().
+   *
+   * @see self::randomBusinessValues()
    */
-  public function convertBusinessValuesToFormPostValues($values) {
+  public function convertBusinessValuesToFormPostValues(array $values) {
     return array(
       'name' => $values['name'],
       'field_business_email[und][0][email]' => $values['field_business_email'],
@@ -209,13 +211,13 @@ trait BusinessTestHelper {
   /**
    * Updates the given business with the given properties.
    *
-   * @param Business $business
+   * @param \Business $business
    *   The business entity to update.
    * @param array $values
    *   An associative array of values to apply to the entity, keyed by property
    *   name.
    */
-  function updateBusiness(Business $business, array $values) {
+  function updateBusiness(\Business $business, array $values) {
     $wrapper = entity_metadata_wrapper('business', $business);
     foreach ($values as $property => $value) {
       $wrapper->$property->set($value);
@@ -225,19 +227,19 @@ trait BusinessTestHelper {
   /**
    * Adds a business to a user, making the user the business owner.
    *
-   * @param Business $business
+   * @param \Business $business
    *   The business to add to the user.
-   * @param object $user
+   * @param \stdClass $user
    *   The user the business should be added to.
    */
-  function addBusinessToUser(Business $business, stdClass $user) {
+  function addBusinessToUser(\Business $business, \stdClass $user) {
     business_add_to_user($business, $user);
   }
 
   /**
    * Returns a random business from the database.
    *
-   * @return Business
+   * @return \Business
    *   A random business.
    */
   function randomBusiness() {
@@ -250,4 +252,5 @@ trait BusinessTestHelper {
 
     return business_load($bid);
   }
+
 }

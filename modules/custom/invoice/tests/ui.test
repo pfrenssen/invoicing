@@ -2,22 +2,21 @@
 
 /**
  * @file
- * UI tests for the Invoice module.
+ * Contains \InvoiceUITestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'client');
-module_load_include('inc', 'test_traits', 'invoice');
-module_load_include('inc', 'test_traits', 'line_item');
+invoicing_core_autoload();
 
+/**
+ * UI tests for the Invoice module.
+ */
 class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
-  use ClientTestHelper;
-  use InvoiceTestHelper;
-  use LineItemTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
 
   /**
    * {@inheritdoc}
@@ -196,6 +195,145 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // Check target Url after redirection.
     $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after editing an invoice.');
+  }
+
+  /**
+   * Tests the tax rate fields on the invoice.
+   */
+  public function testInvoiceLineItemTaxRate() {
+    // Add some tax rates.
+    $tax_rates = array();
+    $first_digit = rand(1, 8);
+    for ($i = 0; $i < 4; $i++) {
+      $tax_rates[$i] = $this->createUiTaxRate(array(
+        'name' => "test rate {$i}",
+        'rate' => "{$first_digit}{$i}.00",
+      ));
+    }
+
+    // Calculate a first digit which is not used for the stored tax rates. All
+    // tax rates start with the same digit so we can simply increment it to get
+    // an unused digit. This will be used to test negative cases.
+    $unused_first_digit = $first_digit + 1;
+
+    // Go to add invoice page.
+    $this->drupalGet('invoice/add');
+
+    // Build an array of wrong tax rates.
+    $invalid_rates = array(
+      100.01,
+      -1,
+      -0.01,
+      'squirrel',
+      '75.00a',
+      "<script>alert('xss');</script>",
+    );
+
+    // Test the tax rate field for both services and products.
+    $expected_tax_rates = array();
+    foreach (array('product', 'service') as $key => $line_item_type) {
+      // Click on "Add new {type}" to open the inline form.
+      $click_method = 'clickAddNew' . ucfirst($line_item_type) . 'Button';
+      $this->$click_method();
+
+      // Verify that the tax field is an autocomplete field. We only check if
+      // the hidden field that is used by the javascript functionality is there.
+      // @todo Test the actual functionality once we have browser based testing.
+      $query = '//input[@type="hidden" and @id="edit-field-invoice-' . $line_item_type . 's-und-form-field-line-item-tax-und-0-value-autocomplete" and contains(@class, "autocomplete")]';
+      $this->assertXPathElements($query, 1, array(), 'The tax rates field is an autocomplete field.');
+
+      // Enter woeful tax rates.
+      foreach ($invalid_rates as $invalid_rate) {
+        $edit = array(
+          'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $invalid_rate,
+        );
+        $submit_method = 'submitInline' . ucfirst($line_item_type) . 'Form';
+        $this->$submit_method($edit);
+
+        if (in_array($invalid_rate, array('squirrel', "<script>alert('xss');</script>"))) {
+          $this->assertText('Tax rate cannot be longer than 7 characters but is currently ' . strlen($invalid_rate) . ' characters long.', 'The tax rate was not correct.');
+        }
+        else {
+          $this->assertText('Tax rate should be between 0.00 and 100.00.', 'The tax rate was not correct.');
+        }
+      }
+
+      // Enter one of our tax rates in the field.
+      $tax_rate = $tax_rates[$key]->rate;
+      $edit = array(
+        'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $tax_rate,
+      );
+      $submit_method = 'submitInline' . ucfirst($line_item_type) . 'Form';
+      $this->$submit_method($edit);
+
+      // Keep track of the tax rates we used so we can assert them later.
+      $expected_tax_rates[] = $tax_rate;
+
+      // Click on "Add new {type}" again and enter a random tax value - one
+      // which is not in the autocomplete results. This should be accepted.
+      $this->$click_method();
+      $tax_rate = $unused_first_digit . $key . '.75';
+      $edit = array(
+        'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $tax_rate,
+      );
+      $this->$submit_method($edit);
+      $expected_tax_rates[] = $tax_rate;
+    }
+
+    // Fill in the required fields ('client' and 'invoice number') and submit
+    // the invoice.
+    $this->addExistingClientToUiInvoice($this->client);
+    $invoice_number = $this->randomString();
+    $edit = array('field_invoice_number[und][0][value]' => $invoice_number);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // Retrieve the tax rates that were saved on the invoice.
+    $actual_tax_rates = array();
+    $invoice = entity_metadata_wrapper('invoice', $this->loadInvoiceByNumber($invoice_number));
+    foreach (array('product', 'service') as $key => $line_item_type) {
+      $field = "field_invoice_{$line_item_type}s";
+      foreach ($invoice->$field->value() as $line_item) {
+        $line_item = entity_metadata_wrapper('line_item', $line_item);
+        $actual_tax_rates[] = $line_item->field_line_item_tax->value();
+      }
+    }
+
+    // Check that the tax rates are successfully saved on the invoice.
+    $this->assertEqual($expected_tax_rates, $actual_tax_rates, 'The tax rates were successfully saved.');
+
+    // Check the autocomplete results by accessing the AJAX result directly,
+    // simulating the request that is done when the first key is pressed.
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $first_digit), TRUE);
+    $result = array_reduce($tax_rates, function ($carry, $item) use ($autocomplete_results) {
+      return $carry && array_key_exists($item->rate, $autocomplete_results) && $autocomplete_results[$item->rate] == $item->rate;
+    }, TRUE);
+    $this->assertTrue($result, 'Autocomplete results contain the correct list of tax rates.');
+
+    // Check that only one result is returned when the first two keys are
+    // pressed.
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $first_digit . '0'), TRUE);
+    $expected_results = array($first_digit . '0.00' => $first_digit . '0.00');
+    $this->assertEqual($autocomplete_results, $expected_results, 'The correct tax rate is returned in the autocomplete results when two keys are pressed.');
+
+    // Check that no results are returned when a key is pressed that does not
+    // correspond with a tax rate.
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $unused_first_digit), TRUE);
+    $this->assertFalse($autocomplete_results, 'No autocomplete results are returned when a non-existing tax rate is requested.');
+
+    // Create a second business that has a tax rate starting with the unused
+    // digit. If we query this we should not get any results, since we should
+    // only see our own tax rates.
+    $business = $this->createBusiness();
+    $business->save();
+    $values = array(
+      'bid' => $business->identifier(),
+      'rate' => $unused_first_digit . '0.00',
+    );
+    $tax_rate = $this->createTaxRate($values);
+    line_item_tax_rate_save($tax_rate);
+
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $unused_first_digit), TRUE);
+    $this->assertFalse($autocomplete_results, 'Tax rates from another business are not returned in the autocomplete results.');
   }
 
 }

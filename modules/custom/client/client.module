@@ -11,7 +11,7 @@ include_once 'client.features.inc';
  * Implements hook_entity_info().
  */
 function client_entity_info() {
-  $info = array();
+  $entity_info = array();
 
   $entity_info['client'] = array(
     'label' => t('Client'),
@@ -233,6 +233,23 @@ function client_field_extra_fields() {
 }
 
 /**
+ * Implements hook_field_widget_form_alter().
+ */
+function client_field_widget_form_alter(&$element, &$form_state, $context) {
+  // The Addressfield module automatically makes all fields required that are
+  // necessary for a valid postal address for a given country. We would like to
+  // keep these fields optional.
+  // @see https://www.drupal.org/node/2282817
+  if ($form_state['build_info']['form_id'] == 'client_edit_form' && $context['field']['type'] == 'addressfield') {
+    $element['street_block']['thoroughfare']['#required'] = FALSE;
+    $element['locality_block']['dependent_locality']['#required'] = FALSE;
+    $element['locality_block']['locality']['#required'] = FALSE;
+    $element['locality_block']['administrative_area']['#required'] = FALSE;
+    $element['locality_block']['postal_code']['#required'] = FALSE;
+  }
+}
+
+/**
  * Implements hook_menu_local_tasks_alter().
  */
 function client_menu_local_tasks_alter(&$data, $router_item, $root_path) {
@@ -297,14 +314,14 @@ function client_ctools_plugin_directory($module, $plugin) {
  * @param Client $client
  *   Optionally a Client to check access for. If nothing is given, access for
  *   all clients is determined.
- * @param object $account
+ * @param \stdClass $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function client_access($op, Client $client = NULL, stdClass $account = NULL) {
+function client_access($op, Client $client = NULL, \stdClass $account = NULL) {
   global $user;
 
   // Default to the current user.
@@ -397,8 +414,6 @@ function client_type_get_names() {
 /**
  * Composes the label of a client type.
  *
- * @see entity_label()
- *
  * @param object $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
@@ -406,6 +421,8 @@ function client_type_get_names() {
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
 function client_type_label($entity, $entity_type) {
   // If the entity type is being created it does not have a name yet.
@@ -422,9 +439,6 @@ function client_type_label($entity, $entity_type) {
  * from the database. Clients are loaded into memory and will not require
  * database access if loaded again during the same page request.
  *
- * @see entity_load()
- * @see EntityFieldQuery
- *
  * @param array $cids
  *   An array of client IDs.
  * @param bool $reset
@@ -432,6 +446,9 @@ function client_type_label($entity, $entity_type) {
  *
  * @return Client[]
  *   An array of client objects indexed by cid.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
  */
 function client_load_multiple(array $cids = array(), $reset = FALSE) {
   return entity_load('client', $cids, array(), $reset);
@@ -533,7 +550,7 @@ function client_uri(Client $client) {
  *
  * @see client_menu()
  */
-function client_page_title($client) {
+function client_page_title(Client $client) {
   return $client->name;
 }
 
@@ -572,17 +589,17 @@ function client_entity_metadata_get_properties(Client $client, array $options, $
 /**
  * Composes the label of a Client.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param Client $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function client_label($entity, $entity_type) {
+function client_label(Client $entity, $entity_type) {
   return $entity->name;
 }
 
@@ -609,13 +626,13 @@ function client_validate_website_field($element, &$form_state) {
  *
  * @param Client $client
  *   The client to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the client is owned by the user, FALSE otherwise.
  */
-function client_is_owned_by_user(Client $client, stdClass $account = NULL) {
+function client_is_owned_by_user(Client $client, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -781,4 +798,5 @@ class ClientInlineEntityFormController extends EntityInlineEntityFormController 
 
     return $entity_form;
   }
+
 }

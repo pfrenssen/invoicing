@@ -2,18 +2,19 @@
 
 /**
  * @file
- * Tests for the Client entity.
+ * Contains \ClientEntityTestCase.
  */
 
-module_load_include('inc', 'test_traits', 'base');
-module_load_include('inc', 'test_traits', 'business');
-module_load_include('inc', 'test_traits', 'client');
+invoicing_core_autoload();
 
+/**
+ * Tests for the Client entity.
+ */
 class ClientEntityTestCase extends EntityTestCase {
 
-  use BaseTestHelper;
-  use BusinessTestHelper;
-  use ClientTestHelper;
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
 
   /**
    * Returns test case metadata.
@@ -92,7 +93,7 @@ class ClientEntityTestCase extends EntityTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function convertPropertiesToEntityMetadataWrapperValues($properties) {
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
     // Convert the bid into a full Business object.
     $properties['bid'] = business_load($properties['bid']);
 

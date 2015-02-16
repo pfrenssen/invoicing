@@ -124,17 +124,17 @@ function line_item_entity_property_info_alter(&$info) {
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
- * @param object $line_item
+ * @param LineItem $line_item
  *   Optionally a line item to check access for. If nothing is given, access for
  *   all line items is determined.
- * @param object $account
+ * @param \stdClass $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_access($op, $line_item = NULL, $account = NULL) {
+function line_item_access($op, LineItem $line_item = NULL, \stdClass $account = NULL) {
   if (user_access('administer line items', $account)) {
     return TRUE;
   }
@@ -311,17 +311,17 @@ function line_item_delete_multiple(array $lids) {
 /**
  * Composes the label of a line item.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param LineItem $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function line_item_label($entity, $entity_type) {
+function line_item_label(LineItem $entity, $entity_type) {
   return $entity->lid;
 }
 
@@ -370,9 +370,6 @@ function line_item_load($lid, $reset = FALSE) {
  * item from the database. Line items are loaded into memory and will not
  * require database access if loaded again during the same page request.
  *
- * @see entity_load()
- * @see EntityFieldQuery
- *
  * @param array $lids
  *   An array of line item IDs.
  * @param bool $reset
@@ -380,6 +377,9 @@ function line_item_load($lid, $reset = FALSE) {
  *
  * @return array
  *   An array of line item objects indexed by lid.
+ *
+ * @see entity_load()
+ * @see EntityFieldQuery
  */
 function line_item_load_multiple($lids = array(), $reset = FALSE) {
   return entity_load('line_item', $lids, array(), $reset);
@@ -414,17 +414,17 @@ function line_item_type_create($type, $name) {
 /**
  * Composes the label of a line item type.
  *
- * @see entity_label()
- *
- * @param object $entity
+ * @param \stdClass $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
  *
  * @return string|bool
  *   The entity label or FALSE if not found.
+ *
+ * @see entity_label()
  */
-function line_item_type_label($entity, $entity_type) {
+function line_item_type_label(\stdClass $entity, $entity_type) {
   // If the entity type is being created it does not have a name yet.
   if (empty($entity->is_new)) {
     return $entity->name;
@@ -437,13 +437,13 @@ function line_item_type_label($entity, $entity_type) {
  *
  * @param LineItem $line_item
  *   The line item to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the line item is owned by the user, FALSE otherwise.
  */
-function line_item_is_owned_by_user(LineItem $line_item, stdClass $account = NULL) {
+function line_item_is_owned_by_user(LineItem $line_item, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -477,6 +477,7 @@ function line_item_menu() {
     'access callback' => 'line_item_tax_rate_access',
     'access arguments' => array('create'),
     'file' => 'line_item.pages.inc',
+    'type' => MENU_CALLBACK,
   );
 
   $items['settings/tax-rates/%line_item_tax_rate/delete'] = array(
@@ -486,14 +487,24 @@ function line_item_menu() {
     'access callback' => 'line_item_tax_rate_access',
     'access arguments' => array('delete', 2),
     'file' => 'line_item.pages.inc',
+    'type' => MENU_CALLBACK,
   );
 
   $items['settings/tax-rates/%line_item_tax_rate/edit'] = array(
-    'title' => 'Edit tax rate',
+    'title' => 'Edit',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('line_item_edit_tax_rate_form', 2),
     'access callback' => 'line_item_tax_rate_access',
     'access arguments' => array('update', 2),
+    'file' => 'line_item.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['settings/tax-rates/autocomplete/%'] = array(
+    'page callback' => 'line_item_tax_rate_autocomplete',
+    'page arguments' => array(3),
+    'access arguments' => array('view own tax rates'),
+    'type' => MENU_CALLBACK,
     'file' => 'line_item.pages.inc',
   );
 
@@ -505,7 +516,7 @@ function line_item_menu() {
  */
 function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
   // Add action link to 'settings/tax-rates/add' on the tax rates overview.
-  if ($root_path == 'settings') {
+  if ($root_path == 'settings/tax-rates') {
     $item = menu_get_item('settings/tax-rates/add');
     if ($item['access']) {
       $data['actions']['output'][] = array(
@@ -514,6 +525,80 @@ function line_item_menu_local_tasks_alter(&$data, $router_item, $root_path) {
       );
     }
   }
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function line_item_field_widget_info() {
+  return array(
+    'line_item_tax_rate' => array(
+      'label' => t('Tax rate'),
+      'description' => t('Tax rate decimal field type widget'),
+      'field types' => array('number_decimal'),
+      'settings' => array('size' => 7),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements function hook_field_widget_form().
+ */
+function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  if ($instance['widget']['type'] == 'line_item_tax_rate') {
+    $element['value'] = array(
+      '#title' => t('Tax rate'),
+      '#type' => 'textfield',
+      '#maxlength' => 7,
+      '#autocomplete_path' => 'settings/tax-rates/autocomplete',
+      '#default_value' => isset($items[$delta]) && is_numeric($items[$delta]['value']) ? $items[$delta]['value'] : '',
+      '#description' => t('Tax rate percentage'),
+      '#required' => FALSE,
+      '#element_validate' => array('line_item_tax_rate_element_validate'),
+    );
+  }
+
+  return $element;
+}
+
+/**
+ * Returns the tax rates that belong to the given business.
+ *
+ * @param Business $business
+ *   Optional business for which to return the tax rates. Defaults to the
+ *   active business.
+ *
+ * @return TaxRate[]
+ *   An array of tax rates keyed by 'tid'.
+ *
+ * @throws Exception
+ *   Thrown when there no business was passed and there is no active business.
+ */
+function line_item_get_tax_rates_by_business(Business $business) {
+  $business = $business ?: business_get_active_business();
+
+  if (!$business) {
+    throw new Exception('Cannot retrieve tax rates without a business.');
+  }
+
+  $tax_rates = &drupal_static(__FUNCTION__, array());
+  if (empty($tax_rates[$business->identifier()])) {
+    $result = db_select('tax_rates', 'tr')
+      ->fields('tr')
+      ->condition('bid', $business->bid, '=')
+      ->execute()
+      ->fetchAllAssoc('tid');
+
+    foreach ($result as $tid => $value) {
+      $tax_rate = line_item_tax_rate_load($tid);
+      $tax_rates[$business->identifier()][$tid] = $tax_rate->rate;
+    }
+  }
+
+  return $tax_rates[$business->identifier()];
 }
 
 /**
@@ -597,13 +682,13 @@ function line_item_tax_rate_save(TaxRate $tax_rate) {
  *
  * @param TaxRate $tax_rate
  *   The tax rate to check.
- * @param object $account
+ * @param \stdClass $account
  *   Optional user account to check. Defaults to the currently logged in user.
  *
  * @return bool
  *   TRUE if the tax rate is owned by the user, FALSE otherwise.
  */
-function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $account = NULL) {
+function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, \stdClass $account = NULL) {
   // Default to the logged in user.
   global $user;
   $account = $account ?: $user;
@@ -619,14 +704,14 @@ function line_item_tax_rate_is_owned_by_user(TaxRate $tax_rate, stdClass $accoun
  * @param TaxRate $tax_rate
  *   Optionally a tax rate to check access for. If nothing is given, access for
  *   all tax rates is determined.
- * @param object $account
+ * @param \stdClass $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
  *
  * @return bool
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
-function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, stdClass $account = NULL) {
+function line_item_tax_rate_access($op, TaxRate $tax_rate = NULL, \stdClass $account = NULL) {
   if (user_access('administer tax rates', $account)) {
     return TRUE;
   }
@@ -661,6 +746,15 @@ function line_item_tax_rate_delete(TaxRate $tax_rate) {
   db_delete('tax_rates')
     ->condition('tid', $tax_rate->tid, '=')
     ->execute();
+}
+
+/**
+ * Validate handler for the tax rate textfield in the line item form.
+ */
+function line_item_tax_rate_element_validate($element, &$form_state, $form) {
+  if (!empty($element['#value']) && (!is_numeric($element['#value']) || $element['#value'] < 0 || $element['#value'] > 100)) {
+    form_error($element, t('Tax rate should be between 0.00 and 100.00.'));
+  }
 }
 
 /**
@@ -814,4 +908,5 @@ class TaxRate {
   public function __isset($property) {
     return $this->{$property} !== NULL;
   }
+
 }

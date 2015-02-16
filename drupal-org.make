@@ -3,7 +3,7 @@ core = 7.x
 
 projects[drupal][type] = core
 projects[drupal][download][type] = git
-projects[drupal][download][revision] = 7.32
+projects[drupal][download][revision] = 7.34
 projects[drupal][download][branch] = 7.x
 
 ; Recursive module dependencies of installation profile are not enabled in
@@ -24,13 +24,17 @@ projects[drupal][patch][] = http://drupal.org/files/1988780-6-simpletest-backref
 ; https://drupal.org/node/2061333
 projects[drupal][patch][] = http://drupal.org/files/updater-installation_directory_not_created-2061333-1.patch
 
+; Warning: DOMDocument::importNode() ID already defined.
+; https://www.drupal.org/node/2386903
+projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simpletest-domdocument_warning-7.x-do-not-test.patch
+
 projects[addressfield][download][type] = git
-projects[addressfield][download][revision] = 7.x-1.0-beta5
+projects[addressfield][download][revision] = 7.x-1.0-rc1
 projects[addressfield][download][branch] = 7.x-1.x
 projects[addressfield][subdir] = contrib
 
 projects[ctools][download][type] = git
-projects[ctools][download][revision] = 7.x-1.4
+projects[ctools][download][revision] = 7.x-1.5
 projects[ctools][download][branch] = 7.x-1.x
 projects[ctools][subdir] = contrib
 
@@ -40,7 +44,7 @@ projects[date][download][branch] = 7.x-2.x
 projects[date][subdir] = contrib
 
 projects[email][download][type] = git
-projects[email][download][revision] = 7.x-1.2
+projects[email][download][revision] = 7.x-1.3
 projects[email][download][branch] = 7.x-1.x
 projects[email][subdir] = contrib
 
@@ -86,7 +90,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
 projects[features][download][type] = git
-projects[features][download][revision] = 7.x-2.1
+projects[features][download][revision] = 7.x-2.3
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
 
@@ -142,7 +146,7 @@ projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
 
 projects[views][download][type] = git
-projects[views][download][revision] = 7.x-3.7
+projects[views][download][revision] = 7.x-3.8
 projects[views][download][branch] = 7.x-3.x
 projects[views][subdir] = contrib
 

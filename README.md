@@ -50,3 +50,39 @@ with the username 'invoicing' and password 'invoicing':
     $ mkdir -p sites/default/files
     $ chmod 775 sites/default/files
     $ drush si --account-name=admin --account-pass=admin --db-url=mysql://invoicing:invoicing@localhost/invoicing invoicing -y --debug
+
+Also, make sure to install the composer dependencies:
+    $ cd ./profiles/invoicing
+    $ composer install
+
+
+Running tests
+=============
+
+Simpletest:
+
+All our unit tests and more complicated functional tests are written in
+Simpletest. They are divided in a number of test groups, each of which starting
+with "Invoicing".
+
+In order to run the tests through the user interface:
+- Enable the simpletest module.
+- In the browser go to admin/config/development/testing.
+- Select the tests you wish to run and click "Run tests".
+
+Alternatively, run the tests with drush:
+$ drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing     - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://my-base-url.local
+
+Behat:
+
+In order to run Behat tests we need to first set some environment variables. The
+easiest way to do this is by installing the
+[drush-bde-env](https://github.com/pfrenssen/drush-bde-env) drush extension and
+running the following command:
+
+$ cd /path/to/drupal/root
+$ drush bes --base-url=http://my-personal-base-url.localhost config.local
+$ source config.local
+
+Now we can run our tests:
+$ ./profiles/invoicing/vendor/bin/behat -c ./profiles/invoicing/behat.yml

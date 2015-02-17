@@ -1,0 +1,20 @@
+default:
+  suites:
+    default:
+      contexts:
+        - FeatureContext
+        - Drupal\invoicing\Context\DrupalContext
+        - Drupal\invoicing\Context\InvoicingContext
+        - Drupal\DrupalExtension\Context\DrushContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\MinkContext
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      selenium2: ~
+      javascript_session: 'selenium2'
+    Drupal\DrupalExtension:
+      api_driver: 'drupal'
+      blackbox: ~
+      text:
+        username_field: 'E-mail'

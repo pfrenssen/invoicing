@@ -39,6 +39,7 @@ before_script:
   # Build the project.
   - ./build.sh --quick
   - cd build/
+  - BUILD_DIR=`pwd`
   # Run the installer.
   - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
   # Enable Simpletest.
@@ -50,10 +51,13 @@ before_script:
 script:
   # Run Simpletests.
   - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080 ; SIMPLETEST_RESULT=$?
+  # Run Behat tests.
+  - export BEHAT_PARAMS="{\"extensions\":{\"Behat\\\\MinkExtension\":{\"base_url\":\"http://127.0.0.1:8080\"},\"Drupal\\\\DrupalExtension\":{\"drupal\":{\"drupal_root\":\"${BUILD_DIR}\"}}}}"
+  - ./profiles/invoicing/vendor/bin/behat -c ./profiles/invoicing/behat.yml ; BEHAT_RESULT=$?
   # Run PHP CodeSniffer tests.
-  - cd ..
-  - ./vendor/bin/phpcs --standard=./phpcs-ruleset.xml --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* --ignore=*/drush-master/* ./build/profiles/invoicing ; CODESNIFFER_RESULT=$?
-  - if [ $SIMPLETEST_RESULT -eq 0 ] && [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
+  - ./profiles/invoicing/vendor/bin/phpcs --standard=./profiles/invoicing/phpcs-ruleset.xml --extensions=php,module,inc,install,test,profile,theme,js,css,info,txt --ignore=*/contrib/* --ignore=*/vendor/* --ignore=*/libraries/* --ignore=*/drush-master/* ./profiles/invoicing ; CODESNIFFER_RESULT=$?
+  # Exit with an error code if any of the tests failed.
+  - if [ $SIMPLETEST_RESULT -eq 0 ] && [ $BEHAT_RESULT -eq 0 ] && [ $CODESNIFFER_RESULT -eq 0 ] ; then exit 0 ; else exit 1 ; fi
 
 notifications:
   irc: irc.freenode.org#pocomas

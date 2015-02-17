@@ -311,7 +311,7 @@ function line_item_delete_multiple(array $lids) {
 /**
  * Composes the label of a line item.
  *
- * @param \stdClass $entity
+ * @param LineItem $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
@@ -321,7 +321,7 @@ function line_item_delete_multiple(array $lids) {
  *
  * @see entity_label()
  */
-function line_item_label(\stdClass $entity, $entity_type) {
+function line_item_label(LineItem $entity, $entity_type) {
   return $entity->lid;
 }
 
@@ -449,7 +449,7 @@ function line_item_is_owned_by_user(LineItem $line_item, \stdClass $account = NU
   $account = $account ?: $user;
 
   $line_item = entity_metadata_wrapper('line_item', $line_item);
-  return in_array($line_item->bid->value(), array_keys(business_get_businesses_from_user($account)));
+  return in_array($line_item->bid->value()->bid, array_keys(business_get_businesses_from_user($account)));
 }
 
 /**
@@ -791,6 +791,13 @@ class LineItem extends Entity {
    * {@inheritdoc}
    */
   public function save() {
+    // The 'type' and 'bid' properties are mandatory.
+    foreach (array('bid', 'type') as $property) {
+      if (empty($this->$property)) {
+        throw new InvalidArgumentException("Line item has missing '$property' property.");
+      }
+    }
+
     // Set created and changed values. Only set the created value if it is new.
     if (empty($this->created) && (!empty($this->is_new) || !$this->lid)) {
       $this->created = REQUEST_TIME;
@@ -811,7 +818,7 @@ class LineItemAPIController extends EntityAPIController {
    * {@inheritdoc}
    */
   public function create(array $values = array()) {
-    // Set the business ID to the active business of the logged in user.
+    // Default to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
       $values += array('bid' => $business->bid);

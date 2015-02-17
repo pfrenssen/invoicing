@@ -154,11 +154,13 @@ class LineItemUnitTestCase extends InvoicingIntegrationTestCase {
     foreach ($ownership as $user_key => $tax_rate_keys) {
       for ($i = 0; $i < 4; $i++) {
         $owned = in_array($i, $tax_rate_keys);
-        $this->assertEqual($owned, line_item_tax_rate_is_owned_by_user($this->taxRates[$i], $this->users[$user_key]), format_string('Tax rate :tax_rate :owned by user :user.', array(
+        $string = 'Tax rate :tax_rate :owned by user :user.';
+        $args = array(
           ':tax_rate' => $i,
           ':owned' => $owned ? 'is owned' : 'is not owned',
           ':user' => $user_key,
-        )));
+        );
+        $this->assertEqual($owned, line_item_tax_rate_is_owned_by_user($this->taxRates[$i], $this->users[$user_key]), format_string($string, $args));
       }
     }
   }

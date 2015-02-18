@@ -336,4 +336,17 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
     $this->assertFalse($autocomplete_results, 'Tax rates from another business are not returned in the autocomplete results.');
   }
 
+  /**
+   * Tests the detail page of an invoice.
+   *
+   * @todo Remove this once IN-40 is in.
+   */
+  public function testDetailPage() {
+    // Create an invoice using random values.
+    $invoice = $this->createUiInvoice();
+
+    // Visit the detail page of the invoice.
+    $this->drupalGet('invoice/' . $invoice->identifier());
+  }
+
 }

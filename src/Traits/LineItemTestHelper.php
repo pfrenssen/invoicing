@@ -72,8 +72,8 @@ trait LineItemTestHelper {
   /**
    * Returns a newly created line item entity without saving it.
    *
-   * This is intended for unit tests. It will not set a business ID. If you are
-   * doing a functionality test use $this->createUiLineItem() instead.
+   * This is intended for unit tests. It will set a random business ID. If you
+   * are doing a functionality test use $this->createUiLineItem() instead.
    *
    * @param string $type
    *   Optional line item type, either 'product' or 'service'.

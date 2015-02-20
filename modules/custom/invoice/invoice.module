@@ -577,7 +577,7 @@ class Invoice extends Entity {
     // Ensure the type is consistent with the value as loaded from the database
     // by casting it back to a string.
     // @see number_field_presave()
-    if (!empty($this->field_invoice_discount[LANGUAGE_NONE][0]['value'])) {
+    if (isset($this->field_invoice_discount[LANGUAGE_NONE][0]['value'])) {
       $this->field_invoice_discount[LANGUAGE_NONE][0]['value'] = (string) $this->field_invoice_discount[LANGUAGE_NONE][0]['value'];
     }
 

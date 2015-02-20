@@ -523,16 +523,16 @@ function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 /**
  * The class used for invoice entities.
  *
- * @param array $field_invoice_client
- * @param array $field_invoice_date
- * @param array $field_invoice_discount
- * @param array $field_invoice_due_date
- * @param array $field_invoice_number
- * @param array $field_invoice_po_number
- * @param array $field_invoice_products
- * @param array $field_invoice_services
- * @param array $field_invoice_status
- * @param array $field_invoice_terms
+ * @property array $field_invoice_client
+ * @property array $field_invoice_date
+ * @property array $field_invoice_discount
+ * @property array $field_invoice_due_date
+ * @property array $field_invoice_number
+ * @property array $field_invoice_po_number
+ * @property array $field_invoice_products
+ * @property array $field_invoice_services
+ * @property array $field_invoice_status
+ * @property array $field_invoice_terms
  */
 class Invoice extends Entity {
 

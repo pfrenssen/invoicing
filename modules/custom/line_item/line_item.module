@@ -420,7 +420,7 @@ function line_item_type_create($type, $name) {
 /**
  * Composes the label of a line item type.
  *
- * @param \stdClass $entity
+ * @param Entity $entity
  *   The entity for which to generate the label.
  * @param string $entity_type
  *   The entity type; e.g., 'node' or 'user'.
@@ -430,7 +430,7 @@ function line_item_type_create($type, $name) {
  *
  * @see entity_label()
  */
-function line_item_type_label(\stdClass $entity, $entity_type) {
+function line_item_type_label(Entity $entity, $entity_type) {
   // If the entity type is being created it does not have a name yet.
   if (empty($entity->is_new)) {
     return $entity->name;

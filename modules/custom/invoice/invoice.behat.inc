@@ -55,6 +55,13 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
   protected $exportedInvoiceCrawler;
 
   /**
+   * A test invoice number.
+   *
+   * @var string
+   */
+  protected $invoiceNumber;
+
+  /**
    * Navigates to the detail page of the invoice with the given number.
    *
    * @When (I )visit the detail page for invoice :number
@@ -403,6 +410,31 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    */
   protected function getClientByName($name) {
     return $this->getContext('ClientSubContext')->clients[$name];
+  }
+
+  /**
+   * Stores an invoice number.
+   *
+   * @param string $number
+   *   The invoice number.
+   *
+   * @Given the most recent invoice has the number :number
+   */
+  public function setInvoiceNumber($number) {
+    $this->invoiceNumber = $number;
+  }
+
+  /**
+   * Asserts that the next invoice number equals the given number.
+   *
+   * @param string $expected
+   *   The expected invoice number.
+   *
+   * @Then the next invoice number should be :expected
+   */
+  public function assertNextInvoiceNumber($expected) {
+    $actual = invoice_get_increased_number($this->invoiceNumber);
+    PHPUnit_Framework_Assert::assertEquals($expected, $actual);
   }
 
   /**

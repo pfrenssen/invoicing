@@ -575,10 +575,10 @@ class Invoice extends Entity {
 
     // The 'discount' field is casted to a float by number_field_presave().
     // Ensure the type is consistent with the value as loaded from the database
-    // by casting it back to a string.
+    // by casting it back to a string with two decimal numbers.
     // @see number_field_presave()
     if (isset($this->field_invoice_discount[LANGUAGE_NONE][0]['value'])) {
-      $this->field_invoice_discount[LANGUAGE_NONE][0]['value'] = (string) $this->field_invoice_discount[LANGUAGE_NONE][0]['value'];
+      $this->field_invoice_discount[LANGUAGE_NONE][0]['value'] = number_format($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 2);
     }
 
     return $return;

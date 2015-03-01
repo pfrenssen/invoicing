@@ -98,17 +98,23 @@ class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
   }
 
   /**
-   * Checks if the discount field has the correct type after it is saved.
+   * Checks if the discount field has the correct format after it is saved.
    *
    * This is a regression test for a bug that turned the discount field into an
-   * integer when the invoice was saved.
+   * integer when the invoice was saved. The discount should always be a string
+   * with two decimal numbers.
    *
    * @see https://invoicing.atlassian.net/browse/IN-20
    */
-  public function testDiscountFieldType() {
-    $test_values = [ 0, 1, 33.33, 100 ];
+  public function testDiscountFieldFormat() {
+    $test_values = [
+      0 => "0.00",
+      1 => "1.00",
+      "33.33" => "33.33",
+      100 => "100.00",
+    ];
 
-    foreach ($test_values as $value) {
+    foreach ($test_values as $value => $expected_value) {
       $properties = $this->randomInvoicePropertyValues();
       $fields = $this->randomInvoiceFieldValues();
       $fields['field_invoice_discount'][LANGUAGE_NONE][0]['value'] = $value;
@@ -118,6 +124,10 @@ class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
       $args = [ '%value' => $value ];
       $message = format_string('The discount field is a string when an invoice is saved with a discount of %value.', $args);
       $this->assertTrue(is_string($entity->field_invoice_discount[LANGUAGE_NONE][0]['value']), $message);
+
+      $message = format_string('The discount field is a formatted correctly when an invoice is saved with a discount of %value.', $args);
+      $this->assertEqual($expected_value, $entity->field_invoice_discount[LANGUAGE_NONE][0]['value'], $message);
     }
   }
+
 }

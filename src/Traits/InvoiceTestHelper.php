@@ -185,9 +185,9 @@ trait InvoiceTestHelper {
     $values['field_invoice_client'][LANGUAGE_NONE][0]['target_id'] = $client->identifier();
     $values['field_invoice_date'][LANGUAGE_NONE][0]['value'] = date('Y-m-d H:i:s', strtotime($date_polarity . $date_offset . ' day 00:00'));
     $values['field_invoice_number'][LANGUAGE_NONE][0]['value'] = $this->randomString();
-    // Round the discount so it will match the field data as returned by the
-    // Number module.
-    $values['field_invoice_discount'][LANGUAGE_NONE][0]['value'] = (string) round(mt_rand(0, 9999) / 100, 2);
+    // Round the discount and format it to use two decimals so it matches the
+    // expected format.
+    $values['field_invoice_discount'][LANGUAGE_NONE][0]['value'] = number_format(round(mt_rand(0, 9999) / 100, 2), 2);
     $values['field_invoice_po_number'][LANGUAGE_NONE][0]['value'] = $this->randomString();
     $values['field_invoice_due_date'][LANGUAGE_NONE][0]['value'] = (string) $this->randomDueDate();
     $values['field_invoice_terms'][LANGUAGE_NONE][0]['value'] = $this->randomString();

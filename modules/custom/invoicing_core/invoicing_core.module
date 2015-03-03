@@ -5,6 +5,8 @@
  * Main functions and hook implementations for the Invoicing Core module.
  */
 
+include_once 'invoicing_core.features.inc';
+
 /**
  * Implements hook_menu_alter().
  */

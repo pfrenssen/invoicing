@@ -141,12 +141,4 @@ function invoicing_install() {
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
 
-  // Allow visitor account creation.
-  variable_set('user_register', USER_REGISTER_VISITORS);
-
-  // Disable poor man's cron.
-  variable_set('cron_safe_threshold', 0);
-
-  // Enable the private file system by default.
-  variable_set('file_default_scheme', 'private');
 }

@@ -203,9 +203,11 @@ function invoice_menu() {
  * @param string $op
  *   The operation being performed. One of 'view', 'update', 'create', 'delete'
  *   or just 'edit' (being the same as 'create' or 'update').
- * @param Invoice $invoice
+ * @param \stdClass|Invoice $invoice
  *   Optionally an invoice to check access for. If nothing is given, access for
- *   all invoices is determined.
+ *   all invoices is determined. This can be either a full Invoice object, or,
+ *   when a new invoice is being created, an object containing menu access
+ *   arguments.
  * @param object $account
  *   Optional, a user object representing the user for whom the operation is to
  *   be performed. Determines access for a user other than the current user.
@@ -303,11 +305,11 @@ function invoice_theme($existing, $type, $theme, $path) {
 /**
  * Process variables for invoice templates that will be exported to PDF.
  *
- * @param $vars
+ * @param array $vars
  *   An associative array with the following keys:
  *   - 'invoice': contains the Invoice entity that will be rendered.
  */
-function template_preprocess_invoice_export(&$vars) {
+function template_preprocess_invoice_export(array &$vars) {
   $invoice_entity = $vars['invoice'];
   $invoice = entity_metadata_wrapper('invoice', $invoice_entity);
 

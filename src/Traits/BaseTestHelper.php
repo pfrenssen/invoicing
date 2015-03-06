@@ -505,4 +505,5 @@ trait BaseTestHelper {
     }
     return $str;
   }
+
 }

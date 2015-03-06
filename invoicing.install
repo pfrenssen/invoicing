@@ -141,4 +141,10 @@ function invoicing_install() {
   user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
 
+  // Make sure the .htaccess files that protect our public and private folders
+  // are present. The private file system is activated when the Invoicing Core
+  // module is enabled, at which time the stream wrappers are already statically
+  // cached. Clear this cache so the 'private://' wrapper can be used.
+  drupal_static_reset('file_get_stream_wrappers');
+  file_ensure_htaccess();
 }

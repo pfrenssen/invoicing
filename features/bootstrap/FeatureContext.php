@@ -22,16 +22,4 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $this->assertSession()->elementExists('xpath', '//fieldset/legend[contains(., "' . $legend . '")]');
   }
 
-  /**
-   * Checks that the current page contains a button with a specified label.
-   *
-   * @Then I should see( a) button with label :button_label
-   */
-  public function iShouldSeeButtonWithLabel($button_label) {
-    $element = $this->getSession()->getPage();
-    $button = $element->findButton($button_label);
-    if (empty($button)) {
-      throw new \Exception(sprintf("The button '%s' was not found on the page %s", $button_label, $this->getSession()->getCurrentUrl()));
-    }
-  }
 }

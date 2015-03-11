@@ -14,26 +14,12 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
 
   /**
-   * Checks that the current page overview contains a given legend fieldset.
+   * Checks that a fieldset with the given legend exists.
    *
-   * @Then I should see( a) fieldset with the legend :legend
+   * @Then I should see( a) fieldset with( the) legend :legend
    */
-  public function iShouldSeeFieldsetWithTheLegend($legend) {
-    $mapping = array(
-      'Client' => 'edit-field-invoice-client',
-      'Add new client' => 'edit-field-invoice-client',
-      'Add existing client' => 'edit-field-invoice-client',
-      'Services' => 'edit-field-invoice-services',
-      'Add new service' => 'edit-field-invoice-services',
-      'Add existing service' => 'edit-field-invoice-services',
-      'Products' => 'edit-field-invoice-products',
-      'Add new product' => 'edit-field-invoice-products',
-      'Add existing product' => 'edit-field-invoice-products',
-    );
-    $id = $mapping[$legend];
-    $selector = '#' . $id . ' .fieldset-legend';
-    $this->assertSession()
-      ->elementTextContains('css', $selector, str_replace('\\"', '"', $legend));
+  public function iShouldSeeFieldsetWithLegend($legend) {
+    $this->assertSession()->elementExists('xpath', '//fieldset/legend[contains(., "' . $legend . '")]');
   }
 
   /**

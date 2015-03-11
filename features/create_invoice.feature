@@ -10,11 +10,11 @@ Scenario Outline: Check labels for inline entities
   Then I should see the fieldset with the legend "<legend>"
   When I press the "<add new>" button
   Then I should see the fieldset with the legend "<add new>"
-  And I should see a button with label "<create>"
+  And I should see the button "<create>"
   When I press the 'Cancel' button
   And I press the "<add existing>" button
   Then I should see the fieldset with the legend "<add existing>"
-  And I should see a button with label "<add>"
+  And I should see the button "<add>"
 
   Examples:
   | legend   | add new         | create         | add existing         | add         |

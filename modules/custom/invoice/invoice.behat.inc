@@ -40,8 +40,9 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * Navigates to the add invoice form.
    *
    * @When (I )go to the add invoice form
+   * @When (I )visit the add invoice form
    */
-  public function iGoToTheAddInvoiceForm() {
+  public function iAmOnAddInvoiceForm() {
     $this->visitPath('/invoice/add');
   }
 

@@ -7,13 +7,13 @@ Feature: Creating invoices
 Scenario Outline: Check labels for inline entities
   Given I am logged in as a user with the "business owner" role
   When I go to the add invoice form
-  Then I should see a fieldset with the legend "<legend>"
+  Then I should see the fieldset with the legend "<legend>"
   When I press the "<add new>" button
-  Then I should see a fieldset with the legend "<add new>"
+  Then I should see the fieldset with the legend "<add new>"
   And I should see a button with label "<create>"
   When I press the 'Cancel' button
   And I press the "<add existing>" button
-  Then I should see a fieldset with the legend "<add existing>"
+  Then I should see the fieldset with the legend "<add existing>"
   And I should see a button with label "<add>"
 
   Examples:

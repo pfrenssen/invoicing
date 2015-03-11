@@ -16,7 +16,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   /**
    * Checks that a fieldset with the given legend exists.
    *
-   * @Then I should see( a) fieldset with( the) legend :legend
+   * @Then I should see the fieldset with (the )legend :legend
    */
   public function assertFieldsetWithLegend($legend) {
     $this->assertSession()->elementExists('xpath', '//fieldset/legend[contains(., "' . $legend . '")]');

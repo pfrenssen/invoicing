@@ -38,6 +38,9 @@ projects[ctools][subdir] = contrib
 projects[date][version] = 2.8
 projects[date][subdir] = contrib
 
+projects[elements][version] = 1.4
+projects[elements][subdir] = contrib
+
 projects[email][version] = 1.3
 projects[email][subdir] = contrib
 

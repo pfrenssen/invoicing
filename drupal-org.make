@@ -94,7 +94,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
 projects[features][download][type] = git
-projects[features][download][revision] = 7.x-2.3
+projects[features][download][revision] = 7.x-2.4
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
 

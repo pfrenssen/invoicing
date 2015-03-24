@@ -122,7 +122,7 @@ projects[user_registrationpassword][download][revision] = 235d87e90077d53a8c6cdf
 projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
 
-projects[views][version] = 3.8
+projects[views][version] = 3.10
 projects[views][subdir] = contrib
 
 ; Libraries

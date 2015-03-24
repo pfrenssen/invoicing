@@ -32,7 +32,7 @@ projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetT
 projects[addressfield][version] = 1.0
 projects[addressfield][subdir] = contrib
 
-projects[ctools][version] = 1.5
+projects[ctools][version] = 1.7
 projects[ctools][subdir] = contrib
 
 projects[date][version] = 2.8

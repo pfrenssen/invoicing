@@ -33,7 +33,7 @@ projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simplet
 projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetToken_hash_salt-D7-do-not-test.patch
 
 projects[addressfield][download][type] = git
-projects[addressfield][download][revision] = 7.x-1.0-rc1
+projects[addressfield][download][revision] = 7.x-1.0
 projects[addressfield][download][branch] = 7.x-1.x
 projects[addressfield][subdir] = contrib
 

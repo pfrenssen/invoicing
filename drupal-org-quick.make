@@ -102,7 +102,7 @@ projects[libraries][subdir] = contrib
 projects[link][version] = 1.3
 projects[link][subdir] = contrib
 
-projects[panels][version] = 3.4
+projects[panels][version] = 3.5
 projects[panels][subdir] = contrib
 
 projects[phone][type] = module

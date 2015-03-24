@@ -126,7 +126,7 @@ projects[link][download][branch] = 7.x-1.x
 projects[link][subdir] = contrib
 
 projects[panels][download][type] = git
-projects[panels][download][revision] = 7.x-3.4
+projects[panels][download][revision] = 7.x-3.5
 projects[panels][download][branch] = 7.x-1.x
 projects[panels][subdir] = contrib
 

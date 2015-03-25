@@ -52,6 +52,10 @@ projects[elements][download][revision] = 7.x-1.4
 projects[elements][download][branch] = 7.x-1.x
 projects[elements][subdir] = contrib
 
+; Allow autocomplete on number field.
+; @see https://www.drupal.org/node/2459025
+projects[elements][patch][] = http://www.drupal.org/files/issues/2459025-1.patch
+
 projects[email][download][type] = git
 projects[email][download][revision] = 7.x-1.3
 projects[email][download][branch] = 7.x-1.x

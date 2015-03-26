@@ -565,7 +565,10 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
   if ($instance['widget']['type'] == 'line_item_tax_rate') {
     $element['value'] = array(
       '#title' => t('Tax rate'),
-      '#type' => 'textfield',
+      '#type' => 'numberfield',
+      '#min' => 0,
+      '#max' => 100,
+      '#step' => 0.01,
       '#maxlength' => 7,
       '#autocomplete_path' => 'settings/tax-rates/autocomplete',
       '#default_value' => isset($items[$delta]) && is_numeric($items[$delta]['value']) ? $items[$delta]['value'] : '',

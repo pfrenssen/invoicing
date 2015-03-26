@@ -4,6 +4,7 @@ core = 7.x
 package = Invoicing
 
 dependencies[] = business
+dependencies[] = elements
 dependencies[] = entity
 dependencies[] = features
 dependencies[] = inline_entity_form

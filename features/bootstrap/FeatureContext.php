@@ -7,6 +7,7 @@
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
@@ -97,6 +98,33 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
     if ($radiobutton->getValue() !== $label) {
       throw new \Exception(sprintf('The radio button with "%s" was not selected.', $label, $this->getSession()->getCurrentUrl()));
+    }
+  }
+
+  /**
+   * Verifies that the given field is of the given type.
+   *
+   * @param string $field
+   *   Field ID, name or label.
+   * @param string $type
+   *   The expected field type.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   Thrown when the field is not found on the page.
+   * @throws \Exception
+   *   Thrown when the field is not of the expected type.
+   *
+   * @Then (I should see )(that )the :field field is a :type( field)
+   */
+  public function assertFieldType($field, $type) {
+    $element = $this->getSession()->getPage()->findField($field);
+
+    if ($element === NULL) {
+      throw new ElementNotFoundException($this->getSession(), 'form field', 'id|name|label|value', $element);
+    }
+
+    if ($element->getAttribute('type') !== $type) {
+      throw new \Exception(sprintf('The "%s" field on the page "%s" is not a %s field.', $field, $this->getSession()->getCurrentUrl(), $type));
     }
   }
 

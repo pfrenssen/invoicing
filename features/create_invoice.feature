@@ -43,3 +43,15 @@ Scenario: Inline editing of a line item after adding it
   | Tax rate    | 19.50            |
   | Discount    | 5                |
   And the radio button option "months" should be selected
+
+@api
+Scenario Outline: Tax rates should be entered using an HTML5 number field
+  Given I am logged in as a user with the 'business owner' role
+  When I go to the add invoice form
+  And I press the "<button>" button
+  Then I should see that the 'Tax rate' field is a number field
+
+  Examples:
+  | button          |
+  | Add new service |
+  | Add new product |

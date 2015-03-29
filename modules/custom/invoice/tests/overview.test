@@ -283,7 +283,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     $this->drupalGet('client/' . $this->clients[0]->identifier());
 
     // Check that the 'Invoices' title is present.
-    $this->assertXPathElements('//h2[text()=:text]', 1, array(':text' => t('Invoices')), 'The title of the overview is present.');
+    $this->assertXPathElements('//h2[normalize-space(text())=:text]', 1, array(':text' => t('Invoices')), 'The title of the overview is present.');
 
     // Check that the pager is not present. We added 20 invoices which is the
     // maximum number that fits on one page.

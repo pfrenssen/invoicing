@@ -63,7 +63,8 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     $messages = array(
       'error' => array(
         t('!name field is required.', array('!name' => t('Business name'))),
-        t('"%mail" is not a valid email address', array('%mail' => $invalid_values['field_business_email[und][0][email]']))),
+        t('"%mail" is not a valid email address', array('%mail' => $invalid_values['field_business_email[und][0][email]'])),
+      ),
     );
     $this->drupalPost('business/add', $invalid_values, t('Save'));
     $this->assertFieldValidationFailed(array_keys($invalid_values));

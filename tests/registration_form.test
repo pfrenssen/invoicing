@@ -83,7 +83,7 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
     preg_match('/user\/registrationpassword\/.+/', $email['body'], $matches);
     $activation_path = $matches[0];
     $this->drupalGet($activation_path);
-    $this->assertText(t('You have just used your one-time login link. Your account is now active.'));
+    $this->assertText(t('You have just used your one-time login link. Your account is now active and you are authenticated.'));
   }
 
 }

@@ -6,8 +6,8 @@
  */
 
 use Behat\Gherkin\Node\TableNode;
+use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
-use Drupal\invoicing\Context\DrupalSubContextBase;
 
 /**
  * Behat step definitions for testing tax rates.

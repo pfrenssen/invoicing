@@ -39,6 +39,7 @@ features[field_instance][] = line_item-service-field_line_item_unit_cost
 features[line_item_type][] = product
 features[line_item_type][] = service
 
+features[views_view][] = line_items
 features[views_view][] = tax_rates
 
 files[] = tests/crud.test

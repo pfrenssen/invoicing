@@ -52,7 +52,8 @@ class TaxRateSubContext extends DrupalSubContextBase implements DrupalSubContext
    *   The tax rate data.
    *
    * @throws \Exception
-   *   Thrown when no user is logged in.
+   *   Thrown when no user is logged in, or when the logged in user has no
+   *   business.
    *
    * @Given tax rate(s):
    */

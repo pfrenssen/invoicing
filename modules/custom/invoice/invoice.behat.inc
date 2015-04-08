@@ -75,7 +75,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * @Given invoice(s):
    */
   public function createInvoices(TableNode $invoices_table) {
-    if (!$this->getuser()->uid) {
+    if (!$this->getUser()->uid) {
       throw new \Exception('There is no current logged in user to create an invoice for.');
     }
 

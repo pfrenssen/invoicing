@@ -29,17 +29,17 @@ Scenario: Inline editing of a line item after adding it
   And I press "Add new service" in the "Services" fieldset
   And I enter the following:
   | Description | A useful service |
-  | Unit cost | 99.99 |
-  | Quantity | 12 |
-  | Tax rate | 19.50 |
-  | Discount | 5 |
+  | Unit cost   | 99.99            |
+  | Quantity    | 12               |
+  | Tax rate    | 19.50            |
+  | Discount    | 5                |
   And I select the radio button "months"
   And I press "Create service" in the "Add new service" fieldset
   And I press "Edit" in the "Services" fieldset
   Then I should see the following field values:
   | Description | A useful service |
-  | Unit cost | 99.99 |
-  | Quantity | 12 |
-  | Tax rate | 19.50 |
-  | Discount | 5 |
+  | Unit cost   | 99.99            |
+  | Quantity    | 12               |
+  | Tax rate    | 19.50            |
+  | Discount    | 5                |
   And the radio button option "months" should be selected

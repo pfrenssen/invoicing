@@ -63,8 +63,11 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * Creates invoices with data provided in a table.
    *
    * Table format:
-   * | client  | number    | date     |
-   * | Axemill | 2015/0001 | 20150223 |
+   * | client | number | date     | products | services   |
+   * | Fritz  | 15/001 | 20150223 | Key, Box | Work, Rent |
+   *
+   * Products and services need to be created before they can be added to an
+   * invoice. Multiple products and services can be added comma separated.
    *
    * @param TableNode $invoices_table
    *   The invoice data.
@@ -86,15 +89,49 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
       throw new \Exception('Cannot create invoices, the currently logged in user has no business.');
     }
 
-    foreach ($invoices_table->getHash() as $invoice_hash) {
-      $invoice = $this->createInvoice(array(
+    foreach ($invoices_table->getHash() as $row) {
+      // Add required properties.
+      $values = array(
         'bid' => $businesses[0]->identifier(),
-        'field_invoice_client' => $this->getClientByName($invoice_hash['client'])->identifier(),
-        'field_invoice_number' => $invoice_hash['number'],
-        'field_invoice_date' => strtotime($invoice_hash['date'] . ' 00:00 UTC'),
-      ));
-      $this->invoices[$invoice_hash['number']] = $invoice;
+        'field_invoice_client' => $this->getClientByName($row['client'])->identifier(),
+        'field_invoice_number' => $row['number'],
+        'field_invoice_date' => strtotime($row['date'] . ' 00:00 UTC'),
+      );
+
+      // Add optional line items. Multiple items can be separated by commas.
+      foreach (['products', 'services'] as $type) {
+        if (array_key_exists($type, $row)) {
+          $line_items = array_map('trim', explode(',', $row[$type]));
+          foreach ($line_items as $line_item) {
+            $values["field_invoice_$type"][] = $this->getLineItem($line_item);
+          }
+        }
+      }
+
+      $invoice = $this->createInvoice($values);
+      $this->invoices[$row['number']] = $invoice;
     }
+  }
+
+  /**
+   * Returns the line item with the given description.
+   *
+   * This returns line items that are stored on LineItemSubContext. This only
+   * contains line items that were created during the current test run.
+   *
+   * @param string $description
+   *   The description of the line item.
+   *
+   * @return \LineItem
+   *   The line item.
+   *
+   * @throws \InvalidArgumentException
+   *   Thrown when no line item with the given description exists.
+   */
+  protected function getLineItem($description) {
+    /** @var \LineItemSubContext $context */
+    $context = $this->getContext('LineItemSubContext');
+    return $context->getLineItem($description);
   }
 
   /**

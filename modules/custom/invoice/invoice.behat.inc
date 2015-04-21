@@ -8,6 +8,7 @@
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Behat step definitions for testing invoices.
@@ -24,7 +25,34 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    *
    * @var \Invoice[]
    */
-  public $invoices = array();
+  protected $invoices = array();
+
+  /**
+   * An exported invoice in HTML format.
+   *
+   * @var string
+   */
+  protected $exportedInvoice;
+
+  /**
+   * Maps human readable field names to CSS selectors in exported invoices.
+   *
+   * @var array
+   *   An associative array mapping human readable field names to CSS selectors.
+   */
+  protected $exportedInvoiceSelectors = [
+    'client' => '#client-name',
+    'client email' => '#client-email .field-item',
+    'date' => '#invoice-date .field-item',
+    'number' => '#invoice-number .field-item',
+  ];
+
+  /**
+   * An instance of DomCrawler that can be used to crawl the exported invoice.
+   *
+   * @var \Symfony\Component\DomCrawler\Crawler
+   */
+  protected $exportedInvoiceCrawler;
 
   /**
    * Navigates to the detail page of the invoice with the given number.
@@ -152,6 +180,66 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
     $this->invoices[$wrapper->field_invoice_number->value()] = $invoice;
 
     return $invoice;
+  }
+
+  /**
+   * Creates an HTML export of the invoice with the given number.
+   *
+   * @param string $number
+   *   The invoice number.
+   *
+   * @When I export the invoice with number :number
+   */
+  public function exportInvoice($number) {
+    $invoice = $this->getInvoiceByNumber($number);
+    $this->exportedInvoice = theme('invoice_export', array('invoice' => $invoice));
+    $this->exportedInvoiceCrawler = new Crawler($this->exportedInvoice);
+  }
+
+  /**
+   * Asserts that the exported invoice contains the given field data.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The field data.
+   *
+   * @Then the exported invoice should have the (following )field(s):
+   */
+  public function assertExportedInvoiceFields(TableNode $table) {
+    foreach ($table->getRowsHash() as $field => $value) {
+      $this->assertExportedInvoiceField($field, $value);
+    }
+  }
+
+  /**
+   * Asserts that the exported invoice contains the given field.
+   *
+   * @param string $field
+   *   The field name.
+   * @param string $value
+   *   The expected value for the field.
+   *
+   * @throws \Exception
+   *   Thrown when the field is not present, or the field value does not match.
+   */
+  public function assertExportedInvoiceField($field, $value) {
+    $selector = $this->exportedInvoiceSelectors[$field];
+    $field_items = $this->exportedInvoiceCrawler->filter($selector);
+
+    // Check if the field is present in the exported invoice.
+    if (!$field_items->count()) {
+      throw new \Exception("The '$field' field is not present in the exported invoice.");
+    }
+
+    // Loop over the field items and check if the given value is found.
+    /** @var \DOMElement $field_item */
+    foreach ($field_items as $field_item) {
+      if ($field_item->textContent === $value) {
+        return;
+      }
+    }
+
+    // The value was not found, fail the test.
+    throw new \Exception("The value '$value' was not found for the '$field' field.");
   }
 
   /**

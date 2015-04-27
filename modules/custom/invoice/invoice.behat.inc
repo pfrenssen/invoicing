@@ -25,7 +25,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    *
    * @var \Invoice[]
    */
-  protected $invoices = array();
+  protected $invoices = [];
 
   /**
    * An exported invoice in HTML format.
@@ -119,12 +119,12 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
 
     foreach ($invoices_table->getHash() as $row) {
       // Add required properties.
-      $values = array(
+      $values = [
         'bid' => $businesses[0]->identifier(),
         'field_invoice_client' => $this->getClientByName($row['client'])->identifier(),
         'field_invoice_number' => $row['number'],
         'field_invoice_date' => strtotime($row['date'] . ' 00:00 UTC'),
-      );
+      ];
 
       // Add optional line items. Multiple items can be separated by commas.
       foreach (['products', 'services'] as $type) {
@@ -171,7 +171,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * @return \Invoice
    *   A new invoice entity.
    */
-  public function createInvoice(array $values = array()) {
+  public function createInvoice(array $values = []) {
     $invoice = invoice_create();
     $this->updateInvoice($invoice, $values);
     invoice_save($invoice);
@@ -192,7 +192,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    */
   public function exportInvoice($number) {
     $invoice = $this->getInvoiceByNumber($number);
-    $this->exportedInvoice = theme('invoice_export', array('invoice' => $invoice));
+    $this->exportedInvoice = theme('invoice_export', ['invoice' => $invoice]);
     $this->exportedInvoiceCrawler = new Crawler($this->exportedInvoice);
   }
 

@@ -29,9 +29,9 @@ class LineItemSubContext extends DrupalSubContextBase implements DrupalSubContex
    * Creates products with data provided in a table.
    *
    * Table format:
-   * | description  | unit cost | quantity | tax rate | discount |
-   * | Taketsuru 21 | 137.50    | 1        | 21.00    | 0        |
-   * | ...          | ...       | ...      | ...      | ...      |
+   * | description  | unit cost | quantity | tax   | discount |
+   * | Taketsuru 21 | 137.50    | 1        | 21.00 | 0        |
+   * | ...          | ...       | ...      | ...   | ...      |
    *
    * @param \Behat\Gherkin\Node\TableNode $products_table
    *   The product data.
@@ -46,9 +46,9 @@ class LineItemSubContext extends DrupalSubContextBase implements DrupalSubContex
    * Creates services with data provided in a table.
    *
    * Table format:
-   * | description | unit cost | time unit | quantity | tax rate | discount |
-   * | Copywriting | 34.95     | hours     | 10       | 19.00    | 15       |
-   * | ...         | ...       | ...       | ...      | ...      | ...      |
+   * | description | unit cost | time unit | quantity | tax   | discount |
+   * | Copywriting | 34.95     | hours     | 10       | 19.00 | 15       |
+   * | ...         | ...       | ...       | ...      | ...   | ...      |
    *
    * All columns in the table are optional.
    *
@@ -120,7 +120,7 @@ class LineItemSubContext extends DrupalSubContextBase implements DrupalSubContex
       'unit cost' => 'field_line_item_unit_cost',
       'time unit' => 'field_line_item_time_unit',
       'quantity' => 'field_line_item_quantity',
-      'tax rate' => 'field_line_item_tax',
+      'tax' => 'field_line_item_tax',
       'discount' => 'field_line_item_discount',
     );
 

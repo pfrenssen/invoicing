@@ -10,14 +10,14 @@ Scenario: Verify content of exported invoice
     | name  | email         |
     | Omnia | info@omnia.eu |
   And services:
-    | description    | unit cost | time unit | quantity | tax rate | discount |
-    | Equipment hire | 124.95    | months    | 10       | 19.00    | 15       |
-    | Truck rental   | 74.99     | days      | 120      | 19.00    | 15       |
-    | Operator       | 250       | days      | 120      | 19.00    | 0        |
+    | description    | unit cost | time unit | quantity | tax   | discount |
+    | Equipment hire | 124.95    | months    | 10.5     | 19.00 | 15       |
+    | Truck rental   | 74.99     | days      | 120      | 19.00 | 15       |
+    | Operator       | 250       | days      | 120      | 19.00 | 0        |
   And products:
-    | description  | unit cost | quantity | tax rate | discount |
-    | Sievert Harp | 3305.00   | 1        | 19.00    | 20       |
-    | Neumann U87  | 2599.00   | 2        | 19.00    | 20       |
+    | description  | unit cost | quantity | tax   | discount |
+    | Sievert Harp | 3305.00   | 1        | 19.00 | 20       |
+    | Neumann U87  | 2599.00   | 2        | 19.00 | 20       |
   And invoice:
     | client | number  | date       | services                               | products                  |
     | Omnia  | 015-001 | 2015-04-08 | Equipment hire, Truck rental, Operator | Neumann U87, Sievert Harp |

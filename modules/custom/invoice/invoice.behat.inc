@@ -243,6 +243,146 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
   }
 
   /**
+   * Asserts that the exported invoice contains the given products.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table containing product descriptions.
+   *
+   * @Then the exported invoice should have the (following )product(s):
+   */
+  public function assertExportedInvoiceProducts(TableNode $table) {
+    foreach ($table->getColumnsHash() as $product) {
+      $line_item = $this->getLineItem($product['description']);
+      $data = $this->getExportedLineItemData('product', $product['description']);
+      $this->assertExportedLineItemData('product', $line_item, $data);
+    }
+  }
+
+  /**
+   * Asserts that the exported invoice contains the given services.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table containing service descriptions.
+   *
+   * @Then the exported invoice should have the (following )service(s):
+   */
+  public function assertExportedInvoiceServices(TableNode $table) {
+    foreach ($table->getColumnsHash() as $service) {
+      $line_item = $this->getLineItem($service['description']);
+      $data = $this->getExportedLineItemData('service', $service['description']);
+      $this->assertExportedLineItemData('service', $line_item, $data);
+    }
+  }
+
+  /**
+   * Checks if the given exported line item data matches the given line item.
+   *
+   * @param string $type
+   *   The line item type, either 'product' or 'service'.
+   * @param \LineItem $line_item
+   *   The line item that was exported.
+   * @param array $data
+   *   An associative array, keyed by human readable property names, with the
+   *   line item data as it appears in the exported invoice.
+   *
+   * @throws \Exception
+   *   Thrown when the actual data does not match the expected data.
+   */
+  protected function assertExportedLineItemData($type, \LineItem $line_item, array $data) {
+    // Map human readable keys to field property names.
+    $properties = [
+      'description' => 'field_line_item_description',
+      'quantity' => 'field_line_item_quantity',
+      'unit cost' => 'field_line_item_unit_cost',
+      'tax' => 'field_line_item_tax',
+      'discount' => 'field_line_item_discount',
+    ];
+    // Services also have a 'time unit' property.
+    if ($type === 'service') {
+      $properties += ['time unit' => 'field_line_item_time_unit'];
+    }
+    foreach ($properties as $key => $property) {
+      $expected_value = $line_item->wrapper()->$property->value();
+      $actual_value = $data[$key];
+      if ($expected_value != $actual_value) {
+        throw new \Exception("The '$key' property does not contain the expected value '$expected_value'. The actual value is '$actual_value'.");
+      }
+    }
+  }
+
+  /**
+   * Returns exported line item data matching the given type and description.
+   *
+   * @param string $type
+   *   The line item type. Either 'product' or 'service'.
+   * @param string $description
+   *   The line item description.
+   *
+   * @return array
+   *   An associative array with the line item data as it appears in the
+   *   exported invoice. With keys 'description', 'quantity', 'unit cost', 'tax'
+   *   and 'discount'. Services also have the key 'time unit'.
+   *
+   * @throws \Exception
+   *   Thrown when a table cell is encountered which is not recognized as a line
+   *   item Views field.
+   */
+  protected function getExportedLineItemData($type, $description) {
+    $line_item_data = [];
+
+    // Retrieve the parent node of the table cell containing the description.
+    // This will be the table row containing the line item.
+    $selector = "#${type}s table tbody td.views-field-field-line-item-description";
+    $element = $this->getDomElementByCssSelectorAndText($this->exportedInvoiceCrawler, $selector, $description)->parentNode;
+
+    foreach ($element->childNodes as $node) {
+      // Only inspect <td> DOM elements, ignore other elements and whitespace.
+      if ($node instanceof \DOMElement && $node->tagName === 'td') {
+        $classes = $node->getAttribute('class');
+        // Retrieve the key from the views field class on the table cell.
+        $key = function () use ($classes) {
+          foreach (explode(' ', $classes) as $class) {
+            if (substr($class, 0, 28) === 'views-field-field-line-item-') {
+              // Turn to dashes into spaces to make it human readable.
+              return str_replace('-', ' ', substr($class, 28));
+            }
+          }
+          throw new \Exception('The line item table contains a cell which is not a line item Views field.');
+        };
+        $line_item_data[$key()] = trim($node->textContent);
+      }
+    }
+
+    return $line_item_data;
+  }
+
+  /**
+   * Returns the DOM element that matches the given CSS selector and text.
+   *
+   * @param \Symfony\Component\DomCrawler\Crawler $crawler
+   *   An instance of Crawler containing the document to search.
+   * @param string $selector
+   *   The CSS selector that should match the element.
+   * @param string $text
+   *   The text that should be present in the element.
+   *
+   * @return \DOMElement
+   *   The matched DOM element.
+   *
+   * @throws \Exception
+   *   Thrown when no DOM element matches the given criteria.
+   */
+  function getDomElementByCssSelectorAndText(Crawler $crawler, $selector, $text) {
+    /** @var \DOMElement $dom_element */
+    foreach ($crawler->filter($selector) as $dom_element) {
+      if (trim($dom_element->textContent) === $text) {
+        return $dom_element;
+      }
+    }
+    throw new \Exception("The text '$text' wasn't found in the DOM element identified by '$selector'.'");
+  }
+
+  /**
    * Returns the client with the given name.
    *
    * @param string $name

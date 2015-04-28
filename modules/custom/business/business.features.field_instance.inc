@@ -54,6 +54,9 @@ function business_field_default_field_instances() {
         'default_country' => '',
         'format_handlers' => array(
           'address' => 'address',
+          'address-optional' => 'address-optional',
+          'address-hide-postal-code' => 0,
+          'address-hide-street' => 0,
           'address-hide-country' => 0,
           'organisation' => 0,
           'name-full' => 0,

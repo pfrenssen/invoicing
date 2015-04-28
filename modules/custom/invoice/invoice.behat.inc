@@ -372,7 +372,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * @throws \Exception
    *   Thrown when no DOM element matches the given criteria.
    */
-  function getDomElementByCssSelectorAndText(Crawler $crawler, $selector, $text) {
+  protected function getDomElementByCssSelectorAndText(Crawler $crawler, $selector, $text) {
     /** @var \DOMElement $dom_element */
     foreach ($crawler->filter($selector) as $dom_element) {
       if (trim($dom_element->textContent) === $text) {

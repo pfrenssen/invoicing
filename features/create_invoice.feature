@@ -55,3 +55,22 @@ Scenario Outline: Tax rates should be entered using an HTML5 number field
   | button          |
   | Add new service |
   | Add new product |
+
+@api
+Scenario: Create an invoice using only the required fields
+  Given I am logged in as a user with the "business owner" role
+  When I go to the add invoice form
+  And I fill in "2015001" for "Invoice number"
+  And I press the "Add new client" button
+  And I fill in the following:
+  | Name          | Martin "Pops" Holdgate          |
+  | Email address | pops@holdgate-enterprises.co.uk |
+  And I press the "Save" button
+  Then I should see the success message "New invoice has been added."
+  But I should not see the following error messages:
+  | error messages                 |
+  | Address 1 field is required.   |
+  | Postal code field is required. |
+  | City field is required.        |
+  And I should have 1 client
+  And I should have 1 invoice

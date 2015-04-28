@@ -16,5 +16,9 @@ default:
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~
+      selectors:
+        message_selector: '.messages'
+        error_message_selector: '.messages.error'
+        success_message_selector: '.messages.status'
       text:
         username_field: 'E-mail'

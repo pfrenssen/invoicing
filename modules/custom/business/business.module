@@ -546,19 +546,19 @@ function business_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
- * Get the businesses from a specific user, defaults to the logged in user.
+ * Get the business IDs from a specific user, defaults to the logged in user.
  *
  * @param \stdClass $account
- *   The account of the user to get the businesses for. If omitted, the logged
+ *   The account of the user to get the business IDs for. If omitted, the logged
  *   in user will be used.
  * @param bool $reset
  *   Whether or not to reset the static cache. Defaults to FALSE.
  *
  * @return array
- *   An array with all the business id's linked to this user, FALSE if none
- *   found.
+ *   An array with IDs of the businesses linked to this user. If no businesses
+ *   are found an empty array will be returned.
  */
-function business_get_businesses_from_user(\stdClass $account = NULL, $reset = FALSE) {
+function business_get_business_ids_from_user(\stdClass $account = NULL, $reset = FALSE) {
   global $user;
 
   // Default to the logged in user.
@@ -566,7 +566,7 @@ function business_get_businesses_from_user(\stdClass $account = NULL, $reset = F
 
   $bids = &drupal_static(__FUNCTION__, array());
   if (empty($bids[$account->uid]) || $reset) {
-    // Retrieve the businesses.
+    // Retrieve the business IDs.
     /* @var $query SelectQuery */
     $query = db_select('business', 'b');
     $query->join('field_data_field_user_businesses', 'u', 'u.field_user_businesses_target_id = b.bid');
@@ -576,7 +576,25 @@ function business_get_businesses_from_user(\stdClass $account = NULL, $reset = F
     $bids[$account->uid] = $query->execute()->fetchCol();
   }
 
-  return business_load_multiple($bids[$account->uid]);
+  return $bids[$account->uid];
+}
+
+/**
+ * Get the businesses from a specific user, defaults to the logged in user.
+ *
+ * @param \stdClass $account
+ *   The account of the user to get the businesses for. If omitted, the logged
+ *   in user will be used.
+ * @param bool $reset
+ *   Whether or not to reset the static cache. Defaults to FALSE.
+ *
+ * @return Business[]
+ *   An array with all the businesses linked to this user. If no businesses were
+ *   found an empty array will be returned.
+ */
+function business_get_businesses_from_user(\stdClass $account = NULL, $reset = FALSE) {
+  $bids = business_get_business_ids_from_user($account, $reset);
+  return business_load_multiple($bids);
 }
 
 /**

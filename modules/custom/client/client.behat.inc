@@ -63,6 +63,27 @@ class ClientSubContext extends DrupalSubContextBase implements DrupalSubContextI
   }
 
   /**
+   * Checks the number of clients that the currently logged in user has.
+   *
+   * @param int $count
+   *   The number of clients the logged in user is supposed to have.
+   *
+   * @throws \Exception
+   *   Thrown when the user is not logged in.
+   *
+   * @Then I should have :count client(s)
+   */
+  public function assertClientCount($count) {
+    if (!$this->getUser()->uid) {
+      throw new \Exception('The user is not logged in.');
+    }
+
+    $user = user_load($this->getUser()->uid);
+    $cids = client_get_client_ids_from_user($user, TRUE);
+    PHPUnit_Framework_Assert::assertEquals($count, count($cids));
+  }
+
+  /**
    * Remove any created clients.
    *
    * @AfterScenario

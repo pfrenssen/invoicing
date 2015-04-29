@@ -673,6 +673,54 @@ function client_get_invoice_ids(Client $client) {
 }
 
 /**
+ * Get the client IDs for a specific user, defaults to the logged in user.
+ *
+ * @param \stdClass $account
+ *   The account of the user to get the client IDs for. If omitted, the logged
+ *   in user will be used.
+ * @param bool $reset
+ *   Whether or not to reset the static cache. Defaults to FALSE.
+ *
+ * @return array
+ *   An array with all the client IDs linked to this user. When no clients are
+ *   found an empty array will be returned.
+ */
+function client_get_client_ids_from_user(\stdClass $account = NULL, $reset = FALSE) {
+  $bids = business_get_business_ids_from_user($account, $reset);
+
+  $cids = &drupal_static(__FUNCTION__, array());
+  if (empty($cids[$account->uid]) || $reset) {
+    $query = new EntityFieldQuery();
+    $query
+      ->entityCondition('entity_type', 'client')
+      ->propertyCondition('bid', $bids, 'IN');
+    $result = $query->execute();
+
+    $cids[$account->uid] = !empty($result['client']) ? array_keys($result['client']) : array();
+  }
+
+  return $cids[$account->uid];
+}
+
+/**
+ * Get the clients for a specific user, defaults to the logged in user.
+ *
+ * @param \stdClass $account
+ *   The account of the user to get the clients for. If omitted, the logged in
+ *   user will be used.
+ * @param bool $reset
+ *   Whether or not to reset the static cache. Defaults to FALSE.
+ *
+ * @return Client[]
+ *   An array with all the clients linked to this user. When no clients are
+ *   found an empty array will be returned.
+ */
+function client_get_clients_from_user(\stdClass $account = NULL, $reset = FALSE) {
+  $cids = client_get_client_ids_from_user($account, $reset);
+  return client_load_multiple($cids);
+}
+
+/**
  * The class used for client entities.
  *
  * @param array field_client_address

@@ -619,6 +619,54 @@ function invoice_is_owned_by_user(Invoice $invoice, \stdClass $account = NULL) {
 }
 
 /**
+ * Get the invoice IDs for a specific user, defaults to the logged in user.
+ *
+ * @param \stdClass $account
+ *   The account of the user to get the invoice IDs for. If omitted, the logged
+ *   in user will be used.
+ * @param bool $reset
+ *   Whether or not to reset the static cache. Defaults to FALSE.
+ *
+ * @return array
+ *   An array with all the invoice IDs linked to this user. When no invoices are
+ *   found an empty array will be returned.
+ */
+function invoice_get_invoice_ids_from_user(\stdClass $account = NULL, $reset = FALSE) {
+  $bids = business_get_business_ids_from_user($account, $reset);
+
+  $iids = &drupal_static(__FUNCTION__, array());
+  if (empty($iids[$account->uid]) || $reset) {
+    $query = new EntityFieldQuery();
+    $query
+      ->entityCondition('entity_type', 'invoice')
+      ->propertyCondition('bid', $bids, 'IN');
+    $result = $query->execute();
+
+    $iids[$account->uid] = !empty($result['invoice']) ? array_keys($result['invoice']) : array();
+  }
+
+  return $iids[$account->uid];
+}
+
+/**
+ * Get the invoices for a specific user, defaults to the logged in user.
+ *
+ * @param \stdClass $account
+ *   The account of the user to get the invoices for. If omitted, the logged in
+ *   user will be used.
+ * @param bool $reset
+ *   Whether or not to reset the static cache. Defaults to FALSE.
+ *
+ * @return Invoice[]
+ *   An array with all the invoices linked to this user. When no invoices are
+ *   found an empty array will be returned.
+ */
+function invoice_get_invoices_from_user(\stdClass $account = NULL, $reset = FALSE) {
+  $iids = invoice_get_invoice_ids_from_user($account, $reset);
+  return invoice_load_multiple($iids);
+}
+
+/**
  * Implements hook_menu_local_tasks_alter().
  */
 function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {

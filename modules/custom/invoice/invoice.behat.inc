@@ -183,6 +183,27 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
   }
 
   /**
+   * Checks the number of invoices that the currently logged in user has.
+   *
+   * @param int $count
+   *   The number of invoices the logged in user is supposed to have.
+   *
+   * @throws \Exception
+   *   Thrown when the user is not logged in.
+   *
+   * @Then I should have :count invoice(s)
+   */
+  public function assertInvoiceCount($count) {
+    if (!$this->getUser()->uid) {
+      throw new \Exception('The user is not logged in.');
+    }
+
+    $user = user_load($this->getUser()->uid);
+    $iids = invoice_get_invoice_ids_from_user($user, TRUE);
+    PHPUnit_Framework_Assert::assertEquals($count, count($iids));
+  }
+
+  /**
    * Creates an HTML export of the invoice with the given number.
    *
    * @param string $number

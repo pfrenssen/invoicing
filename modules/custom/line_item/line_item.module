@@ -582,6 +582,50 @@ function line_item_field_widget_form(&$form, &$form_state, $field, $instance, $l
 }
 
 /**
+ * Calculates the price totals of a line item.
+ *
+ * All values are expressed with 2 decimal numbers to represent Euros and cents.
+ * They are returned as strings to avoid rounding errors with floating point
+ * numbers.
+ *
+ * @param \LineItem $line_item
+ *   The line item for which to calculate the total.
+ *
+ * @return array
+ *   An associative array with the following keys:
+ *   - 'base_price': The base price for the calculation, consisting of the unit
+ *     price multiplied by the number of items.
+ *   - 'discount': The calculated discount.
+ *   - 'subtotal': The total price before tax, with the discount applied.
+ *   - 'tax': The amount of value added tax.
+ *   - 'total': The final total.
+ */
+function line_item_calculate(LineItem $line_item) {
+  $wrapper = $line_item->wrapper();
+  $unit_cost = (string) $wrapper->field_line_item_unit_cost->value();
+  $quantity = (string) $wrapper->field_line_item_quantity->value();
+  $tax_percent = bcdiv($wrapper->field_line_item_tax->value(), 100, 4);
+  $discount_percent = bcdiv($wrapper->field_line_item_discount->value(), 100, 4);
+
+  // Use BCMath for financial calculations. We calculate to a precision of 3
+  // decimal numbers, then round to 2 decimal numbers to get the exact value in
+  // Euros and cents.
+  $base_price = number_format(bcmul($unit_cost, $quantity, 3), 2, '.', '');
+  $discount = number_format(bcmul($base_price, $discount_percent, 3), 2, '.', '');
+  $subtotal = bcsub($base_price, $discount, 2);
+  $tax = number_format(bcmul($subtotal, $tax_percent, 3), 2, '.', '');
+  $total = bcadd($subtotal, $tax, 2);
+
+  return [
+    'base_price' => $base_price,
+    'discount' => $discount,
+    'subtotal' => $subtotal,
+    'tax' => $tax,
+    'total' => $total,
+  ];
+}
+
+/**
  * Returns the tax rates that belong to the given business.
  *
  * @param Business $business

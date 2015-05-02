@@ -91,6 +91,10 @@ function line_item_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
+  /* Field: Line item: Total */
+  $handler->display->display_options['fields']['field_line_item_total']['id'] = 'field_line_item_total';
+  $handler->display->display_options['fields']['field_line_item_total']['table'] = 'line_item';
+  $handler->display->display_options['fields']['field_line_item_total']['field'] = 'field_line_item_total';
   /* Contextual filter: Invoice: Invoice ID */
   $handler->display->display_options['arguments']['iid']['id'] = 'iid';
   $handler->display->display_options['arguments']['iid']['table'] = 'invoice';
@@ -189,6 +193,10 @@ function line_item_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
+  /* Field: Line item: Total */
+  $handler->display->display_options['fields']['field_line_item_total']['id'] = 'field_line_item_total';
+  $handler->display->display_options['fields']['field_line_item_total']['table'] = 'line_item';
+  $handler->display->display_options['fields']['field_line_item_total']['field'] = 'field_line_item_total';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Invoice: Invoice ID */
   $handler->display->display_options['arguments']['iid']['id'] = 'iid';

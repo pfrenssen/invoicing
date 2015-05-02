@@ -101,5 +101,12 @@ function line_item_views_data() {
     ),
   );
 
+  $data['line_item']['field_line_item_total'] = array(
+    'field' => array(
+      'title' => t('Total'),
+      'help' => t('The total price of the line item, with the discount and value added tax applied.'),
+      'handler' => 'line_item_handler_total_field',
+    ),
+  );
   return $data;
 }

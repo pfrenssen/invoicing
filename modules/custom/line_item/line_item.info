@@ -48,5 +48,6 @@ files[] = tests/crud.test
 files[] = tests/overview.test
 files[] = tests/tax_rate_ui.test
 files[] = tests/unit.test
+files[] = views/line_item_handler_total_field.inc
 files[] = views/tax_rate_handler_delete_link_field.inc
 files[] = views/tax_rate_handler_edit_link_field.inc

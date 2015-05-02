@@ -264,70 +264,59 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
   }
 
   /**
-   * Asserts that the exported invoice contains the given products.
+   * Asserts that the exported invoice contains the given product data.
+   *
+   * Table format:
+   * | description | unit cost | quantity | tax   | discount | total |
+   * | Equipment   | 124.95    | 10.5     | 19.00 | 15       | 12    |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
-   *   A table containing product descriptions.
+   *   A table containing product data.
    *
-   * @Then the exported invoice should have the (following )product(s):
+   * @Then the exported invoice should have the (following )product data:
    */
   public function assertExportedInvoiceProducts(TableNode $table) {
     foreach ($table->getColumnsHash() as $product) {
-      $line_item = $this->getLineItem($product['description']);
       $data = $this->getExportedLineItemData('product', $product['description']);
-      $this->assertExportedLineItemData('product', $line_item, $data);
+      $this->assertExportedLineItemData($product, $data);
     }
   }
 
   /**
-   * Asserts that the exported invoice contains the given services.
+   * Asserts that the exported invoice contains the given service data.
+   *
+   * Table format:
+   * | description | unit cost | time unit | quantity | tax   | discount | total |
+   * | Equipment   | 124.95    | months    | 10.5     | 19.00 | 15       | 12    |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
-   *   A table containing service descriptions.
+   *   A table containing service data.
    *
-   * @Then the exported invoice should have the (following )service(s):
+   * @Then the exported invoice should have the (following )service data:
    */
   public function assertExportedInvoiceServices(TableNode $table) {
     foreach ($table->getColumnsHash() as $service) {
-      $line_item = $this->getLineItem($service['description']);
       $data = $this->getExportedLineItemData('service', $service['description']);
-      $this->assertExportedLineItemData('service', $line_item, $data);
+      $this->assertExportedLineItemData($service, $data);
     }
   }
 
   /**
    * Checks if the given exported line item data matches the given line item.
    *
-   * @param string $type
-   *   The line item type, either 'product' or 'service'.
-   * @param \LineItem $line_item
-   *   The line item that was exported.
-   * @param array $data
+   * @param array $expected
+   *   The expected data.
+   * @param array $actual
    *   An associative array, keyed by human readable property names, with the
    *   line item data as it appears in the exported invoice.
    *
    * @throws \Exception
    *   Thrown when the actual data does not match the expected data.
    */
-  protected function assertExportedLineItemData($type, \LineItem $line_item, array $data) {
-    // Map human readable keys to field property names.
-    $properties = [
-      'description' => 'field_line_item_description',
-      'quantity' => 'field_line_item_quantity',
-      'unit cost' => 'field_line_item_unit_cost',
-      'tax' => 'field_line_item_tax',
-      'discount' => 'field_line_item_discount',
-    ];
-    // Services also have a 'time unit' property.
-    if ($type === 'service') {
-      $properties += ['time unit' => 'field_line_item_time_unit'];
-    }
-    foreach ($properties as $key => $property) {
-      $expected_value = $line_item->wrapper()->$property->value();
-      $actual_value = $data[$key];
-      if ($expected_value != $actual_value) {
-        throw new \Exception("The '$key' property does not contain the expected value '$expected_value'. The actual value is '$actual_value'.");
-      }
+  protected function assertExportedLineItemData(array $expected, array $actual) {
+    foreach ($expected as $key => $value) {
+      PHPUnit_Framework_Assert::assertArrayHasKey($key, $actual);
+      PHPUnit_Framework_Assert::assertEquals($value, $actual[$key]);
     }
   }
 

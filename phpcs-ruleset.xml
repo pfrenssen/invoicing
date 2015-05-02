@@ -55,4 +55,9 @@
         <exclude-pattern>modules/custom/client/tests/ui.test</exclude-pattern>
     </rule>
 
+    <!-- Allow comments to exceed 80 characters to describe Behat data tables. -->
+    <rule ref="Drupal.Files.LineLength.TooLong">
+        <exclude-pattern>modules/custom/invoice/invoice.behat.inc</exclude-pattern>
+    </rule>
+
 </ruleset>

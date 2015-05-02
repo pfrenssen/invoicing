@@ -135,6 +135,21 @@ class LineItemSubContext extends DrupalSubContextBase implements DrupalSubContex
   }
 
   /**
+   * Checks that the price calculation of a line item equals the expected total.
+   *
+   * @param string $description
+   *   The description of the line item.
+   * @param string $total
+   *   The expected price total.
+   *
+   * @Then the price calculation of the :description line item should equal :total
+   */
+  public function assertLineItemPriceCalculation($description, $total) {
+    $line_item = $this->getLineItem($description);
+    PHPUnit_Framework_Assert::assertEquals($total, line_item_calculate($line_item)['total']);
+  }
+
+  /**
    * Remove any created line items.
    *
    * @AfterScenario

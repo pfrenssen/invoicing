@@ -604,8 +604,8 @@ function line_item_calculate(LineItem $line_item) {
   $wrapper = $line_item->wrapper();
   $unit_cost = (string) $wrapper->field_line_item_unit_cost->value();
   $quantity = (string) $wrapper->field_line_item_quantity->value();
-  $tax_percent = bcdiv($wrapper->field_line_item_tax->value(), 100, 4);
-  $discount_percent = bcdiv($wrapper->field_line_item_discount->value(), 100, 4);
+  $tax_percent = bcdiv($wrapper->field_line_item_tax->value(), 100, 8);
+  $discount_percent = bcdiv($wrapper->field_line_item_discount->value(), 100, 8);
 
   // Use BCMath for financial calculations. We calculate to a precision of 3
   // decimal numbers, then round to 2 decimal numbers to get the exact value in

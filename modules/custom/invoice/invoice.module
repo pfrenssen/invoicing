@@ -741,6 +741,45 @@ function invoice_get_token(Invoice $invoice) {
 }
 
 /**
+ * Returns the invoice number that follows the given invoice number.
+ *
+ * Only the numbers are incremented, not any other symbols. If there are no more
+ * numbers to increment the first number will be prefixed with a 1.
+ *
+ * @param string $invoice_number
+ *   The invoice number to increment.
+ *
+ * @return string
+ *   The incremented invoice number.
+ */
+function invoice_increment_number($invoice_number) {
+  // Iterate backwards through the characters in the invoice number.
+  for ($i = strlen($invoice_number) - 1; $i >= 0; $i--) {
+    if (is_numeric($invoice_number[$i])) {
+      // Keep track of the most significant number so we can prefix it with a
+      // '1' if it overflows.
+      $most_significant_number = $i;
+
+      // If the number is lower than 9, increase it and stop iterating.
+      if ($invoice_number[$i] < 9) {
+        $invoice_number[$i] = $invoice_number[$i] + 1;
+        break;
+      }
+      // The number was a 9, set it to zero and continue.
+      $invoice_number[$i] = 0;
+    }
+  }
+
+  // If the most significant number was set to a zero it has overflowed so we
+  // need to prefix it with a '1'.
+  if (isset($most_significant_number) && $invoice_number[$most_significant_number] === '0') {
+    $invoice_number = substr_replace($invoice_number, '1', $most_significant_number, 0);
+  }
+
+  return $invoice_number;
+}
+
+/**
  * The class used for invoice entities.
  *
  * @property array $field_invoice_client

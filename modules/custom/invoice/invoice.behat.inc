@@ -433,7 +433,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * @Then the next invoice number should be :expected
    */
   public function assertNextInvoiceNumber($expected) {
-    $actual = invoice_get_increased_number($this->invoiceNumber);
+    $actual = invoice_increment_number($this->invoiceNumber);
     PHPUnit_Framework_Assert::assertEquals($expected, $actual);
   }
 

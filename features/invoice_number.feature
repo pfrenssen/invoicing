@@ -16,3 +16,17 @@ Scenario Outline: Check incrementing of invoice numbers
   | G345*&32 | G345*&33 |
   | 0 1 9 99 | 0 2 0 00 |
   | INV99-9  | INV100-0 |
+
+@api
+Scenario: Check if an incremented invoice number is provided as the default
+  Given I am logged in as a user with the "business owner" role
+  And client:
+    | name         | email               |
+    | Dimmu Borgir | info@dimmuborgir.no |
+  When I go to the add invoice form
+  Then the "Invoice number" field should contain ""
+  Given invoice:
+  | client       | number   | date     |
+  | Dimmu Borgir | SI15\029 | 20150505 |
+  When I go to the add invoice form
+  Then the "Invoice number" field should contain "SI15\030"

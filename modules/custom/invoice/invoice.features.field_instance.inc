@@ -179,6 +179,7 @@ function invoice_field_default_field_instances() {
   $field_instances['invoice-invoice-field_invoice_number'] = array(
     'bundle' => 'invoice',
     'default_value' => NULL,
+    'default_value_function' => 'invoice_get_default_number',
     'deleted' => 0,
     'description' => '',
     'display' => array(

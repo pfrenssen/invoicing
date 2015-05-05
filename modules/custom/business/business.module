@@ -713,3 +713,9 @@ class Business extends Entity {
   }
 
 }
+
+/**
+ * Exception thrown if an active business is required but not present.
+ */
+class NoActiveBusinessException extends \LogicException {
+}

@@ -667,6 +667,66 @@ function invoice_get_invoices_from_user(\stdClass $account = NULL, $reset = FALS
 }
 
 /**
+ * Retrieve the most recent invoice of a business.
+ *
+ * @param int $bid
+ *   Optional business ID of the business for which to retrieve the invoice.
+ *   Defaults to the active business.
+ * @param bool $reset
+ *   Whether or not to reset the static cache.
+ *
+ * @return \Invoice
+ *   The most recent invoice.
+ *
+ * @throws \NoInvoiceException
+ *   Thrown when the active business does not have any invoices yet, or when the
+ *   invoice could not be loaded.
+ * @throws \NoActiveBusinessException
+ *   Thrown when there is not active business.
+ * @throws \InvoiceNotFoundException
+ *   Thrown when an invoice number was present in the database but the invoice
+ *   could not be loaded.
+ */
+function invoice_get_most_recent_invoice($bid = NULL, $reset = FALSE) {
+  // Default to the active business.
+  if (!$bid) {
+    if (!$business = business_get_active_business()) {
+      throw new \NoActiveBusinessException('Cannot retrieve the most recent invoice without an active business.');
+    }
+    $bid = $business->identifier();
+  }
+
+  $iids = &drupal_static(__FUNCTION__, array());
+  if (!isset($iids[$bid]) || $reset) {
+    $query = new EntityFieldQuery();
+    $query
+      ->entityCondition('entity_type', 'invoice')
+      ->propertyCondition('bid', $bid)
+      ->entityOrderBy('entity_id', 'DESC')
+      ->range(0, 1);
+    $result = $query->execute();
+
+    if (!empty($result['invoice'])) {
+      reset($result['invoice']);
+      $iids[$bid] = key($result['invoice']);
+    }
+    else {
+      $iids[$bid] = FALSE;
+    }
+  }
+
+  // Throw exceptions when an unexpected condition occurred.
+  if (empty($iids[$bid])) {
+    throw new NoInvoiceException('Cannot retrieve the most recent invoice, the business has no invoices.');
+  }
+  if (!$invoice = invoice_load($iids[$bid])) {
+    throw new InvoiceNotFoundException("The invoice with number '$bid' could not be loaded.");
+  }
+
+  return $invoice;
+}
+
+/**
  * Implements hook_menu_local_tasks_alter().
  */
 function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
@@ -738,6 +798,37 @@ function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
  */
 function invoice_get_token(Invoice $invoice) {
   return drupal_hmac_base64($invoice->identifier() . $invoice->created . $invoice->changed, drupal_get_private_key() . drupal_get_hash_salt());
+}
+
+/**
+ * Retrieves the default invoice number to use for a new invoice.
+ *
+ * This will be the number of the most recent invoice increased by one.
+ *
+ * @param string $entity_type
+ *   The type of $entity; e.g., 'node' or 'user'.
+ * @param \Invoice $entity
+ *   The entity for the operation.
+ * @param array $field
+ *   The field structure.
+ * @param array $instance
+ *   The instance structure.
+ * @param string $langcode
+ *   The field language to fill-in with the default value.
+ *
+ * @return array
+ *   The default value for the invoice number.
+ */
+function invoice_get_default_number($entity_type, \Invoice $entity, array $field, array $instance, $langcode) {
+  try {
+    $invoice = invoice_get_most_recent_invoice();
+    $previous_number = $invoice->wrapper()->field_invoice_number->value();
+    return array(array('value' => invoice_increment_number($previous_number)));
+  }
+  catch (\NoInvoiceException $e) {
+    // If there is no invoice yet, let the user decide on a number.
+    return NULL;
+  }
 }
 
 /**
@@ -868,4 +959,16 @@ class InvoiceAPIController extends EntityAPIController {
     return parent::create($values);
   }
 
+}
+
+/**
+ * Exception thrown when the logic requires an invoice but none are present.
+ */
+class NoInvoiceException extends \LogicException {
+}
+
+/**
+ * Thrown when an invoice with a certain ID cannot be found.
+ */
+class InvoiceNotFoundException extends \LogicException {
 }

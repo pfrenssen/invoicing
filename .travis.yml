@@ -30,7 +30,7 @@ install:
 
 before_script:
   # Increase max allowed packet size so that MySQL does not go away.
-  - echo -e "[server]\nmax_allowed_packet=64M" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
+  - echo -e "[server]\nmax_allowed_packet=64M\nwait_timeout=3600" | sudo tee -a /etc/mysql/conf.d/drupal.cnf
   - sudo service mysql restart
   # Make sure the installation doesn't fail when it can't send an email.
   - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
@@ -50,7 +50,7 @@ before_script:
 
 script:
   # Run Simpletests.
-  - drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://127.0.0.1:8080 ; SIMPLETEST_RESULT=$?
+  - php ./scripts/run-tests.sh --url http://127.0.0.1:8080/ --verbose --php ~/.phpenv/versions/$(phpenv version-name)/bin/php 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration' ; SIMPLETEST_RESULT=$?
   # Run Behat tests.
   - export BEHAT_PARAMS="{\"extensions\":{\"Behat\\\\MinkExtension\":{\"base_url\":\"http://127.0.0.1:8080\"},\"Drupal\\\\DrupalExtension\":{\"drupal\":{\"drupal_root\":\"${BUILD_DIR}\"}}}}"
   - ./profiles/invoicing/vendor/bin/behat -c ./profiles/invoicing/behat.yml ; BEHAT_RESULT=$?

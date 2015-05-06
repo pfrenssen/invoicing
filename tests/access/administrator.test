@@ -41,7 +41,6 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
     'client/add',
     'dashboard',
     'invoices',
-    'invoice/add',
     'user',
     'user/password',
     'user/register',
@@ -58,6 +57,7 @@ class AdministratorPathAccessTestCase extends AccessWebTestCase {
     'admin/people',
     'admin/reports',
     'admin/structure',
+    'invoice/add',
     'node',
     'node/add',
   );

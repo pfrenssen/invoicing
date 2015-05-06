@@ -195,9 +195,10 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
     // Go to the invoice overview.
     $this->drupalGet('invoices');
 
-    // Check that the "Add invoice" local action is present.
+    // Check that the "Add invoice" local action is not present. Administrators
+    // cannot create invoices.
     $xpath = '//ul[@class="action-links"]/li/a[@href="/invoice/add" and contains(text(), :text)]';
-    $this->assertXPathElements($xpath, 1, array(':text' => t('Add invoice')), 'The "Add invoice" local action is present.');
+    $this->assertXPathElements($xpath, 0, array(':text' => t('Add invoice')), 'The "Add invoice" local action is not present.');
 
     // Loop over the displayed table rows and compare them with each invoice in
     // order.

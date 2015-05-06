@@ -216,8 +216,10 @@ function invoice_menu() {
  *   TRUE if the operation may be performed, FALSE otherwise.
  */
 function invoice_access($op, $invoice = NULL, $account = NULL) {
+  // Administrators can do anything except creating new invoices, since they do
+  // not own a business.
   if (user_access('administer invoices', $account)) {
-    return TRUE;
+    return $op !== 'create';
   }
 
   if (isset($invoice)) {

@@ -32,6 +32,10 @@ projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simplet
 ; @see https://www.drupal.org/node/1555862
 projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetToken_hash_salt-D7-do-not-test.patch
 
+; run-tests.sh should exit with a failure code if any tests failed.
+; @see https://www.drupal.org/node/2189345
+projects[drupal][patch][] = http://www.drupal.org/files/issues/d7-run_tests_sh_should-2189345-34-do-not-test.patch
+
 projects[addressfield][download][type] = git
 projects[addressfield][download][revision] = 7.x-1.1
 projects[addressfield][download][branch] = 7.x-1.x

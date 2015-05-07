@@ -37,7 +37,7 @@ while [ -z "$DRUSH" ] ; do
     DRUSH=
 
   # Check if drush-bde-env is installed.
-  elif ! drush bde-env-gen &> /dev/null ; then
+  elif ! $DRUSH bde-env-gen &> /dev/null ; then
     echo 'Please install the drush-bde-env drush command before continuing.'
     echo 'See https://github.com/pfrenssen/drush-bde-env'
     exit 1
@@ -59,8 +59,8 @@ if [ ! -f behat.config ]; then
 fi
 
 # Retrieve site paths.
-ROOT_PATH=`drush dd`
-PROFILE_PATH=`drush dd invoicing`
+ROOT_PATH=`$DRUSH dd`
+PROFILE_PATH=`$DRUSH dd invoicing`
 BIN_PATH=$PROFILE_PATH/vendor/bin
 
 # Navigate to the root path so DRUPAL_ROOT is set correctly.

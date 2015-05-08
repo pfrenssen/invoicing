@@ -19,8 +19,6 @@ Scenario Outline: Website field validation for correct entries
   | https://www.google.be/q=i+pity+the+fool                   |
   | http://en.wikipedia.org/wiki/Uniform_resource_locator     |
   | https://jon:hunter2@mcp.net:8080/login.php?r=m%20d#Log_in |
-  | localhost                                                 |
-  | localhost/                                                |
   | 127.0.0.1/                                                |
   | twitter.com                                               |
   | twitter.com/                                              |

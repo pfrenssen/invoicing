@@ -133,10 +133,10 @@ class ClientSubContext extends DrupalSubContextBase implements DrupalSubContextI
    *
    * The URL should have been set in a previous step.
    *
-   * @see setClientWebsiteUrl()
-   *
    * @param bool $valid
    *   Whether or not the website URL is expected to be valid.
+   *
+   * @see setClientWebsiteUrl()
    */
   protected function assertClientWebsiteValidity($valid = TRUE) {
     // Create a fake form element and form state.

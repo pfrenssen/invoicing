@@ -101,4 +101,4 @@ variable:
 
 Now we can run our tests:
 
-$ ./profiles/invoicing/vendor/bin/behat -c ./profiles/invoicing/behat.yml
+    $ ./profiles/invoicing/vendor/bin/behat -c ./profiles/invoicing/behat.yml

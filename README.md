@@ -9,6 +9,7 @@ Requirements
 
 - [Composer](https://github.com/composer/composer)
 - [Drush](https://github.com/drush-ops/drush)
+- [PHP BC Math extension](http://php.net/manual/en/bc.setup.php)
 - [PHP intl extension](http://php.net/manual/en/intl.installation.php)
 
 
@@ -60,6 +61,7 @@ Running tests
 =============
 
 Simpletest:
+-----------
 
 All our unit tests and more complicated functional tests are written in
 Simpletest. They are divided in a number of test groups, each of which starting
@@ -70,19 +72,32 @@ In order to run the tests through the user interface:
 - In the browser go to admin/config/development/testing.
 - Select the tests you wish to run and click "Run tests".
 
-Alternatively, run the tests with drush:
-$ drush test-run 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing     - Line item','Invoicing - Invoice','Invoicing - Registration' --uri=http://my-base-url.local
+Alternatively, run the tests with the `run-tests.sh` script:
+    $ cd ./build
+    $ php ./scripts/run-tests.sh --url http://my-base-url.local/ 'Invoicing - Access','Invoicing - Business','Invoicing - Client','Invoicing - Line item','Invoicing - Invoice','Invoicing - Registration'
+
 
 Behat:
+------
 
-In order to run Behat tests we need to first set some environment variables. The
-easiest way to do this is by installing the
-[drush-bde-env](https://github.com/pfrenssen/drush-bde-env) drush extension and
-running the following command:
+A script is provided to make it easy to run the Behat tests. The script will
+take care of setting up the environment variable that contains settings such as
+the base URL that Behat needs.  The script depends on the
+[drush-bde-env](https://github.com/pfrenssen/drush-bde-env) drush extension, so
+make sure to install this first in your ~/.drush folder. You can then run the
+script. It will ask you to enter a few configuration options and will then run
+the tests:
 
-$ cd /path/to/drupal/root
-$ drush bes --base-url=http://my-personal-base-url.localhost config.local
-$ source config.local
+    $ ./profiles/invoicing/behat.sh
+
+If you want to execute the Behat tests manually, the easiest way is to also use
+the `drush-bde-env` Drush extension. You can let it save a script to set up the
+environment variable for Behat. You can then source this script to set the
+variable:
+
+    $ cd /path/to/drupal/root
+    $ drush bes --base-url=http://my-personal-base-url.localhost config.local
+    $ source config.local
 
 Now we can run our tests:
 $ ./profiles/invoicing/vendor/bin/behat -c ./profiles/invoicing/behat.yml

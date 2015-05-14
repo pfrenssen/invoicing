@@ -123,7 +123,7 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // The entity reference fields (client name, products and services) are not
     // shown as fields but as inline tables. Test these separately.
-    $this->assertXPathElements('//div[contains(@class, "entity-client")]//h2[text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in the client summary.');
+    $this->assertXPathElements('//div[contains(@class, "entity-client")]//h2/a[text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in the client summary.');
     $this->assertXPathElements('//div[contains(@class, "field-name-field-client-addres")]', 1, array(), 'The client addres is shown in the client summary.');
     $email = field_get_items('client', $this->client, 'field_client_email');
     $this->assertXPathElements('//div[contains(@class, "field-name-field-client-email")]//a[text() = :email]', 1, array(':email' => $email[0]['email']), 'The client email is shown in the client summary.');

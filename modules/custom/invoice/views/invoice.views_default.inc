@@ -105,6 +105,10 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Invoice: Status */
+  $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
   /* Contextual filter: Invoice: Business */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'invoice';
@@ -184,6 +188,10 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Invoice: Status */
+  $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -232,6 +240,10 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Invoice: Status */
+  $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Invoice: Client (field_invoice_client:target_id) */
   $handler->display->display_options['arguments']['field_invoice_client_target_id']['id'] = 'field_invoice_client_target_id';

@@ -130,6 +130,11 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y'),
           'actual' => (string) $tablerow->td[2]->span[0],
         ),
+        array(
+          'message' => 'The fourth column contains the status.',
+          'expected' => $invoice->field_invoice_status->value(),
+          'actual' => (string) $tablerow->td[3],
+        ),
       );
 
       foreach ($testcases as $testcase) {
@@ -246,6 +251,11 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y'),
           'actual' => (string) $tablerow->td[3]->span[0],
         ),
+        array(
+          'message' => 'The fifth column contains the status.',
+          'expected' => $invoice->field_invoice_status->value(),
+          'actual' => (string) $tablerow->td[4],
+        ),
       );
 
       foreach ($testcases as $testcase) {
@@ -312,6 +322,11 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'message' => 'The second column contains the date.',
           'expected' => format_date($invoice->field_invoice_date->value(), 'custom', 'l, F j, Y'),
           'actual' => (string) $tablerow->td[1]->span[0],
+        ),
+        array(
+          'message' => 'The third column contains the status.',
+          'expected' => $invoice->field_invoice_status->value(),
+          'actual' => (string) $tablerow->td[2],
         ),
       );
 

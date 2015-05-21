@@ -952,6 +952,16 @@ class Invoice extends Entity {
   public $changed;
 
   /**
+   * The total price excluding the VAT.
+   */
+  public $total_ex_vat;
+
+  /**
+   * The total price including the VAT.
+   */
+  public $total_inc_vat;
+
+  /**
    * {@inheritdoc}
    */
   public function save() {
@@ -960,6 +970,26 @@ class Invoice extends Entity {
       $this->created = REQUEST_TIME;
     }
     $this->changed = REQUEST_TIME;
+
+    // Set the initial total values.
+    $this->total_ex_vat = 0.00;
+    $this->total_inc_vat = 0.00;
+
+    // Get the line items to run the calculations on.
+    $line_items = array_merge(field_get_items('invoice', $this, 'field_invoice_services'), field_get_items('invoice', $this, 'field_invoice_products'));
+
+    // Run the calculations and set the totals.
+    foreach($line_items as $service_id) {
+      $line_item = line_item_load($service_id['target_id']);
+      $quantity = field_get_items('line_item', $line_item, 'field_line_item_quantity');
+      $discount = field_get_items('line_item', $line_item, 'field_line_item_discount');
+      $unit_cost = field_get_items('line_item', $line_item, 'field_line_item_unit_cost');
+      $tax_rate = field_get_items('line_item', $line_item, 'field_line_item_tax');
+
+      $subtotal = ($quantity[0]['value'] * $unit_cost[0]['value']) - $discount[0]['value'];
+      $this->total_ex_vat += $subtotal;
+      $this->total_inc_vat += $subtotal * (1 + ($tax_rate[0]['value'] / 100));
+    }
 
     $return = parent::save();
 

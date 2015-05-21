@@ -44,6 +44,9 @@ before_script:
   - drush si --db-url="mysql://root@127.0.0.1/drupal" invoicing -y
   # Enable Simpletest.
   - drush en simpletest -y
+  # Make sure no e-mails are sent out during testing.
+  - drush en maillog -y
+  - drush vset maillog_send 0
   # Start the built-in webserver and wait until it is up and running before continuing.
   - drush runserver 127.0.0.1:8080 &
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done

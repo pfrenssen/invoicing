@@ -118,13 +118,11 @@ function invoice_entity_property_info_alter(&$info) {
 
   $properties['total_ex_vat']['label'] = t('Total excluding VAT');
   $properties['total_ex_vat']['description'] = t('The total price, excluding the VAT.');
-  $properties['total_ex_vat']['type'] = 'date';
   $properties['total_ex_vat']['setter callback'] = 'entity_property_verbatim_set';
   $properties['total_ex_vat']['setter permission'] = 'administer invoices';
 
   $properties['total_inc_vat']['label'] = t('Total including VAT');
   $properties['total_inc_vat']['description'] = t('The total price, including the VAT.');
-  $properties['total_inc_vat']['type'] = 'date';
   $properties['total_inc_vat']['setter callback'] = 'entity_property_verbatim_set';
   $properties['total_inc_vat']['setter permission'] = 'administer invoices';
 }

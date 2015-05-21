@@ -11,15 +11,17 @@ include_once 'invoicing_core.features.inc';
  * Implements hook_menu().
  */
 function invoicing_core_menu() {
-  return ['user/%user/resend/%ctools_js' => [
-    'title' => 'Resend activation mail',
-    'page callback' => 'invoicing_core_resend_activation_mail_callback',
-    'page arguments' => [1, 3],
-    // This is an AJAX callback so it should never return a 403. Access is
-    // handled in the page callback itself.
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK,
-  ]];
+  return [
+    'user/%user/resend/%ctools_js' => [
+      'title' => 'Resend activation mail',
+      'page callback' => 'invoicing_core_resend_activation_mail_callback',
+      'page arguments' => [1, 3],
+      // This is an AJAX callback so it should never return a 403. Access is
+      // handled in the page callback itself.
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    ],
+  ];
 }
 
 /**
@@ -129,7 +131,8 @@ function invoicing_core_get_wkhtmltopdf_path() {
 /**
  * Implements hook_form_alter().
  *
- * - Add an additional validate handler on the user login forms that will allow
+ * Performs the following form alterations:
+ * - Adds an additional validate handler on the user login forms that will allow
  *   to resend the activation e-mail.
  */
 function invoicing_core_form_alter(&$form, &$form_state, $form_id) {

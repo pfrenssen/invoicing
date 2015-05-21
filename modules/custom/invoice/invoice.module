@@ -979,15 +979,17 @@ class Invoice extends Entity {
     // Run the calculations and set the totals.
     foreach($line_items as $service_id) {
       $line_item = line_item_load($service_id['target_id']);
-      $quantity = field_get_items('line_item', $line_item, 'field_line_item_quantity');
-      $discount = field_get_items('line_item', $line_item, 'field_line_item_discount');
-      $unit_cost = field_get_items('line_item', $line_item, 'field_line_item_unit_cost');
-      $tax_rate = field_get_items('line_item', $line_item, 'field_line_item_tax');
+      $calculation = line_item_calculate($line_item);
 
-      $subtotal = ($quantity[0]['value'] * $unit_cost[0]['value']) - $discount[0]['value'];
-      $this->total_ex_vat += $subtotal;
-      $this->total_inc_vat += $subtotal * (1 + ($tax_rate[0]['value'] / 100));
+      $this->total_ex_vat = bcadd($calculation['subtotal'], $this->total_ex_vat, 2);
+      $this->total_inc_vat = bcadd($calculation['total'], $this->total_inc_vat, 2);
     }
+
+    $discount = field_get_items('invoice', $this, 'field_invoice_discount');
+    $discount = number_format(bcmul($this->total_inc_vat, bcdiv($discount[0]['value'], 100, 3), 3), 2, '.', '');
+
+    // Then the total is the base price minus the discount.
+    $this->total_inc_vat = bcsub($this->total_inc_vat, $discount, 2);
 
     $return = parent::save();
 

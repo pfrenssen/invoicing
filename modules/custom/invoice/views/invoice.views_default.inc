@@ -105,6 +105,10 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Invoice: Status */
+  $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
   /* Field: Invoice: Total excluding VAT */
   $handler->display->display_options['fields']['total_ex_vat']['id'] = 'total_ex_vat';
   $handler->display->display_options['fields']['total_ex_vat']['table'] = 'invoice';
@@ -198,6 +202,10 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Invoice: Status */
+  $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
   /* Field: Invoice: Total excluding VAT */
   $handler->display->display_options['fields']['total_ex_vat']['id'] = 'total_ex_vat';
   $handler->display->display_options['fields']['total_ex_vat']['table'] = 'invoice';
@@ -260,6 +268,10 @@ function invoice_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Invoice: Status */
+  $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
   /* Field: Invoice: Total excluding VAT */
   $handler->display->display_options['fields']['total_ex_vat']['id'] = 'total_ex_vat';
   $handler->display->display_options['fields']['total_ex_vat']['table'] = 'invoice';

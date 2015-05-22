@@ -135,6 +135,16 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'expected' => $invoice->field_invoice_status->value(),
           'actual' => (string) $tablerow->td[3],
         ),
+        array(
+          'message' => 'The fifth column contains the total excluding VAT.',
+          'expected' => $invoice->total_ex_vat,
+          'actual' => (string) $tablerow->td[4],
+        ),
+        array(
+          'message' => 'The sixth column contains the total including VAT.',
+          'expected' => $invoice->total_inc_vat,
+          'actual' => (string) $tablerow->td[5],
+        ),
       );
 
       foreach ($testcases as $testcase) {
@@ -256,6 +266,15 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'expected' => $invoice->field_invoice_status->value(),
           'actual' => (string) $tablerow->td[4],
         ),
+          'message' => 'The sixth column contains the total excluding VAT.',
+          'expected' => $invoice->total_ex_vat,
+          'actual' => (string) $tablerow->td[5],
+        ),
+        array(
+          'message' => 'The seventh column contains the total including VAT.',
+          'expected' => $invoice->total_inc_vat,
+          'actual' => (string) $tablerow->td[6],
+        ),
       );
 
       foreach ($testcases as $testcase) {
@@ -327,6 +346,16 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'message' => 'The third column contains the status.',
           'expected' => $invoice->field_invoice_status->value(),
           'actual' => (string) $tablerow->td[2],
+        ),
+        array(
+          'message' => 'The fourth column contains the total excluding VAT.',
+          'expected' => $invoice->total_ex_vat,
+          'actual' => (string) $tablerow->td[3],
+        ),
+        array(
+          'message' => 'The fifth column contains the total including VAT.',
+          'expected' => $invoice->total_inc_vat,
+          'actual' => (string) $tablerow->td[4],
         ),
       );
 

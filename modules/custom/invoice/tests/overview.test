@@ -266,6 +266,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
           'expected' => $invoice->field_invoice_status->value(),
           'actual' => (string) $tablerow->td[4],
         ),
+        array(
           'message' => 'The sixth column contains the total excluding VAT.',
           'expected' => $invoice->total_ex_vat,
           'actual' => (string) $tablerow->td[5],

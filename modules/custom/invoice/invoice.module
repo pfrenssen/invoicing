@@ -837,7 +837,7 @@ function invoice_get_token(Invoice $invoice) {
 function invoice_get_default_number($entity_type, \Invoice $entity, array $field, array $instance, $langcode) {
   try {
     $invoice = invoice_get_most_recent_invoice();
-    $previous_number = $invoice->wrapper()->field_invoice_number->value();
+    $previous_number = $invoice->field_invoice_number;
     return array(array('value' => invoice_increment_number($previous_number)));
   }
   catch (\NoInvoiceException $e) {
@@ -909,6 +909,54 @@ function theme_invoice_inline_client_entity($variables) {
 }
 
 /**
+ * Calculates the price total of an invoice.
+ *
+ * All values are expressed with 2 decimal numbers to represent Euros and cents.
+ * They are returned as strings to avoid rounding errors with floating point
+ * numbers.
+ *
+ * @param \Invoice $invoice
+ *   The array of line items for which to calculate the total.
+ *
+ * @return array
+ *   An associative array with the following keys:
+ *   - 'discount': The calculated discount for an invoice.
+ *   - 'subtotal': The total price before tax, with the discount applied.
+ *   - 'total': The final total.
+ */
+function invoice_calculate(Invoice $invoice) {
+  $wrapper = entity_metadata_wrapper('invoice', $invoice);
+  $line_items = array_merge($wrapper->field_invoice_services->value(), $wrapper->field_invoice_products->value());
+
+  // Set the initial total values.
+  $total_ex_vat = 0;
+  $total_inc_vat = 0;
+
+  // Run the calculations and set the totals.
+  foreach($line_items as $line_item) {
+    $calculation = line_item_calculate($line_item);
+
+    $total_ex_vat = bcadd($calculation['subtotal'], $total_ex_vat, 2);
+    $total_inc_vat = bcadd($calculation['total'], $total_inc_vat, 2);
+  }
+
+  $discount_percent = bcdiv($wrapper->field_invoice_discount->value(), 100, 8);
+  $discount = number_format(bcmul($discount_percent, $total_inc_vat, 3), 2, '.', '');
+
+  // Use BCMath for financial calculations. We calculate to a precision of 3
+  // decimal numbers, then round to 2 decimal numbers to get the exact value in
+  // Euros and cents.
+  $total_ex_vat = bcsub($total_ex_vat, $discount, 2);
+  $total_inc_vat = bcsub($total_inc_vat, $discount, 2);
+
+  return [
+    'discount' => $discount,
+    'subtotal' => $total_ex_vat,
+    'total' => $total_inc_vat,
+  ];
+}
+
+/**
  * The class used for invoice entities.
  *
  * @property array $field_invoice_client
@@ -968,6 +1016,12 @@ class Invoice extends Entity {
       $this->created = REQUEST_TIME;
     }
     $this->changed = REQUEST_TIME;
+
+    // Get the totals for the invoice.
+    $calculation = invoice_calculate($this);
+
+    $this->total_ex_vat = $calculation['subtotal'];
+    $this->total_inc_vat = $calculation['total'];
 
     $return = parent::save();
 

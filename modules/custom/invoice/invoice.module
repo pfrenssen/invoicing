@@ -837,7 +837,7 @@ function invoice_get_token(Invoice $invoice) {
 function invoice_get_default_number($entity_type, \Invoice $entity, array $field, array $instance, $langcode) {
   try {
     $invoice = invoice_get_most_recent_invoice();
-    $previous_number = $invoice->field_invoice_number;
+    $previous_number = $invoice->wrapper()->field_invoice_number->value();
     return array(array('value' => invoice_increment_number($previous_number)));
   }
   catch (\NoInvoiceException $e) {

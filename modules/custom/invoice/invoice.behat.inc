@@ -449,4 +449,18 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
     }
   }
 
+  /**
+   * Checks that the price calculation of a equals the expected total.
+   *
+   * @param string $number
+   *   The number of the invoice.
+   * @param string $total
+   *   The expected price total.
+   *
+   * @Then the price calculation of the :number invoice should equal :total
+   */
+  public function assertInvoicePriceCalculation($number, $total) {
+    $invoice = $this->getInvoiceByNumber($number);
+    PHPUnit_Framework_Assert::assertEquals($total, invoice_calculate($invoice)['total']);
+  }
 }

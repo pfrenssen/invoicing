@@ -3,7 +3,7 @@ core = 7.x
 
 projects[drupal][type] = core
 projects[drupal][download][type] = git
-projects[drupal][download][revision] = 7.35
+projects[drupal][download][revision] = 7.37
 projects[drupal][download][branch] = 7.x
 
 ; Recursive module dependencies of installation profile are not enabled in
@@ -23,10 +23,6 @@ projects[drupal][patch][] = http://drupal.org/files/1988780-6-simpletest-backref
 ; prepareInstallDirectory() doesn't create installation directory.
 ; @see https://drupal.org/node/2061333
 projects[drupal][patch][] = http://drupal.org/files/updater-installation_directory_not_created-2061333-1.patch
-
-; Warning: DOMDocument::importNode() ID already defined.
-; https://www.drupal.org/node/2386903
-projects[drupal][patch][] = http://www.drupal.org/files/issues/2386903-4-simpletest-domdocument_warning-7.x-do-not-test.patch
 
 ; DrupalWebTestCase::drupalGetToken() does not add hash salt.
 ; @see https://www.drupal.org/node/1555862

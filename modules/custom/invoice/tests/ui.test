@@ -123,7 +123,12 @@ class InvoiceUITestCase extends InvoicingIntegrationTestCase {
 
     // The entity reference fields (client name, products and services) are not
     // shown as fields but as inline tables. Test these separately.
-    $this->assertXPathElements('//td[contains(@class, "inline-entity-form-client-name") and text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in an inline table.');
+    $this->assertXPathElements('//div[contains(@class, "entity-client")]//h2/a[text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in the client summary.');
+    $this->assertXPathElements('//div[contains(@class, "field-name-field-client-addres")]', 1, array(), 'The client addres is shown in the client summary.');
+    $email = field_get_items('client', $this->client, 'field_client_email');
+    $this->assertXPathElements('//div[contains(@class, "field-name-field-client-email")]//a[text() = :email]', 1, array(':email' => $email[0]['email']), 'The client email is shown in the client summary.');
+    $vat = field_get_items('client', $this->client, 'field_client_vat');
+    $this->assertXPathElements('//div[contains(@class, "field-name-field-client-vat")]//div[text() = :vat]', 1, array(':vat' => $vat[0]['value']), 'The client vat number is shown in the client summary.');
     unset($form_values['field_invoice_client[und][form][entity_id]']);
     $this->assertXPathElements('//td[contains(@class, "inline-entity-form-line_item-lid") and text() = :lid]', 1, array(':lid' => $this->product->identifier()), 'The product id is shown in an inline table.');
     unset($form_values['field_invoice_products[und][form][entity_id]']);

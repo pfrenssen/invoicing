@@ -109,6 +109,20 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
+  /* Field: Invoice: Total excluding VAT */
+  $handler->display->display_options['fields']['total_ex_vat']['id'] = 'total_ex_vat';
+  $handler->display->display_options['fields']['total_ex_vat']['table'] = 'invoice';
+  $handler->display->display_options['fields']['total_ex_vat']['field'] = 'total_ex_vat';
+  $handler->display->display_options['fields']['total_ex_vat']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['total_ex_vat']['precision'] = '2';
+  $handler->display->display_options['fields']['total_ex_vat']['separator'] = '';
+  /* Field: Invoice: Total including VAT */
+  $handler->display->display_options['fields']['total_inc_vat']['id'] = 'total_inc_vat';
+  $handler->display->display_options['fields']['total_inc_vat']['table'] = 'invoice';
+  $handler->display->display_options['fields']['total_inc_vat']['field'] = 'total_inc_vat';
+  $handler->display->display_options['fields']['total_inc_vat']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['total_inc_vat']['precision'] = '2';
+  $handler->display->display_options['fields']['total_inc_vat']['separator'] = '';
   /* Contextual filter: Invoice: Business */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'invoice';
@@ -192,6 +206,20 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
+  /* Field: Invoice: Total excluding VAT */
+  $handler->display->display_options['fields']['total_ex_vat']['id'] = 'total_ex_vat';
+  $handler->display->display_options['fields']['total_ex_vat']['table'] = 'invoice';
+  $handler->display->display_options['fields']['total_ex_vat']['field'] = 'total_ex_vat';
+  $handler->display->display_options['fields']['total_ex_vat']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['total_ex_vat']['precision'] = '2';
+  $handler->display->display_options['fields']['total_ex_vat']['separator'] = '';
+  /* Field: Invoice: Total including VAT */
+  $handler->display->display_options['fields']['total_inc_vat']['id'] = 'total_inc_vat';
+  $handler->display->display_options['fields']['total_inc_vat']['table'] = 'invoice';
+  $handler->display->display_options['fields']['total_inc_vat']['field'] = 'total_inc_vat';
+  $handler->display->display_options['fields']['total_inc_vat']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['total_inc_vat']['precision'] = '2';
+  $handler->display->display_options['fields']['total_inc_vat']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -244,6 +272,20 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
+  /* Field: Invoice: Total excluding VAT */
+  $handler->display->display_options['fields']['total_ex_vat']['id'] = 'total_ex_vat';
+  $handler->display->display_options['fields']['total_ex_vat']['table'] = 'invoice';
+  $handler->display->display_options['fields']['total_ex_vat']['field'] = 'total_ex_vat';
+  $handler->display->display_options['fields']['total_ex_vat']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['total_ex_vat']['precision'] = '2';
+  $handler->display->display_options['fields']['total_ex_vat']['separator'] = '';
+  /* Field: Invoice: Total including VAT */
+  $handler->display->display_options['fields']['total_inc_vat']['id'] = 'total_inc_vat';
+  $handler->display->display_options['fields']['total_inc_vat']['table'] = 'invoice';
+  $handler->display->display_options['fields']['total_inc_vat']['field'] = 'total_inc_vat';
+  $handler->display->display_options['fields']['total_inc_vat']['set_precision'] = TRUE;
+  $handler->display->display_options['fields']['total_inc_vat']['precision'] = '2';
+  $handler->display->display_options['fields']['total_inc_vat']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Invoice: Client (field_invoice_client:target_id) */
   $handler->display->display_options['arguments']['field_invoice_client_target_id']['id'] = 'field_invoice_client_target_id';

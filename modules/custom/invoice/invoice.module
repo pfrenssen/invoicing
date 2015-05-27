@@ -1002,24 +1002,37 @@ class Invoice extends Entity {
    *   The calculated total.
    */
   private function calculateTotal($vat) {
-    $line_items = array_merge($this->field_invoice_services[LANGUAGE_NONE], $this->field_invoice_products[LANGUAGE_NONE]);
-    $total = 0;
+    $line_items = array();
 
-    // Run the calculations and set the totals.
-    foreach($line_items as $target) {
-      $line_item = line_item_load($target['target_id']);
-      $calculation = line_item_calculate($line_item);
-
-      $total = bcadd($calculation[$vat], $total, 2);
+    if (!empty($this->field_invoice_services[LANGUAGE_NONE])) {
+      $line_items = $this->field_invoice_services[LANGUAGE_NONE];
     }
 
-    $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);
-    $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
+    if (!empty($this->field_invoice_products[LANGUAGE_NONE])) {
+      $line_items = array_merge($line_items, $this->field_invoice_products[LANGUAGE_NONE]);
+    }
 
-    // Use BCMath for financial calculations. We calculate to a precision of 3
-    // decimal numbers, then round to 2 decimal numbers to get the exact value in
-    // Euros and cents.
-    return $total > 0 ? bcsub($total, $discount, 2) : 0;
+    if (!empty($line_items)) {
+      $total = 0;
+
+      // Run the calculations and set the totals.
+      foreach ($line_items as $target) {
+        $line_item = line_item_load($target['target_id']);
+        $calculation = line_item_calculate($line_item);
+
+        $total = bcadd($calculation[$vat], $total, 2);
+      }
+
+      $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);
+      $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
+
+      // Use BCMath for financial calculations. We calculate to a precision of 3
+      // decimal numbers, then round to 2 decimal numbers to get the exact value in
+      // Euros and cents.
+      return $total > 0 ? bcsub($total, $discount, 2) : 0;
+    }
+
+    return 0;
   }
 }
 

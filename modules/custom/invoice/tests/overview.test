@@ -137,12 +137,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fifth column contains the total excluding VAT.',
-          'expected' => $invoice->total_ex_vat,
+          'expected' => $invoice->total_ex_vat->value(),
           'actual' => (string) $tablerow->td[4],
         ),
         array(
           'message' => 'The sixth column contains the total including VAT.',
-          'expected' => $invoice->total_inc_vat,
+          'expected' => $invoice->total_inc_vat->value(),
           'actual' => (string) $tablerow->td[5],
         ),
       );
@@ -268,12 +268,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The sixth column contains the total excluding VAT.',
-          'expected' => $invoice->total_ex_vat,
+          'expected' => $invoice->total_ex_vat->value(),
           'actual' => (string) $tablerow->td[5],
         ),
         array(
           'message' => 'The seventh column contains the total including VAT.',
-          'expected' => $invoice->total_inc_vat,
+          'expected' => $invoice->total_inc_vat->value(),
           'actual' => (string) $tablerow->td[6],
         ),
       );
@@ -350,12 +350,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fourth column contains the total excluding VAT.',
-          'expected' => $invoice->total_ex_vat,
+          'expected' => $invoice->total_ex_vat->value(),
           'actual' => (string) $tablerow->td[3],
         ),
         array(
           'message' => 'The fifth column contains the total including VAT.',
-          'expected' => $invoice->total_inc_vat,
+          'expected' => $invoice->total_inc_vat->value(),
           'actual' => (string) $tablerow->td[4],
         ),
       );

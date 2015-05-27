@@ -940,16 +940,16 @@ function invoice_calculate(Invoice $invoice) {
   }
 
   $discount_percent = bcdiv($invoice->wrapper()->field_invoice_discount->value(), 100, 8);
-  $discount = number_format(bcmul($discount_percent, $total_inc_vat, 3), 2, '.', '');
+  $discount_inc = number_format(bcmul($discount_percent, $total_inc_vat, 3), 2, '.', '');
+  $discount_ex = number_format(bcmul($discount_percent, $total_ex_vat, 3), 2, '.', '');
 
   // Use BCMath for financial calculations. We calculate to a precision of 3
   // decimal numbers, then round to 2 decimal numbers to get the exact value in
   // Euros and cents.
-  $total_ex_vat = bcsub($total_ex_vat, $discount, 2);
-  $total_inc_vat = bcsub($total_inc_vat, $discount, 2);
+  $total_ex_vat = bcsub($total_ex_vat, $discount_ex, 2);
+  $total_inc_vat = bcsub($total_inc_vat, $discount_inc, 2);
 
   return [
-    'discount' => $discount,
     'subtotal' => $total_ex_vat,
     'total' => $total_inc_vat,
   ];

@@ -98,8 +98,8 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * Creates invoices with data provided in a table.
    *
    * Table format:
-   * | client | number | date     | products | services   |
-   * | Fritz  | 15/001 | 20150223 | Key, Box | Work, Rent |
+   * | client | number | date     | discount | products | services   |
+   * | Fritz  | 15/001 | 20150223 | 10       | Key, Box | Work, Rent |
    *
    * Products and services need to be created before they can be added to an
    * invoice. Multiple products and services can be added comma separated.
@@ -131,6 +131,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
         'field_invoice_client' => $this->getClientByName($row['client'])->identifier(),
         'field_invoice_number' => $row['number'],
         'field_invoice_date' => strtotime($row['date'] . ' 00:00 UTC'),
+        'field_invoice_discount' => $row['discount'],
       ];
 
       // Add optional line items. Multiple items can be separated by commas.

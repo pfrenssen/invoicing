@@ -925,8 +925,7 @@ function theme_invoice_inline_client_entity($variables) {
  *   - 'total': The final total.
  */
 function invoice_calculate(Invoice $invoice) {
-  $wrapper = entity_metadata_wrapper('invoice', $invoice);
-  $line_items = array_merge($wrapper->field_invoice_services->value(), $wrapper->field_invoice_products->value());
+  $line_items = array_merge($invoice->wrapper()->field_invoice_services->value(), $invoice->wrapper()->field_invoice_products->value());
 
   // Set the initial total values.
   $total_ex_vat = 0;
@@ -940,7 +939,7 @@ function invoice_calculate(Invoice $invoice) {
     $total_inc_vat = bcadd($calculation['total'], $total_inc_vat, 2);
   }
 
-  $discount_percent = bcdiv($wrapper->field_invoice_discount->value(), 100, 8);
+  $discount_percent = bcdiv($invoice->wrapper()->field_invoice_discount->value(), 100, 8);
   $discount = number_format(bcmul($discount_percent, $total_inc_vat, 3), 2, '.', '');
 
   // Use BCMath for financial calculations. We calculate to a precision of 3

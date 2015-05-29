@@ -789,6 +789,40 @@ function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 }
 
 /**
+ * Implements hook_field_extra_fields().
+ */
+function invoice_field_extra_fields() {
+  $extra['invoice']['invoice']['display']['total_ex_vat'] = array(
+    'label' => t('Total VAT excluded'),
+    'description' => t('Total VAT excluded'),
+    'weight' => 0,
+  );
+
+  $extra['invoice']['invoice']['display']['total_inc_vat'] = array(
+    'label' => t('Total VAT included'),
+    'description' => t('Total VAT included'),
+    'weight' => 0,
+  );
+
+  return $extra;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function invoice_entity_view($entity, $type, $view_mode, $langcode) {
+  // Show the totals on the detail view of an invoice.
+  if ($type == 'invoice') {
+    $entity->content['total_ex_vat'] = array(
+      '#markup' => '<div class="field total-ex-vat"><div class="field-label">' . t('Total VAT excluded') . ':</div><div class="field-items">' . $entity->total_ex_vat . '</div></div>',
+    );
+
+    $entity->content['total_inc_vat'] = array(
+      '#markup' => '<div class="field total-ex-vat"><div class="field-label">' . t('Total VAT included') . ':</div><div class="field-items">' . $entity->total_inc_vat . '</div></div>',
+    );
+  }
+}
+/**
  * Generates a non-session-safe token for an invoice.
  *
  * This is based on drupal_get_token() but is not taking the user session into

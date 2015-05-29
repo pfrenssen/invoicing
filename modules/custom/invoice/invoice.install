@@ -55,7 +55,7 @@ function invoice_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
-        'precision' => 10,
+        'precision' => 20,
         'scale' => 2,
       ),
       'total_inc_vat' => array(
@@ -65,7 +65,7 @@ function invoice_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
         'default' => 0,
-        'precision' => 10,
+        'precision' => 20,
         'scale' => 2,
       ),
     ),

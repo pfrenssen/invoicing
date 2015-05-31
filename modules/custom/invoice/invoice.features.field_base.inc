@@ -261,7 +261,7 @@ function invoice_field_default_field_bases() {
     'settings' => array(
       'allowed_values' => array(
         'draft' => 'draft',
-        'sent' => 'sent',
+        'outstanding' => 'outstanding',
         'paid' => 'paid',
       ),
       'allowed_values_function' => '',

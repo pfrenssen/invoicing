@@ -139,6 +139,52 @@ function invoice_views_default_views() {
   $handler->display->display_options['defaults']['access'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'access invoice overview';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Invoice: Status (field_invoice_status) */
+  $handler->display->display_options['filters']['field_invoice_status_value']['id'] = 'field_invoice_status_value';
+  $handler->display->display_options['filters']['field_invoice_status_value']['table'] = 'field_data_field_invoice_status';
+  $handler->display->display_options['filters']['field_invoice_status_value']['field'] = 'field_invoice_status_value';
+  $handler->display->display_options['filters']['field_invoice_status_value']['value'] = array(
+    'all' => 'all',
+  );
+  $handler->display->display_options['filters']['field_invoice_status_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_invoice_status_value']['expose']['operator_id'] = 'field_invoice_status_value_op';
+  $handler->display->display_options['filters']['field_invoice_status_value']['expose']['label'] = 'Status';
+  $handler->display->display_options['filters']['field_invoice_status_value']['expose']['operator'] = 'field_invoice_status_value_op';
+  $handler->display->display_options['filters']['field_invoice_status_value']['expose']['identifier'] = 'field_invoice_status_value';
+  $handler->display->display_options['filters']['field_invoice_status_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    5 => 0,
+  );
+  $handler->display->display_options['filters']['field_invoice_status_value']['group_info']['label'] = 'Status (field_invoice_status)';
+  $handler->display->display_options['filters']['field_invoice_status_value']['group_info']['identifier'] = 'field_invoice_status_value';
+  $handler->display->display_options['filters']['field_invoice_status_value']['group_info']['group_items'] = array(
+    1 => array(
+      'title' => 'Draft',
+      'operator' => 'or',
+      'value' => array(
+        'draft' => 'draft',
+      ),
+    ),
+    2 => array(
+      'title' => 'Outstanding',
+      'operator' => 'or',
+      'value' => array(
+        'outstanding' => 'outstanding',
+      ),
+    ),
+    3 => array(
+      'title' => 'Paid',
+      'operator' => 'or',
+      'value' => array(
+        'paid' => 'paid',
+      ),
+    ),
+  );
   $handler->display->display_options['path'] = 'invoices';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Invoices';

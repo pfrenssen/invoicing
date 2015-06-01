@@ -44,6 +44,7 @@ features[invoice_type][] = invoice
 features[page_manager_pages][] = client_detail
 features[views_view][] = invoices
 
+files[] = views/invoice_handler_total_excl_field.inc
 files[] = views/invoice_handler_total_field.inc
 files[] = tests/client_reference.test
 files[] = tests/crud.test

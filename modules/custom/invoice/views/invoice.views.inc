@@ -14,6 +14,7 @@ function invoice_views_data_alter(&$data) {
       'title' => t('Total including VAT'),
       'help' => t('Provide the total price including VAT.'),
       'handler' => 'invoice_handler_total_field',
+      'float' => TRUE,
     ),
   );
 
@@ -22,6 +23,7 @@ function invoice_views_data_alter(&$data) {
       'title' => t('Total excluding VAT'),
       'help' => t('Provide the total price excluding VAT.'),
       'handler' => 'invoice_handler_total_excl_field',
+      'float' => TRUE,
     ),
   );
 }

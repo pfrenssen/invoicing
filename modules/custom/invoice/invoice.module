@@ -1002,17 +1002,18 @@ class Invoice extends Entity {
    *   The calculated total.
    */
   private function calculateTotal($vat) {
-    $line_items = array_merge($this->field_invoice_services->value(), $this->field_invoice_products->value());
+    $line_items = array_merge($this->field_invoice_services[LANGUAGE_NONE], $this->field_invoice_products[LANGUAGE_NONE]);
     $total = 0;
 
     // Run the calculations and set the totals.
-    foreach($line_items as $line_item) {
+    foreach($line_items as $target) {
+      $line_item = line_item_load($target['target_id']);
       $calculation = line_item_calculate($line_item);
 
-      $total = bcadd($calculation[$total], $total, 2);
+      $total = bcadd($calculation[$vat], $total, 2);
     }
 
-    $discount_percent = bcdiv($this->field_invoice_discount->value(), 100, 8);
+    $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);
     $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
 
     // Use BCMath for financial calculations. We calculate to a precision of 3

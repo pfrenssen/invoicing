@@ -44,10 +44,11 @@ Scenario Outline: The price calculation for an invoice should be correct
     | product 5   | 199.95    | 1        | 21    | 0        |
 
   Given invoice:
-    | client   | number   | date   | discount            | products   | services   | total           |
-    | <client> | <number> | <date> | <discount>  | <products> | <services> | <invoice total> |
-  Then the price calculation of the "<number>" invoice should equal "<invoice total>"
+    | client   | number   | date   | discount   | products   | services   | including    | excluding   |
+    | <client> | <number> | <date> | <discount> | <products> | <services> | <including > | <excluding> |
+  Then the price including VAT of the "<number>" invoice should equal "<including>"
+  And the price excluding VAT of the "<number>" invoice should equal "<excluding>"
 
   Examples:
-    | client   | number | date     | discount | products                                              | services                                              | invoice total |
-    | Axemill  | 15/001 | 20150223 | 12.13    | product 1, product 2, product 3, product 4, product 5 | service 1, service 2, service 3, service 4, service 5 | 11135.01      |
+    | client   | number | date     | discount | products                                              | services                                              | including | excluding |
+    | Axemill  | 15/001 | 20150223 | 12.13    | product 1, product 2, product 3, product 4, product 5 | service 1, service 2, service 3, service 4, service 5 | 11135.01  | 8829.58   |

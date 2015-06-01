@@ -450,4 +450,34 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
     }
   }
 
+  /**
+   * Checks that the price including VAT of an invoice equals the expected total.
+   *
+   * @param string $number
+   *   The description of the line item.
+   * @param string $including
+   *   The expected price total.
+   *
+   * @Then the price including VAT of the :number invoice should equal :including
+   */
+  public function assertInvoicePriceCalculationIncVat($number, $including) {
+    $invoice = $this->getInvoiceByNumber($number);
+    PHPUnit_Framework_Assert::assertEquals($including, $invoice->getTotal());
+  }
+
+  /**
+   * Checks that the price excluding VAT of an invoice equals the expected total.
+   *
+   * @param string $number
+   *   The description of the line item.
+   * @param string $excluding
+   *   The expected price total.
+   *
+   * @Then the price excluding VAT of the :number invoice should equal :excluding
+   */
+  public function assertInvoicePriceCalculationExcVat($number, $excluding) {
+    $invoice = $this->getInvoiceByNumber($number);
+    PHPUnit_Framework_Assert::assertEquals($excluding, $invoice->getTotalExVat());
+  }
+
 }

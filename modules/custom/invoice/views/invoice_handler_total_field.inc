@@ -31,8 +31,7 @@ class invoice_handler_total_field extends views_handler_field_numeric {
 
   function render($values) {
     // Get the Invoice total and render it.
-    $invoice = invoice_load($values->{$this->aliases['iid']});
-    $value = $invoice->getTotal();
+    $value = $this->get_value($values, 'iid');
 
     if (!empty($this->options['set_precision'])) {
       $value = number_format($value, $this->options['precision'], $this->options['decimal'], $this->options['separator']);
@@ -62,4 +61,11 @@ class invoice_handler_total_field extends views_handler_field_numeric {
     . $this->sanitize_value($this->options['suffix'], 'xss');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  function get_value($values, $field = NULL) {
+    $invoice = invoice_load($values->{$this->aliases[$field]});
+    return $invoice->getTotal();
+  }
 }

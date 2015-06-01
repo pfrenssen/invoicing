@@ -51,4 +51,3 @@ Scenario Outline: The price calculation for an invoice should be correct
   Examples:
     | client   | number | date     | discount | products                                              | services                                              | invoice total |
     | Axemill  | 15/001 | 20150223 | 12.13    | product 1, product 2, product 3, product 4, product 5 | service 1, service 2, service 3, service 4, service 5 | 11135.01      |
->>>>>>> 90b3c0f... Issue #IN-70: Added behat tests.

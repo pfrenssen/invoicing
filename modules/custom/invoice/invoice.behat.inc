@@ -131,7 +131,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
         'field_invoice_client' => $this->getClientByName($row['client'])->identifier(),
         'field_invoice_number' => $row['number'],
         'field_invoice_date' => strtotime($row['date'] . ' 00:00 UTC'),
-        'field_invoice_discount' => $row['discount'],
+        'field_invoice_discount' => !empty($row['discount']) ? $row['discount'] : 0,
       ];
 
       // Add optional line items. Multiple items can be separated by commas.

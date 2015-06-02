@@ -991,9 +991,9 @@ class Invoice extends Entity {
   /**
    * Helper function to calculate the totals for an invoice.
    *
-   * All values are expressed with 2 decimal numbers to represent Euros and cents.
-   * They are returned as strings to avoid rounding errors with floating point
-   * numbers.
+   * All values are expressed with 2 decimal numbers to represent Euros and
+   * cents. They are returned as strings to avoid rounding errors with floating
+   * point numbers.
    *
    * @param string $vat
    *   The key to get from the line item calculation.
@@ -1027,13 +1027,14 @@ class Invoice extends Entity {
       $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
 
       // Use BCMath for financial calculations. We calculate to a precision of 3
-      // decimal numbers, then round to 2 decimal numbers to get the exact value in
-      // Euros and cents.
+      // decimal numbers, then round to 2 decimal numbers to get the exact value
+      // in Euros and cents.
       return $total > 0 ? bcsub($total, $discount, 2) : 0;
     }
 
     return 0;
   }
+
 }
 
 /**

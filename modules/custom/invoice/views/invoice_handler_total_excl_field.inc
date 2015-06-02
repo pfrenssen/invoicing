@@ -13,8 +13,9 @@ class invoice_handler_total_excl_field extends invoice_handler_total_field {
   /**
    * {@inheritdoc}
    */
-  function get_value($values, $field= NULL) {
+  public function get_value($values, $field = NULL) {
     $invoice = invoice_load($values->{$this->aliases[$field]});
     return $invoice->getTotalExVat();
   }
+
 }

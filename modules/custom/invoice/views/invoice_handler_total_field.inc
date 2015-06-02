@@ -29,7 +29,10 @@ class invoice_handler_total_field extends views_handler_field_numeric {
     $this->add_additional_fields();
   }
 
-  function render($values) {
+  /**
+   * {@inheritdoc}
+   */
+  public function render($values) {
     // Get the Invoice total and render it.
     $value = $this->get_value($values, 'iid');
 
@@ -64,8 +67,9 @@ class invoice_handler_total_field extends views_handler_field_numeric {
   /**
    * {@inheritdoc}
    */
-  function get_value($values, $field = NULL) {
+  public function get_value($values, $field = NULL) {
     $invoice = invoice_load($values->{$this->aliases[$field]});
     return $invoice->getTotal();
   }
+
 }

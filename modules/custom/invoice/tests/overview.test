@@ -137,7 +137,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fifth column contains the total excluding VAT.',
-          'expected' =>  $invoice->getTotalExVat(),
+          'expected' => $invoice->getTotalExVat(),
           'actual' => (string) $tablerow->td[4],
         ),
         array(

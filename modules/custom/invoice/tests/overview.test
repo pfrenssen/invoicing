@@ -103,7 +103,11 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
       /* @var $tablerow SimpleXMLElement */
       /* @var $invoice EntityDrupalWrapper */
       $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
+
+      // Keep the invoice object to calculate the values.
+      $invoice_object = invoice_load($invoice->getIdentifier());
       $client = $invoice->field_invoice_client->value();
+
       $testcases = array(
         array(
           'message' => 'The first column contains the invoice number.',
@@ -137,12 +141,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fifth column contains the total excluding VAT.',
-          'expected' => $invoice->getTotalExVat(),
+          'expected' => $invoice_object->getTotalExVat(),
           'actual' => (string) $tablerow->td[4],
         ),
         array(
           'message' => 'The sixth column contains the total including VAT.',
-          'expected' => $invoice->getTotal(),
+          'expected' => $invoice_object->getTotal(),
           'actual' => (string) $tablerow->td[5],
         ),
       );
@@ -223,6 +227,8 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
       /* @var $invoice EntityDrupalWrapper */
       /* @var $business Business */
       $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
+      // Keep the invoice object to calculate the values.
+      $invoice_object = invoice_load($invoice->getIdentifier());
       $business = $invoice->bid->value();
       $client = $invoice->field_invoice_client->value();
       $testcases = array(
@@ -268,12 +274,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The sixth column contains the total excluding VAT.',
-          'expected' => $invoice->getTotalExVat(),
+          'expected' => $invoice_object->getTotalExVat(),
           'actual' => (string) $tablerow->td[5],
         ),
         array(
           'message' => 'The seventh column contains the total including VAT.',
-          'expected' => $invoice->getTotal(),
+          'expected' => $invoice_object->getTotal(),
           'actual' => (string) $tablerow->td[6],
         ),
       );
@@ -327,6 +333,8 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
       /* @var $tablerow SimpleXMLElement */
       /* @var $invoice EntityDrupalWrapper */
       $invoice = entity_metadata_wrapper('invoice', array_shift($this->invoices));
+      // Keep the invoice object to calculate the values.
+      $invoice_object = invoice_load($invoice->getIdentifier());
       $testcases = array(
         array(
           'message' => 'The first column contains the invoice number.',
@@ -350,12 +358,12 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
         ),
         array(
           'message' => 'The fourth column contains the total excluding VAT.',
-          'expected' => $invoice->getTotalExVat(),
+          'expected' => $invoice_object->getTotalExVat(),
           'actual' => (string) $tablerow->td[3],
         ),
         array(
           'message' => 'The fifth column contains the total including VAT.',
-          'expected' => $invoice->getTotal(),
+          'expected' => $invoice_object->getTotal(),
           'actual' => (string) $tablerow->td[4],
         ),
       );

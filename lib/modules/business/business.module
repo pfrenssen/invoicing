@@ -664,13 +664,13 @@ function business_label(Business $entity, $entity_type) {
 /**
  * The class used for business entities.
  *
- * @param array $field_business_address
- * @param array $field_business_bic
- * @param array $field_business_email
- * @param array $field_business_iban
- * @param array $field_business_mobile
- * @param array $field_business_phone
- * @param array $field_business_vat
+ * @property array $field_business_address
+ * @property array $field_business_bic
+ * @property array $field_business_email
+ * @property array $field_business_iban
+ * @property array $field_business_mobile
+ * @property array $field_business_phone
+ * @property array $field_business_vat
  */
 class Business extends Entity {
 

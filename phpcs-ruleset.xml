@@ -9,22 +9,22 @@
 
     <!-- Exclude files automatically generated files that do not follow Drupal file docblock conventions. -->
     <rule ref="Drupal.Commenting.DocComment.ShortFullStop">
-        <exclude-pattern>*/modules/custom/*/*.features.field_base.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.features.field_instance.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.features.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.pages_default.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.strongarm.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.views_default.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.features.field_base.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.features.field_instance.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.features.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.pages_default.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.strongarm.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.views_default.inc</exclude-pattern>
     </rule>
 
     <!-- Exclude automatically generated files that do not follow Drupal file docblock conventions. -->
     <rule ref="Drupal.Commenting.DocComment.ShortNotCapital">
-        <exclude-pattern>*/modules/custom/*/*.features.field_base.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.features.field_instance.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.features.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.pages_default.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.strongarm.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/*/*.views_default.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.features.field_base.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.features.field_instance.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.features.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.pages_default.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.strongarm.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.views_default.inc</exclude-pattern>
     </rule>
 
     <!-- Exclude required but empty files from having a blank line after the file docblock. -->
@@ -34,30 +34,30 @@
 
     <!-- Exclude files (such as Views handlers) that do not follow Drupal class name conventions. -->
     <rule ref="Drupal.NamingConventions.ValidClassName">
-        <exclude-pattern>*/modules/custom/*/views/*.inc</exclude-pattern>
-        <exclude-pattern>*/modules/custom/business/plugins/selection/EntityReference_SelectionHandler_Active_Business.class.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/views/*.inc</exclude-pattern>
+        <exclude-pattern>*/modules/business/plugins/selection/EntityReference_SelectionHandler_Active_Business.class.php</exclude-pattern>
     </rule>
 
     <!-- Exclude files (such as Views handlers) that do not follow Drupal method name conventions. -->
     <rule ref="Drupal.NamingConventions.ValidFunctionName">
-        <exclude-pattern>*/modules/custom/*/views/*.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/views/*.inc</exclude-pattern>
     </rule>
 
     <!-- Exclude files (such as Page Manager exports) that do not follow Drupal indentation conventions. -->
     <rule ref="Drupal.WhiteSpace.ScopeIndent.IncorrectExact">
-        <exclude-pattern>*/modules/custom/*/*.pages_default.inc</exclude-pattern>
+        <exclude-pattern>*/modules/*/*.pages_default.inc</exclude-pattern>
     </rule>
 
     <!-- Exclude files that throw a false positive on trait conflict resolution. -->
     <!-- @todo: Remove this when https://www.drupal.org/node/2419881 is in. -->
     <rule ref="Drupal.WhiteSpace.ScopeIndent.IncorrectExact">
-        <exclude-pattern>modules/custom/business/tests/ui.test</exclude-pattern>
-        <exclude-pattern>modules/custom/client/tests/ui.test</exclude-pattern>
+        <exclude-pattern>modules/business/tests/ui.test</exclude-pattern>
+        <exclude-pattern>modules/client/tests/ui.test</exclude-pattern>
     </rule>
 
     <!-- Allow comments to exceed 80 characters to describe Behat data tables. -->
     <rule ref="Drupal.Files.LineLength.TooLong">
-        <exclude-pattern>modules/custom/invoice/invoice.behat.inc</exclude-pattern>
+        <exclude-pattern>modules/invoice/invoice.behat.inc</exclude-pattern>
     </rule>
 
     <!-- Phing tasks require to use CamelCaps for argument names. -->

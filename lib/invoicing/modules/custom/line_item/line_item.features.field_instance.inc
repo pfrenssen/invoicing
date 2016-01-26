@@ -10,7 +10,7 @@
 function line_item_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'line_item-product-field_line_item_description'
+  // Exported field_instance: 'line_item-product-field_line_item_description'.
   $field_instances['line_item-product-field_line_item_description'] = array(
     'bundle' => 'product',
     'default_value' => NULL,
@@ -44,7 +44,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-product-field_line_item_discount'
+  // Exported field_instance: 'line_item-product-field_line_item_discount'.
   $field_instances['line_item-product-field_line_item_discount'] = array(
     'bundle' => 'product',
     'default_value' => NULL,
@@ -84,7 +84,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-product-field_line_item_quantity'
+  // Exported field_instance: 'line_item-product-field_line_item_quantity'.
   $field_instances['line_item-product-field_line_item_quantity'] = array(
     'bundle' => 'product',
     'default_value' => NULL,
@@ -124,7 +124,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-product-field_line_item_tax'
+  // Exported field_instance: 'line_item-product-field_line_item_tax'.
   $field_instances['line_item-product-field_line_item_tax'] = array(
     'bundle' => 'product',
     'default_value' => NULL,
@@ -166,7 +166,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-product-field_line_item_unit_cost'
+  // Exported field_instance: 'line_item-product-field_line_item_unit_cost'.
   $field_instances['line_item-product-field_line_item_unit_cost'] = array(
     'bundle' => 'product',
     'default_value' => NULL,
@@ -206,7 +206,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-service-field_line_item_description'
+  // Exported field_instance: 'line_item-service-field_line_item_description'.
   $field_instances['line_item-service-field_line_item_description'] = array(
     'bundle' => 'service',
     'default_value' => NULL,
@@ -240,7 +240,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-service-field_line_item_discount'
+  // Exported field_instance: 'line_item-service-field_line_item_discount'.
   $field_instances['line_item-service-field_line_item_discount'] = array(
     'bundle' => 'service',
     'default_value' => NULL,
@@ -280,7 +280,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-service-field_line_item_quantity'
+  // Exported field_instance: 'line_item-service-field_line_item_quantity'.
   $field_instances['line_item-service-field_line_item_quantity'] = array(
     'bundle' => 'service',
     'default_value' => NULL,
@@ -320,7 +320,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-service-field_line_item_tax'
+  // Exported field_instance: 'line_item-service-field_line_item_tax'.
   $field_instances['line_item-service-field_line_item_tax'] = array(
     'bundle' => 'service',
     'default_value' => NULL,
@@ -362,7 +362,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-service-field_line_item_time_unit'
+  // Exported field_instance: 'line_item-service-field_line_item_time_unit'.
   $field_instances['line_item-service-field_line_item_time_unit'] = array(
     'bundle' => 'service',
     'default_value' => array(
@@ -397,7 +397,7 @@ function line_item_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'line_item-service-field_line_item_unit_cost'
+  // Exported field_instance: 'line_item-service-field_line_item_unit_cost'.
   $field_instances['line_item-service-field_line_item_unit_cost'] = array(
     'bundle' => 'service',
     'default_value' => NULL,

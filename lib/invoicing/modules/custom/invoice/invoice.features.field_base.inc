@@ -10,7 +10,7 @@
 function invoice_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_invoice_client'
+  // Exported field_base: 'field_invoice_client'.
   $field_bases['field_invoice_client'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -50,7 +50,7 @@ function invoice_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_invoice_date'
+  // Exported field_base: 'field_invoice_date'.
   $field_bases['field_invoice_date'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -79,7 +79,7 @@ function invoice_field_default_field_bases() {
     'type' => 'datestamp',
   );
 
-  // Exported field_base: 'field_invoice_discount'
+  // Exported field_base: 'field_invoice_discount'.
   $field_bases['field_invoice_discount'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -98,7 +98,7 @@ function invoice_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_invoice_due_date'
+  // Exported field_base: 'field_invoice_due_date'.
   $field_bases['field_invoice_due_date'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -126,7 +126,7 @@ function invoice_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_invoice_number'
+  // Exported field_base: 'field_invoice_number'.
   $field_bases['field_invoice_number'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -147,7 +147,7 @@ function invoice_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_invoice_po_number'
+  // Exported field_base: 'field_invoice_po_number'.
   $field_bases['field_invoice_po_number'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -168,7 +168,7 @@ function invoice_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_invoice_products'
+  // Exported field_base: 'field_invoice_products'.
   $field_bases['field_invoice_products'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -206,7 +206,7 @@ function invoice_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_invoice_services'
+  // Exported field_base: 'field_invoice_services'.
   $field_bases['field_invoice_services'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -244,7 +244,7 @@ function invoice_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_invoice_status'
+  // Exported field_base: 'field_invoice_status'.
   $field_bases['field_invoice_status'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -270,7 +270,7 @@ function invoice_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_invoice_terms'
+  // Exported field_base: 'field_invoice_terms'.
   $field_bases['field_invoice_terms'] = array(
     'active' => 1,
     'cardinality' => 1,

@@ -10,7 +10,7 @@
 function client_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_client_address'
+  // Exported field_base: 'field_client_address'.
   $field_bases['field_client_address'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -25,7 +25,7 @@ function client_field_default_field_bases() {
     'type' => 'addressfield',
   );
 
-  // Exported field_base: 'field_client_email'
+  // Exported field_base: 'field_client_email'.
   $field_bases['field_client_email'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -40,7 +40,7 @@ function client_field_default_field_bases() {
     'type' => 'email',
   );
 
-  // Exported field_base: 'field_client_notes'
+  // Exported field_base: 'field_client_notes'.
   $field_bases['field_client_notes'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -59,7 +59,7 @@ function client_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_client_phone'
+  // Exported field_base: 'field_client_phone'.
   $field_bases['field_client_phone'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -89,7 +89,7 @@ function client_field_default_field_bases() {
     'type' => 'phone',
   );
 
-  // Exported field_base: 'field_client_shipping_address'
+  // Exported field_base: 'field_client_shipping_address'.
   $field_bases['field_client_shipping_address'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -104,7 +104,7 @@ function client_field_default_field_bases() {
     'type' => 'addressfield',
   );
 
-  // Exported field_base: 'field_client_vat'
+  // Exported field_base: 'field_client_vat'.
   $field_bases['field_client_vat'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -125,7 +125,7 @@ function client_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_client_website'
+  // Exported field_base: 'field_client_website'.
   $field_bases['field_client_website'] = array(
     'active' => 1,
     'cardinality' => 1,

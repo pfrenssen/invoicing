@@ -10,7 +10,7 @@
 function business_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_business_address'
+  // Exported field_base: 'field_business_address'.
   $field_bases['field_business_address'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -25,7 +25,7 @@ function business_field_default_field_bases() {
     'type' => 'addressfield',
   );
 
-  // Exported field_base: 'field_business_bic'
+  // Exported field_base: 'field_business_bic'.
   $field_bases['field_business_bic'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -46,7 +46,7 @@ function business_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_business_email'
+  // Exported field_base: 'field_business_email'.
   $field_bases['field_business_email'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -61,7 +61,7 @@ function business_field_default_field_bases() {
     'type' => 'email',
   );
 
-  // Exported field_base: 'field_business_iban'
+  // Exported field_base: 'field_business_iban'.
   $field_bases['field_business_iban'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -82,7 +82,7 @@ function business_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_business_mobile'
+  // Exported field_base: 'field_business_mobile'.
   $field_bases['field_business_mobile'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -112,7 +112,7 @@ function business_field_default_field_bases() {
     'type' => 'phone',
   );
 
-  // Exported field_base: 'field_business_phone'
+  // Exported field_base: 'field_business_phone'.
   $field_bases['field_business_phone'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -142,7 +142,7 @@ function business_field_default_field_bases() {
     'type' => 'phone',
   );
 
-  // Exported field_base: 'field_business_vat'
+  // Exported field_base: 'field_business_vat'.
   $field_bases['field_business_vat'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -163,7 +163,7 @@ function business_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_user_businesses'
+  // Exported field_base: 'field_user_businesses'.
   $field_bases['field_user_businesses'] = array(
     'active' => 1,
     'cardinality' => -1,

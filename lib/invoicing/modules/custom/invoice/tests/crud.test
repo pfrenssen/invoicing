@@ -121,7 +121,7 @@ class InvoiceCRUDTestCase extends InvoicingIntegrationTestCase {
       $entity = invoice_create($properties + $fields);
       $entity->save();
 
-      $args = [ '%value' => $value ];
+      $args = ['%value' => $value];
       $message = format_string('The discount field is a string when an invoice is saved with a discount of %value.', $args);
       $this->assertTrue(is_string($entity->field_invoice_discount[LANGUAGE_NONE][0]['value']), $message);
 

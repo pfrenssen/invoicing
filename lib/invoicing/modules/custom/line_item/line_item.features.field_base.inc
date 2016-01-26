@@ -10,7 +10,7 @@
 function line_item_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_line_item_description'
+  // Exported field_base: 'field_line_item_description'.
   $field_bases['field_line_item_description'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -31,7 +31,7 @@ function line_item_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_line_item_discount'
+  // Exported field_base: 'field_line_item_discount'.
   $field_bases['field_line_item_discount'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -50,7 +50,7 @@ function line_item_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_line_item_quantity'
+  // Exported field_base: 'field_line_item_quantity'.
   $field_bases['field_line_item_quantity'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -69,7 +69,7 @@ function line_item_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_line_item_tax'
+  // Exported field_base: 'field_line_item_tax'.
   $field_bases['field_line_item_tax'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -88,7 +88,7 @@ function line_item_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_line_item_time_unit'
+  // Exported field_base: 'field_line_item_time_unit'.
   $field_bases['field_line_item_time_unit'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -117,7 +117,7 @@ function line_item_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_line_item_unit_cost'
+  // Exported field_base: 'field_line_item_unit_cost'.
   $field_bases['field_line_item_unit_cost'] = array(
     'active' => 1,
     'cardinality' => 1,

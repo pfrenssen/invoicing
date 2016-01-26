@@ -10,7 +10,7 @@
 function client_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'client-client-field_client_address'
+  // Exported field_instance: 'client-client-field_client_address'.
   $field_instances['client-client-field_client_address'] = array(
     'bundle' => 'client',
     'default_value' => array(
@@ -80,7 +80,7 @@ function client_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'client-client-field_client_email'
+  // Exported field_instance: 'client-client-field_client_email'.
   $field_instances['client-client-field_client_email'] = array(
     'bundle' => 'client',
     'default_value' => NULL,
@@ -120,7 +120,7 @@ function client_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'client-client-field_client_notes'
+  // Exported field_instance: 'client-client-field_client_notes'.
   $field_instances['client-client-field_client_notes'] = array(
     'bundle' => 'client',
     'default_value' => NULL,
@@ -160,7 +160,7 @@ function client_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'client-client-field_client_phone'
+  // Exported field_instance: 'client-client-field_client_phone'.
   $field_instances['client-client-field_client_phone'] = array(
     'bundle' => 'client',
     'default_value' => NULL,
@@ -482,7 +482,7 @@ function client_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'client-client-field_client_shipping_address'
+  // Exported field_instance: 'client-client-field_client_shipping_address'.
   $field_instances['client-client-field_client_shipping_address'] = array(
     'bundle' => 'client',
     'default_value' => array(
@@ -546,7 +546,7 @@ function client_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'client-client-field_client_vat'
+  // Exported field_instance: 'client-client-field_client_vat'.
   $field_instances['client-client-field_client_vat'] = array(
     'bundle' => 'client',
     'default_value' => NULL,
@@ -587,7 +587,7 @@ function client_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'client-client-field_client_website'
+  // Exported field_instance: 'client-client-field_client_website'.
   $field_instances['client-client-field_client_website'] = array(
     'bundle' => 'client',
     'default_value' => NULL,

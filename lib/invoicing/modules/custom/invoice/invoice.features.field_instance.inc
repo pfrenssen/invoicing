@@ -10,7 +10,7 @@
 function invoice_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_client'
+  // Exported field_instance: 'invoice-invoice-field_invoice_client'.
   $field_instances['invoice-invoice-field_invoice_client'] = array(
     'bundle' => 'invoice',
     'default_value' => NULL,
@@ -53,7 +53,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_date'
+  // Exported field_instance: 'invoice-invoice-field_invoice_date'.
   $field_instances['invoice-invoice-field_invoice_date'] = array(
     'bundle' => 'invoice',
     'deleted' => 0,
@@ -100,7 +100,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_discount'
+  // Exported field_instance: 'invoice-invoice-field_invoice_discount'.
   $field_instances['invoice-invoice-field_invoice_discount'] = array(
     'bundle' => 'invoice',
     'default_value' => NULL,
@@ -140,7 +140,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_due_date'
+  // Exported field_instance: 'invoice-invoice-field_invoice_due_date'.
   $field_instances['invoice-invoice-field_invoice_due_date'] = array(
     'bundle' => 'invoice',
     'default_value' => array(
@@ -175,7 +175,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_number'
+  // Exported field_instance: 'invoice-invoice-field_invoice_number'.
   $field_instances['invoice-invoice-field_invoice_number'] = array(
     'bundle' => 'invoice',
     'default_value' => NULL,
@@ -210,7 +210,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_po_number'
+  // Exported field_instance: 'invoice-invoice-field_invoice_po_number'.
   $field_instances['invoice-invoice-field_invoice_po_number'] = array(
     'bundle' => 'invoice',
     'default_value' => NULL,
@@ -244,7 +244,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_products'
+  // Exported field_instance: 'invoice-invoice-field_invoice_products'.
   $field_instances['invoice-invoice-field_invoice_products'] = array(
     'bundle' => 'invoice',
     'deleted' => 0,
@@ -286,7 +286,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_services'
+  // Exported field_instance: 'invoice-invoice-field_invoice_services'.
   $field_instances['invoice-invoice-field_invoice_services'] = array(
     'bundle' => 'invoice',
     'deleted' => 0,
@@ -328,7 +328,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_status'
+  // Exported field_instance: 'invoice-invoice-field_invoice_status'.
   $field_instances['invoice-invoice-field_invoice_status'] = array(
     'bundle' => 'invoice',
     'default_value' => array(
@@ -363,7 +363,7 @@ function invoice_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'invoice-invoice-field_invoice_terms'
+  // Exported field_instance: 'invoice-invoice-field_invoice_terms'.
   $field_instances['invoice-invoice-field_invoice_terms'] = array(
     'bundle' => 'invoice',
     'default_value' => NULL,

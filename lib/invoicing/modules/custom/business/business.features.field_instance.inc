@@ -10,7 +10,7 @@
 function business_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'business-business-field_business_address'
+  // Exported field_instance: 'business-business-field_business_address'.
   $field_instances['business-business-field_business_address'] = array(
     'bundle' => 'business',
     'default_value' => array(
@@ -68,7 +68,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'business-business-field_business_bic'
+  // Exported field_instance: 'business-business-field_business_bic'.
   $field_instances['business-business-field_business_bic'] = array(
     'bundle' => 'business',
     'default_value' => NULL,
@@ -102,7 +102,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'business-business-field_business_email'
+  // Exported field_instance: 'business-business-field_business_email'.
   $field_instances['business-business-field_business_email'] = array(
     'bundle' => 'business',
     'default_value' => NULL,
@@ -135,7 +135,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'business-business-field_business_iban'
+  // Exported field_instance: 'business-business-field_business_iban'.
   $field_instances['business-business-field_business_iban'] = array(
     'bundle' => 'business',
     'default_value' => NULL,
@@ -169,7 +169,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'business-business-field_business_mobile'
+  // Exported field_instance: 'business-business-field_business_mobile'.
   $field_instances['business-business-field_business_mobile'] = array(
     'bundle' => 'business',
     'default_value' => NULL,
@@ -473,7 +473,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'business-business-field_business_phone'
+  // Exported field_instance: 'business-business-field_business_phone'.
   $field_instances['business-business-field_business_phone'] = array(
     'bundle' => 'business',
     'default_value' => NULL,
@@ -777,7 +777,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'business-business-field_business_vat'
+  // Exported field_instance: 'business-business-field_business_vat'.
   $field_instances['business-business-field_business_vat'] = array(
     'bundle' => 'business',
     'default_value' => NULL,
@@ -811,7 +811,7 @@ function business_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-field_user_businesses'
+  // Exported field_instance: 'user-user-field_user_businesses'.
   $field_instances['user-user-field_user_businesses'] = array(
     'bundle' => 'user',
     'default_value' => NULL,

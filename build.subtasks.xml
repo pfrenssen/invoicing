@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Invoicing" default="help">
+
+    <!-- Make the given folder writeable. -->
+    <target name="unprotect-folder">
+        <!-- This should only be used on folders that need to be removed. -->
+        <if>
+            <available file="${folder.to.unprotect}" type="dir" />
+            <then>
+                <chmod mode="0777" failonerror="true" verbose="false" quiet="true">
+                    <fileset dir="${folder.to.unprotect}" />
+                </chmod>
+            </then>
+        </if>
+    </target>
+
+    <!-- Delete a given folder. -->
+    <target name="delete-folder">
+        <!-- Use the faster native command on UNIX systems. -->
+        <if>
+            <os family="unix" />
+            <then>
+                <echo msg='rm -rf "${folder.to.delete}"' />
+                <exec
+                    command='rm -rf "${folder.to.delete}"'
+                    dir="${project.basedir}"
+                    passthru="true"
+                    checkreturn="true"
+                />
+            </then>
+            <else>
+                <delete dir="${folder.to.delete}" includeemptydirs="true" failonerror="false" />
+            </else>
+        </if>
+    </target>
+
+    <!-- Copies a given folder to a new location. -->
+    <target name="copy-folder">
+        <copy todir="${copy.destination.path}">
+            <fileset dir="${copy.source.path}" defaultexcludes="false" />
+        </copy>
+    </target>
+
+    <!-- Subtarget: execute a makefile with the no-core option. -->
+    <target name="drush-make-no-core">
+        <echo message="Running make file ${drush.make.target.file} into folder ${drush.make.root}." />
+        <drush
+            command="make"
+            assume="yes"
+            bin="${drush.bin}"
+            pipe="yes"
+            verbose="${drush.verbose}"
+            root="${drush.make.root}">
+            <param>${drush.make.target.file}</param>
+            <param>${drush.make.root}</param>
+            <!--
+                Increasing the concurrency improves the build time by a factor
+                of 3.
+             -->
+            <option name="concurrency">10</option>
+            <option name="no-patch-txt"></option>
+            <!--
+                This option will allow us to build inside an existing folder.
+             -->
+            <option name="no-core"></option>
+        </drush>
+    </target>
+
+    <!-- Link site document root to Webserver document root. -->
+    <target
+        name="link-docroot"
+        description="Create a symlink from the build folder to the webserver document root.">
+        <symlink link="${server.docroot}" target="${platform.build.dir}" overwrite="true" />
+    </target>
+
+</project>

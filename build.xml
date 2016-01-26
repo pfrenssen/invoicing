@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="Invoicing" default="help">
+
+    <property file="build.properties.local" />
+    <property file="build.properties" />
+    <property file="build.properties.dist" />
+
+    <target name="help" description="Phing target list">
+        <exec executable="${phing.bin}"
+              passthru="true">
+            <arg value="-l"/>
+        </exec>
+    </target>
+
+    <includepath classpath="src/Phing" />
+
+    <echo msg="Loading Drush task." />
+    <taskdef name="drush" classname="DrushTask" />
+
+    <echo msg="Loading PHP Codesniffer Configuration task." />
+    <taskdef name="phpcodesnifferconfiguration" classname="\Invoicing\Phing\PhpCodeSnifferConfigurationTask" />
+
+    <echo msg="Loading Drush Makefile task." />
+    <taskdef name="drushmakefile" classname="\Invoicing\Phing\DrushMakeFileTask" />
+
+    <import file="build.subtasks.xml" />
+
+    <!-- Install Composer dependencies for the build system. -->
+    <target name="install-composer-dependencies">
+        <composer command="install" composer="${composer.bin}">
+            <arg value="--working-dir=${project.basedir}" />
+        </composer>
+    </target>
+
+    <!-- Delete the previous build. -->
+    <target name="delete-build">
+        <!--
+            During the Drupal installation process the settings folder is write
+            protected. Ensure it is writeable so it can be removed.
+         -->
+        <phingcall target="unprotect-folder">
+            <property name="folder.to.unprotect" value="${platform.build.settings.dir}" />
+        </phingcall>
+
+        <echo msg="Delete previous build." />
+        <phingcall target="delete-folder">
+            <property name="folder.to.delete" value="${platform.build.dir}" />
+        </phingcall>
+    </target>
+
+    <!-- Make the site using drush make. -->
+    <!-- Todo: Skip the quick build option when building production. -->
+    <target name="make-build">
+        <!-- Default to the standard make file. -->
+        <property name="drush.make.target.file" value="${site.make.standard}" />
+
+        <!-- Determine if we do a quick build. -->
+        <if>
+            <istrue value="${site.build.quick}" />
+            <then>
+                <echo message="Doing a quick build." />
+                <property name="drush.make.target.file" value="${site.make.quick}" override="yes" />
+            </then>
+        </if>
+
+        <echo message="Building make file ${drush.make.target.file}." />
+        <drush
+            command="make"
+            assume="yes"
+            bin="${drush.bin}"
+            pipe="yes"
+            verbose="${drush.verbose}"
+            root="${platform.build.dir}">
+            <param>${drush.make.target.file}</param>
+            <param>${platform.build.dir}</param>
+            <!--
+                Increasing the concurrency improves the build time by a factor
+                of 3.
+             -->
+            <option name="concurrency">10</option>
+            <option name="no-patch-txt"></option>
+            <option name="contrib-destination">${site.make.contrib}</option>
+        </drush>
+    </target>
+
+    <!-- Symlink the source folders for easy development. -->
+    <target name="link-dev-resources">
+        <!-- Symlink our custom modules. -->
+        <symlink link="${platform.build.profile.modules.custom.dir}" target="${site.lib.modules.dir}" />
+        <!-- Symlink our custom PSR-4 code. -->
+        <symlink link="${platform.build.profile.source.dir}" target="${site.lib.source.dir}" />
+        <!-- Symlink composer configuration. -->
+        <symlink link="${platform.build.profile.composer.json}" target="${site.lib.composer.json}" />
+        <symlink link="${platform.build.profile.composer.lock}" target="${site.lib.composer.lock}" />
+        <!-- Symlink install profile. -->
+        <symlink link="${platform.build.profile.profile.info}" target="${site.lib.profile.info}" />
+        <symlink link="${platform.build.profile.profile.install}" target="${site.lib.profile.install}" />
+        <symlink link="${platform.build.profile.profile.profile}" target="${site.lib.profile.profile}" />
+    </target>
+
+    <!-- Copy site resources into the build folder. -->
+    <!-- Todo: Untested. -->
+    <target name="copy-dist-resources">
+        <echo msg="Copy custom resources." />
+        <!-- Copy our custom modules. -->
+        <phingcall target="copy-folder">
+            <property name="copy.source.path" value="${site.lib.modules.dir}" />
+            <property name="copy.destination.path" value="${platform.build.profile.modules.custom.dir}" />
+        </phingcall>
+        <!-- Copy our custom PSR-4 code. -->
+        <phingcall target="copy-folder">
+            <property name="copy.source.path" value="${site.lib.source.dir}" />
+            <property name="copy.destination.path" value="${platform.build.profile.source.dir}" />
+        </phingcall>
+        <!-- Copy composer configuration. -->
+        <copy todir="${platform.build.profile.dir}" file="${site.lib.composer.json}" />
+        <copy todir="${platform.build.profile.dir}" file="${site.lib.composer.lock}" />
+        <!-- Copy install profile. -->
+        <copy todir="${platform.build.profile.profile.info}" file="${site.lib.profile.info}" />
+        <copy todir="${platform.build.profile.profile.install}" file="${site.lib.profile.install}" />
+        <copy todir="${platform.build.profile.profile.profile}" file="${site.lib.profile.profile}" />
+    </target>
+
+    <!-- Install Composer dependencies for the build. -->
+    <target name="install-dev-dependencies">
+        <composer command="install" composer="${composer.bin}">
+            <arg value="--working-dir=${platform.build.profile.dir}" />
+        </composer>
+    </target>
+
+    <!-- Set up Behat. -->
+    <target name="setup-behat">
+        <if>
+            <available file="${behat.yml.path}" type="file" property="behat.yml.available" />
+            <then>
+                <echo message="Deleting existing behat.yml configuration file" />
+                <delete file="${behat.yml.path}" failonerror="false" />
+            </then>
+        </if>
+        <echo message="Creating behat.yml configuration file" />
+        <loadfile property="behat.yml.content" file="${behat.yml.template}">
+            <filterchain>
+                <replacetokens>
+                    <token key="project.code.dir" value="${project.code.dir}" />
+                    <token key="drupal.site.dir" value="${drupal.site.dir}" />
+                    <token key="behat.base_url" value="${behat.base_url}" />
+                    <token key="behat.formatter.name" value="${behat.formatter.name}" />
+                </replacetokens>
+            </filterchain>
+        </loadfile>
+        <echo message="${behat.yml.content}" file="${behat.yml.path}" />
+    </target>
+
+    <!-- Set up PHP CodeSniffer. -->
+    <target name="setup-php-codesniffer" description="Generate the configuration file for PHP CodeSniffer.">
+        <if>
+            <available file="${phpcs.config}" type="file" property="phpcs.config.available" />
+            <then>
+                <echo message="Deleting existing PHP Codesniffer default configuration file." />
+                <delete file="${phpcs.config}" failonerror="false" />
+            </then>
+        </if>
+        <if>
+            <available file="${phpcs.global.config}" type="file" property="phpcs.global.config.available" />
+            <then>
+                <echo message="Deleting existing PHP Codesniffer global configuration file." />
+                <delete file="${phpcs.global.config}" failonerror="false" />
+            </then>
+        </if>
+        <phpcodesnifferconfiguration
+            configFile="${phpcs.config}"
+            extensions="${phpcs.extensions}"
+            files="${phpcs.files}"
+            globalConfig="${phpcs.global.config}"
+            ignorePatterns="${phpcs.ignore}"
+            report="${phpcs.report}"
+            showProgress="${phpcs.progress}"
+            showSniffCodes="${phpcs.sniffcodes}"
+            standard="${phpcs.standard}"
+        />
+    </target>
+
+    <!-- Download development modules. -->
+    <target name="download-development-modules" depends="generate-development-makefile">
+        <echo msg="Download development modules." />
+        <phingcall target="drush-make-no-core">
+            <property name="drush.make.target.file" value="${site.temporary.development.make}" />
+            <property name="drush.make.root" value="${platform.build.dir}" />
+        </phingcall>
+    </target>
+
+    <!-- Generate the makefile used to download development modules. -->
+    <target name="generate-development-makefile">
+        <echo msg="Generate the makefile for development modules." />
+        <mkdir dir="${phing.project.tmp.dir}" />
+        <if>
+            <available file="${site.temporary.development.make}" type="file" property="development.makefile.available" />
+            <then>
+                <echo message="Deleting existing makefile." />
+                <delete file="${site.temporary.development.make}" failonerror="false" />
+            </then>
+        </if>
+        <drushmakefile
+            makeFile="${site.temporary.development.make}"
+            coreVersion="${drupal.core.version}"
+            projects="${development.modules.download}"
+            defaultProjectDir="${development.modules.location}"
+        />
+    </target>
+
+    <!-- Install the site. -->
+    <target name="install" description="Install the site.">
+        <!--
+            Ensure the settings folder is writable so the installer can create
+            the settings.php file.
+         -->
+        <chmod mode="0755" failonerror="false" verbose="false" quiet="true">
+            <fileset dir="${platform.build.settings.dir}" />
+        </chmod>
+        <drush
+            command="site-install"
+            assume="yes"
+            root="${platform.build.dir}"
+            bin="${drush.bin}"
+            verbose="${drush.verbose}">
+            <option name="db-url" value="${drupal.db.url}" />
+            <option name="site-name" value="'${site.name}'" />
+            <option name="account-name" value="${drupal.admin.username}" />
+            <option name="account-pass" value="${drupal.admin.password}" />
+            <option name="account-mail" value="${drupal.admin.email}" />
+            <param>${platform.profile.name}</param>
+            <!-- Prevent e-mails from being sent during the installation. -->
+            <param>install_configure_form.update_status_module='array(FALSE,FALSE)'</param>
+        </drush>
+    </target>
+
+    <!-- Enable development modules. -->
+    <target name="enable-development-modules">
+        <phingcall target="enable-modules">
+            <property name="drupal.modules" value="${development.modules.enable}" />
+        </phingcall>
+    </target>
+
+    <!-- Enable modules. -->
+    <target name="enable-modules">
+        <drush
+            command="pm-enable"
+            assume="yes"
+            root="${platform.build.dir}"
+            bin="${drush.bin}"
+            verbose="${drush.verbose}">
+            <param>${drupal.modules}</param>
+        </drush>
+    </target>
+
+    <!-- Install a development version of the site. -->
+    <target
+        name="install-dev"
+        description="Install a local development version of the site."
+        depends="install, enable-development-modules"
+    />
+
+    <target
+        name="build-dev"
+        description="Build a local development version of the site."
+        depends="install-composer-dependencies, delete-build, make-build, link-dev-resources, install-dev-dependencies, setup-behat, setup-php-codesniffer, download-development-modules"
+    />
+
+    <!-- Todo: untested. -->
+    <target
+        name="build-dist"
+        description="Build a version of the site intended to distribute as a release package."
+        depends="install-composer-dependencies, delete-build, make-build, copy-dist-resources"
+    />
+
+</project>

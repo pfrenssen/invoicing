@@ -4,15 +4,36 @@
         "drupal/coder": "dev-8.x-2.x",
         "drupal/drupal-driver": "dev-master",
         "drupal/drupal-extension": "dev-master",
+        "drupal/phing-drush-task": "1.0",
+        "drush/drush": "8.0.*@beta",
         "h4cc/wkhtmltopdf-amd64": "dev-master",
         "mikehaertl/phpwkhtmltopdf": "~2.0",
         "phing/phing": "~2.10",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "composer/composer": "dev-master#2491679ba35"
     },
     "autoload": {
         "psr-4": {
-            "Drupal\\invoicing\\": "src"
+            "Drupal\\invoicing\\": "tests/src",
+            "Invoicing\\": "src"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "drupal/phing-drush-task",
+                "version": "1.0",
+                "source": {
+                    "url": "http://git.drupal.org/project/phingdrushtask.git",
+                    "type": "git",
+                    "reference": "7.x-1.0"
+                },
+                "autoload": { "classmap": [ "DrushTask.php" ] },
+                "include-path": [ "." ]
+            }
+        }
+    ]
 }

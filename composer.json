@@ -1,16 +1,15 @@
 {
     "require": {
         "behat/behat": "dev-master#2059cbe",
+        "composer/composer": "dev-master#2491679ba35",
         "drupal/coder": "dev-8.x-2.x",
         "drupal/drupal-driver": "dev-master",
         "drupal/drupal-extension": "dev-master",
         "drupal/phing-drush-task": "1.0",
         "drush/drush": "8.0.*@beta",
-        "h4cc/wkhtmltopdf-amd64": "dev-master",
-        "mikehaertl/phpwkhtmltopdf": "~2.0",
         "phing/phing": "~2.10",
         "phpunit/phpunit": "~4.0",
-        "composer/composer": "dev-master#2491679ba35"
+        "symfony/yaml": "~2.7"
     },
     "autoload": {
         "psr-4": {

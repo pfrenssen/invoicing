@@ -38,9 +38,13 @@ projects[addressfield][download][branch] = 7.x-1.x
 projects[addressfield][subdir] = contrib
 
 projects[ctools][download][type] = git
-projects[ctools][download][revision] = 7.x-1.7
+projects[ctools][download][revision] = 7.x-1.9
 projects[ctools][download][branch] = 7.x-1.x
 projects[ctools][subdir] = contrib
+
+; PHP 4 style constructors are deprecated in PHP 7.
+; @see https://www.drupal.org/node/2528736
+projects[ctools][patch][] = https://www.drupal.org/files/issues/deprecating_php4_style-2528736-23.patch
 
 projects[date][download][type] = git
 projects[date][download][revision] = 7.x-2.8
@@ -134,9 +138,11 @@ projects[link][download][revision] = 7.x-1.3
 projects[link][download][branch] = 7.x-1.x
 projects[link][subdir] = contrib
 
+; A recent dev release of Panels is pinned since it contains a number of PHP 7
+; fixes. Revert to the stable release when 7.x-3.6 is released.
 projects[panels][download][type] = git
-projects[panels][download][revision] = 7.x-3.5
-projects[panels][download][branch] = 7.x-1.x
+projects[panels][download][revision] = e8623b704fb2585bbf77f31f06d4a98721556277
+projects[panels][download][branch] = 7.x-3.x
 projects[panels][subdir] = contrib
 
 projects[phone][type] = module
@@ -159,7 +165,7 @@ projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
 
 projects[views][download][type] = git
-projects[views][download][revision] = 7.x-3.10
+projects[views][download][revision] = 7.x-3.13
 projects[views][download][branch] = 7.x-3.x
 projects[views][subdir] = contrib
 

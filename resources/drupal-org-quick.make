@@ -32,8 +32,12 @@ projects[drupal][patch][] = http://www.drupal.org/files/issues/d7-run_tests_sh_s
 projects[addressfield][version] = 1.1
 projects[addressfield][subdir] = contrib
 
-projects[ctools][version] = 1.7
+projects[ctools][version] = 1.9
 projects[ctools][subdir] = contrib
+
+; PHP 4 style constructors are deprecated in PHP 7.
+; @see https://www.drupal.org/node/2528736
+projects[ctools][patch][] = https://www.drupal.org/files/issues/deprecating_php4_style-2528736-23.patch
 
 projects[date][version] = 2.8
 projects[date][subdir] = contrib
@@ -109,7 +113,11 @@ projects[libraries][subdir] = contrib
 projects[link][version] = 1.3
 projects[link][subdir] = contrib
 
-projects[panels][version] = 3.5
+; A recent dev release of Panels is pinned since it contains a number of PHP 7
+; fixes. Revert to the stable release when 7.x-3.6 is released.
+projects[panels][download][type] = git
+projects[panels][download][revision] = e8623b704fb2585bbf77f31f06d4a98721556277
+projects[panels][download][branch] = 7.x-3.x
 projects[panels][subdir] = contrib
 
 projects[phone][type] = module
@@ -129,7 +137,7 @@ projects[user_registrationpassword][download][revision] = 6963288
 projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
 
-projects[views][version] = 3.10
+projects[views][version] = 3.13
 projects[views][subdir] = contrib
 
 ; Libraries

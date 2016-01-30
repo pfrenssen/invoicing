@@ -90,9 +90,12 @@
         <symlink link="${platform.build.profile.modules.custom.dir}" target="${site.lib.modules.dir}" />
         <!-- Symlink our custom PSR-4 code. -->
         <symlink link="${platform.build.profile.source.dir}" target="${site.lib.source.dir}" />
-        <!-- Symlink composer configuration. -->
+        <!-- Symlink composer dependencies for the profile. -->
         <symlink link="${platform.build.profile.composer.json}" target="${site.lib.composer.json}" />
         <symlink link="${platform.build.profile.composer.lock}" target="${site.lib.composer.lock}" />
+        <!-- Symlink composer dependencies for the entire platform. -->
+        <symlink link="${platform.build.composer.json}" target="${site.resources.composer.json}" />
+        <symlink link="${platform.build.composer.lock}" target="${site.resources.composer.lock}" />
         <!-- Symlink install profile. -->
         <symlink link="${platform.build.profile.profile.info}" target="${site.lib.profile.info}" />
         <symlink link="${platform.build.profile.profile.install}" target="${site.lib.profile.install}" />
@@ -101,6 +104,12 @@
 
     <!-- Copy site resources into the build folder. -->
     <!-- Todo: Untested. -->
+    <!--
+      Todo: The composer dependencies need to be rebuilt first using Composer
+            Manager so that the paths of the namespaces are not following
+            symlinks. This means that we need to do a full install and a call to
+            `drush composer-json-rebuild`
+     -->
     <target name="copy-dist-resources">
         <echo msg="Copy custom resources." />
         <!-- Copy our custom modules. -->
@@ -113,9 +122,12 @@
             <property name="copy.source.path" value="${site.lib.source.dir}" />
             <property name="copy.destination.path" value="${platform.build.profile.source.dir}" />
         </phingcall>
-        <!-- Copy composer configuration. -->
+        <!-- Copy composer configuration for the profile. -->
         <copy todir="${platform.build.profile.dir}" file="${site.lib.composer.json}" />
         <copy todir="${platform.build.profile.dir}" file="${site.lib.composer.lock}" />
+        <!-- Copy composer dependencies for the entire platform. -->
+        <copy todir="${platform.build.dir}" file="${site.resources.composer.json}" />
+        <copy todir="${platform.build.dir}" file="${site.resources.composer.lock}" />
         <!-- Copy install profile. -->
         <copy todir="${platform.build.profile.profile.info}" file="${site.lib.profile.info}" />
         <copy todir="${platform.build.profile.profile.install}" file="${site.lib.profile.install}" />
@@ -123,9 +135,9 @@
     </target>
 
     <!-- Install Composer dependencies for the build. -->
-    <target name="install-dev-dependencies">
+    <target name="install-build-dependencies">
         <composer command="install" composer="${composer.bin}">
-            <arg value="--working-dir=${platform.build.profile.dir}" />
+            <arg value="--working-dir=${platform.build.dir}" />
         </composer>
     </target>
 
@@ -264,7 +276,7 @@
     <target
         name="build-dev"
         description="Build a local development version of the site."
-        depends="install-composer-dependencies, delete-build, make-build, link-dev-resources, install-dev-dependencies, setup-behat, setup-php-codesniffer, download-development-modules"
+        depends="install-composer-dependencies, delete-build, make-build, link-dev-resources, install-build-dependencies, setup-behat, setup-php-codesniffer, download-development-modules"
     />
 
     <!-- Todo: untested. -->

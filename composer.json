@@ -6,7 +6,7 @@
         "drupal/drupal-driver": "dev-master",
         "drupal/drupal-extension": "dev-master",
         "drupal/phing-drush-task": "1.0",
-        "drush/drush": "8.0.*@beta",
+        "drush/drush": "~8.0",
         "phing/phing": "~2.10",
         "phpunit/phpunit": "~4.0",
         "symfony/yaml": "~2.7"

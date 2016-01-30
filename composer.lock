@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "79d93b4e3ec35ff714838c1d6cf2cc61",
-    "content-hash": "f00b33d5983df4c7212f33835b65dc34",
+    "hash": "393b2df3d35842b4ff16934c3993bd63",
+    "content-hash": "ae5878d10934d1c02bea904d693966fc",
     "packages": [
         {
             "name": "behat/behat",
@@ -484,7 +484,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/593b88e41487f481d4368a4d331146914c1c2981",
+                "url": "https://api.github.com/repos/composer/composer/zipball/7c3e621102106fd28af0128fdfd750af926fc569",
                 "reference": "2491679ba35",
                 "shasum": ""
             },
@@ -3713,8 +3713,7 @@
         "composer/composer": 20,
         "drupal/coder": 20,
         "drupal/drupal-driver": 20,
-        "drupal/drupal-extension": 20,
-        "drush/drush": 10
+        "drupal/drupal-extension": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

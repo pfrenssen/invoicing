@@ -123,7 +123,7 @@ projects[panels][subdir] = contrib
 projects[phone][type] = module
 projects[phone][download][type] = git
 projects[phone][download][branch] = master
-projects[phone][download][revision] = c7e73693e56fa8c3a8af79db0
+projects[phone][download][revision] = 655b57f96e9
 projects[phone][download][url] = http://git.drupal.org/sandbox/cdale/1925578.git
 projects[phone][subdir] = contrib
 

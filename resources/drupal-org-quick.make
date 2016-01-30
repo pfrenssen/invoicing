@@ -110,9 +110,6 @@ projects[ief_autocomplete][download][branch] = 7.x-1.x
 projects[ief_autocomplete][download][url] = http://git.drupal.org/sandbox/iSoLate/2363793.git
 projects[ief_autocomplete][subdir] = contrib
 
-projects[libraries][version] = 2.2
-projects[libraries][subdir] = contrib
-
 projects[link][version] = 1.3
 projects[link][subdir] = contrib
 
@@ -142,8 +139,3 @@ projects[user_registrationpassword][subdir] = contrib
 
 projects[views][version] = 3.13
 projects[views][subdir] = contrib
-
-; Libraries
-
-libraries[libphonenumber-for-php][download][type] = file
-libraries[libphonenumber-for-php][download][url] = https://github.com/giggsey/libphonenumber-for-php/archive/6.2.tar.gz

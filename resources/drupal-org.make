@@ -37,6 +37,11 @@ projects[addressfield][download][revision] = 7.x-1.1
 projects[addressfield][download][branch] = 7.x-1.x
 projects[addressfield][subdir] = contrib
 
+projects[composer_manager][download][type] = git
+projects[composer_manager][download][revision] = 7.x-1.8
+projects[composer_manager][download][branch] = 7.x-1.x
+projects[composer_manager][subdir] = contrib
+
 projects[ctools][download][type] = git
 projects[ctools][download][revision] = 7.x-1.9
 projects[ctools][download][branch] = 7.x-1.x

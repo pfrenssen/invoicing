@@ -32,6 +32,9 @@ projects[drupal][patch][] = http://www.drupal.org/files/issues/d7-run_tests_sh_s
 projects[addressfield][version] = 1.1
 projects[addressfield][subdir] = contrib
 
+projects[composer_manager][version] = 1.8
+projects[composer_manager][subdir] = contrib
+
 projects[ctools][version] = 1.9
 projects[ctools][subdir] = contrib
 

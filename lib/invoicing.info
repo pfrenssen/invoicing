@@ -6,6 +6,7 @@ dependencies[] = addressfield
 dependencies[] = block
 dependencies[] = business
 dependencies[] = client
+dependencies[] = composer_manager
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = email_registration

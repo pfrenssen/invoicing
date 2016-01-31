@@ -201,7 +201,7 @@ phpcs.verbose = 0
 development.modules.download = devel
 
 # Development / testing modules to enable.
-development.modules.enable = devel field_ui simpletest views_ui
+development.modules.enable = devel field_ui maillog simpletest views_ui
 
 # The location where development modules will be installed.
 development.modules.location = development

@@ -5,8 +5,6 @@
  * Contains \InvoiceOverviewTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests the invoice overview.
  */

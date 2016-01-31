@@ -5,10 +5,7 @@
  * Contains \InvoicingIntegrationTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
- * @file
  * Base class for integration tests for the invoicing platform.
  */
 class InvoicingIntegrationTestCase extends InvoicingWebTestCase {

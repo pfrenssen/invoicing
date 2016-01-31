@@ -5,8 +5,6 @@
  * Contains \InvoiceClientReferenceTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests the referencing of clients in invoices.
  */

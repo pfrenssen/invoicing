@@ -5,8 +5,6 @@
  * Contains \BusinessOverviewTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests the business overview.
  */

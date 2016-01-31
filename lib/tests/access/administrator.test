@@ -5,8 +5,6 @@
  * Contains \AdministratorPathAccessTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Access and permission tests for the 'administrator' role.
  */

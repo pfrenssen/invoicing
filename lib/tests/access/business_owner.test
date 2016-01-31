@@ -5,8 +5,6 @@
  * Contains \BusinessOwnerPathAccessTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Access and permission tests for the 'business owner' role.
  */

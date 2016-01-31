@@ -5,8 +5,6 @@
  * Contains \InvoicingDashboardUITestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * UI tests for the Invoicing dashboard module.
  */

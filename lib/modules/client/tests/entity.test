@@ -5,8 +5,6 @@
  * Contains \ClientEntityTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests for the Client entity.
  */

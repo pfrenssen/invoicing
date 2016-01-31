@@ -5,8 +5,6 @@
  * Contains \LineItemUnitTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Unit tests for the Line item module.
  */

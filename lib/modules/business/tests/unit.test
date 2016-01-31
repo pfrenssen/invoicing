@@ -5,8 +5,6 @@
  * Contains \BusinessUnitTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Unit tests for the Business module.
  */

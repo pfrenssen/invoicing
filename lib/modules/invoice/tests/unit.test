@@ -5,8 +5,6 @@
  * Contains \InvoiceUnitTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Unit tests for the Invoice module.
  */

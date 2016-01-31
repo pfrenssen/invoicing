@@ -5,8 +5,6 @@
  * Contains \InvoiceExportTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests exporting invoices as PDF files.
  */

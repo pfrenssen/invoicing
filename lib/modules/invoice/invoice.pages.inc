@@ -236,7 +236,6 @@ function invoice_download(Invoice $invoice) {
 
     // Generate the PDF if it doesn't exist yet.
     if (!file_exists($file_uri)) {
-      require_once drupal_get_path('profile', 'invoicing') . '/vendor/autoload.php';
       $pdf = new Pdf(array('binary' => invoicing_core_get_wkhtmltopdf_path()));
       $html = theme('invoice_export', array('invoice' => $invoice));
       $pdf->addPage($html);

@@ -5,8 +5,6 @@
  * Contains \BusinessEntityTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests for the Business entity.
  */

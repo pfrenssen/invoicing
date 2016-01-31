@@ -5,8 +5,6 @@
  * Contains \TaxRatesOverviewTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Tests the tax rate overview.
  */

@@ -112,20 +112,13 @@ function invoicing_core_views_pre_view(&$view, &$display_id, &$args) {
 }
 
 /**
- * Initializes the Composer autoloader.
- */
-function invoicing_core_autoload() {
-  require_once 'profiles/invoicing/vendor/autoload.php';
-}
-
-/**
  * Returns the path to the wkhtmltopdf binary.
  *
  * @return string
  *   The path to the binary.
  */
 function invoicing_core_get_wkhtmltopdf_path() {
-  return DRUPAL_ROOT . '/profiles/invoicing/vendor/bin/wkhtmltopdf-amd64';
+  return DRUPAL_ROOT . '/vendor/bin/wkhtmltopdf-amd64';
 }
 
 /**

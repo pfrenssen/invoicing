@@ -5,8 +5,6 @@
  * Contains \LineItemCRUDTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * CRUD tests for the Line item module.
  */

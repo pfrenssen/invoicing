@@ -5,8 +5,6 @@
  * Contains \AuthenticatedUserPathAccessTestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * Access and permission tests for the 'authenticated user' role.
  */

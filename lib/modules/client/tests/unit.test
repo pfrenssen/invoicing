@@ -11,8 +11,6 @@ use Drupal\invoicing\Traits\ClientTestHelper;
 use Drupal\invoicing\Traits\InvoiceTestHelper;
 use Drupal\invoicing\Traits\LineItemTestHelper;
 
-invoicing_core_autoload();
-
 /**
  * Unit tests for the Client module.
  */

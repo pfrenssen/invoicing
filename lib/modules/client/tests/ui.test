@@ -5,8 +5,6 @@
  * Contains \ClientUITestCase.
  */
 
-invoicing_core_autoload();
-
 /**
  * UI tests for the Client module.
  */

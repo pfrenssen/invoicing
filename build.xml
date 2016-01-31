@@ -90,6 +90,8 @@
         <symlink link="${platform.build.profile.modules.custom.dir}" target="${site.lib.modules.dir}" />
         <!-- Symlink our custom PSR-4 code. -->
         <symlink link="${platform.build.profile.source.dir}" target="${site.lib.source.dir}" />
+        <!-- Symlink our tests. -->
+        <symlink link="${platform.build.profile.tests.dir}" target="${site.lib.tests.dir}" />
         <!-- Symlink composer dependencies for the profile. -->
         <symlink link="${platform.build.profile.composer.json}" target="${site.lib.composer.json}" />
         <symlink link="${platform.build.profile.composer.lock}" target="${site.lib.composer.lock}" />
@@ -121,6 +123,11 @@
         <phingcall target="copy-folder">
             <property name="copy.source.path" value="${site.lib.source.dir}" />
             <property name="copy.destination.path" value="${platform.build.profile.source.dir}" />
+        </phingcall>
+        <!-- Copy our tests. -->
+        <phingcall target="copy-folder">
+            <property name="copy.source.path" value="${site.lib.tests.dir}" />
+            <property name="copy.destination.path" value="${platform.build.profile.tests.dir}" />
         </phingcall>
         <!-- Copy composer configuration for the profile. -->
         <copy todir="${platform.build.profile.dir}" file="${site.lib.composer.json}" />

@@ -42,6 +42,10 @@ projects[composer_manager][download][revision] = 7.x-1.8
 projects[composer_manager][download][branch] = 7.x-1.x
 projects[composer_manager][subdir] = contrib
 
+; Simpletests break when vendor folder is different than the default.
+; https://www.drupal.org/node/2660024
+projects[composer_manager][patch][] = https://www.drupal.org/files/issues/2660024-2-remove-workaround.patch
+
 projects[ctools][download][type] = git
 projects[ctools][download][revision] = 7.x-1.9
 projects[ctools][download][branch] = 7.x-1.x

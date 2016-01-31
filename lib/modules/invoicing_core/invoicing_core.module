@@ -63,7 +63,7 @@ function invoicing_core_form_user_register_form_validate($form, &$form_state) {
     ->fetchField();
 
   if ($business_exists) {
-    form_set_error('business', t('The company name you chose is not longer available. Please choose a different name.'));
+    form_set_error('business', t('The company name you have chosen is no longer available. Please choose a different name.'));
   }
 }
 

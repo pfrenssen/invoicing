@@ -1,7 +1,7 @@
 api = 2
 core = 7.x
 
-projects[drupal][version] = 7.37
+projects[drupal][version] = 7.41
 
 ; Recursive module dependencies of installation profile are not enabled in
 ; DrupalWebTestCase::setUp.
@@ -28,6 +28,11 @@ projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetT
 ; run-tests.sh should exit with a failure code if any tests failed.
 ; https://www.drupal.org/node/2189345
 projects[drupal][patch][] = http://www.drupal.org/files/issues/d7-run_tests_sh_should-2189345-34-do-not-test.patch
+
+; _drupal_session_destroy() should return boolean.
+; https://www.drupal.org/node/2460833
+projects[drupal][patch][] = https://www.drupal.org/files/issues/drupal-session_destroy_return_bool-2460833-21-D7.patch
+
 
 projects[addressfield][version] = 1.1
 projects[addressfield][subdir] = contrib

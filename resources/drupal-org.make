@@ -3,7 +3,7 @@ core = 7.x
 
 projects[drupal][type] = core
 projects[drupal][download][type] = git
-projects[drupal][download][revision] = 7.37
+projects[drupal][download][revision] = 7.41
 projects[drupal][download][branch] = 7.x
 
 ; Recursive module dependencies of installation profile are not enabled in
@@ -31,6 +31,10 @@ projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetT
 ; run-tests.sh should exit with a failure code if any tests failed.
 ; https://www.drupal.org/node/2189345
 projects[drupal][patch][] = http://www.drupal.org/files/issues/d7-run_tests_sh_should-2189345-34-do-not-test.patch
+
+; _drupal_session_destroy() should return boolean.
+; https://www.drupal.org/node/2460833
+projects[drupal][patch][] = https://www.drupal.org/files/issues/drupal-session_destroy_return_bool-2460833-21-D7.patch
 
 projects[addressfield][download][type] = git
 projects[addressfield][download][revision] = 7.x-1.1

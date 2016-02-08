@@ -149,6 +149,31 @@ behat.options.verbosity = 2
 behat.src.dir = ${behat.dir}/src
 
 
+# Simpletest configuration
+# ------------------------
+
+# Comma-separated list of test groups to run.
+simpletest.groups = Invoicing - Access,Invoicing - Business,Invoicing - Client,Invoicing - Dashboard,Invoicing - Invoice,Invoicing - Line item,Invoicing - Registration
+
+# How many tests to execute in parallel.
+simpletest.concurrency = 1
+
+# The base URL to use for the tests.
+simpletest.base_url = http://localhost
+
+# The directory where the tests should be executed.
+simpletest.dir = ${platform.build.dir}
+
+# The PHP executable.
+simpletest.php = php
+
+# The location of the "run-tests.sh" script.
+simpletest.script = ./scripts/run-tests.sh
+
+# Command prefix, use this to switch users or set environment variables.
+simpletest.prefix =
+
+
 # PHP CodeSniffer configuration
 # -----------------------------
 

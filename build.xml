@@ -273,6 +273,15 @@
         </drush>
     </target>
 
+    <target name="run-tests">
+        <exec
+            command='${simpletest.prefix} ${simpletest.php} ${simpletest.script} --url ${simpletest.base_url} --concurrency ${simpletest.concurrency} --verbose "${simpletest.groups}"'
+            dir="${simpletest.dir}"
+            checkreturn="true"
+            logoutput="true"
+        />
+    </target>
+
     <!-- Install a development version of the site. -->
     <target
         name="install-dev"

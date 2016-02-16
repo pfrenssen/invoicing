@@ -42,9 +42,27 @@ drupal.site.name = all
 # The Drupal core version.
 drupal.core.version = 7.x
 
+
+# Demo content
+# ------------
+
 # Comma-separated list of demo users to create. The username and password will
 # be taken from the role.
 drupal.demo.users = administrator,authenticated user,business owner,client
+
+# Demo business to create, and the name of the user it will be linked to.
+drupal.demo.business.user = business owner
+drupal.demo.business.name = My business
+drupal.demo.business.email = business@example.com
+drupal.demo.business.country = BE
+drupal.demo.business.thoroughfare = Grote Markt 7
+drupal.demo.business.postal-code = 1000
+drupal.demo.business.locality = Brussel
+drupal.demo.business.vat = BE0123456789
+drupal.demo.business.phone = +3223456789
+drupal.demo.business.mobile = +32475286372
+drupal.demo.business.bic = BBBBEBB
+drupal.demo.business.iban = BE68273690082883
 
 
 # Platform configuration

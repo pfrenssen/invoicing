@@ -317,11 +317,34 @@
         </drush>
     </target>
 
+    <!-- Create a demo business and link it to a user. -->
+    <target name="create-demo-business">
+        <drush
+            command="business-create"
+            assume="yes"
+            root="${platform.build.dir}"
+            bin="${drush.bin}"
+            verbose="${drush.verbose}">
+            <option name="email" value="'${drupal.demo.business.email}'" />
+            <option name="country" value="'${drupal.demo.business.country}'" />
+            <option name="thoroughfare" value="'${drupal.demo.business.thoroughfare}'" />
+            <option name="postal-code" value="'${drupal.demo.business.postal-code}'" />
+            <option name="locality" value="'${drupal.demo.business.locality}'" />
+            <option name="vat" value="'${drupal.demo.business.vat}'" />
+            <option name="phone" value="'${drupal.demo.business.phone}'" />
+            <option name="mobile" value="'${drupal.demo.business.mobile}'" />
+            <option name="bic" value="'${drupal.demo.business.bic}'" />
+            <option name="iban" value="'${drupal.demo.business.iban}'" />
+            <param>'${drupal.demo.business.name}'</param>
+            <param>'${drupal.demo.business.user}'</param>
+        </drush>
+    </target>
+
     <!-- Install a development version of the site. -->
     <target
         name="install-dev"
         description="Install a local development version of the site."
-        depends="install, enable-development-modules, create-demo-users"
+        depends="install, enable-development-modules, create-demo-users, create-demo-business"
     />
 
     <target

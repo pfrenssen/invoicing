@@ -282,11 +282,46 @@
         />
     </target>
 
+    <!-- Create demo users. -->
+    <target name="create-demo-users" description="Create demo users.">
+        <foreach list="${drupal.demo.users}" param="drupal.demo.user" target="create-demo-user" delimiter="," />
+    </target>
+
+    <!-- Create a demo user. Subtarget of "create-demo-users". -->
+    <target name="create-demo-user">
+        <!-- Use a sanitized version of the role name with spaces replaced by dashes as the e-mail address. -->
+        <propertyregex
+            property="user.email"
+            subject="${drupal.demo.user}@example.com"
+            pattern=" "
+            replace="-"
+        />
+        <drush
+            command="user-create"
+            assume="yes"
+            root="${platform.build.dir}"
+            bin="${drush.bin}"
+            verbose="${drush.verbose}">
+            <option name="mail" value="${user.email}"/>
+            <option name="password" value="'${drupal.demo.user}'"/>
+            <param>'${drupal.demo.user}'</param>
+        </drush>
+        <drush
+            command="user-add-role"
+            assume="yes"
+            root="${platform.build.dir}"
+            bin="${drush.bin}"
+            verbose="${drush.verbose}">
+            <option name="name" value="'${drupal.demo.user}'"/>
+            <param>'${drupal.demo.user}'</param>
+        </drush>
+    </target>
+
     <!-- Install a development version of the site. -->
     <target
         name="install-dev"
         description="Install a local development version of the site."
-        depends="install, enable-development-modules"
+        depends="install, enable-development-modules, create-demo-users"
     />
 
     <target

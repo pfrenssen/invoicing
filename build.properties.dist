@@ -17,6 +17,7 @@ site.make.contrib = profiles/${platform.profile.name}
 # Do a quick build, using packaged downloads rather than full git repositories.
 site.build.quick = TRUE
 
+
 # Drupal configuration
 # --------------------
 
@@ -40,6 +41,10 @@ drupal.site.name = all
 
 # The Drupal core version.
 drupal.core.version = 7.x
+
+# Comma-separated list of demo users to create. The username and password will
+# be taken from the role.
+drupal.demo.users = administrator,authenticated user,business owner,client
 
 
 # Platform configuration

@@ -24,6 +24,8 @@ features[field_base][] = field_business_mobile
 features[field_base][] = field_business_phone
 features[field_base][] = field_business_vat
 features[field_base][] = field_user_businesses
+features[field_base][] = field_user_first_name
+features[field_base][] = field_user_last_name
 features[field_instance][] = business-business-field_business_address
 features[field_instance][] = business-business-field_business_bic
 features[field_instance][] = business-business-field_business_email
@@ -32,6 +34,8 @@ features[field_instance][] = business-business-field_business_mobile
 features[field_instance][] = business-business-field_business_phone
 features[field_instance][] = business-business-field_business_vat
 features[field_instance][] = user-user-field_user_businesses
+features[field_instance][] = user-user-field_user_first_name
+features[field_instance][] = user-user-field_user_last_name
 features[views_view][] = businesses
 
 files[] = tests/crud.test

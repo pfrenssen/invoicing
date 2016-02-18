@@ -878,7 +878,7 @@ function business_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 8,
+      'weight' => -13,
     ),
   );
 
@@ -912,7 +912,7 @@ function business_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 9,
+      'weight' => -12,
     ),
   );
 

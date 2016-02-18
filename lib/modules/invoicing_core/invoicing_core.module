@@ -41,6 +41,7 @@ function invoicing_core_form_user_register_form_alter(&$form, &$form_state, $for
     '#type' => 'textfield',
     '#title' => t('Company name'),
     '#required' => TRUE,
+    '#weight' => -14,
   ];
 
   // Attach our validate and submit handlers. Make sure our submit handler runs

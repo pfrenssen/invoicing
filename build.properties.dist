@@ -32,7 +32,7 @@ drupal.db.url = ${drupal.db.type}://${drupal.db.user}:${drupal.db.password}@${dr
 
 # Admin user.
 drupal.admin.username = admin
-drupal.admin.password = pass
+drupal.admin.password = admin
 drupal.admin.email = ${drupal.admin.username}@example.com
 
 # The sites/ installation folder to use. Use 'all' unless you want to build a

@@ -26,16 +26,16 @@ trait BaseTestHelper {
     $role = user_role_load_by_name($role);
 
     // Create a user assigned to that role.
-    $edit = array();
+    $edit = [];
     $edit['name']   = $this->randomName();
     $edit['mail']   = $edit['name'] . '@example.com';
     $edit['pass']   = user_password();
     $edit['status'] = 1;
-    $edit['roles'] = array($role->rid => $role->rid);
+    $edit['roles'] = [$role->rid => $role->rid];
 
     $account = user_save(drupal_anonymous_user(), $edit);
 
-    $this->assertTrue(!empty($account->uid), t('User created with name %name and pass %pass', array('%name' => $edit['name'], '%pass' => $edit['pass'])), t('User login'));
+    $this->assertTrue(!empty($account->uid), t('User created with name %name and pass %pass', ['%name' => $edit['name'], '%pass' => $edit['pass']]), t('User login'));
     if (empty($account->uid)) {
       return FALSE;
     }
@@ -71,14 +71,14 @@ trait BaseTestHelper {
     $result = TRUE;
     foreach ($values as $property => $value) {
       if (is_array($value)) {
-        $result &= $this->assertFalse(drupal_array_diff_assoc_recursive($value, $wrapper->$property->value()), format_string('The %property property has the correct value.', array('%property' => $property)));
+        $result &= $this->assertFalse(drupal_array_diff_assoc_recursive($value, $wrapper->$property->value()), format_string('The %property property has the correct value.', ['%property' => $property]));
       }
       else {
-        $result &= $this->assertEqual($wrapper->$property->value(), $value, format_string('The %property property has the correct value.', array('%property' => $property)));
+        $result &= $this->assertEqual($wrapper->$property->value(), $value, format_string('The %property property has the correct value.', ['%property' => $property]));
       }
     }
 
-    return $this->assertTrue($result, $message ?: format_string('The @entity contains the given values.', array('@entity' => $entity_type)), $group);
+    return $this->assertTrue($result, $message ?: format_string('The @entity contains the given values.', ['@entity' => $entity_type]), $group);
   }
 
   /**
@@ -100,8 +100,8 @@ trait BaseTestHelper {
     $result = TRUE;
     foreach ($fields as $field) {
       $xpath = '//textarea[@name=:value and contains(@class, "error")]|//input[@name=:value and contains(@class, "error")]|//select[@name=:value and contains(@class, "error")]';
-      $elements = $this->xpath($this->buildXPathQuery($xpath, array(':value' => $field)));
-      $result &= $this->assertTrue($elements, format_string('The field %field has the "error" class.', array('%field' => $field)));
+      $elements = $this->xpath($this->buildXPathQuery($xpath, [':value' => $field]));
+      $result &= $this->assertTrue($elements, format_string('The field %field has the "error" class.', ['%field' => $field]));
     }
     return $this->assertTrue($result, $message ?: 'All fields are indicating that validation failed.', $group);
   }
@@ -120,7 +120,7 @@ trait BaseTestHelper {
   function assertNoPager($message = '', $group = 'Other') {
     $message = $message ?: 'No pager is present on the page.';
     $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXpathElements($xpath, 0, array(), $message, $group);
+    return $this->assertXpathElements($xpath, 0, [], $message, $group);
   }
 
   /**
@@ -137,7 +137,7 @@ trait BaseTestHelper {
   function assertPager($message = '', $group = 'Other') {
     $message = $message ?: 'A pager is present on the page.';
     $xpath = '//div[@class = "item-list"]/ul[@class = "pager"]';
-    return $this->assertXpathElements($xpath, 1, array(), $message, $group);
+    return $this->assertXpathElements($xpath, 1, [], $message, $group);
   }
 
   /**
@@ -170,8 +170,8 @@ trait BaseTestHelper {
     $decoded_messages = $this->decodeStatusMessages($messages);
 
     $result = TRUE;
-    foreach (array('status', 'warning', 'error') as $type) {
-      $expected_messages = !empty($decoded_messages[$type]) ? $decoded_messages[$type] : array();
+    foreach (['status', 'warning', 'error'] as $type) {
+      $expected_messages = !empty($decoded_messages[$type]) ? $decoded_messages[$type] : [];
 
       // Loop over the messages that are shown and match them against the
       // expected messages.
@@ -180,18 +180,18 @@ trait BaseTestHelper {
 
         // If the message is not one of the expected messages, fail.
         if ($key === FALSE) {
-          $result &= $this->fail(format_string('Unexpected @type message: @message', array('@type' => $type, '@message' => $shown_message)));
+          $result &= $this->fail(format_string('Unexpected @type message: @message', ['@type' => $type, '@message' => $shown_message]));
         }
 
         // Mark found messages as passed and remove them from the list.
         else {
-          $this->pass(format_string('Found @type message: @message', array('@type' => $type, '@message' => $shown_message)));
+          $this->pass(format_string('Found @type message: @message', ['@type' => $type, '@message' => $shown_message]));
           unset($expected_messages[$key]);
         }
       }
       // Throw fails for all expected messages that are not shown.
       foreach ($expected_messages as $expected_message) {
-        $result &= $this->fail(format_string('Did not find @type message: @message', array('@type' => $type, '@message' => $expected_message)));
+        $result &= $this->fail(format_string('Did not find @type message: @message', ['@type' => $type, '@message' => $expected_message]));
       }
     }
 
@@ -201,7 +201,7 @@ trait BaseTestHelper {
     // negatives.
     foreach ($messages as $type => $expected_messages) {
       foreach ($expected_messages as $expected_message) {
-        $result &= $this->assertRaw($expected_message, format_string('Found correctly encoded message in raw HTML: @message', array('@message' => $expected_message)));
+        $result &= $this->assertRaw($expected_message, format_string('Found correctly encoded message in raw HTML: @message', ['@message' => $expected_message]));
       }
     }
 
@@ -216,10 +216,10 @@ trait BaseTestHelper {
    *
    * Example:
    * @code
-   *   $required_fields = array(
+   *   $required_fields = [
    *     'name' => t('Client name'),
    *     'field_client_email[und][0][email]' => t('Email address'),
-   *   );
+   *   ];
    *   $this->assertRequiredFieldMessages($required_fields);
    * @endcode
    *
@@ -239,13 +239,13 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertRequiredFieldMessages(array $required_fields, $messages = array(), $message = '', $group = 'Other') {
+  function assertRequiredFieldMessages(array $required_fields, $messages = [], $message = '', $group = 'Other') {
     $success = TRUE;
 
     // Use the standard message of the Field module by default.
     if (!$messages) {
       foreach ($required_fields as $required_field) {
-        $messages['error'][] = t('!name field is required.', array('!name' => $required_field));
+        $messages['error'][] = t('!name field is required.', ['!name' => $required_field]);
       }
     }
     $success &= $this->assertFieldValidationFailed(array_keys($required_fields));
@@ -269,7 +269,7 @@ trait BaseTestHelper {
    * @return bool
    *   TRUE if the assertion succeeded, FALSE otherwise.
    */
-  function assertXpathElements($xpath, $count, array $arguments = array(), $message = '', $group = 'Other') {
+  function assertXpathElements($xpath, $count, array $arguments = [], $message = '', $group = 'Other') {
     // Provide a default message.
     $message = $message ?: format_plural($count, 'The element matching the XPath expression is present in the page.', 'The @count elements matching the XPath expression are present in the page.');
 
@@ -306,15 +306,15 @@ trait BaseTestHelper {
    *   status messages.
    */
   function getStatusMessages() {
-    $return = array(
-      'error' => array(),
-      'warning' => array(),
-      'status' => array(),
-    );
+    $return = [
+      'error' => [],
+      'warning' => [],
+      'status' => [],
+    ];
 
     foreach (array_keys($return) as $type) {
       // Retrieve the entire messages container.
-      if ($messages = $this->xpath('//div[contains(@class, "messages") and contains(@class, :type)]', array(':type' => $type))) {
+      if ($messages = $this->xpath('//div[contains(@class, "messages") and contains(@class, :type)]', [':type' => $type])) {
         // If only a single message is being rendered by theme_status_messages()
         // it outputs it as text preceded by an <h2> element that is provided
         // for accessibility reasons. An example:
@@ -369,12 +369,12 @@ trait BaseTestHelper {
     // single spaces before saving the values to the database. We make sure our
     // random data does the same so we do not get random failures.
     // @see addressfield_field_presave()
-    return array(
+    return [
       'country' => chr(mt_rand(65, 90)) . chr(mt_rand(65, 90)),
       'locality' => trim(str_replace('  ', ' ', $this->randomString())),
       'postal_code' => (string) rand(1000, 9999),
       'thoroughfare' => trim(str_replace('  ', ' ', $this->randomString())),
-    );
+    ];
   }
 
   /**
@@ -423,10 +423,10 @@ trait BaseTestHelper {
    *   - countrycode: the country code for the phone number.
    */
   public function randomPhoneNumberField($countrycode = 'BE') {
-    return array(
+    return [
       'number' => $this->randomPhoneNumber($countrycode),
       'countrycode' => $countrycode,
-    );
+    ];
   }
 
   /**

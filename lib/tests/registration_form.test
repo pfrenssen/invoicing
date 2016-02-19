@@ -38,6 +38,8 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
       'mail' => t('E-mail'),
       'pass[pass1]' => t('Password'),
       'business' => t('Company name'),
+      'field_user_first_name[und][0][value]' => t('First name'),
+      'field_user_last_name[und][0][value]' => t('Last name'),
     );
     $this->assertRequiredFieldMessages($required_fields);
 
@@ -48,6 +50,8 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
       'pass[pass1]' => $password,
       'pass[pass2]' => $password,
       'business' => $this->randomString(),
+      'field_user_first_name[und][0][value]' => $this->randomString(),
+      'field_user_last_name[und][0][value]' => $this->randomString(),
     );
     $this->drupalPost('user/register', $values, t('Create new account'));
 
@@ -66,6 +70,8 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
     $this->assertTrue(in_array('authenticated user', $user->roles), 'The account has the authenticated user role.');
     $this->assertEqual(count($user->roles), 2, 'The account does not have any other roles.');
     $this->assertEqual($user->mail, $values['mail'], 'The account has the correct email address.');
+    $this->assertEqual($user->field_user_first_name[LANGUAGE_NONE][0]['value'], $values['field_user_first_name[und][0][value]'], 'The account has the correct first name.');
+    $this->assertEqual($user->field_user_last_name[LANGUAGE_NONE][0]['value'], $values['field_user_last_name[und][0][value]'], 'The account has the correct last name.');
 
     // Check that a business with the given name was created and is associated
     // with the user.

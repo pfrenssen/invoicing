@@ -26,12 +26,24 @@ trait BaseTestHelper {
     $role = user_role_load_by_name($role);
 
     // Create a user assigned to that role.
-    $edit = [];
-    $edit['name']   = $this->randomName();
-    $edit['mail']   = $edit['name'] . '@example.com';
-    $edit['pass']   = user_password();
-    $edit['status'] = 1;
-    $edit['roles'] = [$role->rid => $role->rid];
+    $name = $this->randomName();
+    $edit = [
+      'name' => $name,
+      'mail' => $name . '@example.com',
+      'pass' => user_password(),
+      'status' => 1,
+      'roles' => [$role->rid => $role->rid],
+      'field_user_first_name' => [
+        LANGUAGE_NONE => [
+          ['value' => $this->randomString()],
+        ],
+      ],
+      'field_user_last_name' => [
+        LANGUAGE_NONE => [
+          ['value' => $this->randomString()],
+        ],
+      ],
+    ];
 
     $account = user_save(drupal_anonymous_user(), $edit);
 

@@ -1002,15 +1002,7 @@ class Invoice extends Entity {
    *   The calculated total.
    */
   private function getTotals($vat) {
-    $line_items = [];
-
-    if (!empty($this->field_invoice_services[LANGUAGE_NONE])) {
-      $line_items = $this->field_invoice_services[LANGUAGE_NONE];
-    }
-
-    if (!empty($this->field_invoice_products[LANGUAGE_NONE])) {
-      $line_items = array_merge($line_items, $this->field_invoice_products[LANGUAGE_NONE]);
-    }
+    $line_items = $this->getLineItems();
 
     if (!empty($line_items)) {
       $total = '0.00';
@@ -1033,6 +1025,30 @@ class Invoice extends Entity {
     }
 
     return '0.00';
+  }
+
+  /**
+   * Returns an array of line items.
+   *
+   * @param string $line_item_type
+   *   The type of line items to return, either 'product' or 'service'. If left
+   *   empty both are returned.
+   *
+   * @return LineItem[]
+   *   The line items.
+   */
+  public function getLineItems($line_item_type = NULL) {
+    $line_items = [];
+    foreach (['product', 'service'] as $type) {
+      if (empty($line_item_type) || $line_item_type === $type) {
+        $field_name = "field_invoice_{$type}s";
+        if (!empty($this->$field_name[LANGUAGE_NONE])) {
+          $line_items = array_merge($line_items, $this->$field_name[LANGUAGE_NONE]);
+        }
+      }
+    }
+
+    return $line_items;
   }
 
 }

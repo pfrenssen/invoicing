@@ -84,6 +84,11 @@
         </drush>
     </target>
 
+    <!-- Create the private files folder. -->
+    <target name="create-private-files">
+        <mkdir dir="${platform.build.files.private.dir}" />
+    </target>
+
     <!-- Symlink the source folders for easy development. -->
     <target name="link-dev-resources">
         <!-- Symlink our custom modules. -->
@@ -350,14 +355,14 @@
     <target
         name="build-dev"
         description="Build a local development version of the site."
-        depends="install-composer-dependencies, delete-build, make-build, link-dev-resources, install-build-dependencies, setup-behat, setup-php-codesniffer, download-development-modules"
+        depends="install-composer-dependencies, delete-build, make-build, create-private-files, link-dev-resources, install-build-dependencies, setup-behat, setup-php-codesniffer, download-development-modules"
     />
 
     <!-- Todo: untested. -->
     <target
         name="build-dist"
         description="Build a version of the site intended to distribute as a release package."
-        depends="install-composer-dependencies, delete-build, make-build, copy-dist-resources"
+        depends="install-composer-dependencies, delete-build, make-build, create-private-files, copy-dist-resources"
     />
 
 </project>

@@ -13,6 +13,8 @@ Scenario: Resend activation mail
   | Password         | Desperdicios12@    |
   | Confirm password | Desperdicios12@    |
   | Company name     | Iberia             |
+  | First name       | Mariano            |
+  | Last name        | Campillo Mazo      |
   And I press "Create new account"
   Then I should see the success message "A welcome message with further instructions has been sent to your e-mail address."
   When I fill in the following:

@@ -971,7 +971,7 @@ class Invoice extends Entity {
   /**
    * Calculates the total price excluding VAT of an invoice.
    *
-   * @return int|string
+   * @return string
    *   The total excluding the VAT.
    */
   public function getSubTotal() {
@@ -981,7 +981,7 @@ class Invoice extends Entity {
   /**
    * Calculates the total price including VAT of an invoice.
    *
-   * @return int|string
+   * @return string
    *   The total including the VAT.
    */
   public function getTotal() {
@@ -998,7 +998,7 @@ class Invoice extends Entity {
    * @param string $vat
    *   The key to get from the line item calculation.
    *
-   * @return int|string
+   * @return string
    *   The calculated total.
    */
   private function getTotals($vat) {
@@ -1013,7 +1013,7 @@ class Invoice extends Entity {
     }
 
     if (!empty($line_items)) {
-      $total = 0;
+      $total = '0.00';
 
       // Run the calculations and set the totals.
       foreach ($line_items as $target) {
@@ -1029,10 +1029,10 @@ class Invoice extends Entity {
       // Use BCMath for financial calculations. We calculate to a precision of 3
       // decimal numbers, then round to 2 decimal numbers to get the exact value
       // in Euros and cents.
-      return $total > 0 ? bcsub($total, $discount, 2) : 0;
+      return $total > 0 ? bcsub($total, $discount, 2) : '0.00';
     }
 
-    return 0;
+    return '0.00';
   }
 
 }

@@ -95,6 +95,16 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
   }
 
   /**
+   * Returns the most recently created invoice.
+   *
+   * @return \Invoice
+   *   The most recent invoice created during this test run.
+   */
+  public function getInvoice() {
+    return end($this->invoices);
+  }
+
+  /**
    * Creates invoices with data provided in a table.
    *
    * Table format:
@@ -457,6 +467,32 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
   }
 
   /**
+   * Checks that the price including VAT of an invoice is correct.
+   *
+   * @param string $price
+   *   The expected price total.
+   *
+   * @Then the price including VAT of the invoice should equal :price
+   */
+  public function assertInvoicePriceCalculationIncVat($price) {
+    $invoice = $this->getInvoice();
+    PHPUnit_Framework_Assert::assertEquals($price, $invoice->getTotal());
+  }
+
+  /**
+   * Checks that the price excluding VAT of an invoice is correct.
+   *
+   * @param string $price
+   *   The expected price total.
+   *
+   * @Then the price excluding VAT of the invoice should equal :price
+   */
+  public function assertInvoicePriceCalculationExcVat($price) {
+    $invoice = $this->getInvoice();
+    PHPUnit_Framework_Assert::assertEquals($price, $invoice->getTotalExVat());
+  }
+
+  /**
    * Remove any created invoices.
    *
    * @AfterScenario
@@ -468,34 +504,5 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
     }
   }
 
-  /**
-   * Checks that the price including VAT of an invoice equals the expected total.
-   *
-   * @param string $number
-   *   The description of the line item.
-   * @param string $including
-   *   The expected price total.
-   *
-   * @Then the price including VAT of the :number invoice should equal :including
-   */
-  public function assertInvoicePriceCalculationIncVat($number, $including) {
-    $invoice = $this->getInvoiceByNumber($number);
-    PHPUnit_Framework_Assert::assertEquals($including, $invoice->getTotal());
-  }
-
-  /**
-   * Checks that the price excluding VAT of an invoice equals the expected total.
-   *
-   * @param string $number
-   *   The description of the line item.
-   * @param string $excluding
-   *   The expected price total.
-   *
-   * @Then the price excluding VAT of the :number invoice should equal :excluding
-   */
-  public function assertInvoicePriceCalculationExcVat($number, $excluding) {
-    $invoice = $this->getInvoiceByNumber($number);
-    PHPUnit_Framework_Assert::assertEquals($excluding, $invoice->getTotalExVat());
-  }
 
 }

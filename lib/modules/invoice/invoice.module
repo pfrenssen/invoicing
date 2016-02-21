@@ -975,7 +975,7 @@ class Invoice extends Entity {
    *   The total excluding the VAT.
    */
   public function getSubTotal() {
-    return $this->getTotals('subtotal');
+    return $this->getTotals()['subtotal'];
   }
 
   /**
@@ -985,46 +985,53 @@ class Invoice extends Entity {
    *   The total including the VAT.
    */
   public function getTotal() {
-    return $this->getTotals('total');
+    return $this->getTotals()['total'];
   }
 
   /**
-   * Helper function to calculate the totals for an invoice.
+   * Returns the totals for an invoice.
    *
    * All values are expressed with 2 decimal numbers to represent Euros and
    * cents. They are returned as strings to avoid rounding errors with floating
    * point numbers.
    *
-   * @param string $vat
-   *   The key to get from the line item calculation.
-   *
-   * @return string
-   *   The calculated total.
+   * @return array
+   *   An associative array containing the calculated totals, with the following
+   *   keys:
+   *   - 'base_price': The base price for the calculation, the total of all line
+   *     items excluding discounts and taxes.
+   *   - 'discount': The calculated discounts, consisting of both discounts per
+   *     line item as the global discount.
+   *   - 'subtotal': The total price before tax, with the discount applied.
+   *   - 'tax': The amounts of value added tax. This is an associative array of
+   *     all different tax rates that were applied, keyed by tax rate.
+   *   - 'total': The final total.
    */
-  private function getTotals($vat) {
-    $line_items = $this->getLineItems();
+  public function getTotals() {
+    $totals = [
+      'base_price' => '0.00',
+      'discount' => '0.00',
+      'subtotal' => '0.00',
+      'tax' => [],
+      'total' => '0.00',
+    ];
 
-    if (!empty($line_items)) {
-      $total = '0.00';
+    // Run the calculations and set the totals.
+    foreach ($this->getLineItems() as $line_item) {
+      // @todo How to deal with discounts? They can be on line items and on the
+      // complete invoice.
+      $calculation = line_item_calculate($line_item);
 
-      // Run the calculations and set the totals.
-      foreach ($line_items as $target) {
-        $line_item = line_item_load($target['target_id']);
-        $calculation = line_item_calculate($line_item);
-
-        $total = bcadd($calculation[$vat], $total, 2);
-      }
-
-      $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);
-      $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
-
-      // Use BCMath for financial calculations. We calculate to a precision of 3
-      // decimal numbers, then round to 2 decimal numbers to get the exact value
-      // in Euros and cents.
-      return $total > 0 ? bcsub($total, $discount, 2) : '0.00';
+      $total = bcadd($calculation[$vat], $total, 2);
     }
 
-    return '0.00';
+    $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);
+    $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
+
+    // Use BCMath for financial calculations. We calculate to a precision of 3
+    // decimal numbers, then round to 2 decimal numbers to get the exact value
+    // in Euros and cents.
+    return $total > 0 ? bcsub($total, $discount, 2) : '0.00';
   }
 
   /**
@@ -1043,7 +1050,9 @@ class Invoice extends Entity {
       if (empty($line_item_type) || $line_item_type === $type) {
         $field_name = "field_invoice_{$type}s";
         if (!empty($this->$field_name[LANGUAGE_NONE])) {
-          $line_items = array_merge($line_items, $this->$field_name[LANGUAGE_NONE]);
+          foreach ($this->field_name[LANGUAGE_NONE] as $reference) {
+            $line_items[] = line_item_load($reference['target_id']);
+          }
         }
       }
     }

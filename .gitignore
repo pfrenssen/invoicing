@@ -1,5 +1,6 @@
-behat.config
 build
-modules/contrib
-libraries
+build.properties.local
+phpcs.xml
+tests/behat.yml
+tmp
 vendor

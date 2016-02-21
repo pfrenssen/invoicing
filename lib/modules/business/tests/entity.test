@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * @file
+ * Contains \BusinessEntityTestCase.
+ */
+
+/**
+ * Tests for the Business entity.
+ */
+class BusinessEntityTestCase extends EntityTestCase {
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity test',
+      'description' => 'Tests for the Business entity.',
+      'group' => 'Invoicing - Business',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'business';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTypes() {
+    return array('business');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntityType($type, $name) {
+    business_type_create($type, $name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntity(array $values = array()) {
+    return business_create($values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateEntityUsingEntityMetadataWrapper(Entity $entity, array $values) {
+    $this->updateBusiness($entity, $values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadEntity($id) {
+    return business_load($id, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getBasicPropertyValues() {
+    return $this->randomBusinessPropertyValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getFieldValues($type) {
+    return $this->randomBusinessFieldValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityMetaDataWrapperValues($type) {
+    return $this->randomBusinessValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
+    return $properties;
+  }
+
+}

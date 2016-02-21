@@ -1,0 +1,195 @@
+<?php
+
+/**
+ * @file
+ * Contains \AnonymousUserPathAccessTestCase.
+ */
+
+/**
+ * Access and permission tests for the 'anonymous user' role.
+ */
+class AnonymousUserPathAccessTestCase extends AccessWebTestCase {
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $role = 'anonymous';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array();
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $accessiblePaths = array(
+    'user',
+    'user/password',
+    'user/register',
+  );
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $inaccessiblePaths = array(
+    '<front>',
+    'admin',
+    'admin/clients',
+    'admin/invoices',
+    'admin/config',
+    'admin/config/people',
+    'admin/content',
+    'admin/people',
+    'admin/reports',
+    'admin/structure',
+    'businesses',
+    'business/add',
+    'clients',
+    'client/add',
+    'dashboard',
+    'invoices',
+    'invoice/add',
+    'node',
+    'node/add',
+  );
+
+  /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
+
+  /**
+   * A test invoice.
+   *
+   * @var Invoice
+   */
+  protected $invoice;
+
+  /**
+   * A test line item.
+   *
+   * @var LineItem
+   */
+  protected $lineItem;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Anonymous user',
+      'description' => 'Tests access permissions for the "anonymous user" role.',
+      'group' => 'Invoicing - Access',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Create a business.
+    $this->business = $this->createBusiness();
+    $this->business->save();
+
+    // Add the paths to view, edit and delete the business. These should all be
+    // inaccessible.
+    $this->inaccessiblePaths[] = 'business/' . $this->business->identifier();
+    $this->inaccessiblePaths[] = 'business/' . $this->business->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'business/' . $this->business->identifier() . '/delete';
+
+    // Add a client to the business. This should also be inaccessible.
+    $this->client = $this->createClient(array('bid' => $this->business->identifier()));
+    $this->client->save();
+    $this->inaccessiblePaths[] = 'client/' . $this->client->identifier();
+    $this->inaccessiblePaths[] = 'client/' . $this->client->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'client/' . $this->client->identifier() . '/delete';
+
+    // Create a line item of each type so they can be referenced by invoices.
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
+
+    // Add two invoices to the business. These should also be inaccessible.
+    $this->invoice1 = $this->createInvoice(array(
+      'bid' => $this->business->identifier(),
+      'field_invoice_client' => $this->client,
+    ));
+    $this->invoice1->save();
+    $this->invoice2 = $this->createInvoice(array(
+      'bid' => $this->business->identifier(),
+      'field_invoice_client' => $this->client,
+    ));
+    $this->invoice2->save();
+
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier();
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/download';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice1->identifier() . '/html';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier();
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/delete';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/edit';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/download';
+    $this->inaccessiblePaths[] = 'invoice/' . $this->invoice2->identifier() . '/html';
+
+    // An anonymous user should not be able to directly download the PDF version
+    // of an invoice, even if supplied with the correct token since anonymous
+    // user don't have a session. Anonymous users will be able to download
+    // invoices once we have a landing page for them.
+    // @see https://github.com/pfrenssen/invoicing/issues/46
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice1->identifier()))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice2->identifier()))),
+    );
+
+    // The PDF download should be inaccessible with invalid tokens. To test this
+    // we try to access the paths using the tokens of the other invoices.
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice1->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice2->identifier()))),
+    );
+    $this->inaccessiblePaths[] = array(
+      'path' => 'invoice/' . $this->invoice2->identifier() . '/download',
+      'options' => array('query' => array('token' => $this->drupalGetToken('invoice-download-link-' . $this->invoice1->identifier()))),
+    );
+
+    // Create a line item.
+    $this->lineItem = $this->createLineItem(NULL, array('bid' => $this->business->identifier()));
+    $this->lineItem->save();
+
+    // Add the paths to view, edit and delete the line item. These should all be
+    // inaccessible.
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier();
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier() . '/edit';
+    $this->nonExistingPaths[] = 'line_item/' . $this->lineItem->identifier() . '/delete';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setupUser() {
+    // Do not log in a user, we're testing an anonymous visitor.
+  }
+
+}

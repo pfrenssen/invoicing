@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Contains \InvoicingIntegrationTestCase.
+ */
+
+/**
+ * Base class for integration tests for the invoicing platform.
+ */
+class InvoicingIntegrationTestCase extends InvoicingWebTestCase {
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'invoicing';
+
+  /**
+   * A test business.
+   *
+   * @var Business
+   */
+  protected $business;
+
+  /**
+   * Test user accounts.
+   *
+   * @var array
+   *   An array of user objects.
+   */
+  protected $users;
+
+  /**
+   * A list of roles for which to create a user.
+   *
+   * @var array
+   *   The names of the roles for which to create a user.
+   */
+  protected $usersToCreate = array(
+    'administrator',
+    'authenticated user',
+    'business owner',
+    'client',
+  );
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    // Create the requested user accounts.
+    foreach ($this->usersToCreate as $role) {
+      $this->users[$role] = $this->drupalCreateUserWithRole($role);
+    }
+
+    // If a business user was created, also create a business.
+    if (in_array('business owner', $this->usersToCreate)) {
+      $this->business = $this->createBusiness();
+      $this->business->save();
+      $this->addBusinessToUser($this->business, $this->users['business owner']);
+    }
+  }
+
+}

@@ -1,0 +1,16 @@
+name = Invoicing Core
+description = Core functionality for the Invoicing application.
+core = 7.x
+package = Invoicing
+dependencies[] = ctools
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[variable][] = composer_manager_autobuild_file
+features[variable][] = composer_manager_autobuild_packages
+features[variable][] = composer_manager_vendor_dir
+features[variable][] = cron_safe_threshold
+features[variable][] = file_default_scheme
+features[variable][] = file_private_path
+features[variable][] = file_public_path
+features[variable][] = user_register

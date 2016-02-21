@@ -1,15 +1,38 @@
 {
     "require": {
-        "behat/behat": "3.0.*@stable",
-        "drupal/coder": "~8.2.0",
-        "drupal/drupal-extension": "~3.0",
-        "h4cc/wkhtmltopdf-amd64": "dev-master",
-        "mikehaertl/phpwkhtmltopdf": "~2.0",
-        "phpunit/phpunit": "~4.0"
+        "behat/behat": "dev-master#2059cbe",
+        "composer/composer": "dev-master#2491679ba35",
+        "drupal/coder": "dev-8.x-2.x",
+        "drupal/drupal-driver": "dev-master",
+        "drupal/drupal-extension": "dev-master",
+        "drupal/phing-drush-task": "1.0",
+        "drush/drush": "~8.0",
+        "phing/phing": "~2.10",
+        "phpunit/phpunit": "~4.0",
+        "symfony/yaml": "~2.7"
     },
     "autoload": {
         "psr-4": {
-            "Drupal\\invoicing\\": "src"
+            "Drupal\\invoicing\\": "lib/src",
+            "Invoicing\\": "src"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "drupal/phing-drush-task",
+                "version": "1.0",
+                "source": {
+                    "url": "http://git.drupal.org/project/phingdrushtask.git",
+                    "type": "git",
+                    "reference": "7.x-1.0"
+                },
+                "autoload": { "classmap": [ "DrushTask.php" ] },
+                "include-path": [ "." ]
+            }
+        }
+    ]
 }

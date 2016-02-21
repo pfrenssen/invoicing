@@ -1,0 +1,257 @@
+# Build configuration
+# -------------------
+
+# The site name.
+site.name = Invoicing
+
+# The standard make file.
+site.make.standard = ${site.resources.dir}/drupal-org.make
+
+# The quick make file, this downloads packaged project tarballs rather than
+# full git repositories.
+site.make.quick = ${site.resources.dir}/drupal-org-quick.make
+
+# The location where to install contributed modules.
+site.make.contrib = profiles/${platform.profile.name}
+
+# Do a quick build, using packaged downloads rather than full git repositories.
+site.build.quick = TRUE
+
+
+# Drupal configuration
+# --------------------
+
+# Database settings.
+drupal.db.type = mysql
+drupal.db.name = invoicing
+drupal.db.user = root
+drupal.db.password =
+drupal.db.host = 127.0.0.1
+drupal.db.port = 3306
+drupal.db.url = ${drupal.db.type}://${drupal.db.user}:${drupal.db.password}@${drupal.db.host}:${drupal.db.port}/${drupal.db.name}
+
+# Admin user.
+drupal.admin.username = admin
+drupal.admin.password = admin
+drupal.admin.email = ${drupal.admin.username}@example.com
+
+# The sites/ installation folder to use. Use 'all' unless you want to build a
+# multisite setup.
+drupal.site.name = all
+
+# The Drupal core version.
+drupal.core.version = 7.x
+
+
+# Demo content
+# ------------
+
+# Comma-separated list of demo users to create. The username and password will
+# be taken from the role.
+drupal.demo.users = administrator,authenticated user,business owner,client
+
+# Demo business to create, and the name of the user it will be linked to.
+drupal.demo.business.user = business owner
+drupal.demo.business.name = My business
+drupal.demo.business.email = business@example.com
+drupal.demo.business.country = BE
+drupal.demo.business.thoroughfare = Grote Markt 7
+drupal.demo.business.postal-code = 1000
+drupal.demo.business.locality = Brussel
+drupal.demo.business.vat = BE0123456789
+drupal.demo.business.phone = +3223456789
+drupal.demo.business.mobile = +32475286372
+drupal.demo.business.bic = BBBBEBB
+drupal.demo.business.iban = BE68273690082883
+
+
+# Platform configuration
+# ----------------------
+
+# The root directory of the platform. This will become the Drupal root folder,
+# so point your web server here.
+platform.build.dir = ${project.basedir}/build
+
+# The install profile to use.
+platform.profile.name = invoicing
+
+
+# Paths
+# -----
+
+# Paths to executables.
+composer.bin = ${project.basedir}/vendor/bin/composer
+drush.bin = ${project.basedir}/vendor/bin/drush
+phing.bin = ${project.basedir}/vendor/bin/phing
+
+# Location of Phing tasks.
+phing.project.src.dir = ${project.basedir}/src
+
+# Temporary folder.
+phing.project.tmp.dir = ${project.basedir}/tmp
+
+# Local resources.
+site.resources.dir = ${project.basedir}/resources
+# Todo: the paths of the namespaces are different for development and
+# distribution builds. Generate this in a temp folder instead.
+site.resources.composer.json = ${site.resources.dir}/composer.json
+site.resources.composer.lock = ${site.resources.dir}/composer.lock
+
+# Custom code.
+site.lib.dir = ${project.basedir}/lib
+site.lib.modules.dir = ${site.lib.dir}/modules
+site.lib.source.dir = ${site.lib.dir}/src
+site.lib.tests.dir = ${site.lib.dir}/tests
+site.lib.profile.info = ${site.lib.dir}/${platform.profile.name}.info
+site.lib.profile.install = ${site.lib.dir}/${platform.profile.name}.install
+site.lib.profile.profile = ${site.lib.dir}/${platform.profile.name}.profile
+site.lib.composer.json = ${site.lib.dir}/composer.json
+site.lib.composer.lock = ${site.lib.dir}/composer.lock
+
+# Temporary resources. These are generated on the fly when building.
+site.temporary.development.make = ${phing.project.tmp.dir}/development.make
+
+# Files and directories inside the Drupal installation for local development.
+platform.build.settings.dir = ${platform.build.sites.dir}/default
+platform.build.files.dir = ${platform.build.settings.dir}/files
+platform.build.files.private.dir = ${platform.build.files.dir}/private
+
+platform.build.composer.json = ${platform.build.dir}/composer.json
+platform.build.composer.lock = ${platform.build.dir}/composer.lock
+
+platform.build.profiles.dir = ${platform.build.dir}/profiles
+platform.build.profile.dir = ${platform.build.profiles.dir}/${platform.profile.name}
+platform.build.profile.modules.custom.dir = ${platform.build.profile.dir}/modules/custom
+platform.build.profile.source.dir = ${platform.build.profile.dir}/src
+platform.build.profile.tests.dir = ${platform.build.profile.dir}/tests
+platform.build.profile.profile.info = ${platform.build.profile.dir}/${platform.profile.name}.info
+platform.build.profile.profile.install = ${platform.build.profile.dir}/${platform.profile.name}.install
+platform.build.profile.profile.profile = ${platform.build.profile.dir}/${platform.profile.name}.profile
+platform.build.profile.composer.json = ${platform.build.profile.dir}/composer.json
+platform.build.profile.composer.lock = ${platform.build.profile.dir}/composer.lock
+
+platform.build.sites.dir = ${platform.build.dir}/sites
+platform.build.site.dir = ${platform.build.sites.dir}/${drupal.site.name}
+platform.build.site.libraries.dir = ${platform.build.site.dir}/libraries
+platform.build.site.modules.dir = ${platform.build.site.dir}/modules
+platform.build.site.themes.dir = ${platform.build.site.dir}/themes
+
+
+# Behat configuration
+# -------------------
+
+# The location of the Behat executable.
+behat.bin = ${project.basedir}/bin/behat
+
+# The location of the Behat tests.
+behat.dir = ${project.basedir}/tests
+
+# The location of the Behat configuration template.
+behat.yml.template = ${behat.dir}/behat.yml.dist
+
+# The location of the generated Behat configuration file.
+behat.yml.path = ${behat.dir}/behat.yml
+
+# The base URL to use in Behat tests.
+behat.base_url = http://localhost
+
+# The location to search for Behat subcontexts.
+behat.subcontexts.path = ${platform.build.site.dir}
+
+# The output format to use for Behat tests, either 'progress' or 'pretty'.
+behat.formatter.name = progress
+
+# Enable strict mode in Behat tests. Will only pass if all tests are explicitly
+# passing.
+behat.options.strict = false
+
+# Set verbosity for Behat tests. 0 is completely silent, 1 is normal output, 2
+# shows exception backtraces, 3 shows debugging information.
+behat.options.verbosity = 2
+
+# The path to the custom Behat Contexts.
+behat.src.dir = ${behat.dir}/src
+
+
+# Simpletest configuration
+# ------------------------
+
+# Comma-separated list of test groups to run.
+simpletest.groups = Invoicing - Access,Invoicing - Business,Invoicing - Client,Invoicing - Dashboard,Invoicing - Invoice,Invoicing - Line item,Invoicing - Registration
+
+# How many tests to execute in parallel.
+simpletest.concurrency = 1
+
+# The base URL to use for the tests.
+simpletest.base_url = http://localhost
+
+# The directory where the tests should be executed.
+simpletest.dir = ${platform.build.dir}
+
+# The PHP executable.
+simpletest.php = php
+
+# The location of the "run-tests.sh" script.
+simpletest.script = ./scripts/run-tests.sh
+
+# Command prefix, use this to switch users or set environment variables.
+simpletest.prefix =
+
+
+# PHP CodeSniffer configuration
+# -----------------------------
+
+# The file extensions to test.
+phpcs.extensions = php inc module install info test profile theme css js
+
+# The default configuration file to generate.
+phpcs.config = ${project.basedir}/phpcs.xml
+
+# The coding standard to use.
+phpcs.standard = ${project.basedir}/phpcs-ruleset.xml
+
+# Paths to check, delimited by semicolons.
+phpcs.files = ${site.lib.dir};${phing.project.src.dir};${behat.src.dir}
+
+# Paths to ignore, delimited by semicolons.
+phpcs.ignore =
+
+# The report format. For example 'full', 'summary', 'diff', 'xml', 'json'.
+phpcs.report = full
+
+# Whether or not to show sniff codes in the report.
+phpcs.sniffcodes = 0
+
+# Whether or not to show the progress of the run.
+phpcs.progress = 1
+
+# The location of the file containing the global configuration options.
+phpcs.global.config = ${project.basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer.conf
+
+
+# Host configuration
+# ------------------
+
+# The location of the webserver docroot. Used for testing on CI infrastructure.
+server.docroot = /var/www
+
+
+# Debugging and development configuration
+# ---------------------------------------
+
+# Verbosity of drush commands. Set to TRUE to be verbose.
+drush.verbose = FALSE
+
+# Verbosity of PHP Codesniffer. Set to 0 for standard output, 1 for progress
+# report, 2 for debugging info.
+phpcs.verbose = 0
+
+# Development / testing modules to download.
+development.modules.download = devel
+
+# Development / testing modules to enable.
+development.modules.enable = devel field_ui maillog simpletest views_ui
+
+# The location where development modules will be installed.
+development.modules.location = development
+

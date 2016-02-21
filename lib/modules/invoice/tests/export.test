@@ -1,0 +1,106 @@
+<?php
+
+/**
+ * @file
+ * Contains \InvoiceExportTestCase.
+ */
+
+/**
+ * Tests exporting invoices as PDF files.
+ */
+class InvoiceExportTestCase extends InvoicingIntegrationTestCase {
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
+
+  /**
+   * A test invoice.
+   *
+   * @var Invoice
+   */
+  protected $invoice;
+
+  /**
+   * A test product.
+   *
+   * @var LineItem
+   */
+  protected $product;
+
+  /**
+   * A test service.
+   *
+   * @var LineItem
+   */
+  protected $service;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'PDF export',
+      'description' => 'Tests exporting invoices as PDF files.',
+      'group' => 'Invoicing - Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup();
+
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a client.
+    $this->client = $this->createUiClient();
+
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->product = $this->createLineItem('product');
+    $this->product->save();
+    $this->service = $this->createLineItem('service');
+    $this->service->save();
+  }
+
+  /**
+   * Tests if a PDF version can be downloaded through the user interface.
+   */
+  public function testInvoicePdfDownload() {
+    // Create a test invoice.
+    $this->invoice = $this->createUiInvoice();
+
+    // Check that a download button is available on the invoice detail page.
+    $this->drupalGet('invoice/' . $this->invoice->identifier());
+    $xpath = '//ul[contains(@class, "action-links")]//a[contains(@class, "download")]';
+    $this->assertXPathElements($xpath, 1, array(), 'The download link is present on the invoice detail page.');
+
+    // Check that the download is protected with a token. The actual access with
+    // valid and invalid tokens is tested in the access tests.
+    $elements = $this->xpath($xpath);
+    $query = parse_url($elements[0]['href'], PHP_URL_QUERY);
+    $this->assertEqual(substr($query, 0, 6), 'token=', 'The download link is protected with a token.');
+
+    // Check that the invoice can be downloaded and that the download is in PDF
+    // format.
+    $this->clickLink(t('Download'));
+    $this->assertTrue(strpos($this->drupalGetContent(), '%PDF') === 0, 'A PDF file is downloaded when clicking on the download link.');
+  }
+
+}

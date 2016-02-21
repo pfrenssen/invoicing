@@ -1,0 +1,355 @@
+<?php
+
+/**
+ * @file
+ * Contains \InvoiceUITestCase.
+ */
+
+/**
+ * UI tests for the Invoice module.
+ */
+class InvoiceUITestCase extends InvoicingIntegrationTestCase {
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\BusinessTestHelper;
+  use \Drupal\invoicing\Traits\ClientTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $usersToCreate = array('business owner');
+
+  /**
+   * A test client.
+   *
+   * @var Client
+   */
+  protected $client;
+
+  /**
+   * A test product.
+   *
+   * @var LineItem
+   */
+  protected $product;
+
+  /**
+   * A test service.
+   *
+   * @var LineItem
+   */
+  protected $service;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'UI test',
+      'description' => 'Tests the managing of invoices through the user interface.',
+      'group' => 'Invoicing - Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setup();
+
+    // Log in the business owner.
+    $this->drupalLogin($this->users['business owner']);
+
+    // Create a client.
+    $this->client = $this->createUiClient();
+
+    // Create a line item of each type so they can be referenced in invoices.
+    $this->product = $this->createLineItem('product');
+    $this->product->save();
+    $this->service = $this->createLineItem('service');
+    $this->service->save();
+  }
+
+  /**
+   * Tests the invoice form.
+   */
+  public function testInvoiceForm() {
+    // Check that the database table exists and is empty.
+    $this->assertTrue(db_table_exists('invoice'), 'The invoice database table exists.');
+    $this->assertInvoiceTableEmpty('The invoice database is initially empty.');
+
+    // Click on the "Add existing entity" button to display the autocomplete
+    // field, so we can check if it will be marked as required.
+    // @todo Rework this once we have the unified autocomplete field.
+    // @see https://github.com/pfrenssen/invoicing/issues/20
+    $this->drupalGet('invoice/add');
+    $button_element = $this->xpath('//input[@id = "edit-field-invoice-client-und-actions-ief-add-existing"]');
+    $this->drupalPostAJAX(NULL, array(), (string) $button_element[0]['name']);
+
+    // Check that error messages are displayed about required fields when
+    // creating a new invoice.
+    $this->drupalPost(NULL, array(), t('Save'));
+    $required_fields = array(
+      'field_invoice_client[und][form][entity_id]' => t('Client'),
+      'field_invoice_number[und][0][value]' => t('Invoice number'),
+    );
+    $messages = array(
+      'error' => array(
+        t('!name field is required.', array('!name' => t('Client'))),
+        t('The selected @label is not valid.', array('@label' => t('client'))),
+        t('!name field is required.', array('!name' => t('Invoice number'))),
+      ),
+    );
+    $this->assertRequiredFieldMessages($required_fields, $messages);
+
+    // Fill in all the fields and check if they are saved correctly.
+    $values = $this->randomInvoiceValues();
+    $values['field_invoice_client'] = $this->client;
+    $invoice = $this->createUiInvoice($values);
+    $messages = array('status' => array(t('New invoice has been added.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been added.');
+    $this->assertInvoiceTableNotEmpty('The invoice database table is no longer empty after creating a invoice.');
+    $this->assertInvoiceProperties($invoice, $values, 'The invoice has been correctly saved to the database.');
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after creating a new invoice.');
+
+    // Check that the form fields have correct values when the invoice is
+    // edited.
+    $this->drupalGet('invoice/' . $invoice->iid . '/edit');
+    $form_values = $this->convertInvoiceValuesToFormPostValues($values);
+
+    // The entity reference fields (client name, products and services) are not
+    // shown as fields but as inline tables. Test these separately.
+    $this->assertXPathElements('//div[contains(@class, "entity-client")]//h2/a[text() = :name]', 1, array(':name' => $this->client->name), 'The client name is shown in the client summary.');
+    $this->assertXPathElements('//div[contains(@class, "field-name-field-client-addres")]', 1, array(), 'The client addres is shown in the client summary.');
+    $email = field_get_items('client', $this->client, 'field_client_email');
+    $this->assertXPathElements('//div[contains(@class, "field-name-field-client-email")]//a[text() = :email]', 1, array(':email' => $email[0]['email']), 'The client email is shown in the client summary.');
+    $vat = field_get_items('client', $this->client, 'field_client_vat');
+    $this->assertXPathElements('//div[contains(@class, "field-name-field-client-vat")]//div[text() = :vat]', 1, array(':vat' => $vat[0]['value']), 'The client vat number is shown in the client summary.');
+    unset($form_values['field_invoice_client[und][form][entity_id]']);
+    $this->assertXPathElements('//td[contains(@class, "inline-entity-form-line_item-lid") and text() = :lid]', 1, array(':lid' => $this->product->identifier()), 'The product id is shown in an inline table.');
+    unset($form_values['field_invoice_products[und][form][entity_id]']);
+    $this->assertXPathElements('//td[contains(@class, "inline-entity-form-line_item-lid") and text() = :lid]', 1, array(':lid' => $this->service->identifier()), 'The service id is shown in an inline table.');
+    unset($form_values['field_invoice_services[und][form][entity_id]']);
+
+    // Test the remaining values.
+    foreach ($form_values as $name => $value) {
+      $this->assertFieldByName($name, $value, format_string('When editing an existing invoice the %name field has the right value.', array('%name' => $name)));
+    }
+
+    // Change the values and check that the entity is correctly updated.
+    $new_values = $this->randomInvoiceValues();
+
+    // Disregard the entity reference fields (client name, products and
+    // services), these are currently displayed as inline tables. They will be
+    // reworked in the future.
+    // @todo Test this when issue #20 is in.
+    // @see https://github.com/pfrenssen/invoicing/issues/20
+    $new_values['field_invoice_client'] = $values['field_invoice_client'];
+    $new_values['field_invoice_products'] = $values['field_invoice_products'];
+    $new_values['field_invoice_services'] = $values['field_invoice_services'];
+    $edit = $this->convertInvoiceValuesToFormPostValues($new_values);
+    unset($edit['field_invoice_client[und][form][entity_id]']);
+    unset($edit['field_invoice_products[und][form][entity_id]']);
+    unset($edit['field_invoice_services[und][form][entity_id]']);
+
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $edit, t('Save'));
+    $invoice = invoice_load($invoice->iid, TRUE);
+    $messages = array('status' => array(t('The changes have been saved.', array('%invoice_number' => $values['field_invoice_number']))));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');
+    $this->assertInvoiceProperties($invoice, $new_values, 'The updated invoice has been correctly saved to the database.');
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after editing an invoice.');
+
+    // Check that the user is redirected to the confirmation page when clicking
+    // the 'Delete' button on the invoice edit page.
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', array(), t('Delete'));
+    $this->assertUrl('invoice/' . $invoice->iid . '/delete', array(), 'The user is redirected to the confirmation form when clicking the "Delete" button in the invoice edit form.');
+    $this->assertRaw(t('Are you sure you want to delete the invoice?'));
+    $this->assertRaw(t('This action cannot be undone.'), 'The disclaimer is shown when deleting an invoice.');
+
+    // Check that the invoice can be deleted.
+    $this->drupalPost('invoice/' . $invoice->iid . '/delete', array(), t('Delete'));
+    $messages = array('status' => array(t('The invoice has been deleted.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been deleted.');
+    $this->assertInvoiceTableEmpty('The invoice database is empty after the invoice has been deleted.');
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after deleting an invoice.');
+  }
+
+  /**
+   * Tests setting the 'paid' option on the invoice status.
+   */
+  public function testInvoicePaid() {
+    // Create an invoice using random values.
+    $invoice = $this->createUiInvoice();
+
+    // Edit the invoice and set the 'status' field to 'paid'. Save the changes.
+    $edit = array('field_invoice_status[und]' => 'paid');
+    $this->drupalPost('invoice/' . $invoice->iid . '/edit', $edit, t('Save'));
+
+    // Check status message after saving.
+    $messages = array('status' => array(t('The changes have been saved.')));
+    $this->assertStatusMessages($messages, 'A message is shown informing the user that the invoice has been edited.');
+
+    // Check that the status is saved correctly.
+    $invoice = invoice_load($invoice->iid, TRUE);
+    $values = array('field_invoice_status' => 'paid');
+    $this->assertInvoiceProperties($invoice, $values, 'The updated invoice has been correctly saved to the database.');
+
+    // Check target Url after redirection.
+    $this->assertUrl('invoices', array(), 'The user is redirected to the invoice overview after editing an invoice.');
+  }
+
+  /**
+   * Tests the tax rate fields on the invoice.
+   */
+  public function testInvoiceLineItemTaxRate() {
+    // Add some tax rates.
+    $tax_rates = array();
+    $first_digit = rand(1, 8);
+    for ($i = 0; $i < 4; $i++) {
+      $tax_rates[$i] = $this->createUiTaxRate(array(
+        'name' => "test rate {$i}",
+        'rate' => "{$first_digit}{$i}.00",
+      ));
+    }
+
+    // Calculate a first digit which is not used for the stored tax rates. All
+    // tax rates start with the same digit so we can simply increment it to get
+    // an unused digit. This will be used to test negative cases.
+    $unused_first_digit = $first_digit + 1;
+
+    // Go to add invoice page.
+    $this->drupalGet('invoice/add');
+
+    // Build an array of wrong tax rates.
+    $invalid_rates = array(
+      100.01,
+      -1,
+      -0.01,
+      'squirrel',
+      '75.00a',
+      "<script>alert('xss');</script>",
+    );
+
+    // Test the tax rate field for both services and products.
+    $expected_tax_rates = array();
+    foreach (array('product', 'service') as $key => $line_item_type) {
+      // Click on "Add new {type}" to open the inline form.
+      $click_method = 'clickAddNew' . ucfirst($line_item_type) . 'Button';
+      $this->$click_method();
+
+      // Verify that the tax field is an autocomplete field. We only check if
+      // the hidden field that is used by the javascript functionality is there.
+      // @todo Test the actual functionality once we have browser based testing.
+      $query = '//input[@type="hidden" and @id="edit-field-invoice-' . $line_item_type . 's-und-form-field-line-item-tax-und-0-value-autocomplete" and contains(@class, "autocomplete")]';
+      $this->assertXPathElements($query, 1, array(), 'The tax rates field is an autocomplete field.');
+
+      // Enter woeful tax rates.
+      foreach ($invalid_rates as $invalid_rate) {
+        $edit = array(
+          'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $invalid_rate,
+        );
+        $submit_method = 'submitInline' . ucfirst($line_item_type) . 'Form';
+        $this->$submit_method($edit);
+
+        if (in_array($invalid_rate, array('squirrel', "<script>alert('xss');</script>"))) {
+          $this->assertText('Tax rate cannot be longer than 7 characters but is currently ' . strlen($invalid_rate) . ' characters long.', 'The tax rate was not correct.');
+        }
+        else {
+          $this->assertText('Tax rate should be between 0.00 and 100.00.', 'The tax rate was not correct.');
+        }
+      }
+
+      // Enter one of our tax rates in the field.
+      $tax_rate = $tax_rates[$key]->rate;
+      $edit = array(
+        'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $tax_rate,
+      );
+      $submit_method = 'submitInline' . ucfirst($line_item_type) . 'Form';
+      $this->$submit_method($edit);
+
+      // Keep track of the tax rates we used so we can assert them later.
+      $expected_tax_rates[] = $tax_rate;
+
+      // Click on "Add new {type}" again and enter a random tax value - one
+      // which is not in the autocomplete results. This should be accepted.
+      $this->$click_method();
+      $tax_rate = $unused_first_digit . $key . '.75';
+      $edit = array(
+        'field_invoice_' . $line_item_type . 's[und][form][field_line_item_tax][und][0][value]' => $tax_rate,
+      );
+      $this->$submit_method($edit);
+      $expected_tax_rates[] = $tax_rate;
+    }
+
+    // Fill in the required fields ('client' and 'invoice number') and submit
+    // the invoice.
+    $this->addExistingClientToUiInvoice($this->client);
+    $invoice_number = $this->randomString();
+    $edit = array('field_invoice_number[und][0][value]' => $invoice_number);
+    $this->drupalPost(NULL, $edit, t('Save'));
+
+    // Retrieve the tax rates that were saved on the invoice.
+    $actual_tax_rates = array();
+    $invoice = entity_metadata_wrapper('invoice', $this->loadInvoiceByNumber($invoice_number));
+    foreach (array('product', 'service') as $key => $line_item_type) {
+      $field = "field_invoice_{$line_item_type}s";
+      foreach ($invoice->$field->value() as $line_item) {
+        $line_item = entity_metadata_wrapper('line_item', $line_item);
+        $actual_tax_rates[] = $line_item->field_line_item_tax->value();
+      }
+    }
+
+    // Check that the tax rates are successfully saved on the invoice.
+    $this->assertEqual($expected_tax_rates, $actual_tax_rates, 'The tax rates were successfully saved.');
+
+    // Check the autocomplete results by accessing the AJAX result directly,
+    // simulating the request that is done when the first key is pressed.
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $first_digit), TRUE);
+    $result = array_reduce($tax_rates, function ($carry, $item) use ($autocomplete_results) {
+      return $carry && array_key_exists($item->rate, $autocomplete_results) && $autocomplete_results[$item->rate] == $item->rate;
+    }, TRUE);
+    $this->assertTrue($result, 'Autocomplete results contain the correct list of tax rates.');
+
+    // Check that only one result is returned when the first two keys are
+    // pressed.
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $first_digit . '0'), TRUE);
+    $expected_results = array($first_digit . '0.00' => $first_digit . '0.00');
+    $this->assertEqual($autocomplete_results, $expected_results, 'The correct tax rate is returned in the autocomplete results when two keys are pressed.');
+
+    // Check that no results are returned when a key is pressed that does not
+    // correspond with a tax rate.
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $unused_first_digit), TRUE);
+    $this->assertFalse($autocomplete_results, 'No autocomplete results are returned when a non-existing tax rate is requested.');
+
+    // Create a second business that has a tax rate starting with the unused
+    // digit. If we query this we should not get any results, since we should
+    // only see our own tax rates.
+    $business = $this->createBusiness();
+    $business->save();
+    $values = array(
+      'bid' => $business->identifier(),
+      'rate' => $unused_first_digit . '0.00',
+    );
+    $tax_rate = $this->createTaxRate($values);
+    line_item_tax_rate_save($tax_rate);
+
+    $autocomplete_results = json_decode($this->drupalGet('settings/tax-rates/autocomplete/' . $unused_first_digit), TRUE);
+    $this->assertFalse($autocomplete_results, 'Tax rates from another business are not returned in the autocomplete results.');
+  }
+
+  /**
+   * Tests the detail page of an invoice.
+   *
+   * @todo Remove this once IN-40 is in.
+   */
+  public function testDetailPage() {
+    // Create an invoice using random values.
+    $invoice = $this->createUiInvoice();
+
+    // Visit the detail page of the invoice.
+    $this->drupalGet('invoice/' . $invoice->identifier());
+  }
+
+}

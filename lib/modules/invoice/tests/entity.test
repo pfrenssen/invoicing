@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Contains \InvoiceEntityTestCase.
+ */
+
+/**
+ * Tests for the Invoice entity.
+ */
+class InvoiceEntityTestCase extends EntityTestCase {
+
+  use \Drupal\invoicing\Traits\BaseTestHelper;
+  use \Drupal\invoicing\Traits\InvoiceTestHelper;
+  use \Drupal\invoicing\Traits\LineItemTestHelper;
+
+  /**
+   * Returns test case metadata.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Entity test',
+      'description' => 'Tests for the Invoice entity.',
+      'group' => 'Invoicing - Invoice',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    // Save a business, a client and a line item of each type so they can be
+    // referenced.
+    $business = $this->createBusiness();
+    $business->save();
+    $this->createClient(array('bid' => $business->identifier()))->save();
+    $this->createLineItem('product')->save();
+    $this->createLineItem('service')->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName() {
+    return 'invoice';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTypes() {
+    return array('invoice');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntityType($type, $name) {
+    invoice_type_create($type, $name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function createEntity(array $values = array()) {
+    return invoice_create($values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateEntityUsingEntityMetadataWrapper(Entity $entity, array $values) {
+    $this->updateInvoice($entity, $values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadEntity($id) {
+    return invoice_load($id, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getBasicPropertyValues() {
+    return $this->randomInvoicePropertyValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getFieldValues($type) {
+    return $this->randomInvoiceFieldValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityMetaDataWrapperValues($type) {
+    return $this->randomInvoiceValues();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function convertPropertiesToEntityMetadataWrapperValues(array $properties) {
+    // Convert the bid into a full Business object.
+    $properties['bid'] = business_load($properties['bid']);
+
+    return $properties;
+  }
+
+}

@@ -489,7 +489,7 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    */
   public function assertInvoicePriceCalculationExcVat($price) {
     $invoice = $this->getInvoice();
-    PHPUnit_Framework_Assert::assertEquals($price, $invoice->getTotalExVat());
+    PHPUnit_Framework_Assert::assertEquals($price, $invoice->getSubTotal());
   }
 
   /**

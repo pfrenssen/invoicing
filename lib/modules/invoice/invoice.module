@@ -974,8 +974,8 @@ class Invoice extends Entity {
    * @return int|string
    *   The total excluding the VAT.
    */
-  public function getTotalExVat() {
-    return $this->calculateTotal('subtotal');
+  public function getSubTotal() {
+    return $this->getTotals('subtotal');
   }
 
   /**
@@ -985,7 +985,7 @@ class Invoice extends Entity {
    *   The total including the VAT.
    */
   public function getTotal() {
-    return $this->calculateTotal('total');
+    return $this->getTotals('total');
   }
 
   /**
@@ -1001,7 +1001,7 @@ class Invoice extends Entity {
    * @return int|string
    *   The calculated total.
    */
-  private function calculateTotal($vat) {
+  private function getTotals($vat) {
     $line_items = [];
 
     if (!empty($this->field_invoice_services[LANGUAGE_NONE])) {

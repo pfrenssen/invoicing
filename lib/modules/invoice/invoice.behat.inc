@@ -98,11 +98,16 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
    * Creates invoices with data provided in a table.
    *
    * Table format:
-   * | client | number | date     | discount | products | services   |
-   * | Fritz  | 15/001 | 20150223 | 10       | Key, Box | Work, Rent |
+   * | client | number | date     | discount | po number | due date     | terms    | status          | products | services   |
+   * | Fritz  | 15/001 | 20150223 | 10       | 1234      | 0|7|15|30|60 | My terms | draft|sent|paid | Key, Box | Work, Rent |
    *
    * Products and services need to be created before they can be added to an
    * invoice. Multiple products and services can be added comma separated.
+   *
+   * The following fields are required:
+   * - client
+   * - number
+   * - date
    *
    * @param TableNode $invoices_table
    *   The invoice data.
@@ -131,8 +136,21 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
         'field_invoice_client' => $this->getClientByName($row['client'])->identifier(),
         'field_invoice_number' => $row['number'],
         'field_invoice_date' => strtotime($row['date'] . ' 00:00 UTC'),
-        'field_invoice_discount' => !empty($row['discount']) ? $row['discount'] : 0,
       ];
+
+      // Add optional properties.
+      $property_mapping = [
+        'discount' => 'field_invoice_discount',
+        'po number' => 'field_invoice_po_number',
+        'due date' => 'field_invoice_due_date',
+        'terms' => 'field_invoice_terms',
+        'status' => 'field_invoice_status',
+      ];
+      foreach ($property_mapping as $property => $field) {
+        if (!empty($row[$property])) {
+          $values[$field] = $row[$property];
+        }
+      }
 
       // Add optional line items. Multiple items can be separated by commas.
       foreach (['products', 'services'] as $type) {

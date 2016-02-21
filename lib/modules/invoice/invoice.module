@@ -11,48 +11,48 @@ include_once 'invoice.features.inc';
  * Implements hook_entity_info().
  */
 function invoice_entity_info() {
-  $entity_info = array();
+  $entity_info = [];
 
-  $entity_info['invoice'] = array(
+  $entity_info['invoice'] = [
     'label' => t('Invoice'),
     'plural label' => t('Invoices'),
     'entity class' => 'Invoice',
     'controller class' => 'InvoiceAPIController',
     'base table' => 'invoice',
     'fieldable' => TRUE,
-    'entity keys' => array(
+    'entity keys' => [
       'id' => 'iid',
       'bundle' => 'type',
-    ),
-    'bundle keys' => array(
+    ],
+    'bundle keys' => [
       'bundle' => 'type',
-    ),
-    'bundles' => array(),
+    ],
+    'bundles' => [],
     'label callback' => 'invoice_label',
     'uri callback' => 'invoice_uri',
     'access callback' => 'invoice_access',
     'module' => 'invoice',
-  );
+  ];
 
   // Add bundle info but bypass entity_load() as we cannot use it here.
   $types = db_select('invoice_type', 'ivt')
-    ->fields('ivt', array('type', 'name'))
+    ->fields('ivt', ['type', 'name'])
     ->execute()
     ->fetchAllKeyed();
 
   foreach ($types as $type => $name) {
-    $entity_info['invoice']['bundles'][$type] = array(
+    $entity_info['invoice']['bundles'][$type] = [
       'label' => $name,
-      'admin' => array(
+      'admin' => [
         'path' => 'admin/structure/invoices/manage/%invoice_type',
         'real path' => 'admin/structure/invoices/manage/' . $type,
         'bundle argument' => 4,
-        'access arguments' => array('administer invoices'),
-      ),
-    );
+        'access arguments' => ['administer invoices'],
+      ],
+    ];
   }
 
-  $entity_info['invoice_type'] = array(
+  $entity_info['invoice_type'] = [
     'label' => t('Invoice type'),
     'plural label' => t('Invoice types'),
     'entity class' => 'Entity',
@@ -61,20 +61,20 @@ function invoice_entity_info() {
     'fieldable' => FALSE,
     'bundle of' => 'invoice',
     'exportable' => TRUE,
-    'entity keys' => array(
+    'entity keys' => [
       'id' => 'type',
       'name' => 'type',
       'label' => 'name',
-    ),
+    ],
     'access callback' => 'invoice_type_access',
     'label callback' => 'invoice_type_label',
     'module' => 'invoice',
-    'admin ui' => array(
+    'admin ui' => [
       'path' => 'admin/structure/invoices',
       'file' => 'invoice.admin.inc',
       'controller class' => 'EntityDefaultUIController',
-    ),
-  );
+    ],
+  ];
 
   return $entity_info;
 }
@@ -121,78 +121,78 @@ function invoice_entity_property_info_alter(&$info) {
  * Implements hook_menu().
  */
 function invoice_menu() {
-  $items = array();
+  $items = [];
 
   // We only support one basic invoice type for the moment. This may be extended
   // in the future.
   $invoice_type = invoice_type_load('invoice');
-  $items['invoice/add'] = array(
+  $items['invoice/add'] = [
     'title' => 'Add invoice',
     'page callback' => 'invoice_add_page',
-    'page arguments' => array($invoice_type),
+    'page arguments' => [$invoice_type],
     'access callback' => 'invoice_access',
-    'access arguments' => array('create', $invoice_type),
+    'access arguments' => ['create', $invoice_type],
     'file' => 'invoice.pages.inc',
-  );
+  ];
 
-  $items['invoice/%invoice/edit'] = array(
+  $items['invoice/%invoice/edit'] = [
     'title' => 'Edit',
     'page callback' => 'invoice_edit_page',
-    'page arguments' => array(1),
+    'page arguments' => [1],
     'access callback' => 'invoice_access',
-    'access arguments' => array('update', 1),
+    'access arguments' => ['update', 1],
     'type' => MENU_LOCAL_TASK,
     'file' => 'invoice.pages.inc',
     'weight' => 5,
-  );
+  ];
 
-  $items['invoice/%invoice/delete'] = array(
+  $items['invoice/%invoice/delete'] = [
     'title' => 'Delete',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('invoice_delete_confirm_form', 1),
+    'page arguments' => ['invoice_delete_confirm_form', 1],
     'access callback' => 'invoice_access',
-    'access arguments' => array('delete', 1),
+    'access arguments' => ['delete', 1],
     'type' => MENU_LOCAL_TASK,
     'file' => 'invoice.pages.inc',
     'weight' => 10,
-  );
+  ];
 
-  $items['invoice/%invoice/view'] = array(
+  $items['invoice/%invoice/view'] = [
     'title' => 'View',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0,
-  );
+  ];
 
-  $items['invoice/%invoice'] = array(
+  $items['invoice/%invoice'] = [
     'title' => '',
     'page callback' => 'invoice_detail_page',
-    'page arguments' => array(1),
+    'page arguments' => [1],
     'access callback' => 'invoice_access',
-    'access arguments' => array('view', 1),
+    'access arguments' => ['view', 1],
     'type' => MENU_CALLBACK,
     'file' => 'invoice.pages.inc',
-  );
+  ];
 
-  $items['invoice/%invoice/html'] = array(
+  $items['invoice/%invoice/html'] = [
     'title' => 'HTML',
     'page callback' => 'invoice_generate_html',
-    'page arguments' => array(1),
+    'page arguments' => [1],
     // This is protected with a token in the page callback. No session based
     // access control can be done since this path needs to be accessible by the
     // PDF converter.
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
     'file' => 'invoice.pages.inc',
-  );
+  ];
 
-  $items['invoice/%invoice/download'] = array(
+  $items['invoice/%invoice/download'] = [
     'title' => 'Download',
     'page callback' => 'invoice_download',
-    'page arguments' => array(1),
+    'page arguments' => [1],
     'access callback' => TRUE,
     'type' => MENU_CALLBACK,
     'file' => 'invoice.pages.inc',
-  );
+  ];
 
   return $items;
 }
@@ -248,44 +248,44 @@ function invoice_access($op, $invoice = NULL, $account = NULL) {
  * Implements hook_permission().
  */
 function invoice_permission() {
-  $permissions = array(
-    'access invoice overview' => array(
+  $permissions = [
+    'access invoice overview' => [
       'title' => t('Access invoice overview'),
-    ),
-    'administer invoices' => array(
+    ],
+    'administer invoices' => [
       'title' => t('Administer invoices'),
       'description' => t('Create new invoices, and edit and delete all invoices.'),
-    ),
-    'administer invoice types' => array(
+    ],
+    'administer invoice types' => [
       'title' => t('Administer invoice types'),
       'description' => t('Create and delete fields for invoice types, and set their permissions.'),
-    ),
-    'create new invoices' => array(
+    ],
+    'create new invoices' => [
       'title' => t('Create new invoices'),
-    ),
-    'view own invoices' => array(
+    ],
+    'view own invoices' => [
       'title' => t('View own invoices'),
-    ),
-    'administer own invoices' => array(
+    ],
+    'administer own invoices' => [
       'title' => t('Administer own invoices'),
       'description' => t('Edit and delete your own invoices.'),
-    ),
-    'view html version of any invoice' => array(
+    ],
+    'view html version of any invoice' => [
       'title' => t('View HTML version of any invoice'),
       'description' => t('This is intended to help in developing and theming PDF templates.'),
-    ),
-  );
+    ],
+  ];
 
   // Generate permissions per invoice type.
   foreach (invoice_get_types() as $type) {
-    $permissions += array(
-      "edit any $type->type invoice" => array(
-        'title' => t('%type_name: Edit any invoice', array('%type_name' => $type->name)),
-      ),
-      "view any $type->type invoice" => array(
-        'title' => t('%type_name: View any invoice', array('%type_name' => $type->name)),
-      ),
-    );
+    $permissions += [
+      "edit any $type->type invoice" => [
+        'title' => t('%type_name: Edit any invoice', ['%type_name' => $type->name]),
+      ],
+      "view any $type->type invoice" => [
+        'title' => t('%type_name: View any invoice', ['%type_name' => $type->name]),
+      ],
+    ];
   }
 
   return $permissions;
@@ -295,16 +295,16 @@ function invoice_permission() {
  * Implements hook_theme().
  */
 function invoice_theme($existing, $type, $theme, $path) {
-  return array(
-    'invoice_export' => array(
-      'variables' => array('invoice' => NULL),
+  return [
+    'invoice_export' => [
+      'variables' => ['invoice' => NULL],
       'template' => 'invoice_export',
       'path' => drupal_get_path('module', 'invoice') . '/theme',
-    ),
-    'invoice_inline_client_entity' => array(
+    ],
+    'invoice_inline_client_entity' => [
       'render element' => 'form',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -335,7 +335,7 @@ function template_preprocess_invoice_export(array &$vars) {
   $business = entity_metadata_wrapper('business', $business_entity);
 
   // Make all business properties available.
-  $vars['business_name'] = $business->name->value(array('sanitize' => TRUE));
+  $vars['business_name'] = $business->name->value(['sanitize' => TRUE]);
   $vars['business_address'] = field_view_field('business', $business_entity, 'field_business_address');
   $vars['business_bic'] = field_view_field('business', $business_entity, 'field_business_bic');
   $vars['business_email'] = field_view_field('business', $business_entity, 'field_business_email');
@@ -350,7 +350,7 @@ function template_preprocess_invoice_export(array &$vars) {
   $client = entity_metadata_wrapper('client', $client_entity);
 
   // Make all client properties available.
-  $vars['client_name'] = $client->name->value(array('sanitize' => TRUE));
+  $vars['client_name'] = $client->name->value(['sanitize' => TRUE]);
   $vars['client_address'] = field_view_field('client', $client_entity, 'field_client_address');
   $vars['client_email'] = field_view_field('client', $client_entity, 'field_client_email');
   $vars['client_phone'] = field_view_field('client', $client_entity, 'field_client_phone');
@@ -365,7 +365,7 @@ function template_preprocess_invoice_export(array &$vars) {
   // Provide a list of CSS files.
   // @todo Generate this with drupal_get_css() when we have PDF templates.
   $css_path = drupal_get_path('module', 'invoice') . '/theme/invoice_export.css';
-  $css_url = url($css_path, array('absolute' => TRUE));
+  $css_url = url($css_path, ['absolute' => TRUE]);
   $vars['styles'] = <<<HTML
     <style type="text/css" media="all">@import url("$css_url");</style>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
@@ -425,7 +425,7 @@ function invoice_type_load($type) {
  *   An associative array of invoice type labels, keyed by invoice type.
  */
 function invoice_type_get_names() {
-  $types = array();
+  $types = [];
 
   foreach (invoice_get_types() as $machine_name => $type) {
     $types[$machine_name] = $type->name;
@@ -463,9 +463,9 @@ function invoice_type_label(Entity $invoice) {
  * @return Invoice
  *   The new invoice entity.
  */
-function invoice_create($values = array()) {
+function invoice_create($values = []) {
   // Default to the 'invoice' bundle.
-  $values += array('type' => 'invoice');
+  $values += ['type' => 'invoice'];
   return entity_get_controller('invoice')->create($values);
 }
 
@@ -562,17 +562,17 @@ function invoice_load($iid, $reset = FALSE) {
  * @see entity_load()
  * @see EntityFieldQuery
  */
-function invoice_load_multiple($iids = array(), $reset = FALSE) {
-  return entity_load('invoice', $iids, array(), $reset);
+function invoice_load_multiple($iids = [], $reset = FALSE) {
+  return entity_load('invoice', $iids, [], $reset);
 }
 
 /**
  * Implements callback_entity_info_uri().
  */
 function invoice_uri(Invoice $invoice) {
-  return array(
+  return [
     'path' => 'invoice/' . $invoice->iid,
-  );
+  ];
 }
 
 /**
@@ -585,10 +585,10 @@ function invoice_uri(Invoice $invoice) {
  */
 function invoice_type_create($type, $name) {
   db_insert('invoice_type')
-    ->fields(array(
+    ->fields([
       'type' => $type,
       'name' => $name,
-    ))
+    ])
     ->execute();
 }
 
@@ -639,7 +639,7 @@ function invoice_is_owned_by_user(Invoice $invoice, \stdClass $account = NULL) {
 function invoice_get_invoice_ids_from_user(\stdClass $account = NULL, $reset = FALSE) {
   $bids = business_get_business_ids_from_user($account, $reset);
 
-  $iids = &drupal_static(__FUNCTION__, array());
+  $iids = &drupal_static(__FUNCTION__, []);
   if (empty($iids[$account->uid]) || $reset) {
     $query = new EntityFieldQuery();
     $query
@@ -647,7 +647,7 @@ function invoice_get_invoice_ids_from_user(\stdClass $account = NULL, $reset = F
       ->propertyCondition('bid', $bids, 'IN');
     $result = $query->execute();
 
-    $iids[$account->uid] = !empty($result['invoice']) ? array_keys($result['invoice']) : array();
+    $iids[$account->uid] = !empty($result['invoice']) ? array_keys($result['invoice']) : [];
   }
 
   return $iids[$account->uid];
@@ -701,7 +701,7 @@ function invoice_get_most_recent_invoice($bid = NULL, $reset = FALSE) {
     $bid = $business->identifier();
   }
 
-  $iids = &drupal_static(__FUNCTION__, array());
+  $iids = &drupal_static(__FUNCTION__, []);
   if (!isset($iids[$bid]) || $reset) {
     $query = new EntityFieldQuery();
     $query
@@ -748,33 +748,33 @@ function invoice_menu_local_tasks_alter(&$data, $router_item, $root_path) {
 
       // Add an action link to download a PDF.
       $action = menu_get_item('invoice/' . $invoice->identifier() . '/download');
-      $action['localized_options'] = array(
-        'attributes' => array('class' => 'download'),
-        'query' => array('token' => drupal_get_token('invoice-download-link-' . $invoice->identifier())),
-      );
+      $action['localized_options'] = [
+        'attributes' => ['class' => 'download'],
+        'query' => ['token' => drupal_get_token('invoice-download-link-' . $invoice->identifier())],
+      ];
 
       // Add a tab to view the HTML version for administrators. This is mainly
       // intended to help in theming and debugging.
       $tab = menu_get_item('invoice/' . $invoice->identifier() . '/html');
-      $tab['localized_options'] = array(
-        'query' => array('token' => invoice_get_token($invoice)),
-      );
+      $tab['localized_options'] = [
+        'query' => ['token' => invoice_get_token($invoice)],
+      ];
       $tab['access'] = user_access('view html version of any invoice');
       break;
   }
 
   if (isset($action) && $action['access']) {
-    $data['actions']['output'][] = array(
+    $data['actions']['output'][] = [
       '#theme' => 'menu_local_action',
       '#link' => $action,
-    );
+    ];
   }
 
   if (isset($tab) && $tab['access']) {
-    $data['tabs'][0]['output'][] = array(
+    $data['tabs'][0]['output'][] = [
       '#theme' => 'menu_local_action',
       '#link' => $tab,
-    );
+    ];
   }
 }
 
@@ -828,7 +828,7 @@ function invoice_get_default_number($entity_type, \Invoice $entity, array $field
   try {
     $invoice = invoice_get_most_recent_invoice();
     $previous_number = $invoice->wrapper()->field_invoice_number->value();
-    return array(array('value' => invoice_increment_number($previous_number)));
+    return [['value' => invoice_increment_number($previous_number)]];
   }
   catch (\NoInvoiceException $e) {
     // If there is no invoice yet, let the user decide on a number.
@@ -892,7 +892,7 @@ function invoice_field_widget_inline_entity_form_single_form_alter(&$element, &$
  */
 function theme_invoice_inline_client_entity($variables) {
   if (!empty($variables['form'][0]) && !empty($variables['form'][0]['#entity'])) {
-    $summary = entity_view('client', array($variables['form'][0]['#entity']), 'summary');
+    $summary = entity_view('client', [$variables['form'][0]['#entity']], 'summary');
     $output = array_merge($summary, $variables['form'][0]['actions']);
     return drupal_render($output);
   }
@@ -1002,7 +1002,7 @@ class Invoice extends Entity {
    *   The calculated total.
    */
   private function calculateTotal($vat) {
-    $line_items = array();
+    $line_items = [];
 
     if (!empty($this->field_invoice_services[LANGUAGE_NONE])) {
       $line_items = $this->field_invoice_services[LANGUAGE_NONE];
@@ -1045,11 +1045,11 @@ class InvoiceAPIController extends EntityAPIController {
   /**
    * {@inheritdoc}
    */
-  public function create(array $values = array()) {
+  public function create(array $values = []) {
     // Set the business id to the active business of the logged in user.
     $business = business_get_active_business();
     if ($business instanceof Business) {
-      $values += array('bid' => $business->bid);
+      $values += ['bid' => $business->bid];
     }
     return parent::create($values);
   }

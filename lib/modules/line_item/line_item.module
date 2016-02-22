@@ -868,6 +868,17 @@ class LineItem extends Entity {
     return parent::save();
   }
 
+  /**
+   * Returns the tax rate of the line item as a percentage value.
+   *
+   * @return string
+   *   The tax rate as a decimal value with 8 decimals.
+   */
+  public function getTaxRate() {
+    $tax_rate = !empty($this->field_line_item_tax[LANGUAGE_NONE][0]['value']) ? $this->field_line_item_tax[LANGUAGE_NONE][0]['value'] : '0.00';
+    return bcdiv($tax_rate, 100, 8);
+  }
+
 }
 
 /**

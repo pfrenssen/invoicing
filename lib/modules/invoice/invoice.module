@@ -969,6 +969,17 @@ class Invoice extends Entity {
   }
 
   /**
+   * Returns the discount percentage of the invoice.
+   *
+   * @return string
+   *   The discount as a value with 8 decimals.
+   */
+  public function getDiscountPercent() {
+    $discount = !empty($this->field_invoice_discount[LANGUAGE_NONE][0]['value']) ? $this->field_invoice_discount[LANGUAGE_NONE][0]['value'] : '0.00';
+    return bcdiv($discount, 100, 8);
+  }
+
+  /**
    * Calculates the total price excluding VAT of an invoice.
    *
    * @return string

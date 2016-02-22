@@ -1011,9 +1011,10 @@ class Invoice extends Entity {
    *   keys:
    *   - 'base_price': The base price for the calculation, the total of all line
    *     items excluding discounts and taxes.
-   *   - 'discount': The calculated discounts, consisting of both discounts per
-   *     line item as the global discount.
-   *   - 'subtotal': The total price before tax, with the discount applied.
+   *   - 'discount': An associative array of calculated discounts, with keys:
+   *     - 'line_items': total of discounts per line item.
+   *     - 'invoice': the global discount on the invoice.
+   *   - 'subtotal': The total price before tax, with the discounts applied.
    *   - 'tax': The amounts of value added tax. This is an associative array of
    *     all different tax rates that were applied, keyed by tax rate.
    *   - 'total': The final total.
@@ -1021,7 +1022,10 @@ class Invoice extends Entity {
   public function getTotals() {
     $totals = [
       'base_price' => '0.00',
-      'discount' => '0.00',
+      'discount' => [
+        'line_items' => '0.00',
+        'invoice' => '0.00',
+      ],
       'subtotal' => '0.00',
       'tax' => [],
       'total' => '0.00',
@@ -1029,11 +1033,16 @@ class Invoice extends Entity {
 
     // Run the calculations and set the totals.
     foreach ($this->getLineItems() as $line_item) {
-      // @todo How to deal with discounts? They can be on line items and on the
-      // complete invoice.
-      $calculation = line_item_calculate($line_item);
+      $line_item_totals = line_item_calculate($line_item);
+      $totals['base_price'] = bcadd($totals['base_price'], $line_item_totals['base_price'], 2);
+      $totals['discount']['line_items'] = bcadd($totals['discount']['line_items'], $line_item_totals['discount'], 2);
 
-      $total = bcadd($calculation[$vat], $total, 2);
+      // @todo These tax rates should take the invoice discount into account.
+      $tax_rate = $line_item->getTaxRate();
+      if (empty($totals['tax'][$tax_rate])) {
+        $totals['tax'][$tax_rate] = '0.00';
+      }
+      $totals['tax'][$tax_rate] = bcadd($totals['tax'][$tax_rate], $line_item_totals['tax'], 2);
     }
 
     $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);

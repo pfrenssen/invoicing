@@ -1031,27 +1031,42 @@ class Invoice extends Entity {
       'total' => '0.00',
     ];
 
-    // Run the calculations and set the totals.
+    // Sum up the base price, discount and tax of the line items.
+    $invoice_discount = bcsub('1.00', $this->getDiscountPercent(), 8);
     foreach ($this->getLineItems() as $line_item) {
       $line_item_totals = line_item_calculate($line_item);
       $totals['base_price'] = bcadd($totals['base_price'], $line_item_totals['base_price'], 2);
       $totals['discount']['line_items'] = bcadd($totals['discount']['line_items'], $line_item_totals['discount'], 2);
 
-      // @todo These tax rates should take the invoice discount into account.
       $tax_rate = $line_item->getTaxRate();
       if (empty($totals['tax'][$tax_rate])) {
         $totals['tax'][$tax_rate] = '0.00';
       }
-      $totals['tax'][$tax_rate] = bcadd($totals['tax'][$tax_rate], $line_item_totals['tax'], 2);
+      // Apply the invoice discount to the tax rate. The line item discount has
+      // already been applied in line_item_calculate().
+      $tax_amount = number_format(bcmul($line_item_totals['tax'], $invoice_discount, 3), 2, '.', '');
+      $totals['tax'][$tax_rate] = bcadd($totals['tax'][$tax_rate], $tax_amount, 2);
     }
 
-    $discount_percent = bcdiv($this->field_invoice_discount[LANGUAGE_NONE][0]['value'], 100, 8);
-    $discount = number_format(bcmul($discount_percent, $total, 3), 2, '.', '');
+    // Calculate the invoice discount using BCMath for financial calculations.
+    // We calculate to a precision of 3 decimal numbers, then round to 2 decimal
+    // numbers to get the exact value in Euros and cents.
+    $discounted_base_price = bcsub($totals['base_price'], $totals['discount']['line_items'], 2);
+    $totals['discount']['invoice'] = number_format(bcmul($this->getDiscountPercent(), $discounted_base_price, 3), 2, '.', '');
 
-    // Use BCMath for financial calculations. We calculate to a precision of 3
-    // decimal numbers, then round to 2 decimal numbers to get the exact value
-    // in Euros and cents.
-    return $total > 0 ? bcsub($total, $discount, 2) : '0.00';
+    // Calculate the subtotal. This is the total price before tax, with all the
+    // discounts applied.
+    $totals['subtotal'] = bcsub($discounted_base_price, $totals['discount']['invoice'], 2);
+
+    // Calculate the final total by adding the taxes to the subtotal.
+    $tax_total = '0.00';
+    foreach ($totals['tax'] as $tax_amount) {
+      $tax_total = bcadd($tax_total, $tax_amount, 2);
+    }
+
+    $totals['total'] = bcadd($totals['subtotal'], $tax_total, 2);
+
+    return $totals;
   }
 
   /**

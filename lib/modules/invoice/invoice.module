@@ -1085,7 +1085,7 @@ class Invoice extends Entity {
       if (empty($line_item_type) || $line_item_type === $type) {
         $field_name = "field_invoice_{$type}s";
         if (!empty($this->$field_name[LANGUAGE_NONE])) {
-          foreach ($this->field_name[LANGUAGE_NONE] as $reference) {
+          foreach ($this->$field_name[LANGUAGE_NONE] as $reference) {
             $line_items[] = line_item_load($reference['target_id']);
           }
         }

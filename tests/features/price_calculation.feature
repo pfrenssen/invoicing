@@ -37,14 +37,14 @@ Scenario: The price calculation for an invoice should be correct
 
   Given products:
     | description | unit cost | quantity | tax   | discount |
-    | product 1   | 100       | 20       | 15    | 10       |
-    | product 2   | 14        | 3        | 12.5  | 7        |
-    | product 3   | 237.12    | 21       | 33.33 | 40.05    |
-    | product 4   | 0         | 0        | 0     | 0        |
-    | product 5   | 199.95    | 1        | 21    | 0        |
+    | product 1   | 580.48    | 37       | 0.05  | 31.68    |
+    | product 2   | 0.97      | 11       | 37.86 | 7.21     |
+    | product 3   | 51.91     | 76       | 0.38  | 14.32    |
+    | product 4   | 464.00    | 26       | 9.07  | 77.59    |
+    | product 5   | 56.01     | 59       | 16.95 | 42.41    |
 
   Given invoice:
     | client   | number | date     | discount | products                                              | services                                              |
     | Axemill  | 15/001 | 20150223 | 12.13    | product 1, product 2, product 3, product 4, product 5 | service 1, service 2, service 3, service 4, service 5 |
-  Then the price including VAT of the invoice should equal "11135.01"
-  And the price excluding VAT of the invoice should equal "8829.58"
+  Then the price excluding VAT of the invoice should equal "24335.25"
+  And the price including VAT of the invoice should equal "26007.92"

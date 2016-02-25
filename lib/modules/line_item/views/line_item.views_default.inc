@@ -30,13 +30,59 @@ function line_item_views_default_views() {
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
-    'lid' => 'lid',
+    'field_line_item_description' => 'field_line_item_description',
+    'field_line_item_quantity' => 'field_line_item_quantity',
+    'field_line_item_time_unit' => 'field_line_item_time_unit',
+    'field_line_item_unit_cost' => 'field_line_item_unit_cost',
+    'field_line_item_tax' => 'field_line_item_tax',
+    'field_line_item_discount' => 'field_line_item_discount',
+    'field_line_item_total' => 'field_line_item_total',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
-    'lid' => array(
+    'field_line_item_description' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_line_item_quantity' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_line_item_time_unit' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_line_item_unit_cost' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_line_item_tax' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 1,
+    ),
+    'field_line_item_discount' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 1,
+    ),
+    'field_line_item_total' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,

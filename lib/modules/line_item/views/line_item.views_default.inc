@@ -85,6 +85,8 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['field_line_item_discount']['id'] = 'field_line_item_discount';
   $handler->display->display_options['fields']['field_line_item_discount']['table'] = 'field_data_field_line_item_discount';
   $handler->display->display_options['fields']['field_line_item_discount']['field'] = 'field_line_item_discount';
+  $handler->display->display_options['fields']['field_line_item_discount']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_line_item_discount']['alter']['text'] = '[field_line_item_discount-value]%';
   $handler->display->display_options['fields']['field_line_item_discount']['settings'] = array(
     'thousand_separator' => '',
     'decimal_separator' => '.',
@@ -187,6 +189,8 @@ function line_item_views_default_views() {
   $handler->display->display_options['fields']['field_line_item_discount']['id'] = 'field_line_item_discount';
   $handler->display->display_options['fields']['field_line_item_discount']['table'] = 'field_data_field_line_item_discount';
   $handler->display->display_options['fields']['field_line_item_discount']['field'] = 'field_line_item_discount';
+  $handler->display->display_options['fields']['field_line_item_discount']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['field_line_item_discount']['alter']['text'] = '[field_line_item_discount-value]%';
   $handler->display->display_options['fields']['field_line_item_discount']['settings'] = array(
     'thousand_separator' => ' ',
     'decimal_separator' => '.',

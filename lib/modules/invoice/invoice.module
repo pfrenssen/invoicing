@@ -1000,6 +1000,60 @@ class Invoice extends Entity {
   }
 
   /**
+   * Returns the sum of all taxes on the invoice.
+   *
+   * @return string
+   *   The tax total.
+   */
+  public function getTaxTotal() {
+    $tax_total = '0.00';
+    foreach ($this->getTotals()['tax'] as $tax_amount) {
+      $tax_total = bcadd($tax_total, $tax_amount, 2);
+    }
+    return $tax_total;
+  }
+
+  /**
+   * Returns the total of all line items excluding discounts and taxes.
+   *
+   * @return string
+   *   The base price.
+   */
+  public function getBasePrice() {
+    return $this->getTotals()['base_price'];
+  }
+
+  /**
+   * Returns whether or not the invoice is discounted.
+   *
+   * @return bool
+   *   TRUE if the invoice has a discount.
+   */
+  public function isDiscounted() {
+    return $this->getInvoiceDiscount() !== '0.00' || $this->getLineItemsDiscount() != '0.00';
+  }
+
+  /**
+   * Returns the sum of all discounts on line items.
+   *
+   * @return string
+   *   The total discount on all line items.
+   */
+  public function getLineItemsDiscount() {
+    return $this->getTotals()['discount']['line_items'];
+  }
+
+  /**
+   * Returns the global invoice discount.
+   *
+   * @return string
+   *   The invoice discount.
+   */
+  public function getInvoiceDiscount() {
+    return $this->getTotals()['discount']['invoice'];
+  }
+
+  /**
    * Returns the totals for an invoice.
    *
    * All values are expressed with 2 decimal numbers to represent Euros and

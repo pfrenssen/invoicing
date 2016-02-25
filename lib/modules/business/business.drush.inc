@@ -83,17 +83,24 @@ function drush_business_create($business_name, $user_name) {
         'locality' => drush_get_option('locality'),
       ],
       'field_business_vat' => drush_get_option('vat'),
-      'field_business_phone' => [
-        'number' => drush_get_option('phone'),
-        'countrycode' => drush_get_option('country'),
-      ],
-      'field_business_mobile' => [
-        'number' => drush_get_option('mobile'),
-        'countrycode' => drush_get_option('country'),
-      ],
       'field_business_bic' => drush_get_option('bic'),
       'field_business_iban' => drush_get_option('iban'),
     ];
+
+    if ($phone = drush_get_option('phone')) {
+      $values['field_business_phone'] = [
+        'number' => drush_get_option('phone'),
+        'countrycode' => drush_get_option('country'),
+      ];
+    }
+
+    if ($mobile = drush_get_option('mobile')) {
+      $values['field_business_mobile'] = [
+        'number' => drush_get_option('mobile'),
+        'countrycode' => drush_get_option('country'),
+      ];
+    }
+
     $business = business_create();
     $wrapper = entity_metadata_wrapper('business', $business);
     foreach ($values as $property => $value) {

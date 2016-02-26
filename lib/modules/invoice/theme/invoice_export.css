@@ -1,6 +1,7 @@
 body {
   font-family: Ubuntu, sans-serif;
   margin: 4em;
+  font-size: 0.8em;
 }
 
 /* Layout */
@@ -79,20 +80,56 @@ body {
   padding: 1.25em 0;
 }
 
-#tables th {
+table th {
   background-color: #ddd;
-  font-size: 0.9em;
 }
 
-.view-line-items table {
+#tables table {
   width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
   margin: 1.5em 0;
+  font-size: 1em;
 }
 
-.view-line-items table th,
-.view-line-items table td {
+#tables table th,
+#tables table td {
   border: thin solid #ccc;
   padding: 0.5em;
+}
+
+#tables table#totals {
+  width: auto;
+  float: right;
+}
+
+#tables table#totals th,
+#tables table#totals td {
+  padding: 0.5em 1.5em;
+}
+
+#totals .label {
+  text-align: left;
+}
+
+#totals .value {
+  text-align: right;
+}
+
+#totals tr.total th {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#terms {
+  clear: both;
+}
+
+#terms .field-label {
+  display: none;
+}
+
+#terms .field-items {
+  margin-left: auto;
+  font-size: 0.95em;
 }

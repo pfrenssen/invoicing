@@ -301,6 +301,9 @@ function invoice_theme($existing, $type, $theme, $path) {
       'template' => 'invoice_export',
       'path' => drupal_get_path('module', 'invoice') . '/theme',
     ],
+    'invoice_totals' => [
+      'variables' => ['invoice' => NULL],
+    ],
     'invoice_inline_client_entity' => [
       'render element' => 'form',
     ],
@@ -361,6 +364,9 @@ function template_preprocess_invoice_export(array &$vars) {
   // Provide the tables for products and services.
   $vars['products'] = views_embed_view('line_items', 'products', $invoice_entity->identifier());
   $vars['services'] = views_embed_view('line_items', 'services', $invoice_entity->identifier());
+
+  // Provide a table with the totals.
+  $vars['totals'] = theme('invoice_totals', ['invoice' => $invoice_entity]);
 
   // Provide a list of CSS files.
   // @todo Generate this with drupal_get_css() when we have PDF templates.
@@ -885,6 +891,73 @@ function invoice_field_widget_inline_entity_form_single_form_alter(&$element, &$
   if (!empty($context['field']) && !empty($context['field']['field_name']) && $context['field']['field_name'] == 'field_invoice_client') {
     $element['entities']['#theme'] = 'invoice_inline_client_entity';
   }
+}
+
+/**
+ * Themes a table containing the invoice totals.
+ */
+function theme_invoice_totals($variables) {
+  /** @var Invoice $invoice */
+  $invoice = $variables['invoice'];
+
+  $get_row = function ($label, $value, $class, $header = FALSE) use ($invoice) {
+    $label_row = [
+      'data' => $label,
+      'class' => ['label'],
+    ];
+    $value_row = [
+      'data' => $value . '&euro;',
+      'class' => ['value'],
+    ];
+    if ($header) {
+      $label_row['header'] = TRUE;
+      $value_row['header'] = TRUE;
+    }
+    return [
+      'data' => [$label_row, $value_row],
+      'class' => [$class],
+    ];
+  };
+
+  $rows = [];
+
+  // Only show the base price if there are any discounts.
+  if ($invoice->isDiscounted()) {
+    $rows[] = $get_row(t('Base price'), $invoice->getBasePrice(), 'base-price');
+  };
+
+  // Add the line item discount.
+  if ($invoice->getLineItemsDiscount() != '0.00') {
+    $rows[] = $get_row(t('Discount'), $invoice->getLineItemsDiscount(), 'line-items-discount');
+  }
+
+  // Add the invoice discount.
+  if ($invoice->getInvoiceDiscount() != '0.00') {
+    $discount_percent = $invoice->getDiscountPercent() * 100;
+    $args = ['@discount' => $discount_percent];
+    $rows[] = $get_row(t('Discount @discount%', $args), $invoice->getLineItemsDiscount(), 'invoice-discount');
+  }
+
+  // Show the subtotal.
+  $rows[] = $get_row(t('Subtotal'), $invoice->getSubTotal(), 'subtotal');
+
+  // Show the taxes.
+  if ($invoice->getTaxTotal() !== '0.00') {
+    foreach ($invoice->getTaxes() as $tax_rate => $tax_value) {
+      $args = ['@tax' => $tax_rate];
+      $rows[] = $get_row(t('Tax @tax%', $args), $tax_value, 'tax-rate');
+    }
+  }
+  // Show an empty line for the VAT if there are no taxes.
+  else {
+    $rows[] = $get_row(t('VAT'), '0.00', 'tax-rate');
+  }
+
+  // Add the final total.
+  $rows[] = $get_row(t('Total'), $invoice->getTotal(), 'total', TRUE);
+
+  $attributes = ['id' => 'totals'];
+  return theme('table', ['rows' => $rows, 'attributes' => $attributes]);
 }
 
 /**

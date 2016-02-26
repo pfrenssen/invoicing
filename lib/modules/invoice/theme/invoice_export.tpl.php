@@ -109,6 +109,7 @@
       <?php if ($services): ?>
         <div id="services"><?php print $services; ?></div>
       <?php endif; ?>
+      <?php print $totals; ?>
     </div>
   </body>
 </html>

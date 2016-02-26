@@ -111,5 +111,10 @@
       <?php endif; ?>
       <?php print $totals; ?>
     </div>
+    <?php if ($invoice_terms): ?>
+      <div id="terms">
+         <?php print render($invoice_terms); ?>
+      </div>
+    <?php endif; ?>
   </body>
 </html>

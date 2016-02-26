@@ -1087,6 +1087,16 @@ class Invoice extends Entity {
   }
 
   /**
+   * Returns an array of the taxes on the invoice.
+   *
+   * @return array
+   *   An associative array of taxes, keyed by tax rate.
+   */
+  public function getTaxes() {
+    return $this->getTotals()['tax'];
+  }
+
+  /**
    * Returns the total of all line items excluding discounts and taxes.
    *
    * @return string

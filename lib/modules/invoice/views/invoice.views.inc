@@ -11,8 +11,8 @@
 function invoice_views_data_alter(&$data) {
   $data['invoice']['total'] = array(
     'field' => array(
-      'title' => t('Total including VAT'),
-      'help' => t('Provide the total price including VAT.'),
+      'title' => t('Total'),
+      'help' => t('The total price including VAT.'),
       'handler' => 'invoice_handler_total_field',
       'float' => TRUE,
     ),
@@ -20,8 +20,8 @@ function invoice_views_data_alter(&$data) {
 
   $data['invoice']['total_excl'] = array(
     'field' => array(
-      'title' => t('Total excluding VAT'),
-      'help' => t('Provide the total price excluding VAT.'),
+      'title' => t('Total ex VAT'),
+      'help' => t('The total price excluding VAT.'),
       'handler' => 'invoice_handler_total_excl_field',
       'float' => TRUE,
     ),

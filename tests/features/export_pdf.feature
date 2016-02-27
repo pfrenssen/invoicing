@@ -29,10 +29,10 @@ Scenario: Verify content of exported invoice
     | client email    | info@omnia.eu            |
   And the exported invoice should have the following service data:
     | description    | unit cost | time unit | quantity | tax   | discount | total     |
-    | Equipment hire | 124.95    | months    | 10.5     | 19.00 | 15       | 1327.06€  |
-    | Truck rental   | 74.99     | days      | 120      | 19.00 | 15       | 9102.29€  |
-    | Operator       | 250       | days      | 120      | 19.00 | 0        | 35700.00€ |
+    | Equipment hire | 124.95    | months    | 10.5     | 19.00 | 15.00%   | 1327.06€  |
+    | Truck rental   | 74.99     | days      | 120      | 19.00 | 15.00%   | 9102.29€  |
+    | Operator       | 250       | days      | 120      | 19.00 | 0.00%    | 35700.00€ |
   And the exported invoice should have the following product data:
     | description  | unit cost | quantity | tax   | discount | total    |
-    | Sievert Harp | 3305.00   | 1        | 19.00 | 20       | 3146.36€ |
-    | Neumann U87  | 2599.00   | 2        | 19.00 | 20       | 4948.50€ |
+    | Sievert Harp | 3305.00   | 1        | 19.00 | 20.00%   | 3146.36€ |
+    | Neumann U87  | 2599.00   | 2        | 19.00 | 20.00%   | 4948.50€ |

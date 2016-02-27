@@ -113,16 +113,10 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['total_excl']['id'] = 'total_excl';
   $handler->display->display_options['fields']['total_excl']['table'] = 'invoice';
   $handler->display->display_options['fields']['total_excl']['field'] = 'total_excl';
-  $handler->display->display_options['fields']['total_excl']['set_precision'] = TRUE;
-  $handler->display->display_options['fields']['total_excl']['precision'] = '2';
-  $handler->display->display_options['fields']['total_excl']['separator'] = '';
   /* Field: Invoice: Total including VAT */
   $handler->display->display_options['fields']['total']['id'] = 'total';
   $handler->display->display_options['fields']['total']['table'] = 'invoice';
   $handler->display->display_options['fields']['total']['field'] = 'total';
-  $handler->display->display_options['fields']['total']['set_precision'] = TRUE;
-  $handler->display->display_options['fields']['total']['precision'] = '2';
-  $handler->display->display_options['fields']['total']['separator'] = '';
   /* Contextual filter: Invoice: Business */
   $handler->display->display_options['arguments']['bid']['id'] = 'bid';
   $handler->display->display_options['arguments']['bid']['table'] = 'invoice';

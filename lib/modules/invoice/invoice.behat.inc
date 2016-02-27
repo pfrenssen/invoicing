@@ -504,5 +504,4 @@ class InvoiceSubContext extends DrupalSubContextBase implements DrupalSubContext
     }
   }
 
-
 }

@@ -169,9 +169,6 @@ behat.options.strict = false
 # shows exception backtraces, 3 shows debugging information.
 behat.options.verbosity = 2
 
-# The path to the custom Behat Contexts.
-behat.src.dir = ${behat.dir}/src
-
 
 # Simpletest configuration
 # ------------------------
@@ -211,7 +208,7 @@ phpcs.config = ${project.basedir}/phpcs.xml
 phpcs.standard = ${project.basedir}/phpcs-ruleset.xml
 
 # Paths to check, delimited by semicolons.
-phpcs.files = ${site.lib.dir};${phing.project.src.dir};${behat.src.dir}
+phpcs.files = ${site.lib.dir};${phing.project.src.dir}
 
 # Paths to ignore, delimited by semicolons.
 phpcs.ignore =

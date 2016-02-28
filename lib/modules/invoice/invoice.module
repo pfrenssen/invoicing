@@ -1083,7 +1083,7 @@ class Invoice extends Entity {
     $numbers_words = new Numbers_Words();
     // @todo Implement ::toCurrency() for Bulgarian.
     list($decimals, $fraction) = explode('.', $this->getTotal());
-    return $numbers_words->toWords($decimals, $langcode) . ' &euro; ' . $numbers_words->toWords($fraction, $langcode) . ' &cent;';
+    return drupal_ucfirst($numbers_words->toWords($decimals, $langcode) . ' &euro; ' . $numbers_words->toWords($fraction, $langcode) . ' &cent;');
     return $numbers_words->toCurrency($this->getTotal(), $langcode, 'EUR', '.');
   }
 

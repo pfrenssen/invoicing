@@ -148,6 +148,9 @@
       <?php endif; ?>
     </div>
 
+    <div id="terms">
+      <?php print t('The delivery is not subject to VAT taxation in Bulgaria in accordance with the VAT reverse charge system, art. 21, paragraph 2 of the VAT act.'); ?>
+    </div>
     <?php if ($invoice_terms): ?>
       <div id="terms">
         <?php print render($invoice_terms); ?>

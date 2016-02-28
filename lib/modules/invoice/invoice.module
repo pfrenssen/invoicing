@@ -373,7 +373,7 @@ function template_preprocess_invoice_export(array &$vars) {
   // Provide a list of CSS files.
   // @todo Generate this with drupal_get_css() when we have PDF templates.
   $css_path = drupal_get_path('module', 'invoice') . '/theme/invoice_export.css';
-  $css_url = url($css_path, ['absolute' => TRUE]);
+  $css_url = url($css_path, ['absolute' => TRUE, 'language' => language_default()]);
   $vars['styles'] = <<<HTML
     <style type="text/css" media="all">@import url("$css_url");</style>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">

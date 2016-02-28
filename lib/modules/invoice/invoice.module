@@ -340,6 +340,7 @@ function template_preprocess_invoice_export(array &$vars) {
   // Make all business properties available.
   $vars['business_name'] = $business->name->value(['sanitize' => TRUE]);
   $vars['business_address'] = field_view_field('business', $business_entity, 'field_business_address');
+  $vars['business_address']['#title'] = t('Address');
   $vars['business_bic'] = field_view_field('business', $business_entity, 'field_business_bic');
   $vars['business_email'] = field_view_field('business', $business_entity, 'field_business_email');
   $vars['business_iban'] = field_view_field('business', $business_entity, 'field_business_iban');
@@ -355,6 +356,7 @@ function template_preprocess_invoice_export(array &$vars) {
   // Make all client properties available.
   $vars['client_name'] = $client->name->value(['sanitize' => TRUE]);
   $vars['client_address'] = field_view_field('client', $client_entity, 'field_client_address');
+  $vars['client_address']['#title'] = t('Address');
   $vars['client_email'] = field_view_field('client', $client_entity, 'field_client_email');
   $vars['client_phone'] = field_view_field('client', $client_entity, 'field_client_phone');
   $vars['client_shipping_address'] = field_view_field('client', $client_entity, 'field_client_shipping_address');

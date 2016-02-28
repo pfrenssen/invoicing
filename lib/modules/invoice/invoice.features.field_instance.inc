@@ -403,7 +403,7 @@ function invoice_field_default_field_instances() {
   t('Date');
   t('Discount');
   t('Due date');
-  t('Invoice number');
+  t('Number');
   t('PO number');
   t('Products');
   t('Services');

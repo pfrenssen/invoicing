@@ -124,6 +124,11 @@ projects[features][download][revision] = 7.x-2.4
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
 
+projects[i18n][download][type] = git
+projects[i18n][download][revision] = 7.x-1.13
+projects[i18n][download][branch] = 7.x-1.x
+projects[i18n][subdir] = contrib
+
 ; The dev branch has been pinned at the time the below patch was created.
 projects[inline_entity_form][download][type] = git
 projects[inline_entity_form][download][revision] = 887eec888030a43daaa7265809c105663baa3ff8
@@ -171,6 +176,11 @@ projects[user_registrationpassword][download][type] = git
 projects[user_registrationpassword][download][revision] = 6963288
 projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
+
+projects[variable][download][type] = git
+projects[variable][download][revision] = 7.x-2.5
+projects[variable][download][branch] = 7.x-2.x
+projects[variable][subdir] = contrib
 
 projects[views][download][type] = git
 projects[views][download][revision] = 7.x-3.13

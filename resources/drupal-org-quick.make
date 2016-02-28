@@ -102,6 +102,9 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22091
 projects[features][version] = 2.4
 projects[features][subdir] = contrib
 
+projects[i18n][version] = 1.13
+projects[i18n][subdir] = contrib
+
 ; The dev branch has been pinned at the time the below patch was created.
 projects[inline_entity_form][download][type] = git
 projects[inline_entity_form][download][revision] = 887eec888030a43daaa7265809c105663baa3ff8
@@ -145,6 +148,9 @@ projects[user_registrationpassword][download][type] = git
 projects[user_registrationpassword][download][revision] = 6963288
 projects[user_registrationpassword][download][branch] = 7.x-1.x
 projects[user_registrationpassword][subdir] = contrib
+
+projects[variable][version] = 2.5
+projects[variable][subdir] = contrib
 
 projects[views][version] = 3.13
 projects[views][subdir] = contrib

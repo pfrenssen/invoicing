@@ -13,6 +13,7 @@ dependencies[] = email_registration
 dependencies[] = entity_token
 dependencies[] = entityreference
 dependencies[] = features
+dependencies[] = i18n_field
 dependencies[] = inline_entity_form
 dependencies[] = ief_autocomplete
 dependencies[] = invoice

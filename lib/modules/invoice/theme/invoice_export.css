@@ -1,10 +1,19 @@
 body {
   font-family: Ubuntu, sans-serif;
   margin: 4em;
-  font-size: 0.8em;
+  font-size: 0.7em;
+}
+
+h2 {
+  font-size: 1.2em;
+  margin: 0;
 }
 
 /* Layout */
+#company-details {
+  margin-top: 2em;
+}
+
 #first-column {
   float: left;
 }
@@ -39,7 +48,7 @@ body {
 }
 
 #invoice-originality {
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 0.25em;
   text-transform: uppercase;
@@ -139,6 +148,7 @@ table th {
 }
 
 #terms {
+  clear: both;
   margin-top: 1.25em;
 }
 

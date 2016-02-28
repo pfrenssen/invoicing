@@ -115,14 +115,6 @@
         <?php if($business_vat): ?>
           <div id="business-vat"><?php print render($business_vat); ?></div>
         <?php endif; ?>
-        <div class="field-label"><?php print t('Bank'); ?>:</div>
-        <div id="business-bank"><?php print t('Raiffeisen Bank'); ?></div>
-        <?php if($business_iban): ?>
-          <div id="business-iban"><?php print render($business_iban); ?></div>
-        <?php endif; ?>
-        <?php if ($business_bic): ?>
-          <div id="business-bic"><?php print render($business_bic); ?></div>
-        <?php endif; ?>
         <div class="field-label"><?php print t('Accountable'); ?>:</div>
         <div id="business-accountable">Pieter Frenssen</div>
       </div>
@@ -136,11 +128,19 @@
       <?php endif; ?>
       <?php print $totals; ?>
     </div>
-    <div id="extra">
+    <div id="payment-details">
       <div class="field-label"><?php print t('In words'); ?>:</div>
       <div id="invoice-total-words">Todo</div>
       <div class="field-label"><?php print t('Payment method'); ?>:</div>
-      <div id="invoice-total-words"><?php print t('Bank transfer'); ?></div>
+      <div id="invoice-payment-method"><?php print t('Bank transfer'); ?></div>
+      <div class="field-label"><?php print t('Bank'); ?>:</div>
+      <div id="business-bank"><?php print t('Raiffeisen Bank'); ?></div>
+      <?php if($business_iban): ?>
+        <div id="business-iban"><?php print render($business_iban); ?></div>
+      <?php endif; ?>
+      <?php if ($business_bic): ?>
+        <div id="business-bic"><?php print render($business_bic); ?></div>
+      <?php endif; ?>
       <?php if ($invoice_due_date): ?>
         <div id="invoice-due-date"><?php print render($invoice_due_date); ?></div>
       <?php endif; ?>

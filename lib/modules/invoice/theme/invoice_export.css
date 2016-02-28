@@ -69,7 +69,8 @@ body {
 #business-vat,
 #client-vat,
 #business-bic,
-#client-bic {
+#client-bic,
+#invoice-payment-method {
   margin-bottom: 1.25em;
 }
 
@@ -132,10 +133,13 @@ table th {
 
 #signature {
   clear: both;
+  margin-top: 4em;
   margin-bottom: 2em;
+  margin-left: 50%;
 }
 
 #terms {
+  margin-top: 1.25em;
 }
 
 #terms .field-label {

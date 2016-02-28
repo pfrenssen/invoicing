@@ -132,7 +132,7 @@
     </div>
     <div id="payment-details">
       <div class="field-label"><?php print t('In words'); ?>:</div>
-      <div id="invoice-total-words">Todo</div>
+      <div id="invoice-total-words"><?php print $invoice_total_words; ?></div>
       <div class="field-label"><?php print t('Payment method'); ?>:</div>
       <div id="invoice-payment-method"><?php print t('Bank transfer'); ?></div>
       <div class="field-label"><?php print t('Bank'); ?>:</div>

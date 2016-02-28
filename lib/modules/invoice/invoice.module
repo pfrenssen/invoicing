@@ -318,6 +318,7 @@ function invoice_theme($existing, $type, $theme, $path) {
  *   - 'invoice': contains the Invoice entity that will be rendered.
  */
 function template_preprocess_invoice_export(array &$vars) {
+  /** @var Invoice $invoice_entity */
   $invoice_entity = $vars['invoice'];
   $invoice = entity_metadata_wrapper('invoice', $invoice_entity);
 
@@ -378,6 +379,8 @@ function template_preprocess_invoice_export(array &$vars) {
     <style type="text/css" media="all">@import url("$css_url");</style>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
 HTML;
+
+  $vars['invoice_total_words'] = $invoice_entity->getTotalInWords();
 
   // @todo Render CSS styles inline. On Travis wkhtmltopdf cannot access these
   //   external stylesheets and hangs.
@@ -1072,6 +1075,16 @@ class Invoice extends Entity {
    */
   public function getTotal() {
     return $this->getTotals()['total'];
+  }
+
+  public function getTotalInWords() {
+    global $language;
+    $langcode = $language->language == 'en' ? 'en_GB' : $language->language;
+    $numbers_words = new Numbers_Words();
+    // @todo Implement ::toCurrency() for Bulgarian.
+    list($decimals, $fraction) = explode('.', $this->getTotal());
+    return $numbers_words->toWords($decimals, $langcode) . ' &euro; ' . $numbers_words->toWords($fraction, $langcode) . ' &cent;';
+    return $numbers_words->toCurrency($this->getTotal(), $langcode, 'EUR', '.');
   }
 
   /**

@@ -20,6 +20,7 @@ dependencies[] = invoicing_core
 dependencies[] = invoicing_dashboard
 dependencies[] = line_item
 dependencies[] = link
+dependencies[] = locale
 dependencies[] = panels
 dependencies[] = phone
 dependencies[] = user_registrationpassword

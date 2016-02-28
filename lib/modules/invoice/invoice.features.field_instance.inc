@@ -193,7 +193,7 @@ function invoice_field_default_field_instances() {
     ),
     'entity_type' => 'invoice',
     'field_name' => 'field_invoice_number',
-    'label' => 'Invoice number',
+    'label' => 'Number',
     'required' => 1,
     'settings' => array(
       'text_processing' => 0,

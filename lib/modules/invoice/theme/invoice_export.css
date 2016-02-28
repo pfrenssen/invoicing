@@ -18,21 +18,36 @@ body {
   float: left;
 }
 
-.field-items {
+.field-items,
+#client-name,
+#business-name,
+#client-accountable,
+#business-accountable,
+#invoice-tax-date,
+#invoice-place,
+#client-number,
+#business-number,
+#invoice-total-words,
+#invoice-payment-method,
+#business-bank,
+#invoice-issuer {
   margin-left: 9em;
 }
 
+/* Invoice */
+#invoice {
+}
+
+#invoice-originality {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0.25em;
+  text-transform: uppercase;
+}
+
+
 /* Business */
 #business-name {
-  margin-bottom: 0.25em;
-}
-
-#business-address .field-label {
-  display: none;
-}
-
-#business-address .field-items {
-  margin-left: 0;
 }
 
 #business-contact {
@@ -51,23 +66,17 @@ body {
   margin-top: 0;
 }
 
-#business-vat {
+#business-vat,
+#client-vat,
+#business-bic,
+#client-bic {
   margin-bottom: 1.25em;
 }
 
-/* Invoice number and date */
-#invoice {
-  padding: 1.5em 0;
-}
-
-#invoice-number .field-label,
-#invoice-date .field-label {
-  font-weight: bold;
-}
-
 /* Client */
-#client-name {
-  margin-left: 9em;
+#client-name,
+#business-name {
+  font-weight: bold;
 }
 
 #client-contact {
@@ -121,8 +130,12 @@ table th {
   font-weight: bold;
 }
 
-#terms {
+#signature {
   clear: both;
+  margin-bottom: 2em;
+}
+
+#terms {
 }
 
 #terms .field-label {
@@ -131,5 +144,4 @@ table th {
 
 #terms .field-items {
   margin-left: auto;
-  font-size: 0.95em;
 }

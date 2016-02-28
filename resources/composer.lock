@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "063773c7830a426f85d096b878c5fa32",
-    "content-hash": "05377459af4916a7d86a8fce708951e0",
+    "hash": "522bfe3d03c16fc59d19fb1ba644cf39",
+    "content-hash": "e1e52cc08baca7e63ac25b2030bf1fe8",
     "packages": [
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "7.2.4",
+            "version": "7.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "0c9608d59541e8360794f42dc3e18d64e031a39f"
+                "reference": "8b3d1ee4ca4badef2b4d0286b4518ad11456ab71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/0c9608d59541e8360794f42dc3e18d64e031a39f",
-                "reference": "0c9608d59541e8360794f42dc3e18d64e031a39f",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/8b3d1ee4ca4badef2b4d0286b4518ad11456ab71",
+                "reference": "8b3d1ee4ca4badef2b4d0286b4518ad11456ab71",
                 "shasum": ""
             },
             "require": {
@@ -68,20 +68,20 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2016-01-28 10:46:45"
+            "time": "2016-02-25 16:42:28"
         },
         {
             "name": "h4cc/wkhtmltopdf-amd64",
-            "version": "0.12.2.1",
+            "version": "0.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/h4cc/wkhtmltopdf-amd64.git",
-                "reference": "9ea617154cf88b81c7c0f5e5fa2d2f731ba0ae6c"
+                "reference": "b80ce6720349e98cebac7e8a19426455805fa7e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/h4cc/wkhtmltopdf-amd64/zipball/9ea617154cf88b81c7c0f5e5fa2d2f731ba0ae6c",
-                "reference": "9ea617154cf88b81c7c0f5e5fa2d2f731ba0ae6c",
+                "url": "https://api.github.com/repos/h4cc/wkhtmltopdf-amd64/zipball/b80ce6720349e98cebac7e8a19426455805fa7e1",
+                "reference": "b80ce6720349e98cebac7e8a19426455805fa7e1",
                 "shasum": ""
             },
             "bin": [
@@ -108,7 +108,7 @@
                 "thumbnail",
                 "wkhtmltopdf"
             ],
-            "time": "2015-01-22 08:01:37"
+            "time": "2016-02-02 19:38:55"
         },
         {
             "name": "mikehaertl/php-shellcommand",
@@ -230,6 +230,125 @@
                 "wkhtmltopdf"
             ],
             "time": "2015-10-21 11:16:53"
+        },
+        {
+            "name": "pear/math_biginteger",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/Math_BigInteger.git",
+                "reference": "012ad85ce07c7e1c68689fcb2013481270b3a8f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/Math_BigInteger/zipball/012ad85ce07c7e1c68689fcb2013481270b3a8f7",
+                "reference": "012ad85ce07c7e1c68689fcb2013481270b3a8f7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">=4.2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "suggest": {
+                "ext-bcmath": "Allows using the BCMath extension internally for computation. Faster than native implementation.",
+                "ext-gmp": "Allows using the GNU Multiple Precision extension internally for computation. If you are doing a lot of computation this is the recommended extension."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Math_": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1+"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net"
+                }
+            ],
+            "description": "Pure-PHP arbitrary precission integer arithmetic library. If GMP or BCMath are available they are used.",
+            "homepage": "https://github.com/pear/Math_BigInteger",
+            "keywords": [
+                "arbitrary",
+                "bcmath",
+                "gmp",
+                "integer",
+                "precision"
+            ],
+            "time": "2014-07-28 20:28:08"
+        },
+        {
+            "name": "pear/numbers_words",
+            "version": "v0.18.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pear/Numbers_Words.git",
+                "reference": "a1bebceb0f8d4c97059e4fe0aaa35437ad409bc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pear/Numbers_Words/zipball/a1bebceb0f8d4c97059e4fe0aaa35437ad409bc2",
+                "reference": "a1bebceb0f8d4c97059e4fe0aaa35437ad409bc2",
+                "shasum": ""
+            },
+            "require": {
+                "pear/math_biginteger": ">=1.0.2",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Numbers": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "./"
+            ],
+            "license": [
+                "PHP-3.01"
+            ],
+            "authors": [
+                {
+                    "name": "Kouber Saparev",
+                    "email": "kouber@php.net"
+                },
+                {
+                    "name": "Igor Feghali",
+                    "email": "ifeghali@php.net"
+                },
+                {
+                    "name": "Xavier Noguer",
+                    "email": "xnoguer.php@gmail.com"
+                },
+                {
+                    "name": "Hadar Porat",
+                    "email": "hpman28@gmail.com"
+                },
+                {
+                    "name": "Piotr Klaban",
+                    "email": "makler@man.torun.pl"
+                },
+                {
+                    "name": "Marcelo Subtil Marcal",
+                    "email": "msmarcal@php.net"
+                }
+            ],
+            "description": "Allows converting numbers written in arabic digits to words in several languages. You can convert an integer between -infinity and infinity.",
+            "homepage": "https://github.com/pear/Numbers_Words",
+            "keywords": [
+                "numbers"
+            ],
+            "time": "2014-11-03 10:38:38"
         }
     ],
     "packages-dev": [],

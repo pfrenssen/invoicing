@@ -94,8 +94,10 @@
         <div id="business">
           <h2><?php print t('Supplier'); ?></h2>
           <?php if ($business_name): ?>
+          <!-- @todo Change field label from Business name to Company name.
             <div class="field-label"><?php print t('Company name'); ?>:</div>
-            <div id="business-name"><?php print $business_name; ?></div>
+           -->
+            <div id="business-name"><?php print render($business_name); ?></div>
           <?php endif; ?>
           <?php if ($business_address): ?>
             <div id="business-address"><?php print render($business_address); ?></div>

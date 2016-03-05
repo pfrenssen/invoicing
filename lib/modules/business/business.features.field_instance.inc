@@ -64,7 +64,7 @@ function business_field_default_field_instances() {
         ),
       ),
       'type' => 'addressfield_standard',
-      'weight' => -3,
+      'weight' => 2,
     ),
   );
 
@@ -98,7 +98,7 @@ function business_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 2,
+      'weight' => 7,
     ),
   );
 
@@ -131,7 +131,7 @@ function business_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'email_textfield',
-      'weight' => -4,
+      'weight' => 1,
     ),
   );
 
@@ -165,7 +165,7 @@ function business_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 1,
+      'weight' => 6,
     ),
   );
 
@@ -469,7 +469,41 @@ function business_field_default_field_instances() {
         'use_tel_input' => 1,
       ),
       'type' => 'phone',
-      'weight' => -1,
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'business-business-field_business_name'.
+  $field_instances['business-business-field_business_name'] = array(
+    'bundle' => 'business',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 7,
+      ),
+    ),
+    'entity_type' => 'business',
+    'field_name' => 'field_business_name',
+    'label' => 'Business name',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 0,
     ),
   );
 
@@ -773,7 +807,7 @@ function business_field_default_field_instances() {
         'use_tel_input' => 1,
       ),
       'type' => 'phone',
-      'weight' => -2,
+      'weight' => 3,
     ),
   );
 
@@ -807,7 +841,7 @@ function business_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 0,
+      'weight' => 5,
     ),
   );
 
@@ -926,7 +960,9 @@ function business_field_default_field_instances() {
   t('Invoice address');
   t('Last name');
   t('Mobile number');
+  t('Name');
   t('Phone number');
+  t('The name of the business.');
   t('VAT number');
 
   return $field_instances;

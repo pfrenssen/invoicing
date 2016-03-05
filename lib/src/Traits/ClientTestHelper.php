@@ -1,12 +1,10 @@
 <?php
 
-/**
- * @file
- * Asserts and helper methods concerning the client module.
- */
-
 namespace Drupal\invoicing\Traits;
 
+/**
+ * Reusable test methods for testing clients.
+ */
 trait ClientTestHelper {
 
   /**

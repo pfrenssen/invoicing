@@ -88,53 +88,53 @@ function invoice_default_page_manager_pages() {
   $display->uuid = 'd2720c13-14f9-46d2-9dda-de72360541cc';
   $display->content = array();
   $display->panels = array();
-    $pane = new stdClass();
-    $pane->pid = 'new-902793e8-84b1-4b65-af58-26230e138462';
-    $pane->panel = 'middle';
-    $pane->type = 'entity_view';
-    $pane->subtype = 'client';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'view_mode' => 'default',
-      'context' => 'argument_entity_id:client_1',
-      'override_title' => 0,
-      'override_title_text' => '',
-    );
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 0;
-    $pane->locks = array();
-    $pane->uuid = '902793e8-84b1-4b65-af58-26230e138462';
-    $display->content['new-902793e8-84b1-4b65-af58-26230e138462'] = $pane;
-    $display->panels['middle'][0] = 'new-902793e8-84b1-4b65-af58-26230e138462';
-    $pane = new stdClass();
-    $pane->pid = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
-    $pane->panel = 'middle';
-    $pane->type = 'views_panes';
-    $pane->subtype = 'invoices-client';
-    $pane->shown = TRUE;
-    $pane->access = array();
-    $pane->configuration = array(
-      'context' => array(
-        0 => 'argument_entity_id:client_1',
-      ),
-    );
-    $pane->cache = array();
-    $pane->style = array(
-      'settings' => NULL,
-    );
-    $pane->css = array();
-    $pane->extras = array();
-    $pane->position = 1;
-    $pane->locks = array();
-    $pane->uuid = '744f8e6a-86ca-4abc-b7ec-c66820a576e8';
-    $display->content['new-744f8e6a-86ca-4abc-b7ec-c66820a576e8'] = $pane;
-    $display->panels['middle'][1] = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
+  $pane = new stdClass();
+  $pane->pid = 'new-902793e8-84b1-4b65-af58-26230e138462';
+  $pane->panel = 'middle';
+  $pane->type = 'entity_view';
+  $pane->subtype = 'client';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'view_mode' => 'default',
+    'context' => 'argument_entity_id:client_1',
+    'override_title' => 0,
+    'override_title_text' => '',
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 0;
+  $pane->locks = array();
+  $pane->uuid = '902793e8-84b1-4b65-af58-26230e138462';
+  $display->content['new-902793e8-84b1-4b65-af58-26230e138462'] = $pane;
+  $display->panels['middle'][0] = 'new-902793e8-84b1-4b65-af58-26230e138462';
+  $pane = new stdClass();
+  $pane->pid = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
+  $pane->panel = 'middle';
+  $pane->type = 'views_panes';
+  $pane->subtype = 'invoices-client';
+  $pane->shown = TRUE;
+  $pane->access = array();
+  $pane->configuration = array(
+    'context' => array(
+      0 => 'argument_entity_id:client_1',
+    ),
+  );
+  $pane->cache = array();
+  $pane->style = array(
+    'settings' => NULL,
+  );
+  $pane->css = array();
+  $pane->extras = array();
+  $pane->position = 1;
+  $pane->locks = array();
+  $pane->uuid = '744f8e6a-86ca-4abc-b7ec-c66820a576e8';
+  $display->content['new-744f8e6a-86ca-4abc-b7ec-c66820a576e8'] = $pane;
+  $display->panels['middle'][1] = 'new-744f8e6a-86ca-4abc-b7ec-c66820a576e8';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = 'new-902793e8-84b1-4b65-af58-26230e138462';
   $handler->conf['display'] = $display;

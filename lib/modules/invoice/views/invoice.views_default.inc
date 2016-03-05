@@ -109,11 +109,11 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
-  /* Field: Invoice: Total excluding VAT */
+  /* Field: Invoice: Total ex VAT */
   $handler->display->display_options['fields']['total_excl']['id'] = 'total_excl';
   $handler->display->display_options['fields']['total_excl']['table'] = 'invoice';
   $handler->display->display_options['fields']['total_excl']['field'] = 'total_excl';
-  /* Field: Invoice: Total including VAT */
+  /* Field: Invoice: Total */
   $handler->display->display_options['fields']['total']['id'] = 'total';
   $handler->display->display_options['fields']['total']['table'] = 'invoice';
   $handler->display->display_options['fields']['total']['field'] = 'total';
@@ -159,14 +159,14 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['bid']['field'] = 'bid';
   $handler->display->display_options['fields']['bid']['relationship'] = 'bid';
   $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
-  /* Field: Business: Label */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'business';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['relationship'] = 'bid';
-  $handler->display->display_options['fields']['name']['label'] = 'Business';
-  $handler->display->display_options['fields']['name']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['name']['alter']['path'] = 'business/[bid]';
+  /* Field: Business: Name */
+  $handler->display->display_options['fields']['field_business_name']['id'] = 'field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['table'] = 'field_data_field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['field'] = 'field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['relationship'] = 'bid';
+  $handler->display->display_options['fields']['field_business_name']['label'] = 'Business';
+  $handler->display->display_options['fields']['field_business_name']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_business_name']['alter']['path'] = 'business/[bid]';
   /* Field: Invoice: Invoice ID */
   $handler->display->display_options['fields']['iid']['id'] = 'iid';
   $handler->display->display_options['fields']['iid']['table'] = 'invoice';
@@ -200,36 +200,30 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
-  /* Field: Invoice: Total excluding VAT */
+  /* Field: Invoice: Total ex VAT */
   $handler->display->display_options['fields']['total_excl']['id'] = 'total_excl';
   $handler->display->display_options['fields']['total_excl']['table'] = 'invoice';
   $handler->display->display_options['fields']['total_excl']['field'] = 'total_excl';
-  $handler->display->display_options['fields']['total_excl']['set_precision'] = TRUE;
-  $handler->display->display_options['fields']['total_excl']['precision'] = '2';
-  $handler->display->display_options['fields']['total_excl']['separator'] = '';
-  /* Field: Invoice: Total including VAT */
+  /* Field: Invoice: Total */
   $handler->display->display_options['fields']['total']['id'] = 'total';
   $handler->display->display_options['fields']['total']['table'] = 'invoice';
   $handler->display->display_options['fields']['total']['field'] = 'total';
-  $handler->display->display_options['fields']['total']['set_precision'] = TRUE;
-  $handler->display->display_options['fields']['total']['precision'] = '2';
-  $handler->display->display_options['fields']['total']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Business: Label */
-  $handler->display->display_options['filters']['name']['id'] = 'name';
-  $handler->display->display_options['filters']['name']['table'] = 'business';
-  $handler->display->display_options['filters']['name']['field'] = 'name';
-  $handler->display->display_options['filters']['name']['relationship'] = 'bid';
-  $handler->display->display_options['filters']['name']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['name']['expose']['operator_id'] = 'name_op';
-  $handler->display->display_options['filters']['name']['expose']['label'] = 'Business';
-  $handler->display->display_options['filters']['name']['expose']['operator'] = 'name_op';
-  $handler->display->display_options['filters']['name']['expose']['identifier'] = 'name';
-  $handler->display->display_options['filters']['name']['expose']['remember_roles'] = array(
-    2 => '2',
+  /* Filter criterion: Business: Name (field_business_name) */
+  $handler->display->display_options['filters']['field_business_name_value']['id'] = 'field_business_name_value';
+  $handler->display->display_options['filters']['field_business_name_value']['table'] = 'field_data_field_business_name';
+  $handler->display->display_options['filters']['field_business_name_value']['field'] = 'field_business_name_value';
+  $handler->display->display_options['filters']['field_business_name_value']['relationship'] = 'bid';
+  $handler->display->display_options['filters']['field_business_name_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_business_name_value']['expose']['operator_id'] = 'field_business_name_value_op';
+  $handler->display->display_options['filters']['field_business_name_value']['expose']['label'] = 'Business';
+  $handler->display->display_options['filters']['field_business_name_value']['expose']['operator'] = 'field_business_name_value_op';
+  $handler->display->display_options['filters']['field_business_name_value']['expose']['identifier'] = 'field_business_name_value';
+  $handler->display->display_options['filters']['field_business_name_value']['expose']['remember_roles'] = array(
     1 => 0,
+    2 => '2',
     3 => 0,
     4 => 0,
     5 => 0,
@@ -266,20 +260,14 @@ function invoice_views_default_views() {
   $handler->display->display_options['fields']['field_invoice_status']['id'] = 'field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['table'] = 'field_data_field_invoice_status';
   $handler->display->display_options['fields']['field_invoice_status']['field'] = 'field_invoice_status';
-  /* Field: Invoice: Total excluding VAT */
+  /* Field: Invoice: Total ex VAT */
   $handler->display->display_options['fields']['total_excl']['id'] = 'total_excl';
   $handler->display->display_options['fields']['total_excl']['table'] = 'invoice';
   $handler->display->display_options['fields']['total_excl']['field'] = 'total_excl';
-  $handler->display->display_options['fields']['total_excl']['set_precision'] = TRUE;
-  $handler->display->display_options['fields']['total_excl']['precision'] = '2';
-  $handler->display->display_options['fields']['total_excl']['separator'] = '';
-  /* Field: Invoice: Total including VAT */
+  /* Field: Invoice: Total */
   $handler->display->display_options['fields']['total']['id'] = 'total';
   $handler->display->display_options['fields']['total']['table'] = 'invoice';
   $handler->display->display_options['fields']['total']['field'] = 'total';
-  $handler->display->display_options['fields']['total']['set_precision'] = TRUE;
-  $handler->display->display_options['fields']['total']['precision'] = '2';
-  $handler->display->display_options['fields']['total']['separator'] = '';
   $handler->display->display_options['defaults']['arguments'] = FALSE;
   /* Contextual filter: Invoice: Client (field_invoice_client:target_id) */
   $handler->display->display_options['arguments']['field_invoice_client_target_id']['id'] = 'field_invoice_client_target_id';

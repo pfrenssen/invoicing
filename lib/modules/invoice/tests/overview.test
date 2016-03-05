@@ -232,7 +232,7 @@ class InvoiceOverviewTestCase extends InvoicingIntegrationTestCase {
       $testcases = array(
         array(
           'message' => 'The first column contains the business name.',
-          'expected' => $business->name,
+          'expected' => $business->getName(),
           'actual' => (string) $tablerow->td[0]->a,
         ),
         array(

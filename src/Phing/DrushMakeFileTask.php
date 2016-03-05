@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Invoicing\build\Phing\DrushMakeFileTask.
- */
-
 namespace Invoicing\Phing;
 
 use Symfony\Component\Yaml\Dumper;

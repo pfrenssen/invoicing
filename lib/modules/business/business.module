@@ -23,7 +23,6 @@ function business_entity_info() {
     'entity keys' => array(
       'id' => 'bid',
       'bundle' => 'type',
-      'label' => 'name',
     ),
     'bundle keys' => array(
       'bundle' => 'type',
@@ -93,10 +92,6 @@ function business_entity_property_info_alter(&$info) {
   $properties['type']['required'] = TRUE;
   $properties['type']['setter callback'] = 'entity_property_verbatim_set';
   $properties['type']['setter permission'] = 'administer businesses';
-
-  $properties['name']['description'] = t('The name of the business.');
-  $properties['name']['required'] = TRUE;
-  $properties['name']['setter callback'] = 'entity_property_verbatim_set';
 
   $properties['created']['label'] = t('Date created');
   $properties['created']['description'] = t('The date the business was created.');
@@ -212,27 +207,6 @@ function business_permission() {
   }
 
   return $permissions;
-}
-
-/**
- * Implements hook_field_extra_fields().
- */
-function business_field_extra_fields() {
-  $extra_fields = array();
-
-  foreach (business_get_types() as $business_type) {
-    $extra_fields['business'][$business_type->type] = array(
-      'form' => array(
-        'name' => array(
-          'label' => t('Name'),
-          'description' => t('The name of the business'),
-          'weight' => -5,
-        ),
-      ),
-    );
-  }
-
-  return $extra_fields;
 }
 
 /**
@@ -488,7 +462,26 @@ function business_uri(Business $business) {
  * @see business_menu()
  */
 function business_page_title(Business $business) {
-  return $business->name;
+  return $business->getName();
+}
+
+/**
+ * Checks if the given business name is still available.
+ *
+ * @param string $name
+ *   The business name to check.
+ *
+ * @return bool
+ *   TRUE is the name is still available.
+ */
+function business_name_available($name) {
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'business')
+    ->fieldCondition('field_business_name', 'value', $name);
+  $result = $query->execute();
+
+  return empty($result['business']);
 }
 
 /**
@@ -658,7 +651,7 @@ function business_add_to_user(Business $business, \stdClass $account) {
  * @see entity_label()
  */
 function business_label(Business $entity, $entity_type) {
-  return $entity->name;
+  return $entity->getName();
 }
 
 /**
@@ -669,6 +662,7 @@ function business_label(Business $entity, $entity_type) {
  * @property array $field_business_email
  * @property array $field_business_iban
  * @property array $field_business_mobile
+ * @property array $field_business_name
  * @property array $field_business_phone
  * @property array $field_business_vat
  */
@@ -683,11 +677,6 @@ class Business extends Entity {
    * The type of this business.
    */
   public $type;
-
-  /**
-   * The name of the business.
-   */
-  public $name;
 
   /**
    * The Unix timestamp when the business was created.
@@ -710,6 +699,16 @@ class Business extends Entity {
     $this->changed = REQUEST_TIME;
 
     return parent::save();
+  }
+
+  /**
+   * Returns the name of the business.
+   *
+   * @return string
+   *   The business name.
+   */
+  public function getName() {
+    return $this->wrapper()->field_business_name->value();
   }
 
 }

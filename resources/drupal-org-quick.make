@@ -1,7 +1,7 @@
 api = 2
 core = 7.x
 
-projects[drupal][version] = 7.41
+projects[drupal][version] = 7.43
 
 ; Recursive module dependencies of installation profile are not enabled in
 ; DrupalWebTestCase::setUp.
@@ -99,7 +99,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 ; https://drupal.org/node/2209127
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
-projects[features][version] = 2.4
+projects[features][version] = 2.7
 projects[features][subdir] = contrib
 
 projects[i18n][version] = 1.13

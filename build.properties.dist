@@ -244,7 +244,7 @@ drush.verbose = FALSE
 phpcs.verbose = 0
 
 # Development / testing modules to download.
-development.modules.download = devel
+development.modules.download = devel maillog
 
 # Development / testing modules to enable.
 development.modules.enable = devel field_ui maillog simpletest views_ui

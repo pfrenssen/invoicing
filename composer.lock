@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "393b2df3d35842b4ff16934c3993bd63",
-    "content-hash": "ae5878d10934d1c02bea904d693966fc",
+    "hash": "481aafb217f3212a9f7843d4a6e66078",
+    "content-hash": "d485110450cabd64a1bbcdeef593e3de",
     "packages": [
         {
             "name": "behat/behat",
@@ -764,12 +764,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klausi/coder.git",
-                "reference": "74cd8596c7e07480a0114c3da3929ab2a52795e9"
+                "reference": "06ea52ef66833590df592e9fdb23393352caf5d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klausi/coder/zipball/74cd8596c7e07480a0114c3da3929ab2a52795e9",
-                "reference": "74cd8596c7e07480a0114c3da3929ab2a52795e9",
+                "url": "https://api.github.com/repos/klausi/coder/zipball/06ea52ef66833590df592e9fdb23393352caf5d1",
+                "reference": "06ea52ef66833590df592e9fdb23393352caf5d1",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +792,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-02-26 18:25:34"
+            "time": "2016-03-05 12:54:19"
         },
         {
             "name": "drupal/drupal-driver",
@@ -917,7 +917,7 @@
             "version": "1.0",
             "source": {
                 "type": "git",
-                "url": "http://git.drupal.org/project/phingdrushtask.git",
+                "url": "https://git.drupal.org/project/phingdrushtask.git",
                 "reference": "7.x-1.0"
             },
             "type": "library",

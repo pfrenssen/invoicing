@@ -58,16 +58,6 @@ function business_edit_form($form, &$form_state, Business $business) {
     $business = $form_state['business'];
   }
 
-  // Business name.
-  $form['name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Business name'),
-    '#required' => TRUE,
-    '#default_value' => !empty($business->name) ? $business->name : '',
-    '#maxlength' => 255,
-    '#weight' => -5,
-  );
-
   // Attach all form elements for the fields.
   field_attach_form('business', $business, $form, $form_state, entity_language('business', $business));
 

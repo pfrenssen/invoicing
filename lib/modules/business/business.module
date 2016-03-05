@@ -466,6 +466,25 @@ function business_page_title(Business $business) {
 }
 
 /**
+ * Checks if the given business name is still available.
+ *
+ * @param string $name
+ *   The business name to check.
+ *
+ * @return bool
+ *   TRUE is the name is still available.
+ */
+function business_name_available($name) {
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'business')
+    ->fieldCondition('field_business_name', 'value', $name);
+  $result = $query->execute();
+
+  return empty($result['business']);
+}
+
+/**
  * Creates a business type.
  *
  * @param string $type

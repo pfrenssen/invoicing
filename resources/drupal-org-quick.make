@@ -99,7 +99,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 ; https://drupal.org/node/2209127
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
-projects[features][version] = 2.4
+projects[features][version] = 2.7
 projects[features][subdir] = contrib
 
 ; The dev branch has been pinned at the time the below patch was created.

@@ -74,7 +74,7 @@ function business_drush_command() {
 function drush_business_create($business_name, $user_name) {
   if ($user = user_load_by_name($user_name)) {
     $values = [
-      'name' => $business_name,
+      'field_business_name' => $business_name,
       'field_business_email' => drush_get_option('email'),
       'field_business_address' => [
         'country' => drush_get_option('country'),

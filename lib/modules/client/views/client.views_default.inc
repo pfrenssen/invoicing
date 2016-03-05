@@ -142,14 +142,14 @@ function client_views_default_views() {
   $handler->display->display_options['fields']['bid']['field'] = 'bid';
   $handler->display->display_options['fields']['bid']['relationship'] = 'bid';
   $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
-  /* Field: Business: Label */
-  $handler->display->display_options['fields']['name_1']['id'] = 'name_1';
-  $handler->display->display_options['fields']['name_1']['table'] = 'business';
-  $handler->display->display_options['fields']['name_1']['field'] = 'name';
-  $handler->display->display_options['fields']['name_1']['relationship'] = 'bid';
-  $handler->display->display_options['fields']['name_1']['label'] = 'Business';
-  $handler->display->display_options['fields']['name_1']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['name_1']['alter']['path'] = 'business/[bid]';
+  /* Field: Business: Business name */
+  $handler->display->display_options['fields']['field_business_name']['id'] = 'field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['table'] = 'field_data_field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['field'] = 'field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['relationship'] = 'bid';
+  $handler->display->display_options['fields']['field_business_name']['label'] = 'Business';
+  $handler->display->display_options['fields']['field_business_name']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_business_name']['alter']['path'] = 'business/[bid]';
   /* Field: Client: Client ID */
   $handler->display->display_options['fields']['cid']['id'] = 'cid';
   $handler->display->display_options['fields']['cid']['table'] = 'client';

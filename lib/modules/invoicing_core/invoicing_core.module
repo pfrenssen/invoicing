@@ -57,13 +57,13 @@ function invoicing_core_form_user_register_form_alter(&$form, &$form_state, $for
  */
 function invoicing_core_form_user_register_form_validate($form, &$form_state) {
   // Check if the business name is already taken.
-  $business_exists = db_select('business', 'b')
-    ->condition('b.name', $form_state['values']['business'])
-    ->countQuery()
-    ->execute()
-    ->fetchField();
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'business')
+    ->fieldCondition('field_business_name', 'value', $form_state['values']['business']);
+  $result = $query->execute();
 
-  if ($business_exists) {
+  if (!empty($result['business'])) {
     form_set_error('business', t('The company name you have chosen is no longer available. Please choose a different name.'));
   }
 }

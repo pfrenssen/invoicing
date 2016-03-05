@@ -29,10 +29,13 @@ class InvoicingContext extends RawDrupalContext {
    * @afterUserCreate
    */
   public function createBusinessForBusinessOwner(AfterUserCreateScope $scope) {
-    $user = user_load($scope->getEntity()->uid);
-    $business = $this->createBusiness();
-    $business->save();
-    $this->addBusinessToUser($business, $user);
+    $entity = $scope->getEntity();
+    if ($entity->role === 'business owner') {
+      $user = user_load($entity->uid);
+      $business = $this->createBusiness();
+      $business->save();
+      $this->addBusinessToUser($business, $user);
+    }
   }
 
 }

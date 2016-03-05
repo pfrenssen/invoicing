@@ -107,7 +107,7 @@ trait BusinessTestHelper {
     $query
       ->entityCondition('entity_type', 'business')
       ->entityCondition('bundle', 'business')
-      ->propertyCondition('name', $values['name'])
+      ->fieldCondition('field_business_name', 'value', $values['field_business_name'])
       ->fieldCondition('field_business_email', 'email', $values['field_business_email'])
       ->range(0, 1);
     $result = $query->execute();
@@ -127,7 +127,7 @@ trait BusinessTestHelper {
    */
   function randomBusinessValues() {
     return array(
-      'name' => $this->randomName(),
+      'field_business_name' => $this->randomString(),
       'field_business_address' => $this->randomAddressField(),
       'field_business_bic' => $this->randomString(),
       'field_business_email' => $this->randomEmail(),
@@ -147,6 +147,7 @@ trait BusinessTestHelper {
   public function randomBusinessFieldValues() {
     $values = array();
 
+    $values['field_business_name'][LANGUAGE_NONE][0]['value'] = $this->randomString();
     $values['field_business_address'][LANGUAGE_NONE][0] = $this->randomAddressField();
     $values['field_business_bic'][LANGUAGE_NONE][0]['value'] = $this->randomString();
     $values['field_business_email'][LANGUAGE_NONE][0]['email'] = $this->randomEmail();
@@ -171,7 +172,6 @@ trait BusinessTestHelper {
    */
   protected function randomBusinessPropertyValues() {
     return array(
-      'name' => $this->randomString(),
       'type' => $this->randomName(),
       'created' => rand(0, 2000000000),
       'changed' => rand(0, 2000000000),
@@ -193,7 +193,7 @@ trait BusinessTestHelper {
    */
   public function convertBusinessValuesToFormPostValues(array $values) {
     return array(
-      'name' => $values['name'],
+      'field_business_name[und][0][value]' => $values['field_business_name'],
       'field_business_email[und][0][email]' => $values['field_business_email'],
       // @todo Support other countries in addition to Belgium.
       'field_business_address[und][0][country]' => 'BE',

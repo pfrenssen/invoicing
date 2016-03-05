@@ -96,6 +96,7 @@ function business_edit_form_validate($form, &$form_state) {
  * Saves a business and outputs a status message to the user.
  */
 function business_edit_form_submit($form, &$form_state) {
+  /** @var \Business $business */
   $business = $form_state['business'];
   entity_form_submit_build_entity('business', $business, $form, $form_state);
 

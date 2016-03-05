@@ -38,11 +38,11 @@ function business_views_default_views() {
   $handler->display->display_options['fields']['bid']['field'] = 'bid';
   $handler->display->display_options['fields']['bid']['exclude'] = TRUE;
   /* Field: Business: Name */
-  $handler->display->display_options['fields']['name']['id'] = 'name';
-  $handler->display->display_options['fields']['name']['table'] = 'business';
-  $handler->display->display_options['fields']['name']['field'] = 'name';
-  $handler->display->display_options['fields']['name']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['name']['alter']['path'] = 'business/[bid]';
+  $handler->display->display_options['fields']['field_business_name']['id'] = 'field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['table'] = 'field_data_field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['field'] = 'field_business_name';
+  $handler->display->display_options['fields']['field_business_name']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_business_name']['alter']['path'] = 'business/[bid]';
   /* Field: Business: Email address */
   $handler->display->display_options['fields']['field_business_email']['id'] = 'field_business_email';
   $handler->display->display_options['fields']['field_business_email']['table'] = 'field_data_field_business_email';

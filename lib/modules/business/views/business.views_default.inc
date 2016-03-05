@@ -64,10 +64,10 @@ function business_views_default_views() {
   $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['label'] = 'Actions';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<a href="/business/[bid]/edit">edit</a>';
-  /* Sort criterion: Business: Name */
-  $handler->display->display_options['sorts']['name']['id'] = 'name';
-  $handler->display->display_options['sorts']['name']['table'] = 'business';
-  $handler->display->display_options['sorts']['name']['field'] = 'name';
+  /* Sort criterion: Business: Name (field_business_name) */
+  $handler->display->display_options['sorts']['field_business_name_value']['id'] = 'field_business_name_value';
+  $handler->display->display_options['sorts']['field_business_name_value']['table'] = 'field_data_field_business_name';
+  $handler->display->display_options['sorts']['field_business_name_value']['field'] = 'field_business_name_value';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_businesses');

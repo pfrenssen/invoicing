@@ -478,7 +478,7 @@ function business_field_default_field_instances() {
     'bundle' => 'business',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'The name of the business.',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -490,7 +490,7 @@ function business_field_default_field_instances() {
     ),
     'entity_type' => 'business',
     'field_name' => 'field_business_name',
-    'label' => 'Name',
+    'label' => 'Business name',
     'required' => 1,
     'settings' => array(
       'text_processing' => 0,

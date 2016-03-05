@@ -46,7 +46,7 @@
   <body>
     <div id="first-column">
       <?php if ($business_name): ?>
-        <h2 id="business-name"><?php print $business_name; ?></h2>
+        <h2 id="business-name"><?php print render($business_name); ?></h2>
       <?php endif; ?>
       <?php if ($business_address): ?>
         <div id="business-address"><?php print render($business_address); ?></div>

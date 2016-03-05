@@ -6,6 +6,7 @@ package = Invoicing
 dependencies[] = addressfield
 dependencies[] = email
 dependencies[] = entity
+dependencies[] = entity_translation
 dependencies[] = entityreference
 dependencies[] = entityreference_unique
 dependencies[] = features

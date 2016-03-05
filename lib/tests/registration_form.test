@@ -78,7 +78,7 @@ class InvoicingRegistrationFormTestCase extends InvoicingIntegrationTestCase {
     $businesses_reference = field_get_items('user', $user, 'field_user_businesses');
     $business_reference = reset($businesses_reference);
     $business = business_load($business_reference['target_id']);
-    $this->assertEqual($business->name, $values['business'], 'The correct business is created and associated with the user.');
+    $this->assertEqual($business->getName(), $values['business'], 'The correct business is created and associated with the user.');
 
     // Activate the account by clicking on the link sent in the email.
     $captured_emails = variable_get('drupal_test_email_collector', array());

@@ -462,7 +462,7 @@ function business_uri(Business $business) {
  * @see business_menu()
  */
 function business_page_title(Business $business) {
-  return $business->name;
+  return $business->getName();
 }
 
 /**
@@ -632,7 +632,7 @@ function business_add_to_user(Business $business, \stdClass $account) {
  * @see entity_label()
  */
 function business_label(Business $entity, $entity_type) {
-  return $entity->name;
+  return $entity->getName();
 }
 
 /**
@@ -680,6 +680,16 @@ class Business extends Entity {
     $this->changed = REQUEST_TIME;
 
     return parent::save();
+  }
+
+  /**
+   * Returns the name of the business.
+   *
+   * @return string
+   *   The business name.
+   */
+  public function getName() {
+    return $this->wrapper()->field_business_name->value();
   }
 
 }

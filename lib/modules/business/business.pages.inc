@@ -34,7 +34,7 @@ function business_add_page($business_type) {
  * @see business_edit_form()
  */
 function business_edit_page(Business $business) {
-  drupal_set_title(t('Edit business %business', array('%business' => $business->name)), PASS_THROUGH);
+  drupal_set_title(t('Edit business %business', array('%business' => $business->getName())), PASS_THROUGH);
 
   return drupal_get_form('business_edit_form', $business);
 }
@@ -114,12 +114,12 @@ function business_edit_form_submit($form, &$form_state) {
   if (business_save($business)) {
     $message = $operation == 'add' ? 'New business %name has been added.' : 'The changes have been saved.';
     // @codingStandardsIgnoreStart
-    drupal_set_message(t($message, array('%name' => $business->name)));
+    drupal_set_message(t($message, array('%name' => $business->getName())));
     // @codingStandardsIgnoreEnd
   }
   else {
     drupal_set_message(t('The business could not be saved.'), 'error');
-    watchdog('business', 'Business %name could not be saved.', array('%name' => $business->name), WATCHDOG_ERROR);
+    watchdog('business', 'Business %name could not be saved.', array('%name' => $business->getName()), WATCHDOG_ERROR);
   }
 }
 
@@ -149,7 +149,7 @@ function business_edit_form_delete_submit($form, &$form_state) {
 function business_delete_confirm_form($form, &$form_state, Business $business) {
   $form_state['business'] = $business;
   return confirm_form($form,
-    t('Are you sure you want to delete %name?', array('%name' => $business->name)),
+    t('Are you sure you want to delete %name?', array('%name' => $business->getName())),
     'business/' . $business->bid,
     t('This action cannot be undone.'),
     t('Delete'),
@@ -167,7 +167,7 @@ function business_delete_confirm_form($form, &$form_state, Business $business) {
 function business_delete_confirm_form_submit($form, &$form_state) {
   $business = $form_state['business'];
   business_delete($business);
-  drupal_set_message(t('Business %name has been deleted.', array('%name' => $business->name)));
+  drupal_set_message(t('Business %name has been deleted.', array('%name' => $business->getName())));
   $form_state['redirect'] = '<front>';
 }
 
@@ -175,7 +175,7 @@ function business_delete_confirm_form_submit($form, &$form_state) {
  * Page callback for the business page.
  */
 function business_detail_page($business) {
-  drupal_set_title($business->name);
+  drupal_set_title($business->getName());
   $output = entity_view($business->type, array($business));
 
   // Prevent the business title from being rendered twice.

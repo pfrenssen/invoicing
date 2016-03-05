@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Invoicing\build\Phing\PhpCodeSnifferConfigurationTask.
- */
-
 namespace Invoicing\Phing;
 
 require_once 'phing/Task.php';

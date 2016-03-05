@@ -1,12 +1,10 @@
 <?php
 
-/**
- * @file
- * Asserts and helper methods concerning the line item module.
- */
-
 namespace Drupal\invoicing\Traits;
 
+/**
+ * Reusable test methods for testing line items.
+ */
 trait LineItemTestHelper {
 
   /**

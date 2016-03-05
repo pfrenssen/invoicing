@@ -1,12 +1,10 @@
 <?php
 
-/**
- * @file
- * Asserts and helper methods to use in testing.
- */
-
 namespace Drupal\invoicing\Traits;
 
+/**
+ * Reusable test methods.
+ */
 trait BaseTestHelper {
 
   /**

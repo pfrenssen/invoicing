@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\invoicing\Context\InvoicingContext.
- */
-
 namespace Drupal\invoicing\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;

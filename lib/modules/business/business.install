@@ -27,13 +27,6 @@ function business_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'name' => array(
-        'description' => 'The name of the business.',
-        'type' => 'varchar',
-        'length' => 255,
-        'not null' => TRUE,
-        'default' => '',
-      ),
       'created' => array(
         'description' => 'The Unix timestamp when the business was created.',
         'type' => 'int',

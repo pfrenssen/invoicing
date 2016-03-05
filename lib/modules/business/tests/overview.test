@@ -53,7 +53,7 @@ class BusinessOverviewTestCase extends InvoicingIntegrationTestCase {
       // collation, while the database can be configured with an arbitrary
       // collation.
       $name = $this->randomName(4) . $this->randomString();
-      $business = $this->createBusiness(array('name' => $name));
+      $business = $this->createBusiness(array('field_business_name' => $name));
       $business->save();
       $this->businesses[$business->bid] = $business;
     }
@@ -78,7 +78,7 @@ class BusinessOverviewTestCase extends InvoicingIntegrationTestCase {
     // Check that the businesses are present in the overview in alphabetical
     // order.
     uasort($this->businesses, function ($a, $b) {
-      return strcasecmp($a->name, $b->name);
+      return strcasecmp($a->field_business_name[LANGUAGE_NONE][0]['value'], $b->field_business_name[LANGUAGE_NONE][0]['value']);
     });
 
     // Loop over the displayed table rows and compare them with each business in
@@ -96,7 +96,7 @@ class BusinessOverviewTestCase extends InvoicingIntegrationTestCase {
       $testcases = array(
         array(
           'message' => 'The first column contains the business name.',
-          'expected' => $business->name->value(),
+          'expected' => $business->field_business_name->value(),
           'actual' => (string) $tablerow->td[0]->a,
         ),
         array(

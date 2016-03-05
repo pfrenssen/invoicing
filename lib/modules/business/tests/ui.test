@@ -51,7 +51,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     // Check that error messages are displayed about required fields when
     // creating a new business.
     $this->drupalPost('business/add', array(), t('Save'));
-    $required_fields = array('name' => t('Business name'));
+    $required_fields = array('field_business_name[und][0][value]' => t('Business name'));
     $this->assertRequiredFieldMessages($required_fields);
 
     // Check form validation errors.
@@ -71,7 +71,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     // Fill in all the fields and check if they are saved correctly.
     $values = $this->randomBusinessValues();
     $business = $this->createUiBusiness($values);
-    $messages = array('status' => array(t('New business %name has been added.', array('%name' => $values['name']))));
+    $messages = array('status' => array(t('New business %name has been added.', array('%name' => $values['field_business_name']))));
     $this->assertStatusMessages($messages);
     $this->assertBusinessTableNotEmpty('The business database table is no longer empty after creating a business.');
     $this->assertBusinessProperties($business, $values, 'The business has been correctly saved to the database.');
@@ -88,7 +88,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     $new_values = $this->randomBusinessValues();
     $this->drupalPost('business/' . $business->bid . '/edit', $this->convertBusinessValuesToFormPostValues($new_values), t('Save'));
     $business = business_load($business->bid, TRUE);
-    $this->assertRaw(t('The changes have been saved.', array('%name' => $values['name'])), 'A message is shown informing the user that the business has been edited.');
+    $this->assertRaw(t('The changes have been saved.', array('%name' => $values['field_business_name'])), 'A message is shown informing the user that the business has been edited.');
     $this->assertBusinessProperties($business, $new_values, 'The updated business has been correctly saved to the database.');
 
     // Check that the user is redirected to the confirmation page when clicking

@@ -117,9 +117,9 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
     $this->assertFieldById('edit-field-user-businesses-und-0-target-id', '', 'The field_user_businesses is shown on the page.');
 
     // Add the businesses to the user.
-    $this->drupalPost(NULL, array('field_user_businesses[und][0][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
+    $this->drupalPost(NULL, array('field_user_businesses[und][0][target_id]' => $business1->getName() . ' (' . $business1->bid . ')'), t('Add another item'));
     $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a second business is shown on the page.');
-    $this->drupalPost(NULL, array('field_user_businesses[und][1][target_id]' => $business2->name . ' (' . $business2->bid . ')'), t('Add another item'));
+    $this->drupalPost(NULL, array('field_user_businesses[und][1][target_id]' => $business2->getName() . ' (' . $business2->bid . ')'), t('Add another item'));
     $this->assertFieldById('edit-field-user-businesses-und-1-target-id', '', 'The field_user_businesses for a third business is shown on the page.');
     $this->drupalPost(NULL, array(), t('Save'));
     $this->assertRaw('The changes have been saved.', 'The user was saved successfully.');
@@ -131,7 +131,7 @@ class BusinessUITestCase extends InvoicingIntegrationTestCase {
 
     // Check that a validation error is displayed if a business is added twice
     // to the same user.
-    $this->drupalPost(NULL, array('field_user_businesses[und][2][target_id]' => $business1->name . ' (' . $business1->bid . ')'), t('Add another item'));
+    $this->drupalPost(NULL, array('field_user_businesses[und][2][target_id]' => $business1->getName() . ' (' . $business1->bid . ')'), t('Add another item'));
     $this->drupalPost(NULL, array(), t('Save'));
     // @todo Replace this with $this->assertFieldValidationFailed() and
     //   $this->assertStatusMessages() when we are using traits.

@@ -41,6 +41,53 @@ function invoicing_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'entity_translation_entity_types';
+  $strongarm->value = array(
+    'business' => 'business',
+    'client' => 0,
+    'invoice' => 0,
+    'node' => 0,
+    'user' => 0,
+  );
+  $export['entity_translation_entity_types'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'entity_translation_revision_enabled';
+  $strongarm->value = TRUE;
+  $export['entity_translation_revision_enabled'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'entity_translation_settings_business__business';
+  $strongarm->value = array(
+    'default_language' => 'xx-et-default',
+    'hide_language_selector' => 1,
+    'exclude_language_none' => 0,
+    'lock_language' => 0,
+    'shared_fields_original_only' => 1,
+  );
+  $export['entity_translation_settings_business__business'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'entity_translation_shared_labels';
+  $strongarm->value = 1;
+  $export['entity_translation_shared_labels'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'entity_translation_workflow_enabled';
+  $strongarm->value = 0;
+  $export['entity_translation_workflow_enabled'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'file_default_scheme';
   $strongarm->value = 'private';
   $export['file_default_scheme'] = $strongarm;
@@ -117,6 +164,11 @@ function invoicing_core_strongarm() {
       ),
       'file' => 'includes/locale.inc',
     ),
+    'language-default' => array(
+      'callbacks' => array(
+        'language' => 'language_from_default',
+      ),
+    ),
   );
   $export['language_negotiation_language_content'] = $strongarm;
 
@@ -148,7 +200,7 @@ function invoicing_core_strongarm() {
   $strongarm->name = 'language_types';
   $strongarm->value = array(
     'language' => TRUE,
-    'language_content' => FALSE,
+    'language_content' => TRUE,
     'language_url' => FALSE,
   );
   $export['language_types'] = $strongarm;
@@ -156,9 +208,50 @@ function invoicing_core_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
+  $strongarm->name = 'locale_field_language_fallback';
+  $strongarm->value = 1;
+  $export['locale_field_language_fallback'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
   $strongarm->name = 'locale_language_negotiation_url_part';
   $strongarm->value = '0';
   $export['locale_language_negotiation_url_part'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'locale_language_providers_weight_language';
+  $strongarm->value = array(
+    'locale-url' => '-8',
+    'locale-session' => '-6',
+    'locale-user' => '-4',
+    'locale-browser' => '-2',
+    'language-default' => '10',
+  );
+  $export['locale_language_providers_weight_language'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'locale_language_providers_weight_language_content';
+  $strongarm->value = array(
+    'locale-url' => '-8',
+    'locale-session' => '-6',
+    'locale-user' => '-4',
+    'locale-browser' => '-2',
+    'locale-interface' => '8',
+    'language-default' => '10',
+  );
+  $export['locale_language_providers_weight_language_content'] = $strongarm;
+
+  $strongarm = new stdClass();
+  $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
+  $strongarm->api_version = 1;
+  $strongarm->name = 'translation_language_type';
+  $strongarm->value = 'language_content';
+  $export['translation_language_type'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

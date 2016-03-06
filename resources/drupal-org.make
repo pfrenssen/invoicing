@@ -136,14 +136,14 @@ projects[i18n][subdir] = contrib
 
 ; The dev branch has been pinned at the time the below patch was created.
 projects[inline_entity_form][download][type] = git
-projects[inline_entity_form][download][revision] = 887eec888030a43daaa7265809c105663baa3ff8
+projects[inline_entity_form][download][revision] = 8d8ee06592d991
 projects[inline_entity_form][download][branch] = 7.x-1.x
 projects[inline_entity_form][subdir] = contrib
 
 ; Issue #2134035: Allow to add existing entities using the single value field
 ; widget.
-; https://drupal.org/node/2134035
-projects[inline_entity_form][patch][] = http://www.drupal.org/files/issues/inline_entity_form-allow-to-add-existing-2134035-52.patch
+; https://www.drupal.org/node/2134035
+projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/inline_entity_form-allow-to-add-existing-2134035-76.patch
 
 projects[ief_autocomplete][type] = module
 projects[ief_autocomplete][download][type] = git

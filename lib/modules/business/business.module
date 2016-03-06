@@ -32,6 +32,15 @@ function business_entity_info() {
     'uri callback' => 'entity_class_uri',
     'access callback' => 'business_access',
     'module' => 'business',
+    'translation' => array(
+      'entity_translation' => array(
+        'class' => 'EntityTranslationBusinessHandler',
+        'default settings' => array(
+          'default_language' => LANGUAGE_NONE,
+          'hide_language_selector' => TRUE,
+        ),
+      ),
+    ),
   );
 
   // Add bundle info but bypass entity_load() as we cannot use it here.
@@ -709,6 +718,13 @@ class Business extends Entity {
    */
   public function getName() {
     return $this->wrapper()->field_business_name->value();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function defaultUri() {
+    return array('path' => 'business/' . $this->identifier());
   }
 
 }

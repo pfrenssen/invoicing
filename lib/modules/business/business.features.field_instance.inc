@@ -13,16 +13,7 @@ function business_field_default_field_instances() {
   // Exported field_instance: 'business-business-field_business_address'.
   $field_instances['business-business-field_business_address'] = array(
     'bundle' => 'business',
-    'default_value' => array(
-      0 => array(
-        'element_key' => 'business|business|field_business_address|und|0',
-        'thoroughfare' => '',
-        'premise' => '',
-        'postal_code' => '',
-        'locality' => '',
-        'country' => 'BE',
-      ),
-    ),
+    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -44,6 +35,7 @@ function business_field_default_field_instances() {
     'label' => 'Invoice address',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -88,6 +80,7 @@ function business_field_default_field_instances() {
     'label' => 'BIC number',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -122,6 +115,7 @@ function business_field_default_field_instances() {
     'label' => 'Email address',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -155,6 +149,7 @@ function business_field_default_field_instances() {
     'label' => 'IBAN number',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -455,6 +450,7 @@ function business_field_default_field_instances() {
         'enable_default_country' => 1,
       ),
       'enable_extension' => 0,
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -493,6 +489,7 @@ function business_field_default_field_instances() {
     'label' => 'Business name',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -793,6 +790,7 @@ function business_field_default_field_instances() {
         'enable_default_country' => 1,
       ),
       'enable_extension' => 0,
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -831,6 +829,7 @@ function business_field_default_field_instances() {
     'label' => 'VAT number',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -867,6 +866,7 @@ function business_field_default_field_instances() {
     'label' => 'Businesses',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'user_register_form' => 0,
     ),
     'widget' => array(
@@ -902,6 +902,7 @@ function business_field_default_field_instances() {
     'label' => 'First name',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 1,
     ),
@@ -936,6 +937,7 @@ function business_field_default_field_instances() {
     'label' => 'Last name',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => 1,
     ),
@@ -953,6 +955,7 @@ function business_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('BIC number');
+  t('Business name');
   t('Businesses');
   t('Email address');
   t('First name');
@@ -960,9 +963,7 @@ function business_field_default_field_instances() {
   t('Invoice address');
   t('Last name');
   t('Mobile number');
-  t('Name');
   t('Phone number');
-  t('The name of the business.');
   t('VAT number');
 
   return $field_instances;

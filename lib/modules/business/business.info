@@ -41,6 +41,7 @@ features[field_instance][] = user-user-field_user_first_name
 features[field_instance][] = user-user-field_user_last_name
 features[views_view][] = businesses
 
+files[] = includes/translation.handler.business.inc
 files[] = tests/crud.test
 files[] = tests/entity.test
 files[] = tests/overview.test

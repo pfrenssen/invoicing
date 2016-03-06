@@ -119,6 +119,7 @@ function invoicing_install() {
     'create new line items',
     'create new tax rates',
     'edit own businesses',
+    'translate business entities',
     'view own businesses',
     'view own clients',
     'view own invoices',

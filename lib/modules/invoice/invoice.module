@@ -939,14 +939,14 @@ function theme_invoice_totals($variables) {
 
   // Add the line item discount.
   if ($invoice->getLineItemsDiscount() != '0.00') {
-    $rows[] = $get_row(t('Discount'), $invoice->getLineItemsDiscount(), 'line-items-discount');
+    $rows[] = $get_row(t('Discount'), '-' . $invoice->getLineItemsDiscount(), 'line-items-discount');
   }
 
   // Add the invoice discount.
   if ($invoice->getInvoiceDiscount() != '0.00') {
     $discount_percent = $invoice->getDiscountPercent() * 100;
     $args = ['@discount' => $discount_percent];
-    $rows[] = $get_row(t('Discount @discount%', $args), $invoice->getLineItemsDiscount(), 'invoice-discount');
+    $rows[] = $get_row(t('Discount @discount%', $args), '-' . $invoice->getLineItemsDiscount(), 'invoice-discount');
   }
 
   // Show the subtotal.

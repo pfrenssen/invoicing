@@ -720,6 +720,13 @@ class Business extends Entity {
     return $this->wrapper()->field_business_name->value();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function defaultUri() {
+    return array('path' => 'business/' . $this->identifier());
+  }
+
 }
 
 /**

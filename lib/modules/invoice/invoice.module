@@ -339,6 +339,7 @@ function template_preprocess_invoice_export(array &$vars) {
 
   // Make all business properties available.
   $vars['business_name'] = field_view_field('business', $business_entity, 'field_business_name');
+  $vars['business_name']['#title'] = t('Company name');
   $vars['business_address'] = field_view_field('business', $business_entity, 'field_business_address');
   $vars['business_address']['#title'] = t('Address');
   $vars['business_bic'] = field_view_field('business', $business_entity, 'field_business_bic');

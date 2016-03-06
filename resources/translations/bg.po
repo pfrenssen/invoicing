@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2016-02-28 15:21+0100\n"
-"PO-Revision-Date: 2016-02-28 15:21+0100\n"
+"PO-Revision-Date: 2016-03-06 21:07+0200\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1924,7 +1924,7 @@ msgstr ""
 
 #: /bg/invoice/7/html?token=C6HH8OulX7nFEUqjnNpA4LWTvJ1L8mNdtBXjFOmJ32g
 msgid "Bulgaria"
-msgstr ""
+msgstr "България"
 
 #: /bg/invoice/7/html?token=C6HH8OulX7nFEUqjnNpA4LWTvJ1L8mNdtBXjFOmJ32g
 msgid "Bahrain"
@@ -5773,6 +5773,17 @@ msgstr "Банка"
 #: /bg/invoice/7/html?token=C6HH8OulX7nFEUqjnNpA4LWTvJ1L8mNdtBXjFOmJ32g
 msgid "Raiffeisen Bank"
 msgstr "Райфайзен Банк"
+
+#: /bg/invoice/1/html?token=4E5DaV34zd4rqfXTyd7N2yr9Jlh0R4QeqFy4JOEVsWg
+msgid ""
+"The delivery is not subject to VAT taxation in Bulgaria in accordance "
+"with the VAT reverse charge system, art. 21, paragraph 2 of the VAT "
+"act."
+msgstr ""
+"Доставката не подлежи на облагане с "
+"данък добавена стойност в България, "
+"съгласно чл.21, ал.2 от ЗДДС. Данъкът е "
+"изискуем от получателя."
 
 #: /bg/invoice/7/html?token=C6HH8OulX7nFEUqjnNpA4LWTvJ1L8mNdtBXjFOmJ32g
 msgid "Prepared by"

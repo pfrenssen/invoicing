@@ -37,6 +37,8 @@
  * - $products: A rendered HTML table containing the products.
  * - $services: A rendered HTML table containing the services.
  */
+global $language;
+$name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Frenssen';
 ?>
 <html>
   <head>
@@ -119,7 +121,7 @@
             <div id="business-vat"><?php print render($business_vat); ?></div>
           <?php endif; ?>
           <div class="field-label"><?php print t('Accountable'); ?>:</div>
-          <div id="business-accountable">Pieter Frenssen</div>
+          <div id="business-accountable"><?php print $name; ?></div>
         </div>
       </div>
     </div>
@@ -161,7 +163,7 @@
 
     <div id="signature">
       <div class="field-label"><?php print t('Prepared by'); ?>:</div>
-      <div id="invoice-issuer">Pieter Frenssen</div>
+      <div id="invoice-issuer"><?php print $name; ?></div>
       <div class="field-label"><?php print t('Signature'); ?>:</div>
     </div>
   </body>

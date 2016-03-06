@@ -29,7 +29,6 @@ h2 {
 
 .field-items,
 #client-name,
-#business-name,
 #client-accountable,
 #business-accountable,
 #invoice-tax-date,
@@ -85,7 +84,7 @@ h2 {
 
 /* Client */
 #client-name,
-#business-name {
+#business-name .field-item {
   font-weight: bold;
 }
 

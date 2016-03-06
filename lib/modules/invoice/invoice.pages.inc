@@ -230,9 +230,10 @@ function invoice_generate_html(Invoice $invoice) {
  *   Thrown when the PDF to download could not be created.
  */
 function invoice_download(Invoice $invoice) {
+  global $language;
   // Check if a valid token is present.
   if (isset($_REQUEST['token']) && drupal_valid_token($_REQUEST['token'], 'invoice-download-link-' . $invoice->identifier())) {
-    $file_uri = file_build_uri('invoices/' . $invoice->iid . '.pdf');
+    $file_uri = file_build_uri('invoices/' . $language->language . '/' . $invoice->iid . '.pdf');
 
     // Generate the PDF if it doesn't exist yet.
     if (!file_exists($file_uri)) {

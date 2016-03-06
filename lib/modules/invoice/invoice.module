@@ -1044,6 +1044,7 @@ class Invoice extends Entity {
     }
 
     // Delete the cached PDF if it exists.
+    // @todo Delete for all languages.
     $file_uri = file_build_uri('invoices/' . $this->iid . '.pdf');
     if (file_exists($file_uri)) {
       unlink($file_uri);

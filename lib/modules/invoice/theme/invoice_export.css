@@ -1,5 +1,5 @@
 body {
-  font-family: Ubuntu, sans-serif;
+  font-family: 'PT Sans', sans-serif;
   margin: 4em;
   font-size: 0.7em;
 }
@@ -39,7 +39,7 @@ h2 {
 #invoice-payment-method,
 #business-bank,
 #invoice-issuer {
-  margin-left: 9em;
+  margin-left: 10em;
 }
 
 /* Invoice */
@@ -135,7 +135,6 @@ table th {
 }
 
 #totals tr.total th {
-  font-size: 1.2em;
   font-weight: bold;
 }
 

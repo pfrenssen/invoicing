@@ -105,7 +105,10 @@ projects[entity_translation][subdir] = contrib
 projects[features][version] = 2.7
 projects[features][subdir] = contrib
 
-projects[inline_entity_form][version] = 1.6
+; The dev branch has been pinned at the time the below patch was created.
+projects[inline_entity_form][download][type] = git
+projects[inline_entity_form][download][revision] = 8d8ee06592d991
+projects[inline_entity_form][download][branch] = 7.x-1.x
 projects[inline_entity_form][subdir] = contrib
 
 ; Issue #2134035: Allow to add existing entities using the single value field

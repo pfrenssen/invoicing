@@ -129,8 +129,9 @@ projects[features][download][revision] = 7.x-2.7
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
 
+; The dev branch has been pinned at the time the below patch was created.
 projects[inline_entity_form][download][type] = git
-projects[inline_entity_form][download][revision] = 7.x-1.6
+projects[inline_entity_form][download][revision] = 8d8ee06592d991
 projects[inline_entity_form][download][branch] = 7.x-1.x
 projects[inline_entity_form][subdir] = contrib
 

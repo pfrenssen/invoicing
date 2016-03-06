@@ -1087,9 +1087,11 @@ class Invoice extends Entity {
     global $language;
     $langcode = $language->language == 'en' ? 'en_GB' : $language->language;
     $numbers_words = new Numbers_Words();
+    // @todo Implement a currency converter.
+    $bgn_total = number_format(bcmul($this->getTotal(), '1.9558', 3), 2, '.', '');
     // @todo Implement ::toCurrency() for Bulgarian.
-    list($decimals, $fraction) = explode('.', $this->getTotal());
-    return drupal_ucfirst($numbers_words->toWords($decimals, $langcode) . ' &euro; ' . $numbers_words->toWords($fraction, $langcode) . ' &cent;');
+    list($decimals, $fraction) = explode('.', $bgn_total);
+    return drupal_ucfirst($numbers_words->toWords($decimals, $langcode) . ' лева ' . $numbers_words->toWords($fraction, $langcode) . ' ст');
     return $numbers_words->toCurrency($this->getTotal(), $langcode, 'EUR', '.');
   }
 

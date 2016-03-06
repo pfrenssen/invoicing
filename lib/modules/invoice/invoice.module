@@ -914,12 +914,18 @@ function theme_invoice_totals($variables) {
       'data' => $value . '&euro;',
       'class' => ['value'],
     ];
+    $bgn_value = number_format(bcmul($value, '1.9558', 3), 2, '.', '');
+    $bgn_row = [
+      'data' => $bgn_value . 'BGN',
+      'class' => ['value'],
+    ];
     if ($header) {
       $label_row['header'] = TRUE;
       $value_row['header'] = TRUE;
+      $bgn_row['header'] = TRUE;
     }
     return [
-      'data' => [$label_row, $value_row],
+      'data' => [$label_row, $value_row, $bgn_row],
       'class' => [$class],
     ];
   };

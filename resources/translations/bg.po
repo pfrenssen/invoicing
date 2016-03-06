@@ -5674,6 +5674,10 @@ msgid "Sunday"
 msgstr "неделя"
 
 #: /bg/invoice/7/html?token=C6HH8OulX7nFEUqjnNpA4LWTvJ1L8mNdtBXjFOmJ32g
+msgid "Monday"
+msgstr "понеделник"
+
+#: /bg/invoice/7/html?token=C6HH8OulX7nFEUqjnNpA4LWTvJ1L8mNdtBXjFOmJ32g
 msgctxt "Long month name"
 msgid "February"
 msgstr "февруари"

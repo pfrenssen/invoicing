@@ -914,7 +914,7 @@ function theme_invoice_totals($variables) {
       'data' => $value . '&euro;',
       'class' => ['value'],
     ];
-    $bgn_value = number_format(bcmul($value, '1.9558', 3), 2, '.', '');
+    $bgn_value = number_format(bcmul($value, '1.95583', 3), 2, '.', '');
     $bgn_row = [
       'data' => $bgn_value . 'BGN',
       'class' => ['value'],
@@ -1089,7 +1089,7 @@ class Invoice extends Entity {
     $langcode = $language->language == 'en' ? 'en_GB' : $language->language;
     $numbers_words = new Numbers_Words();
     // @todo Implement a currency converter.
-    $bgn_total = number_format(bcmul($this->getTotal(), '1.9558', 3), 2, '.', '');
+    $bgn_total = number_format(bcmul($this->getTotal(), '1.95583', 3), 2, '.', '');
     // @todo Implement ::toCurrency() for Bulgarian.
     list($decimals, $fraction) = explode('.', $bgn_total);
     return drupal_ucfirst($numbers_words->toWords($decimals, $langcode) . ' лева ' . $numbers_words->toWords($fraction, $langcode) . ' ст');

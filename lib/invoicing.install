@@ -12,8 +12,12 @@
  * @see system_install()
  */
 function invoicing_install() {
+  // Enable the theme.
+  $default_theme = 'invoicing_theme';
+  theme_enable([$default_theme]);
+  variable_set('theme_default', $default_theme);
+
   // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'bartik');
   $values = array(
     array(
       'module' => 'system',

@@ -93,6 +93,8 @@
     <target name="link-dev-resources">
         <!-- Symlink our custom modules. -->
         <symlink link="${platform.build.profile.modules.custom.dir}" target="${site.lib.modules.dir}" />
+        <!-- Symlink our custom themes. -->
+        <symlink link="${platform.build.profile.themes.dir}" target="${site.lib.themes.dir}" />
         <!-- Symlink our custom PSR-4 code. -->
         <symlink link="${platform.build.profile.source.dir}" target="${site.lib.source.dir}" />
         <!-- Symlink our tests. -->
@@ -123,6 +125,11 @@
         <phingcall target="copy-folder">
             <property name="copy.source.path" value="${site.lib.modules.dir}" />
             <property name="copy.destination.path" value="${platform.build.profile.modules.custom.dir}" />
+        </phingcall>
+        <!-- Copy our custom themes. -->
+        <phingcall target="copy-folder">
+            <property name="copy.source.path" value="${site.lib.themes.dir}" />
+            <property name="copy.destination.path" value="${platform.build.profile.themes.dir}" />
         </phingcall>
         <!-- Copy our custom PSR-4 code. -->
         <phingcall target="copy-folder">

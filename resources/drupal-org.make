@@ -124,6 +124,10 @@ projects[entity_translation][download][revision] = 7.x-1.0-beta4
 projects[entity_translation][download][branch] = 7.x-1.x
 projects[entity_translation][subdir] = contrib
 
+; Issue #2710879: Allow to properly theme the translation overview.
+; https://drupal.org/node/2710879
+projects[entity_translation][patch][] = https://www.drupal.org/files/issues/2710879-2.patch
+
 projects[features][download][type] = git
 projects[features][download][revision] = 7.x-2.7
 projects[features][download][branch] = 7.x-2.x

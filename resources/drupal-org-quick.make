@@ -102,6 +102,10 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22091
 projects[entity_translation][version] = 1.0-beta4
 projects[entity_translation][subdir] = contrib
 
+; Issue #2710879: Allow to properly theme the translation overview.
+; https://drupal.org/node/2710879
+projects[entity_translation][patch][] = https://www.drupal.org/files/issues/2710879-2.patch
+
 projects[features][version] = 2.7
 projects[features][subdir] = contrib
 

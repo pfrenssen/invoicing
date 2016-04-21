@@ -218,7 +218,6 @@ trait BaseTestHelper {
     return $this->assertTrue($result, $message ?: 'The correct messages are shown.', $group);
   }
 
-
   /**
    * Check if the status messages about required fields are shown.
    *

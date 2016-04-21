@@ -9,6 +9,7 @@
  * Field handler to present a link to delete a tax rate.
  */
 class tax_rate_handler_delete_link_field extends views_handler_field {
+
   /**
    * Constructs a client_handler_link_field object.
    */

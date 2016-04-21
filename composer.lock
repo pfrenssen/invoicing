@@ -17,7 +17,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/264dea6cfb667fd63649d61e8c4c0b36f6612164",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/56657835a16fa1fcfbd801612c7b8f95ebd7a328",
                 "reference": "2059cbe",
                 "shasum": ""
             },
@@ -484,7 +484,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/3cea62b6ed8220cca53721a3210fbf64a08170dc",
+                "url": "https://api.github.com/repos/composer/composer/zipball/95e0347917614276a4001d3e3d6593d01582a87e",
                 "reference": "2491679ba35",
                 "shasum": ""
             },
@@ -764,12 +764,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/klausi/coder.git",
-                "reference": "06ea52ef66833590df592e9fdb23393352caf5d1"
+                "reference": "c2f1d86492c2679bb9c3b443063f6657d1b4255a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klausi/coder/zipball/06ea52ef66833590df592e9fdb23393352caf5d1",
-                "reference": "06ea52ef66833590df592e9fdb23393352caf5d1",
+                "url": "https://api.github.com/repos/klausi/coder/zipball/c2f1d86492c2679bb9c3b443063f6657d1b4255a",
+                "reference": "c2f1d86492c2679bb9c3b443063f6657d1b4255a",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +792,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-03-05 12:54:19"
+            "time": "2016-04-17 20:07:37"
         },
         {
             "name": "drupal/drupal-driver",
@@ -804,7 +804,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/9f3a36d18ad2a96d9c67b6dfd8a824745b13bebd",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/25d6ceed27d2538324171fe30f11a846c3c7496f",
                 "reference": "9f3a36d18ad2a96d9c67b6dfd8a824745b13bebd",
                 "shasum": ""
             },
@@ -861,7 +861,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/309e2144dd33cfdd3939311483194695eef30c95",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/83aeb0d4ecb318fe60cda7dce28e04d66a0e9a43",
                 "reference": "309e2144dd33cfdd3939311483194695eef30c95",
                 "shasum": ""
             },

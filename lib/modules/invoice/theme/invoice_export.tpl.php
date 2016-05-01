@@ -79,17 +79,19 @@ $name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Fren
             <?php if ($client_email): ?>
               <div id="client-email"><?php print render($client_email); ?></div>
             <?php endif; ?>
-            <?php if($client_phone): ?>
+            <?php if ($client_phone): ?>
               <div id="client-phone"><?php print render($client_phone); ?></div>
             <?php endif; ?>
           </div>
-          <div class="field-label"><?php print t('Company number'); ?>:</div>
-          <div id="client-number">0450.760.087</div>
+          <?php if ($client_number): ?>
+            <div id="client-number"><?php print render($client_number); ?></div>
+          <?php endif; ?>
           <?php if($client_vat): ?>
             <div id="client-vat"><?php print render($client_vat); ?></div>
           <?php endif; ?>
-          <div class="field-label"><?php print t('Accountable'); ?>:</div>
-          <div id="client-accountable">Mathieu De Ruyver</div>
+          <?php if ($client_accountable): ?>
+            <div id="client-accountable"><?php print render($client_accountable); ?></div>
+          <?php endif; ?>
         </div>
       </div>
       <div id="second-column">

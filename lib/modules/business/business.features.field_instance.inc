@@ -10,6 +10,41 @@
 function business_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'business-business-field_business_accountable'.
+  $field_instances['business-business-field_business_accountable'] = array(
+    'bundle' => 'business',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 8,
+      ),
+    ),
+    'entity_type' => 'business',
+    'field_name' => 'field_business_accountable',
+    'label' => 'Accountable',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 8,
+    ),
+  );
+
   // Exported field_instance: 'business-business-field_business_address'.
   $field_instances['business-business-field_business_address'] = array(
     'bundle' => 'business',
@@ -954,6 +989,7 @@ function business_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Accountable');
   t('BIC number');
   t('Business name');
   t('Businesses');

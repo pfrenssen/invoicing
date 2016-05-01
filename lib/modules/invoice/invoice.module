@@ -951,7 +951,7 @@ function theme_invoice_totals($variables) {
   if ($invoice->getInvoiceDiscount() != '0.00') {
     $discount_percent = $invoice->getDiscountPercent() * 100;
     $args = ['@discount' => $discount_percent];
-    $rows[] = $get_row(t('Discount @discount%', $args), '-' . $invoice->getLineItemsDiscount(), 'invoice-discount');
+    $rows[] = $get_row(t('Discount @discount%', $args), '-' . $invoice->getInvoiceDiscount(), 'invoice-discount');
   }
 
   // Show the subtotal.

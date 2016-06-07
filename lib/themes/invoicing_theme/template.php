@@ -65,7 +65,7 @@ function invoicing_theme_entity_translation_overview_table($variables) {
         if ($edit_path && $handler->getAccess('update') && $handler->getTranslationAccess($langcode)) {
           $link = isset($edit_links->links[$langcode]['href']) ? $edit_links->links[$langcode] : array('href' => $edit_path, 'language' => $language);
           $link['query'] = isset($_GET['destination']) ? drupal_get_destination() : FALSE;
-          $options[] = l(t('edit'), $link['href'], $link);
+          $options[] = l(t('Edit translation'), $link['href'], $link);
         }
 
         $classes[] = $translation['status'] ? 'published' : 'not-published';
@@ -88,7 +88,7 @@ function invoicing_theme_entity_translation_overview_table($variables) {
 
           $link = isset($add_links->links[$langcode]['href']) ? $add_links->links[$langcode] : array('href' => $add_path, 'language' => $language);
           $link['query'] = isset($_GET['destination']) ? drupal_get_destination() : FALSE;
-          $options[] = $translatable ? l(t('add'), $link['href'], $link) : t('No translatable fields');
+          $options[] = $translatable ? l(t('Add translation'), $link['href'], $link) : t('No translatable fields');
           $classes[] = $translatable ? '' : 'non-translatable';
         }
       }

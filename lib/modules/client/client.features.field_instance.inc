@@ -10,6 +10,47 @@
 function client_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'client-client-field_client_accountable'.
+  $field_instances['client-client-field_client_accountable'] = array(
+    'bundle' => 'client',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 7,
+      ),
+      'summary' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'client',
+    'field_name' => 'field_client_accountable',
+    'label' => 'Accountable',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 8,
+    ),
+  );
+
   // Exported field_instance: 'client-client-field_client_address'.
   $field_instances['client-client-field_client_address'] = array(
     'bundle' => 'client',
@@ -157,6 +198,47 @@ function client_field_default_field_instances() {
       ),
       'type' => 'text_textarea',
       'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'client-client-field_client_number'.
+  $field_instances['client-client-field_client_number'] = array(
+    'bundle' => 'client',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 8,
+      ),
+      'summary' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'client',
+    'field_name' => 'field_client_number',
+    'label' => 'Trade registry number',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 9,
     ),
   );
 
@@ -645,11 +727,13 @@ function client_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Accountable');
   t('Billing address');
   t('Email address');
   t('Notes');
   t('Phone number');
   t('Shipping address');
+  t('Trade registry number');
   t('VAT number');
   t('Website');
 

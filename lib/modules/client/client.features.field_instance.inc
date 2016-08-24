@@ -97,6 +97,7 @@ function client_field_default_field_instances() {
     'label' => 'Billing address',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -148,6 +149,7 @@ function client_field_default_field_instances() {
     'label' => 'Email address',
     'required' => 1,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -187,6 +189,7 @@ function client_field_default_field_instances() {
     'label' => 'Notes',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -546,6 +549,7 @@ function client_field_default_field_instances() {
         'enable_default_country' => 1,
       ),
       'enable_extension' => 0,
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -604,6 +608,7 @@ function client_field_default_field_instances() {
     'label' => 'Shipping address',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -655,6 +660,7 @@ function client_field_default_field_instances() {
     'label' => 'VAT number',
     'required' => 0,
     'settings' => array(
+      'entity_translation_sync' => FALSE,
       'text_processing' => 0,
       'user_register_form' => FALSE,
     ),
@@ -707,6 +713,7 @@ function client_field_default_field_instances() {
         'url_cutoff' => 80,
       ),
       'enable_tokens' => 1,
+      'entity_translation_sync' => FALSE,
       'rel_remove' => 'default',
       'title' => 'none',
       'title_label_use_field_label' => FALSE,

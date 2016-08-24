@@ -318,6 +318,7 @@ function invoice_theme($existing, $type, $theme, $path) {
  *   - 'invoice': contains the Invoice entity that will be rendered.
  */
 function template_preprocess_invoice_export(array &$vars) {
+  /** @var Invoice $invoice_entity */
   $invoice_entity = $vars['invoice'];
   $invoice = entity_metadata_wrapper('invoice', $invoice_entity);
 
@@ -338,13 +339,17 @@ function template_preprocess_invoice_export(array &$vars) {
 
   // Make all business properties available.
   $vars['business_name'] = field_view_field('business', $business_entity, 'field_business_name');
+  $vars['business_name']['#title'] = t('Company name');
   $vars['business_address'] = field_view_field('business', $business_entity, 'field_business_address');
+  $vars['business_address']['#title'] = t('Address');
   $vars['business_bic'] = field_view_field('business', $business_entity, 'field_business_bic');
   $vars['business_email'] = field_view_field('business', $business_entity, 'field_business_email');
   $vars['business_iban'] = field_view_field('business', $business_entity, 'field_business_iban');
   $vars['business_mobile'] = field_view_field('business', $business_entity, 'field_business_mobile');
   $vars['business_phone'] = field_view_field('business', $business_entity, 'field_business_phone');
   $vars['business_vat'] = field_view_field('business', $business_entity, 'field_business_vat');
+  $vars['business_accountable'] = field_view_field('business', $business_entity, 'field_business_accountable');
+  $vars['business_number'] = field_view_field('business', $business_entity, 'field_business_number');
 
   // Provide the full client entity as a variable.
   $client_entity = $invoice->field_invoice_client->value();
@@ -354,11 +359,15 @@ function template_preprocess_invoice_export(array &$vars) {
   // Make all client properties available.
   $vars['client_name'] = $client->name->value(['sanitize' => TRUE]);
   $vars['client_address'] = field_view_field('client', $client_entity, 'field_client_address');
+  $vars['client_address']['#title'] = t('Address');
   $vars['client_email'] = field_view_field('client', $client_entity, 'field_client_email');
   $vars['client_phone'] = field_view_field('client', $client_entity, 'field_client_phone');
   $vars['client_shipping_address'] = field_view_field('client', $client_entity, 'field_client_shipping_address');
   $vars['client_vat'] = field_view_field('client', $client_entity, 'field_client_vat');
   $vars['client_website'] = field_view_field('client', $client_entity, 'field_client_website');
+  $vars['client_accountable'] = field_view_field('client', $client_entity, 'field_client_accountable');
+  $vars['client_number'] = field_view_field('client', $client_entity, 'field_client_number');
+  $vars['client_number']['#title'] = t('Company number');
 
   // Provide the tables for products and services.
   $vars['products'] = views_embed_view('line_items', 'products', $invoice_entity->identifier());

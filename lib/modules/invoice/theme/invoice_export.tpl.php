@@ -44,62 +44,78 @@
     <?php print $styles; ?>
   </head>
   <body>
-    <div id="first-column">
-      <?php if ($business_name): ?>
-        <h2 id="business-name"><?php print render($business_name); ?></h2>
+    <div id="invoice">
+      <?php if ($invoice_number): ?>
+        <div id="invoice-number"><?php print render($invoice_number); ?></div>
       <?php endif; ?>
-      <?php if ($business_address): ?>
-        <div id="business-address"><?php print render($business_address); ?></div>
-      <?php endif; ?>
-      <div id="business-contact">
-        <?php if ($business_email): ?>
-          <div id="business-email"><?php print render($business_email); ?></div>
-        <?php endif; ?>
-        <?php if($business_phone): ?>
-          <div id="business-phone"><?php print render($business_phone); ?></div>
-        <?php endif; ?>
-        <?php if($business_mobile): ?>
-          <div id="business-mobile"><?php print render($business_mobile); ?></div>
-        <?php endif; ?>
-      </div>
-      <?php if($business_vat): ?>
-        <div id="business-vat"><?php print render($business_vat); ?></div>
-      <?php endif; ?>
-      <?php if($business_iban): ?>
-        <div id="business-iban"><?php print render($business_iban); ?></div>
-      <?php endif; ?>
-      <?php if ($business_bic): ?>
-        <div id="business-bic"><?php print render($business_bic); ?></div>
+      <?php if ($invoice_date): ?>
+        <div id="invoice-date"><?php print render($invoice_date); ?></div>
       <?php endif; ?>
     </div>
-    <div id="second-column">
-      <div id="invoice">
-        <?php if ($invoice_number): ?>
-          <div id="invoice-number"><?php print render($invoice_number); ?></div>
-        <?php endif; ?>
-        <?php if ($invoice_date): ?>
-          <div id="invoice-date"><?php print render($invoice_date); ?></div>
-        <?php endif; ?>
-      </div>
-      <div id="client">
-        <div class="field-label"><?php print t('Client'); ?>:</div>
-        <?php if ($client_name): ?>
-          <div id="client-name"><?php print $client_name; ?></div>
-        <?php endif; ?>
-        <?php if ($client_address): ?>
-          <div id="client-address"><?php print render($client_address); ?></div>
-        <?php endif; ?>
-        <div id="client-contact">
-          <?php if ($client_email): ?>
-            <div id="client-email"><?php print render($client_email); ?></div>
+    <div id="company-details">
+      <div id="first-column">
+        <div id="client">
+          <h2><?php print t('Recipient'); ?></h2>
+          <?php if ($client_name): ?>
+          <div class="field-label"><?php print t('Company name'); ?>:</div>
+            <div id="client-name"><?php print $client_name; ?></div>
           <?php endif; ?>
-          <?php if($client_phone): ?>
-            <div id="client-phone"><?php print render($client_phone); ?></div>
+          <?php if ($client_address): ?>
+            <div id="client-address"><?php print render($client_address); ?></div>
+          <?php endif; ?>
+          <div id="client-contact">
+            <?php if ($client_email): ?>
+              <div id="client-email"><?php print render($client_email); ?></div>
+            <?php endif; ?>
+            <?php if($client_phone): ?>
+              <div id="client-phone"><?php print render($client_phone); ?></div>
+            <?php endif; ?>
+          </div>
+          <?php if ($client_number): ?>
+            <div id="client-number"><?php print render($client_number); ?></div>
+          <?php endif; ?>
+          <?php if($client_vat): ?>
+            <div id="client-vat"><?php print render($client_vat); ?></div>
+          <?php endif; ?>
+          <?php if ($client_accountable): ?>
+            <div id="client-accountable"><?php print render($client_accountable); ?></div>
           <?php endif; ?>
         </div>
-        <?php if($client_vat): ?>
-          <div id="client-vat"><?php print render($client_vat); ?></div>
-        <?php endif; ?>
+      </div>
+      <div id="second-column">
+        <div id="business">
+          <h2><?php print t('Supplier'); ?></h2>
+          <?php if ($business_name): ?>
+            <div id="business-name"><?php print render($business_name); ?></div>
+          <?php endif; ?>
+          <?php if ($business_address): ?>
+            <div id="business-address"><?php print render($business_address); ?></div>
+          <?php endif; ?>
+          <div id="business-contact">
+            <?php if ($business_email): ?>
+              <div id="business-email"><?php print render($business_email); ?></div>
+            <?php endif; ?>
+            <?php if($business_phone): ?>
+              <div id="business-phone"><?php print render($business_phone); ?></div>
+            <?php endif; ?>
+            <?php if($business_mobile): ?>
+              <div id="business-mobile"><?php print render($business_mobile); ?></div>
+            <?php endif; ?>
+          </div>
+          <div class="field-label"><?php print t('Company number'); ?>:</div>
+          <div id="business-number">203805153</div>
+          <?php if($business_vat): ?>
+            <div id="business-vat"><?php print render($business_vat); ?></div>
+          <?php endif; ?>
+          <div class="field-label"><?php print t('Accountable'); ?>:</div>
+          <div id="business-accountable"><?php print $name; ?></div>
+          <?php if($business_iban): ?>
+            <div id="business-iban"><?php print render($business_iban); ?></div>
+          <?php endif; ?>
+          <?php if ($business_bic): ?>
+            <div id="business-bic"><?php print render($business_bic); ?></div>
+          <?php endif; ?>
+        </div>
       </div>
     </div>
     <div id="tables">

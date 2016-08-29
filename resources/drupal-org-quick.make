@@ -99,7 +99,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 ; https://drupal.org/node/2209127
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
-projects[entity_translation][version] = 1.0-beta4
+projects[entity_translation][version] = 1.0-beta5
 projects[entity_translation][subdir] = contrib
 
 ; Issue #2710879: Allow to properly theme the translation overview.

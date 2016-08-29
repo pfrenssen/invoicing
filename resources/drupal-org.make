@@ -120,7 +120,7 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22069
 projects[entityreference_unique][patch][] = http://drupal.org/files/issues/2209127-1-entityreference_unique-validation_message.patch
 
 projects[entity_translation][download][type] = git
-projects[entity_translation][download][revision] = 7.x-1.0-beta4
+projects[entity_translation][download][revision] = 7.x-1.0-beta5
 projects[entity_translation][download][branch] = 7.x-1.x
 projects[entity_translation][subdir] = contrib
 

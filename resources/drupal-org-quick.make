@@ -1,7 +1,7 @@
 api = 2
 core = 7.x
 
-projects[drupal][version] = 7.43
+projects[drupal][version] = 7.59
 
 ; Recursive module dependencies of installation profile are not enabled in
 ; DrupalWebTestCase::setUp.
@@ -25,14 +25,17 @@ projects[drupal][patch][] = http://drupal.org/files/updater-installation_directo
 ; https://www.drupal.org/node/1555862
 projects[drupal][patch][] = http://drupal.org/files/issues/1555862-38-drupalGetToken_hash_salt-D7-do-not-test.patch
 
-; run-tests.sh should exit with a failure code if any tests failed.
-; https://www.drupal.org/node/2189345
-projects[drupal][patch][] = http://www.drupal.org/files/issues/d7-run_tests_sh_should-2189345-34-do-not-test.patch
+; [PHP 7.2] Avoid count() calls on uncountable variables.
+; https://www.drupal.org/project/drupal/issues/2885610
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-04-21/drupal-7-count-function-deprecation-fixes-2885610-19.patch
 
-; _drupal_session_destroy() should return boolean.
-; https://www.drupal.org/node/2460833
-projects[drupal][patch][] = https://www.drupal.org/files/issues/drupal-session_destroy_return_bool-2460833-21-D7.patch
+; Unable to update modules due to Archive_Tar incompatibility with PHP 7.2.
+; https://www.drupal.org/project/drupal/issues/2946045
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-04-15/update-pear-tar-archive-class-2946045-10.patch
 
+; [PHP 7] Function each() is deprecated since PHP 7.2.
+; https://www.drupal.org/project/drupal/issues/2925449
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-04-08/deprecated_each2925449-106.patch
 
 projects[addressfield][version] = 1.1
 projects[addressfield][subdir] = contrib

@@ -1,9 +1,8 @@
 {
     "require": {
-        "behat/behat": "dev-master#2059cbe",
-        "composer/composer": "dev-master#2491679ba35",
+        "behat/behat": "~3.2",
+        "composer/composer": "1.6.3",
         "drupal/coder": "dev-8.x-2.x",
-        "drupal/drupal-driver": "dev-master",
         "drupal/drupal-extension": "dev-master",
         "drupal/phing-drush-task": "1.0",
         "drush/drush": "~8.0",

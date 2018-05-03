@@ -102,8 +102,12 @@ projects[entityreference_unique][patch][] = http://drupal.org/files/issues/22091
 projects[entity_translation][version] = 1.0-beta4
 projects[entity_translation][subdir] = contrib
 
-projects[features][version] = 2.7
+projects[features][version] = 2.10
 projects[features][subdir] = contrib
+
+; Issue #2931464: Function create_function() is deprecated in PHP 7.2.
+; https://drupal.org/node/2931464
+projects[features][patch][] = https://www.drupal.org/files/issues/2018-03-12/features-support_php_72-2931464-10.patch
 
 projects[i18n][version] = 1.13
 projects[i18n][subdir] = contrib

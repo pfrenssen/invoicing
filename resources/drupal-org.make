@@ -125,9 +125,13 @@ projects[entity_translation][download][branch] = 7.x-1.x
 projects[entity_translation][subdir] = contrib
 
 projects[features][download][type] = git
-projects[features][download][revision] = 7.x-2.7
+projects[features][download][revision] = 7.x-2.10
 projects[features][download][branch] = 7.x-2.x
 projects[features][subdir] = contrib
+
+; Issue #2931464: Function create_function() is deprecated in PHP 7.2.
+; https://drupal.org/node/2931464
+projects[features][patch][] = https://www.drupal.org/files/issues/2018-03-12/features-support_php_72-2931464-10.patch
 
 projects[i18n][download][type] = git
 projects[i18n][download][revision] = 7.x-1.13

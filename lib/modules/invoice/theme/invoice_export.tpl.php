@@ -43,6 +43,7 @@ $name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Fren
 <html>
   <head>
     <meta charset="utf-8">
+    <style type="text/css" media="all">@import url("http://invoicing.local/profiles/invoicing/modules/custom/invoice/theme/invoice_export.css");</style>
     <?php print $styles; ?>
   </head>
   <body>

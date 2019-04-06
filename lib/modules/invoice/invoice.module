@@ -390,7 +390,7 @@ HTML;
   // @todo Render CSS styles inline. On Travis wkhtmltopdf cannot access these
   //   external stylesheets and hangs.
   // @see https://github.com/pfrenssen/invoicing/issues/48
-  $vars['styles'] = '';
+  // $vars['styles'] = '';
 }
 
 /**

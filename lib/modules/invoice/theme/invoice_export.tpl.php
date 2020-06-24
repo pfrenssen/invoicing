@@ -143,7 +143,7 @@ $name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Fren
       <div class="field-label"><?php print t('Payment method'); ?>:</div>
       <div id="invoice-payment-method"><?php print t('Bank transfer'); ?></div>
       <div class="field-label"><?php print t('Bank'); ?>:</div>
-      <div id="business-bank"><?php print t('Raiffeisen Bank'); ?></div>
+      <div id="business-bank"><?php print t('Revolut'); ?></div>
       <?php if($business_iban): ?>
         <div id="business-iban"><?php print render($business_iban); ?></div>
       <?php endif; ?>
@@ -154,6 +154,7 @@ $name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Fren
         <div id="invoice-due-date"><?php print render($invoice_due_date); ?></div>
       <?php endif; ?>
     </div>
+    <h2 style="background-color: yellow; text-align: center;">Attention: new address and bank account number since 2019-12-01!</h2>
 
     <div id="terms">
       <?php print t('The delivery is not subject to VAT taxation in Bulgaria in accordance with the VAT reverse charge system, art. 21, paragraph 2 of the VAT act.'); ?>

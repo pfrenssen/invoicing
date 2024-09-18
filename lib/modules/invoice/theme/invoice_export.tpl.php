@@ -43,7 +43,7 @@ $name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Fren
 <html>
   <head>
     <meta charset="utf-8">
-    <style type="text/css" media="all">@import url("http://invoicing.local/profiles/invoicing/modules/custom/invoice/theme/invoice_export.css");</style>
+    <style type="text/css" media="all">@import url("http://invoicing.lan/profiles/invoicing/modules/custom/invoice/theme/invoice_export.css");</style>
     <?php print $styles; ?>
   </head>
   <body>
@@ -154,10 +154,13 @@ $name = $language->language == 'bg' ? 'Питър Френсън' : 'Pieter Fren
         <div id="invoice-due-date"><?php print render($invoice_due_date); ?></div>
       <?php endif; ?>
     </div>
-    <h2 style="background-color: yellow; text-align: center;">Attention: new address and bank account number since 2019-12-01!</h2>
 
     <div id="terms">
-      <?php print t('The delivery is not subject to VAT taxation in Bulgaria in accordance with the VAT reverse charge system, art. 21, paragraph 2 of the VAT act.'); ?>
+      <?php if ($client_name === 'Liip AG'): ?>
+        <?php print t('Grounds for non-accrual of VAT: Art. 86 para. (3) No tax shall be charged in case of exempt supply, exempt intra-Community acquisition, as well as in case of supply with place of performance outside the territory of the country.'); ?>
+      <?php else: ?>
+        <?php print t('The delivery is not subject to VAT taxation in Bulgaria in accordance with the VAT reverse charge system, art. 21, paragraph 2 of the VAT act.'); ?>
+      <?php endif; ?>
     </div>
     <?php if ($invoice_terms): ?>
       <div id="terms">

@@ -1,0 +1,38 @@
+services:
+  php-fpm:
+    build: .
+    container_name: invoicing
+    ports:
+      - "9271:9000"
+    volumes:
+      - .:/var/www
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=3306
+      - DB_NAME=invoicing
+      - DB_USER=invoicing
+      - DB_PASSWORD=Dish-Obtain-Trainer-Treasury-Evaluation-2
+    networks:
+      - invoicing_network
+  nginx:
+    image: nginx:alpine
+    container_name: invoicing_nginx
+    ports:
+      - "8797:80"
+    volumes:
+      - .:/var/www
+      - ./resources/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php-fpm
+    restart: unless-stopped
+    networks:
+      - invoicing_network
+
+networks:
+  invoicing_network:
+    driver: bridge
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-drupal-with-docker-compose

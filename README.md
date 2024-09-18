@@ -39,6 +39,22 @@ Alternatively you can perform everything through the command line.
     $ ./vendor/bin/phing install-dev
 
 
+Docker
+======
+
+The supplied docker-compose file can be used to run the Invoicing project on a
+host that has Docker and MariaDB installed. The site can be accessed at
+http://localhost:8797
+
+```bash
+# Start the container.
+$ docker-compose up --build
+
+# Run a Drush command inside the container.
+$ docker-compose exec php-fpm /bin/sh -c "cd /var/www/build && ../vendor/bin/drush status"
+```
+
+
 Running tests
 =============
 

@@ -129,7 +129,7 @@ projects[inline_entity_form][patch][] = https://www.drupal.org/files/issues/inli
 projects[ief_autocomplete][type] = module
 projects[ief_autocomplete][download][type] = git
 projects[ief_autocomplete][download][branch] = 7.x-1.x
-projects[ief_autocomplete][download][url] = http://git.drupal.org/sandbox/iSoLate/2363793.git
+projects[ief_autocomplete][download][url] = https://git.drupalcode.org/sandbox/iSoLate-2363793.git
 projects[ief_autocomplete][subdir] = contrib
 
 projects[link][version] = 1.3
@@ -146,7 +146,7 @@ projects[phone][type] = module
 projects[phone][download][type] = git
 projects[phone][download][branch] = master
 projects[phone][download][revision] = 655b57f96e9
-projects[phone][download][url] = http://git.drupal.org/sandbox/cdale/1925578.git
+projects[phone][download][url] = https://git.drupalcode.org/sandbox/cdale-1925578.git
 projects[phone][subdir] = contrib
 
 projects[strongarm][version] = 2.0

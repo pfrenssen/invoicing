@@ -20,3 +20,7 @@ $databases['default']['default'] = array(
 );
 
 $drupal_hash_salt = trim(file_get_contents('/run/secrets/hash_salt'));
+
+// Do not print PHP notices and deprecations on the page. Drupal 7.59 on PHP 7.4
+// raises many of them, and they show file paths. They stay in the Drupal log.
+$conf['error_level'] = 0;

@@ -1,0 +1,30 @@
+[Unit]
+Description=Invoicing
+Requires=invoicing-db.container
+After=invoicing-db.container
+
+[Container]
+ContainerName=invoicing
+Image=invoicing.build
+# Loopback only by default: the container serves HTTP without TLS, and runs a
+# Drupal 7 site on a PHP version that no longer receives security fixes.
+PublishPort=127.0.0.1:8797:80
+Secret=invoicing-db-password,target=db_password
+Secret=invoicing-hash-salt,target=hash_salt
+Network=invoicing.network
+Volume=invoicing-files.volume:/var/www/build/sites/default/files
+HealthCmd=healthcheck.sh
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=60s
+# systemd counts the unit as started when the health check passes.
+Notify=healthy
+
+[Service]
+Restart=on-failure
+# The first start builds the image, which downloads Drupal and its modules.
+TimeoutStartSec=1800
+
+[Install]
+WantedBy=default.target

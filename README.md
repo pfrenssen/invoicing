@@ -55,6 +55,47 @@ $ docker-compose exec php-fpm /bin/sh -c "cd /var/www/build && ../vendor/bin/dru
 ```
 
 
+Podman
+======
+
+The directory `quadlet/` holds Quadlet files that run the project with rootless
+Podman and systemd, on a host with Podman 6.1 or later. They start two
+containers: `invoicing`, with Drupal on PHP 7.4 behind nginx, and
+`invoicing-db`, with MariaDB. The image fetches the code from GitHub and builds
+the site in it. Set the build argument `INVOICING_REF` in `quadlet/Containerfile`
+to a commit to always get the same code.
+
+PHP 7.4 and Drupal 7.59 no longer receive security fixes. The site listens on
+`127.0.0.1:8797` only; do not expose it to the internet.
+
+Create the secrets once. Each one is a random string of 64 hexadecimal digits:
+
+```bash
+openssl rand -hex 32 | podman secret create invoicing-db-password -
+openssl rand -hex 32 | podman secret create invoicing-db-root-password -
+openssl rand -hex 32 | podman secret create invoicing-hash-salt -
+```
+
+Install the files and start the site. The first start builds the image, which
+takes several minutes:
+
+```bash
+podman quadlet install --application=invoicing quadlet
+systemctl --user start invoicing
+```
+
+The site is at http://localhost:8797. To change the address or the port, copy
+`quadlet/settings.conf.example` to
+`~/.config/containers/systemd/invoicing.container.d/settings.conf`.
+
+Run a Drush command inside the container:
+
+```bash
+podman exec --user www-data --workdir /var/www/build invoicing \
+    /var/www/vendor/bin/drush status
+```
+
+
 Running tests
 =============
 

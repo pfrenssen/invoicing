@@ -1,0 +1,5 @@
+[Unit]
+Description=Network of the Invoicing containers
+
+[Network]
+NetworkName=invoicing

@@ -1,0 +1,44 @@
+# Image of Invoicing: Drupal 7 on PHP-FPM, served by nginx, with supervisord as
+# the main process. Build it with "podman build" in this directory, or let the
+# Quadlet unit invoicing.build do that.
+
+ARG PHP_VERSION=7.4
+
+# The PHP extensions that Drupal and the Invoicing code need.
+FROM docker.io/library/php:${PHP_VERSION}-fpm-alpine AS base
+RUN apk add --no-cache icu-dev libpng-dev libjpeg-turbo-dev freetype-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" bcmath gd intl mysqli opcache pdo_mysql
+
+# Build the site in /var/www/build, the way "phing build-dev" does on a
+# development machine: the code of the project is linked into the Drupal tree.
+FROM base AS build
+# The branch or commit of https://github.com/pfrenssen/invoicing to install.
+# Pin it to a commit to get the same code at each build.
+ARG INVOICING_REF=IN-89
+RUN apk add --no-cache git patch unzip
+COPY --from=docker.io/library/composer:2 /usr/bin/composer /usr/local/bin/composer
+WORKDIR /var/www
+RUN git init --quiet . \
+    && git remote add origin https://github.com/pfrenssen/invoicing.git \
+    && git fetch --quiet --depth 1 origin "${INVOICING_REF}" \
+    && git checkout --quiet FETCH_HEAD \
+    && rm -rf .git
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-interaction
+RUN vendor/bin/phing delete-build make-build create-private-files \
+    link-dev-resources install-build-dependencies
+
+FROM base AS runtime
+RUN apk add --no-cache curl mariadb-client nginx supervisor
+COPY --from=build /var/www /var/www
+COPY container/settings.php /var/www/build/sites/default/settings.php
+COPY container/php.ini /usr/local/etc/php/conf.d/zz-invoicing.ini
+COPY container/php-fpm.conf /usr/local/etc/php-fpm.d/zz-invoicing.conf
+COPY container/nginx.conf /etc/nginx/nginx.conf
+COPY container/supervisord.conf /etc/supervisord.conf
+COPY --chmod=755 container/entrypoint.sh container/healthcheck.sh /usr/local/bin/
+RUN mkdir -p /tmp/nginx && chown www-data:www-data /tmp/nginx
+
+EXPOSE 80
+STOPSIGNAL SIGTERM
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

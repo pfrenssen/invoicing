@@ -1,0 +1,31 @@
+[Unit]
+Description=MariaDB database of Invoicing
+
+[Container]
+ContainerName=invoicing-db
+Image=docker.io/library/mariadb:11.8
+Environment=MARIADB_DATABASE=invoicing
+Environment=MARIADB_USER=invoicing
+Environment=MARIADB_PASSWORD_FILE=/run/secrets/db_password
+Environment=MARIADB_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+Secret=invoicing-db-password,target=db_password
+Secret=invoicing-db-root-password,target=db_root_password
+Network=invoicing.network
+# The Invoicing container connects to the host name "db".
+NetworkAlias=db
+Volume=invoicing-db.volume:/var/lib/mysql
+HealthCmd=healthcheck.sh --connect --innodb_initialized
+HealthInterval=10s
+HealthTimeout=5s
+HealthRetries=5
+HealthStartPeriod=30s
+# systemd counts the unit as started when the health check passes, so the
+# Invoicing container is started after the database accepts connections.
+Notify=healthy
+# Drupal 7 uses utf8mb4 with utf8mb4_general_ci.
+Exec=--character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+
+[Service]
+Restart=on-failure
+# The first start downloads the image, which has to fit in this time.
+TimeoutStartSec=900

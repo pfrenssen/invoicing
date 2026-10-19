@@ -10,4 +10,10 @@ FILES=/var/www/build/sites/default/files
 mkdir -p "$FILES/private"
 chown www-data:www-data "$FILES" "$FILES/private"
 
+# The temporary files of nginx. /run is an empty tmpfs at each start. nginx
+# finds the directories with the right owner, and does not have to create them.
+mkdir -p /run/nginx/body /run/nginx/fastcgi /run/nginx/proxy /run/nginx/scgi \
+    /run/nginx/uwsgi
+chown -R www-data:www-data /run/nginx
+
 exec supervisord --configuration /etc/supervisord.conf

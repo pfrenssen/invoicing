@@ -14,6 +14,20 @@ Network=invoicing.network
 # The Invoicing container connects to the host name "db".
 NetworkAlias=db
 Volume=invoicing-db.volume:/var/lib/mysql
+# Limit the damage of a compromise. The only writable paths are the volume and
+# the tmpfs mounts: /tmp for temporary tables, /run for the socket and the pid
+# file of mysqld.
+DropCapability=ALL
+AddCapability=SETUID SETGID DAC_READ_SEARCH
+NoNewPrivileges=true
+ReadOnly=true
+ReadOnlyTmpfs=false
+Tmpfs=/tmp:noexec,size=128m
+Tmpfs=/run:noexec,size=8m
+# Measured under load: 210 MB and 24 threads, with the default InnoDB buffer
+# pool of 128 MB. The tmpfs mounts count as memory too.
+Memory=512M
+PidsLimit=128
 HealthCmd=healthcheck.sh --connect --innodb_initialized
 HealthInterval=10s
 HealthTimeout=5s

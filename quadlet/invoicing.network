@@ -3,3 +3,6 @@ Description=Network of the Invoicing containers
 
 [Network]
 NetworkName=invoicing
+# The containers reach each other, and nothing else: no internet, no host
+# services, no DNS for outside names. Published ports still work.
+Internal=true

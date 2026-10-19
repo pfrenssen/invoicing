@@ -95,6 +95,54 @@ podman exec --user www-data --workdir /var/www/build invoicing \
     /var/www/vendor/bin/drush status
 ```
 
+Limits of the containers
+------------------------
+
+The containers limit what an attacker can do after a compromise of Drupal or
+PHP:
+
+- The network `invoicing` is internal. The containers reach each other, and
+  nothing else: no internet, no other host, no DNS for outside names. The
+  published port still works. Drupal therefore cannot check for updates, and
+  the status report shows that HTTP requests fail.
+- All capabilities are dropped, and only these are added:
+  - `invoicing`: `CHOWN` (the entrypoint gives the files volume and the
+    temporary directories of nginx to www-data), `SETUID` and `SETGID` (nginx
+    and PHP-FPM start their workers as www-data), `NET_BIND_SERVICE` (nginx
+    listens on port 80).
+  - `invoicing-db`: `SETUID` and `SETGID` (the entrypoint switches to the user
+    mysql), `DAC_READ_SEARCH` (the entrypoint, which runs as root, searches the
+    data directory, and the health check reads its credentials from it).
+- No process can gain privileges, for example through a setuid program.
+- The file system of the image is read-only. Only the volumes and two tmpfs
+  mounts are writable: `/tmp`, for PHP, Drupal, Drush and MariaDB, and `/run`,
+  for the pid files, the socket of MariaDB and the temporary files of nginx.
+  Programs on the tmpfs mounts cannot run.
+- Memory and the number of processes are limited: 512 MB and 64 processes for
+  `invoicing`, 512 MB and 128 for `invoicing-db`. The tmpfs mounts count as
+  memory.
+
+The OCI runtime has to be crun. With runc, a container with a read-only file
+system cannot mount the secrets, and fails to start with
+`make mountpoint "/run/secrets/…": read-only file system`
+([podman#15541](https://github.com/containers/podman/issues/15541)). Podman
+uses crun when it is installed: `podman info --format
+'{{.Host.OCIRuntime.Name}}'` shows the runtime.
+
+A change that needs another capability fails with an error such as
+`Operation not permitted` or `Permission denied` in the journal:
+
+```bash
+journalctl --user -u invoicing -u invoicing-db
+```
+
+Find the operation in the error and the capability that allows it in
+`capabilities(7)`, for example `setuid()` and `CAP_SETUID`. Add one capability
+at a time to `AddCapability=`, and start the unit again. An error about a
+read-only file system means that the program writes outside the volumes and the
+tmpfs mounts; change its path to one in `/tmp` or `/run` instead of making the
+file system writable.
+
 
 Running tests
 =============

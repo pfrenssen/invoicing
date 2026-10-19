@@ -21,13 +21,14 @@ AddCapability=CHOWN SETGID SETUID NET_BIND_SERVICE
 NoNewPrivileges=true
 ReadOnly=true
 ReadOnlyTmpfs=false
-Tmpfs=/tmp:noexec,size=128m
+Tmpfs=/tmp:noexec,size=16m
 # Empty at each start: without notmpcopyup, podman copies /run of the image into
 # the tmpfs, with /run/nginx owned by the user nginx.
 Tmpfs=/run:noexec,notmpcopyup,size=64m
-# Measured under load: 140 MB and 13 processes. A PHP request may use up to
-# memory_limit (256M); the tmpfs mounts count as memory too.
-Memory=512M
+# Measured without the page cache, with one user, a cache rebuild and a restore:
+# 87 MB and 10 processes; 148 MB under sustained parallel load. A PHP request
+# may use up to memory_limit (128M); the tmpfs mounts count as memory too.
+Memory=192M
 PidsLimit=64
 HealthCmd=healthcheck.sh
 HealthInterval=30s

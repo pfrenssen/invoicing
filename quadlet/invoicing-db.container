@@ -22,11 +22,13 @@ AddCapability=SETUID SETGID DAC_READ_SEARCH
 NoNewPrivileges=true
 ReadOnly=true
 ReadOnlyTmpfs=false
-Tmpfs=/tmp:noexec,size=128m
+Tmpfs=/tmp:noexec,size=16m
 Tmpfs=/run:noexec,size=8m
-# Measured under load: 210 MB and 24 threads, with the default InnoDB buffer
-# pool of 128 MB. The tmpfs mounts count as memory too.
-Memory=512M
+# Measured without the page cache, with one user and a restore: 136 MB and 20
+# threads, with the InnoDB buffer pool of 32 MB. Under sustained parallel load
+# the memory of malloc keeps growing past 170 MB; the site gets a few requests
+# a month. The tmpfs mounts count as memory too.
+Memory=192M
 PidsLimit=128
 HealthCmd=healthcheck.sh --connect --innodb_initialized
 HealthInterval=10s
@@ -36,8 +38,10 @@ HealthStartPeriod=30s
 # systemd counts the unit as started when the health check passes, so the
 # Invoicing container is started after the database accepts connections.
 Notify=healthy
-# Drupal 7 uses utf8mb4 with utf8mb4_general_ci.
-Exec=--character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+# Drupal 7 uses utf8mb4 with utf8mb4_general_ci. The database is small, and the
+# default buffer pool of 128 MB would be most of the memory of the container.
+Exec=--character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci \
+    --innodb-buffer-pool-size=32M
 
 [Service]
 Restart=on-failure

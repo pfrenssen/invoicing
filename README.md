@@ -118,9 +118,12 @@ PHP:
   mounts are writable: `/tmp`, for PHP, Drupal, Drush and MariaDB, and `/run`,
   for the pid files, the socket of MariaDB and the temporary files of nginx.
   Programs on the tmpfs mounts cannot run.
-- Memory and the number of processes are limited: 512 MB and 64 processes for
-  `invoicing`, 512 MB and 128 for `invoicing-db`. The tmpfs mounts count as
-  memory.
+- Memory and the number of processes are limited: 192 MB and 64 processes for
+  `invoicing`, 192 MB and 128 for `invoicing-db`. The tmpfs mounts count as
+  memory. A PHP request may use up to 128 MB, and the buffer pool of MariaDB is
+  32 MB.
+- PHP accepts no file uploads, and a request body is at most 2 MB. A form with
+  a file field, such as the import of a translation, receives no file.
 
 The OCI runtime has to be crun. With runc, a container with a read-only file
 system cannot mount the secrets, and fails to start with
